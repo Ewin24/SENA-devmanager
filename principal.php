@@ -3,6 +3,7 @@ require_once 'logica/clasesGenericas/ConectorBD.php';
 require_once 'logica/clases/Usuario.php';
 require_once 'logica/clases/TipoUsuario.php';
 require_once 'logica/clases/Proyecto.php';
+require_once 'logica/clases/Habilidad.php';
 
 date_default_timezone_set('America/Bogota'); //establecer zona horaria de colombia
 

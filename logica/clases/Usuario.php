@@ -4,8 +4,8 @@ class Usuario
 {
 
     protected $identificacion;
-    protected $nombres; //nombre real del usuario
-    protected $apellidos;
+    protected $nombre; //nombre real del usuario
+    protected $apellido;
     protected $tipoUsuario;
     protected $clave;
     protected $nombreUsuario; //nombre que se usa para identificar al usuario y darle ingreso al sistema, por defecto N.identificacion
@@ -20,15 +20,15 @@ class Usuario
     {
         if ($campo != null) {
             if (!is_array($campo)) {
-                $cadenaSQL = "select identificacion, nombres, apellidos, tipoUsuario, clave, nombreUsuario, correo, "
+                $cadenaSQL = "select identificacion, nombre, apellido, tipoUsuario, clave, nombreUsuario, correo, "
                     . "telefono, tipoIdentificacion, foto, direccion, nitEmpresa_FK from usuario where $campo = $valor";
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
                 print_r($campo);
             }
             //asignacion de los datos
             $this->identificacion = $campo['identificacion'];
-            $this->nombres = $campo['nombres'];
-            $this->apellidos = $campo['apellidos'];
+            $this->nombre = $campo['nombre'];
+            $this->apellido = $campo['apellido'];
             $this->tipoUsuario = 'T'; //por defecto es trabajador ,tambien puede ser $campo['tipoUsuario']
             $this->clave = $campo['clave'];
             $this->nombreUsuario = $campo['identificacion']; //por defecto el nombre de usuario es la identificacion
@@ -46,14 +46,14 @@ class Usuario
         return $this->identificacion;
     }
 
-    public function getNombres()
+    public function getNombre()
     {
-        return $this->nombres;
+        return $this->nombre;
     }
 
-    public function getApellidos()
+    public function getApellido()
     {
-        return $this->apellidos;
+        return $this->apellido;
     }
 
     public function getTipoUsuario()
@@ -106,14 +106,14 @@ class Usuario
         $this->identificacion = $identificacion;
     }
 
-    public function setNombres($nombres): void
+    public function setNombre($nombre): void
     {
-        $this->nombres = $nombres;
+        $this->nombre = $nombre;
     }
 
-    public function setApellidos($apellidos): void
+    public function setApellido($apellido): void
     {
-        $this->apellidos = $apellidos;
+        $this->apellido = $apellido;
     }
 
     public function setTipoUsuario($tipoUsuario): void
@@ -168,14 +168,14 @@ class Usuario
 
     public function __toString()
     {
-        $cadena = "identificacion: $this->identificacion <br>nombre : $this->nombres  <br>apellido: $this->apellidos";
+        $cadena = "identificacion: $this->identificacion <br>nombre : $this->nombre  <br>apellido: $this->apellido";
         return $cadena;
     }
 
     //metodo para registrar un usuario en la base de datos
     public function guardar()
     {
-        $cadenaSQL = "insert into usuario (identificacion,nombres,apellidos,tipoUsuario,clave, nombreUsuario, correo, telefono, tipoIdentificacion, foto, direccion, nitEmpresa_FK) values ('$this->identificacion', '$this->nombres', '$this->apellidos', '$this->tipoUsuario', md5('$this->clave'), '$this->nombreUsuario', '$this->correo', '$this->telefono', '$this->tipoIdentificacion', '$this->foto', '$this->direccion', '$this->nitEmpresa')";
+        $cadenaSQL = "insert into usuario (identificacion,nombre,apellido,tipoUsuario,clave, nombreUsuario, correo, telefono, tipoIdentificacion, foto, direccion, nitEmpresa_FK) values ('$this->identificacion', '$this->nombre', '$this->apellido', '$this->tipoUsuario', md5('$this->clave'), '$this->nombreUsuario', '$this->correo', '$this->telefono', '$this->tipoIdentificacion', '$this->foto', '$this->direccion', '$this->nitEmpresa')";
         ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
@@ -184,7 +184,7 @@ class Usuario
         if (strlen($this->clave) < 32) {
             $this->clave = md5($this->clave); // si engresa clave, vendra sin una encriptacion, por ello antes de ingresarla se encripta
         }
-        $cadenaSQL = "update usuario set identificacion = '$this->identificacion', nombres = '$this->nombres', apellidos = '$this->apellidos', tipoUsuario = '$this->tipoUsuario', clave = '$this->clave', nombreUsuario = '$this->nombreUsuario', correo = '$this->correo', telefono = '$this->telefono', tipoIdentificacion = '$this->tipoIdentificacion', foto = '$this->foto', direccion = '$this->direccion', nitEmpresa_FK = '$this->nitEmpresa' where identificacion = '$identificacionAnterior'";
+        $cadenaSQL = "update usuario set identificacion = '$this->identificacion', nombre = '$this->nombre', apellido = '$this->apellido', tipoUsuario = '$this->tipoUsuario', clave = '$this->clave', nombreUsuario = '$this->nombreUsuario', correo = '$this->correo', telefono = '$this->telefono', tipoIdentificacion = '$this->tipoIdentificacion', foto = '$this->foto', direccion = '$this->direccion', nitEmpresa_FK = '$this->nitEmpresa' where identificacion = '$identificacionAnterior'";
         ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
@@ -211,7 +211,7 @@ class Usuario
         else
             $orden = "order by $orden";
 
-        $cadenaSQL = "select identificacion, nombres, apellidos, tipoUsuario, clave, nombreUsuario, correo, "
+        $cadenaSQL = "select identificacion, nombre, apellido, tipoUsuario, clave, nombreUsuario, correo, "
             . "telefono, tipoIdentificacion, foto, direccion, nitEmpresa_FK from usuario $filtro $orden";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
