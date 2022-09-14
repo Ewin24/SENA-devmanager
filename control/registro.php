@@ -16,8 +16,8 @@ if (count($identificaciones) > 0) {
 
 if (isset($_POST['registro']) && $_POST['clave1'] == $_POST['clave2']) {
     $identificacion = $_POST['identificacion'];
-    $nombres = $_POST['nombre'];
-    $apellidos = $_POST['apellido'];
+    $nombre = $_POST['nombre'];
+    $apellido = $_POST['apellido'];
     $tipo_usuario = 'T'; //por defecto es trabajador
     $clave = $_POST['clave2'];
     $nombreUsuario = $_POST['identificacion']; //por defecto el nombre de usuario es la identificacion
@@ -29,8 +29,8 @@ if (isset($_POST['registro']) && $_POST['clave1'] == $_POST['clave2']) {
 
     $usuario = new Usuario(null, null);
     $usuario->setIdentificacion($identificacion);
-    $usuario->setNombres($nombres);
-    $usuario->setApellidos($apellidos);
+    $usuario->setNombre($nombre);
+    $usuario->setApellido($apellido);
     $usuario->setTipoUsuario($tipo_usuario);
     $usuario->setClave($clave);
     $usuario->setNombreUsuario($nombreUsuario);

@@ -18,7 +18,7 @@ create table usuario(
     apellido varchar(50) not null,
     tipoIdentificacion char not null,
     correo varchar(60) not null,
-    contrasenia varchar(32) not null,
+    clave varchar(32) not null,
     direccion varchar(255) null,
     foto varchar(255) null,
     telefono varchar(15) null,
