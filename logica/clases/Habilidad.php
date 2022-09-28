@@ -4,8 +4,6 @@ class Habilidad
     private $idHabilidad;
     private $nombre;
     private $descripcion;
-    private $experiencia;
-    private $nivelDominio;
 
     //constructor con array
 
@@ -13,7 +11,7 @@ class Habilidad
     {
         if ($campo != null) {
             if (!is_array($campo)) {
-                $cadenaSQL = "SELECT idHabilidad,nombre,descripcion,experiencia,nivelDominio FROM habilidad WHERE $campo = $valor;";
+                $cadenaSQL = "SELECT idHabilidad,nombre,descripcion FROM habilidad WHERE $campo = $valor;";
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
                 print_r($campo);
             }
@@ -21,8 +19,6 @@ class Habilidad
             $this->idHabilidad_FK = $campo['idHabilidad'];
             $this->nombre = $campo['nombre'];
             $this->descripcion = $campo['descripcion'];
-            $this->experiencia = $campo['experiencia'];
-            $this->nivelDominio = $campo['nivelDominio'];
         }
     }
 
@@ -42,16 +38,6 @@ class Habilidad
         return $this->descripcion;
     }
 
-    public function getExperiencia()
-    {
-        return $this->experiencia;
-    }
-
-    public function getNivelDominio()
-    {
-        return $this->nivelDominio;
-    }
-
     //set
     public function setIdHabilidad($idHabilidad)
     {
@@ -68,19 +54,10 @@ class Habilidad
         $this->descripcion = $descripcion;
     }
 
-    public function setExperiencia($experiencia)
-    {
-        $this->experiencia = $experiencia;
-    }
-
-    public function setNivelDominio($nivelDominio)
-    {
-        $this->nivelDominio = $nivelDominio;
-    }
-
     public function guardar()
     {
-        $cadenaSQL = "INSERT INTO  habilidad (idHabilidad, nombre, descripcion, experiencia,nivelDominio ) VALUES ($this->idHabilidad,$this->nombre, $this->descripcion, $this->experiencia, $this->nivelDominio)";
+        //echo $this->nombre, $this->descripcion;
+        $cadenaSQL = "INSERT INTO  habilidad (nombre, descripcion ) VALUES ('$this->nombre', '$this->descripcion')";
         ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
@@ -101,7 +78,7 @@ class Habilidad
         else
             $orden = "order by $orden";
 
-        $cadenaSQL = "SELECT idHabilidad, nombre, descripcion, experiencia, nivelDominio FROM habilidad $filtro $orden";
+        $cadenaSQL = "SELECT idHabilidad, nombre, descripcion FROM habilidad $filtro $orden";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
