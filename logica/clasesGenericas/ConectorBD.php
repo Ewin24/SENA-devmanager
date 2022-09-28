@@ -39,7 +39,7 @@ class ConectorBD {
         try {
             $this->conexion = new PDO("$this->controlador: host=$this->servidor;port=$this->puerto;dbname=$this->baseDatos", $this->usuario, $this->clave);
             //$this->conexion = new PDO($dsn, $username, $passwd)
-            echo 'Conectado a la base de datos ';
+            //echo 'Conectado a la base de datos ';
             return true;
             //print_r(PDO::getAvailableDrivers()); //ver controladores que se encuentran disponibles en la base de datos
         } catch (Exception $e) {
