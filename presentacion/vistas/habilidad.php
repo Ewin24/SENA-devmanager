@@ -14,8 +14,6 @@ for ($i = 0; $i < count($resultado); $i++) {
     $lista .= "<td>{$proyecto->getIdHabilidad()}</td>";
     $lista .= "<td>{$proyecto->getNombre()}</td>";
     $lista .= "<td>{$proyecto->getDescripcion()}</td>";
-    $lista .= "<td>{$proyecto->getExperiencia()}</td>";
-    $lista .= "<td>{$proyecto->getNivelDominio()}</td>";
     $lista .= "</tr>";
 }
 ?>
@@ -27,9 +25,7 @@ for ($i = 0; $i < count($resultado); $i++) {
             <th>Id</th>
             <th>Nombre</th>
             <th>Descripcion</th>
-            <th>Experiencia</th>
-            <th>Dominio</th>
-            <th><a href="">adicionar</a></th>
+            <th><a href="principal.php?CONTENIDO=presentacion/configuracion/habilidad/habilidadFormulario.php">adicionar</a></th>
         </tr>
     </thead>
     <tbody>
