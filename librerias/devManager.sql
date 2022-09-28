@@ -29,8 +29,8 @@ create table usuario(
 create table habilidad(
     idHabilidad int auto_increment primary key,
     nombre varchar(55) not null,
-    descripcion varchar(255) not null,
-    experiencia varchar(500) not null,
+    --descripcion varchar(255) not null,
+    --experiencia varchar(500) not null,
     nivelDominio char not null
 );
 
