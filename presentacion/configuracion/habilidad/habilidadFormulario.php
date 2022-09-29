@@ -1,9 +1,14 @@
 <?php
 
-$cadenaSQL = "select idHabilidad,nombre,descripcion from habilidad";
-$empresas = ConectorBD::ejecutarQuery($cadenaSQL);
 $HabilidadesRegistradas = "";
+$titulo = $_REQUEST['accion'];
 
+if (isset($_REQUEST['idHabilidad'])) {
+    $titulo = 'Modificar';
+    $habilidad = new Habilidad('idHabilidad', $_REQUEST['idHabilidad']);
+} else {
+    $habilidad = new Habilidad(null, null);
+}
 ?>
 
 <!DOCTYPE html>
@@ -23,19 +28,18 @@ $HabilidadesRegistradas = "";
       <div class="col-md-10">
         <div class="card">
           <div class="card-header">
-            <h3 class="h1 text-center">Registro de Habilidad</h3>
+            <h3 class="h1 text-center"><?= $titulo?> Habilidad</h3>
           </div>
           <div class="card-body">
             <form action="principal.php?CONTENIDO=presentacion/configuracion/habilidad/habilidadCRUD.php" method="post">
               <div class="form-group">
-                <input type="text" class="form-control mt-2" id="nombre" name="nombre" placeholder="Nombre" title="Nombres" required />
+                <input type="text" class="form-control mt-2" id="nombre" name="nombre" placeholder="Nombre" title="Nombres" value="<?=$habilidad->getNombre()?>" required />
               </div>
               <div class="form-group">
-                <textarea class="form-control mt-2" id="descripcion" name="descripcion" placeholder="Descripcion" title="Descripcion" required rows="3"></textarea>
+                <textarea class="form-control mt-2" id="descripcion" name="descripcion" placeholder="Descripcion" title="Descripcion" value="<?=$habilidad->getDescripcion()?>" required rows="3"></textarea>
               </div>
               <div class="form-group">
-                <input type="hidden" name="accion" value="adicionar">
-                <input type="submit" class="btn btn-primary btn-block mt-2" value="Confirmar" title="confirmar" />
+                <input type="submit" class="btn btn-primary btn-block mt-2" name = "accion" value="<?=$titulo?>" title="confirmar" />
                 <a href="principal.php?CONTENIDO=presentacion/vistas/habilidad.php">
                   <input type="button" class="btn btn-danger btn-block mt-2" value="Cancelar" title="cancelar" />
                 </a>
