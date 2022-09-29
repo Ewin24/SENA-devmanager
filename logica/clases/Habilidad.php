@@ -23,8 +23,11 @@ class Habilidad
     }
 
     //get
-    public function getIdHabilidad()
+    public function getIdHabilidad($campo,$valor)
     {
+        $cadenaSQL = "SELECT idHabilidad FROM habilidad WHERE $campo = '$valor';";
+        $id = ConectorBD::ejecutarQuery($cadenaSQL);
+        $this->idHabilidad = $id;
         return $this->idHabilidad;
     }
 
