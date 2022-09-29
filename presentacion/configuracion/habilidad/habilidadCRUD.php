@@ -7,13 +7,26 @@ if (!isset($_SESSION['usuario'])) {
 
 $habilidad = new Habilidad(null, null);
 switch ($_REQUEST['accion']) {
-    case 'adicionar':
+    case 'Adicionar':
         $habilidad->setNombre($_REQUEST['nombre']);
         $habilidad->setDescripcion($_REQUEST['descripcion']);
         $habilidad->guardar();
+        //$habilidad->getIdHabiliad('nombre', $_REQUEST['nombre']);
         break;
+
+    case 'Modificar':
+        $habilidad->setNombre($_REQUEST['nombre']);
+        $habilidad->setDescripcion($_REQUEST['descripcion']);
+        $habilidad->modificar();
+        break;
+
+        case 'Eliminar':
+            // code...
+            break;
 
     default:
         # code...
         break;
 }
+
+header('location: principal.php?CONTENIDO=presentacion/vistas/habilidad.php'); //regresa a la pagina para continuar las acciones
