@@ -6,7 +6,6 @@ class Habilidad
     private $descripcion;
 
     //constructor con array
-
     public function __construct($campo, $valor)
     {
         if ($campo != null) {
@@ -30,6 +29,12 @@ class Habilidad
         $this->idHabilidad = $id;
         return $this->idHabilidad;
     }
+
+    public function getIdHabilidad2()
+    {
+        return $this->idHabilidad;
+    }
+    
 
     public function getNombre()
     {
@@ -61,6 +66,12 @@ class Habilidad
     {
         //echo $this->nombre, $this->descripcion;
         $cadenaSQL = "INSERT INTO  habilidad (nombre, descripcion ) VALUES ('$this->nombre', '$this->descripcion')";
+        ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    public function modificar()
+    {
+        $cadenaSQL = "update habilidad set nombre='{$this->nombre}', descripcion='{$this->descripcion}' where idHabilidad= {$this->idHabilidad}";
         ConectorBD::ejecutarQuery($cadenaSQL);
     }
 

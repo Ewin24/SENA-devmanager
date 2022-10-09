@@ -50,11 +50,6 @@ create table perfil(
     descripcion varchar(500) null
 );
 
-create table estudio(
-    idEstudio int auto_increment primary key,
-    nombreCertificacion varchar(55) not null
-);
-
 create table perfilUsuarios(
     idUsuario_FK varchar(15) not null,
     idPerfil_FK int not null,
@@ -82,14 +77,16 @@ create table postulaciones(
     foreign key (idProyecto_FK) references proyecto(idProyecto) on delete restrict on update cascade
 );
 
-create table certificaciones(
-    id int auto_increment primary key,
+create table estudio(
+    idEstudio int auto_increment primary key,
+    idCertificacion int not null,
+    nombreEstudio varchar(255),
     fechaCertificacion datetime not null,
-    fotoCertificado varchar(255) not null,
+    certificado varchar(255) not null,
     idUsuario_FK varchar(15) not null,
-    idEstudio_FK int not null,
+    idPerfilEstudio_FK int not null,
     foreign key (idUsuario_FK) references usuario(identificacion) on delete restrict on update cascade,
-    foreign key (idEstudio_FK) references estudio(idEstudio) on delete restrict on update cascade
+    foreign key (idPerfilEstudio_FK) references perfilEstudio(idPerfilEstudio) on delete restrict on update cascade
 );
 
 create table perfilProyecto(
@@ -100,10 +97,9 @@ create table perfilProyecto(
 );
 
 create table perfilEstudio(
+    idPerfilEstudio int auto_increment primary key,
     idPerfil_FK int not null,
-    idEstudio_FK int not null,
-    foreign key (idPerfil_FK) references perfil(idPerfil) on delete restrict on update cascade,
-    foreign key (idEstudio_FK) references estudio(idEstudio) on delete restrict on update cascade
+    foreign key (idPerfil_FK) references perfil(idPerfil) on delete restrict on update cascade
 );
 
 create table perfilHabilidad(
