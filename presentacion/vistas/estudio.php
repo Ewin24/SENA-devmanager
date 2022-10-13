@@ -6,31 +6,32 @@ else {
 }
 $lista = '';
 
-$resultado = Habilidad::getListaEnObjetos(null, null);
+$resultado = Estudio::getListaEnObjetos(null, null);
 
 for ($i = 0; $i < count($resultado); $i++) {
-    $habilidad = $resultado[$i];
+    $estudio = $resultado[$i];
+    echo $estudio;
     $lista .= '<tr>';
-    $lista .= "<td>{$habilidad->getIdHabilidad('nombre',$habilidad->getNombre())[0][0]}</td>";
-    $lista .= "<td>{$habilidad->getNombre()}</td>";
-    $lista .= "<td>{$habilidad->getDescripcion()}</td>";
-    //$lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/habilidad/habilidadFormulario.php&accion=adicionar'>Adicionar</a></td>";
-    $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/habilidad/habilidadFormulario.php&accion=Modificar&idHabilidad={$habilidad->getIdHabilidad('nombre',$habilidad->getNombre())[0][0]}' title='modificar habilidad'> Modificar </a></td>";
-    $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/habilidad/habilidadCRUD.php&accion=Eliminar&idHabilidad={$habilidad->getIdHabilidad('nombre',$habilidad->getNombre())[0][0]}' onclick='eliminar({$habilidad->getIdHabilidad('nombre',$habilidad->getNombre())[0][0]})' title='Eliminar Habilidad'>Eliminar</a></td>";
+    $lista .= "<td>{$estudio->getIdEstudio()}</td>";
+    $lista .= "<td>{$estudio->getNombreEstudio()}</td>";
+    $lista .= "<td>{$estudio->getCertificado()}</td>";
+    $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/estudio/estudioFormulario.php&accion=Modificar&idEstudio={$estudio->getIdEstudio()}' title='modificar Estudio'> Modificar </a></td>";
+    $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/estudio/estudioCRUD.php&accion=Eliminar&idEstudio={$estudio->getIdEstudio()}' onclick='eliminar({$estudio->getIdEstudio()})' title='Eliminar Estudio'>Eliminar</a></td>";
+    $lista .= "<a href='presentacion/candidatos/propuestas/{$candidato->getPropuesta()}' title= 'ver propuesta' target= '-blank'><img src='presentacion/imagenes/pdf.png'></a>";
+    
     $lista .= "<td></td>";
     $lista .= "</tr>";
-
 }
 ?>
 
-<h3>LISTA DE HABILIDADES</h3>
+<h3>LISTA DE ESTUDIOS</h3>
 <table border="1">
     <thead>
         <tr>
             <th>Id</th>
             <th>Nombre</th>
-            <th>Descripcion</th>
-            <th><a href='principal.php?CONTENIDO=presentacion/configuracion/habilidad/habilidadFormulario.php&accion=Adicionar'>Adicionar</a></th>
+            <th>Certificacion</th>
+            <th><a href='principal.php?CONTENIDO=presentacion/configuracion/estudio/estudioFormulario.php&accion=Adicionar'>Adicionar</a></th>
         </tr>
     </thead>
     <tbody>
@@ -43,7 +44,7 @@ for ($i = 0; $i < count($resultado); $i++) {
     function eliminar(id) {
         var respuesta = confirm("Esta seguro de eliminar este registro?");
         if (respuesta) {
-            location = "principal.php?CONTENIDO=presentacion/configuracion/habilidad/habilidadCRUD.php&accion=Eliminar&idHabilidad=" + id;
+            location = "principal.php?CONTENIDO=presentacion/configuracion/habilidad/estudioCRUD.php&accion=Eliminar&idEstudio=" + id;
         }
     }
 </script>

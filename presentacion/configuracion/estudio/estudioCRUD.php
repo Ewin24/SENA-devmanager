@@ -5,16 +5,19 @@ if (!isset($_SESSION['usuario'])) {
     header('location: index.php?mensaje=Acceso no autorizado');
 }
 
-$habilidad = new Habilidad(null, null);
+$estudio = new Estudio(null, null);
 
-$idHabiliad = $_REQUEST['idHabilidad'];
+$idEstudio = $_REQUEST['idEstudio'];
 
 switch ($_REQUEST['accion']) {
     case 'Adicionar':
-        $habilidad->setNombre($_REQUEST['nombre']);
-        $habilidad->setDescripcion($_REQUEST['descripcion']);
-        $habilidad->guardar();
-        //$habilidad->getIdHabiliad('nombre', $_REQUEST['nombre']);
+        $estudio->setNombreEstudio($_REQUEST['nombreEstudio']);
+        if (isset($_REQUEST['certificado'])) {
+            $estudio->setCertificado($_REQUEST['certificado']);
+        }
+        $estudio->setCertificado(""); //si no se envio el certificado al adicionar, ponerlo vacio
+        $estudio->setFechaCertificacion($_REQUEST['fechaCertificado']);
+        $estudio->guardar();
         break;
 
     case 'Modificar':
@@ -34,4 +37,4 @@ switch ($_REQUEST['accion']) {
         break;
 }
 
-header('location: principal.php?CONTENIDO=presentacion/vistas/habilidad.php'); //regresa a la pagina para continuar las acciones
+header('location: principal.php?CONTENIDO=presentacion/vistas/estudio.php'); //regresa a la pagina para continuar las acciones

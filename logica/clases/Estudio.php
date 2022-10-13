@@ -1,6 +1,6 @@
 <?php
 
-create class Estudio{
+class Estudio{
 	private $idEstudio;
 	private $idCertificacion;
 	private $nombreEstudio;
@@ -110,13 +110,12 @@ create class Estudio{
 
     public static function getListaEnObjetos($filtro, $orden)
     {
-        $resultado = Habilidad::getLista($filtro, $orden);
+        $resultado = Estudio::getLista($filtro, $orden);
         $lista = array();
         for ($i = 0; $i < count($resultado); $i++) {
-            $estudio = new Habilidad($resultado[$i], null);
+            $estudio = new Estudio($resultado[$i], null);
             $lista[$i] = $estudio;
         }
         return $lista;
     }
 }
-?>

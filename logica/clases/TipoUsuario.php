@@ -35,7 +35,7 @@ class TipoUsuario
         // $menu .= "<li class='border nav-item me-4'><a class='nav-link active' aria-current='page' href='#'>Inicio</a></li>";
         $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/proyectos.php&accion=''&id=''>Proyectos</a></li>";
         $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='#'>Perfil</a></li>";
-        $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='#'>Estudios</a></li>";
+        $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/estudio.php&accion=''&id='''>Estudios</a></li>";
         $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/habilidad.php&accion=''&id='''>Habilidades</a></li>";
 
         switch ($this->codigo) {
