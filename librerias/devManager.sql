@@ -41,7 +41,8 @@ create table proyecto(
     estado char null,
     fechaInicio datetime not null,
     fechaFinalizacion datetime not null,
-    directorProyecto datetime not null
+    idUsuario_FK varchar(15) not null,
+    foreign key (idUsuario_FK) references usuario(identificacion) on delete restrict on update cascade --revisar que este funcionando la foranea con usuario, los directores del proyecto son una lista de usuarios de tipo 'D' o director
 );
 
 create table perfil(
@@ -108,3 +109,6 @@ create table perfilHabilidad(
     foreign key (idHabilidad_FK) references habilidad(idHabilidad) on delete restrict on update cascade,
     foreign key (idPerfil_FK) references perfil(idPerfil) on delete restrict on update cascade
 );
+
+
+ALTER TABLE `usuarioestudio` ADD CONSTRAINT `fk1` FOREIGN KEY (`idEstudio_FK`) REFERENCES `estudio`(`idEstudio`) ON DELETE RESTRICT ON UPDATE CASCADE; ALTER TABLE `usuarioestudio` ADD CONSTRAINT `fk2` FOREIGN KEY (`identificacion_FK`) REFERENCES `usuario`(`identificacion`) ON DELETE RESTRICT ON UPDATE CASCADE; 

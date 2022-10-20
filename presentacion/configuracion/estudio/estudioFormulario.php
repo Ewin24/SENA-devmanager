@@ -40,8 +40,7 @@ $idHabilidad = $_REQUEST['idEstudio'];
 
 
               <!-- Inicio de caja para fechas-->
-              Fehca del Certificado <input class="mt-5" type="date" id="fechaCertificado" name="fechaCertificado" title="fechaCertificado" value="<?= $estudio->getFechaCertificacion() ?>">
-
+              Fecha del Certificado <input class="mt-5" type="date" id="fechaCertificado" name="fechaCertificado" title="fechaCertificado" value="<?= $estudio->getFechaCertificacion() ?>">
               <!-- fin de caja para fechas -->
 
               <!-- caja para subir archivo -->

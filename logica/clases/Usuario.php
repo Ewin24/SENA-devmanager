@@ -161,7 +161,8 @@ class Usuario
         $this->nitEmpresa = $nitEmpresa;
     }
 
-    public function getTipoEnObjeto(){
+    public function getTipoEnObjeto()
+    {
         $tipoUsuario = new TipoUsuario($this->tipoUsuario);
         return $tipoUsuario;
     }
@@ -235,5 +236,11 @@ class Usuario
             $usuario = $resultado[0];
         }
         return $usuario;
+    }
+
+    public static function esAdmin($identificacion)
+    {
+        $cadenaSQL = "SELECT tipoUsuario FROM `usuario` WHERE identificacion = $identificacion";
+        
     }
 }

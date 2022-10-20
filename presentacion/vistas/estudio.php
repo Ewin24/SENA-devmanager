@@ -17,7 +17,7 @@ for ($i = 0; $i < count($resultado); $i++) {
     $lista .= "<td>{$estudio->getCertificado()}</td>";
     $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/estudio/estudioFormulario.php&accion=Modificar&idEstudio={$estudio->getIdEstudio()}' title='modificar Estudio'> Modificar </a></td>";
     $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/estudio/estudioCRUD.php&accion=Eliminar&idEstudio={$estudio->getIdEstudio()}' onclick='eliminar({$estudio->getIdEstudio()})' title='Eliminar Estudio'>Eliminar</a></td>";
-    $lista .= "<a href='presentacion/candidatos/propuestas/{$candidato->getPropuesta()}' title= 'ver propuesta' target= '-blank'><img src='presentacion/imagenes/pdf.png'></a>";
+    //$lista .= "<a href='presentacion/candidatos/propuestas/{$candidato->getPropuesta()}' title= 'ver propuesta' target= '-blank'><img src='presentacion/imagenes/pdf.png'></a>";
     
     $lista .= "<td></td>";
     $lista .= "</tr>";
@@ -44,7 +44,7 @@ for ($i = 0; $i < count($resultado); $i++) {
     function eliminar(id) {
         var respuesta = confirm("Esta seguro de eliminar este registro?");
         if (respuesta) {
-            location = "principal.php?CONTENIDO=presentacion/configuracion/habilidad/estudioCRUD.php&accion=Eliminar&idEstudio=" + id;
+            location = "principal.php?CONTENIDO=presentacion/configuracion/estudio/estudioCRUD.php&accion=Eliminar&idEstudio=" + id;
         }
     }
 </script>

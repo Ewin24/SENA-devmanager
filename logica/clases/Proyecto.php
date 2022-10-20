@@ -9,13 +9,13 @@ class Proyecto
     protected $estado;
     protected $fechaInicio;
     protected $fechaFinalizacion;
-    protected $directorProyecto;
+    protected $idUsuario_FK; //puede tener como foranea el director de proyecto
 
     public function __construct($campo, $valor)
     {
         if ($campo != null) {
             if (!is_array($campo)) {
-                $cadenaSQL = "select id, nombre, descripcion, estado, fechaInicio, fechaFinalizacion, directorProyecto from proyecto where $campo = $valor";
+                $cadenaSQL = "select id, nombre, descripcion, estado, fechaInicio, fechaFinalizacion, idUsuario_FK from proyecto where $campo = $valor";
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
             }
             //asignacion de los datos
@@ -25,7 +25,7 @@ class Proyecto
             $this->estado = $campo['estado'];
             $this->fechaInicio = $campo['fechaInicio'];
             $this->fechaFinalizacion = $campo['fechaFinalizacion'];
-            $this->directorProyecto = $campo['directorProyecto'];
+            $this->idUsuario_FK = $campo['idUsuario_FK'];
         }
     }
 
@@ -44,9 +44,28 @@ class Proyecto
         return $this->descripcion;
     }
 
+    // public function getEstado()
+    // {
+    //     return $this->estado;
+    // }
+
+    //obtener el estado haciendo uso de la clase Fecha,  si la fecha de inicio es mayor a la de fin, entonces esta en estado "cerrado"  y si no, esta en estado "abierto" 
+    //  y si la fecha de inicio es igual a la de fin, esta en estado "abierto"  y si la fecha de inicio es menor a la de fin, esta en estado "abierto"  
     public function getEstado()
     {
-        return $this->estado;
+        $fechaActual = date('Y-m-d H:i:s');
+        // echo $fechaActual;
+        $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaInicio);
+        if ($diferenciaFechas < 0) {
+            return "Por ejecutar";
+        } else {
+            $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaFinalizacion);
+            if ($diferenciaFechas > 0) {
+                return "Terminado";
+            } else {
+                return "En ejecucion";
+            }
+        }
     }
 
     public function getFechaInicio()
@@ -59,9 +78,9 @@ class Proyecto
         return $this->fechaFinalizacion;
     }
 
-    public function getDirectorProyecto()
+    public function getIdUsuario_FK()
     {
-        return $this->directorProyecto;
+        return $this->idUsuario_FK;
     }
 
     public function setId($id)
@@ -94,21 +113,24 @@ class Proyecto
         $this->fechaFinalizacion = $fechaFinalizacion;
     }
 
-    public function setDirectorProyecto($directorProyecto)
+    public function setIdUsuario_FK($idUsuario_FK)
     {
-        $this->directorProyecto = $directorProyecto;
+        $this->idUsuario_FK = $idUsuario_FK;
     }
+
+
 
     public function getProyectoPorNombre($nombre)
     {
-        $cadenaSQL = "select nombre, descripcion, estado, fechaInicio, fechaFinalizacion, directorProyecto from proyecto where nombre = '$nombre'";
+        $cadenaSQL = "select nombre, descripcion, estado, fechaInicio, fechaFinalizacion, idUsuario_FK from proyecto where nombre = '$nombre'";
         return ConectorBD::ejecutarQuery($cadenaSQL)[0];
     }
 
-    public function getProyectoPorDirector($director)
+    public function getProyectoPorDirector($idDirector) //se busca el director como foranea
     {
-        $cadenaSQL = "select nombre, descripcion, estado, fechaInicio, fechaFinalizacion, directorProyecto from proyecto where directorProyecto = '$director'";
+        $cadenaSQL = "SELECT usuario.* FROM `proyecto` INNER JOIN usuario ON usuario.identificacion = '$idDirector' WHERE usuario.tipoUsuario = 'D';";
         return ConectorBD::ejecutarQuery($cadenaSQL);
+        //consulta el director y devuelve todos los datos
     }
 
     public function getProyectoPorEstado($estado)
@@ -136,23 +158,23 @@ class Proyecto
     }
 
     //eliminar un proyecto
-    public function eliminarProyecto($id)
+    public function eliminarProyecto($idProyecto)
     {
-        $cadenaSQL = "delete from proyecto where id = '$id'";
+        $cadenaSQL = "delete from proyecto where idProyecto = '$idProyecto'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
     //adicionar un proyecto
-    public function adicionarProyecto($nombre, $descripcion, $estado, $fechaInicio, $fechaFinalizacion, $directorProyecto)
+    public function adicionarProyecto($nombre, $descripcion, $estado, $fechaInicio, $fechaFinalizacion, $idUsuario_FK)
     {
-        $cadenaSQL = "insert into proyecto (nombre, descripcion, estado, fechaInicio, fechaFinalizacion, directorProyecto) values( '$nombre', '$descripcion', '$estado', '$fechaInicio', '$fechaFinalizacion', '$directorProyecto')";
+        $cadenaSQL = "insert into proyecto (nombre, descripcion, estado, fechaInicio, fechaFinalizacion, idUsuario_FK) values( '$nombre', '$descripcion', '$estado', '$fechaInicio', '$fechaFinalizacion', '$idUsuario_FK')";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
     //modificar un proyecto
-    public function modificarProyecto($id, $nombre, $descripcion, $estado, $fechaInicio, $fechaFinalizacion, $directorProyecto)
+    public function modificarProyecto($idProyecto, $nombre, $descripcion, $estado, $fechaInicio, $fechaFinalizacion, $idUsuario_FK)
     {
-        $cadenaSQL = "update proyecto set nombre = '$nombre', descripcion = '$descripcion', estado = '$estado', fechaInicio = '$fechaInicio', fechaFinalizacion = '$fechaFinalizacion', directorProyecto = '$directorProyecto' where id = '$id'";
+        $cadenaSQL = "update proyecto set nombre = '$nombre', descripcion = '$descripcion', estado = '$estado', fechaInicio = '$fechaInicio', fechaFinalizacion = '$fechaFinalizacion', idUsuario_FK = '$idUsuario_FK' where idProyecto = '$idProyecto'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
@@ -167,7 +189,7 @@ class Proyecto
         else
             $orden = "order by $orden";
 
-        $cadenaSQL = "select idProyecto, nombre, descripcion, estado, fechaInicio, fechaFinalizacion, directorProyecto from proyecto $filtro $orden";
+        $cadenaSQL = "select idProyecto, nombre, descripcion, estado, fechaInicio, fechaFinalizacion, idUsuario_FK from proyecto $filtro $orden";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
