@@ -19,12 +19,11 @@ for ($i = 0; $i < count($resultado); $i++) {
     $lista .= "<td>{$proyecto->getFechaInicio()}</td>";
     $lista .= "<td>{$proyecto->getFechaFinalizacion()}</td>";
 
-    if ($evento->getEstado() == 'Por ejecutar') { //si el evento esta por ejecutar, se puede editar o eliminar
+    if ($USUARIO->esAdmin()) { //esta misma validacion se hace para todos, en caso de que sea trabajador se deja que postule o agregue estudios o habilidades
         $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoFormulario.php&accion=Modificar&idProyecto={$proyecto->getIdproyecto()}' title='modificar proyecto'> Modificar </a></td>";
-    
+        $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Eliminar&idProyecto={$proyecto->getIdproyecto()}' onclick='eliminar({$proyecto->getIdproyecto()})' title='Eliminar proyecto'>Eliminar</a></td>";
     }
 
-    $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Eliminar&idProyecto={$proyecto->getIdproyecto()}' onclick='eliminar({$proyecto->getIdproyecto()})' title='Eliminar proyecto'>Eliminar</a></td>";
     $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Postularse&idProyecto={$proyecto->getIdproyecto()}&idUsuario={$USUARIO->getIdentificacion()}' title='Postular a proyecto'>Postularse</a></td>";
     $lista .= "<td></td>";
     $lista .= "</tr>";
@@ -41,7 +40,11 @@ for ($i = 0; $i < count($resultado); $i++) {
             <th>Estado</th>
             <th>Fecha de Inicio</th>
             <th>Fecha de finalizacion</th>
-            <th><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoFormulario.php&accion=Adicionar'>Adicionar</a></th>
+            <?php
+            if ($USUARIO->esAdmin()) {
+                echo  "<th><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoFormulario.php&accion=Adicionar'>Adicionar</a></th>";
+            }
+            ?>
         </tr>
     </thead>
     <tbody>

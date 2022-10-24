@@ -41,7 +41,8 @@ if (isset($_REQUEST['idProyecto'])) {
                                 <textarea class="form-control mt-2" id="descripcion" name="descripcion" placeholder="<?= $descripcion ?>" title="Descripcion" rows="3" required><?= $descripcion ?> </textarea>
                             </div>
 
-                                                        
+                            
+
 
                             <!-- inicio de peticion de fechas -->
                             <div class="form-group">
