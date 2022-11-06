@@ -110,5 +110,10 @@ create table perfilHabilidad(
     foreign key (idPerfil_FK) references perfil(idPerfil) on delete restrict on update cascade
 );
 
+create table usuarioEstudio(
+    idUsuarioEstudio int auto_increment primary KEY,
+    identificacion_FK varchar(15),
+    idestudio_FK int
+);
 
 ALTER TABLE `usuarioestudio` ADD CONSTRAINT `fk1` FOREIGN KEY (`idEstudio_FK`) REFERENCES `estudio`(`idEstudio`) ON DELETE RESTRICT ON UPDATE CASCADE; ALTER TABLE `usuarioestudio` ADD CONSTRAINT `fk2` FOREIGN KEY (`identificacion_FK`) REFERENCES `usuario`(`identificacion`) ON DELETE RESTRICT ON UPDATE CASCADE; 
