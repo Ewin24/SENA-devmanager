@@ -29,7 +29,9 @@ else {
 <body>
     <center>
         <div id="encabezado" class="m-4">
-            <h1 class="display-1">DevManager</h1>
+            <a href="./principal.php" target="_blank">
+                <h1 class="display-1">DevManager</h1s>
+            </a>
         </div>
     </center>
 

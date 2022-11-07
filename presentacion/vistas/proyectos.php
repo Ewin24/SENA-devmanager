@@ -5,6 +5,7 @@ else {
     $USUARIO = unserialize($_SESSION['usuario']);
 }
 $lista = '';
+$identificacion = $USUARIO->getIdentificacion();
 
 $resultado = Proyecto::getListaEnObjetos(null, null);
 
@@ -19,7 +20,7 @@ for ($i = 0; $i < count($resultado); $i++) {
     $lista .= "<td>{$proyecto->getFechaInicio()}</td>";
     $lista .= "<td>{$proyecto->getFechaFinalizacion()}</td>";
 
-    if ($USUARIO->esAdmin()) { //esta misma validacion se hace para todos, en caso de que sea trabajador se deja que postule o agregue estudios o habilidades
+    if ($USUARIO->esAdmin($USUARIO->getIdentificacion())) { //esta misma validacion se hace para todos, en caso de que sea trabajador se deja que postule o agregue estudios o habilidades
         $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoFormulario.php&accion=Modificar&idProyecto={$proyecto->getIdproyecto()}' title='modificar proyecto'> Modificar </a></td>";
         $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Eliminar&idProyecto={$proyecto->getIdproyecto()}' onclick='eliminar({$proyecto->getIdproyecto()})' title='Eliminar proyecto'>Eliminar</a></td>";
     }
@@ -41,7 +42,7 @@ for ($i = 0; $i < count($resultado); $i++) {
             <th>Fecha de Inicio</th>
             <th>Fecha de finalizacion</th>
             <?php
-            if ($USUARIO->esAdmin()) {
+            if (Usuario::esAdmin($identificacion)) {
                 echo  "<th><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoFormulario.php&accion=Adicionar'>Adicionar</a></th>";
             }
             ?>
@@ -51,7 +52,6 @@ for ($i = 0; $i < count($resultado); $i++) {
         <?= $lista ?>
     </tbody>
 </table>
-
 
 <script type="text/javascript">
     function eliminar(id) {

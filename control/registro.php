@@ -1,6 +1,5 @@
 <?php
 //codigo para recibir los datos del formulario de registro y guardarlos en la base de datos
-echo 'hola';
 require_once '../logica/clases/usuario.php';
 require_once '../logica/clasesGenericas/ConectorBD.php';
 
@@ -9,7 +8,7 @@ $identificacion = $_POST['identificacion'];
 $cadenaSQL = "select identificacion from usuario where identificacion = $identificacion";
 $identificaciones = ConectorBD::ejecutarQuery($cadenaSQL);
 if (count($identificaciones) > 0) {
-    header("Location: ?mensaje=La identificacion ya existe en la base de datos");
+    header("Location: ../index.php ?mensaje= ya existe un usuario con esa identificacion en el sistema");
     echo "<div id='alerta' class='alert alert-danger text-center m-2 ' role='alert'>$mensaje</div>";
     exit();
 }
@@ -52,6 +51,3 @@ if (isset($_POST['registro']) && $_POST['clave1'] == $_POST['clave2']) {
  //    $ruta = $_FILES['imagen']['tmp_name'];
  //    $destino = "../img/usuarios/" . $imagen;
  //    move_uploaded_file($ruta, $destino);
-
-
- 

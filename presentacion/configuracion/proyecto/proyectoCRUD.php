@@ -16,8 +16,8 @@ switch ($_REQUEST['accion']) {
         $proyecto->setEstado($_REQUEST['estado']);
         $proyecto->setFechaInicio($_REQUEST['fechaInicio']);
         $proyecto->setFechaFinalizacion($_REQUEST['fechaFin']);
-        $proyecto->setIdUsuario_FK($_REQUEST['idUsuario']); //llega desde proyectos.php y es el usuario
-        $estudio->guardar();
+        $proyecto->setIdUsuario_FK($_REQUEST['idUsuario']); //llega desde proyectos.php y es el director de proyecto
+        $proyecto->guardar();
         break;
 
     case 'Modificar':

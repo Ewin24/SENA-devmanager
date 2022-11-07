@@ -240,9 +240,9 @@ class Usuario
 
     public static function esAdmin($identificacion)
     {
-        $cadenaSQL = "SELECT tipoUsuario FROM `usuario` WHERE identificacion = $identificacion";
+        $cadenaSQL = "SELECT tipoUsuario FROM usuario WHERE identificacion = $identificacion";
         $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
-        if ($resultado === 'A') {
+        if ($resultado[0]['tipoUsuario'] == 'A') { //regresa de la base de datos como arreglo
             return true;
         }
     }

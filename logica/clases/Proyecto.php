@@ -158,23 +158,23 @@ class Proyecto
     }
 
     //eliminar un proyecto
-    public function eliminarProyecto($idProyecto)
+    public function eliminar($idProyecto)
     {
         $cadenaSQL = "delete from proyecto where idProyecto = '$idProyecto'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
     //adicionar un proyecto
-    public function adicionarProyecto($nombre, $descripcion, $estado, $fechaInicio, $fechaFinalizacion, $idUsuario_FK)
+    public function guardar()
     {
-        $cadenaSQL = "insert into proyecto (nombre, descripcion, estado, fechaInicio, fechaFinalizacion, idUsuario_FK) values( '$nombre', '$descripcion', '$estado', '$fechaInicio', '$fechaFinalizacion', '$idUsuario_FK')";
+        $cadenaSQL = "insert into proyecto (nombre, descripcion, estado, fechaInicio, fechaFinalizacion, idUsuario_FK) values( '$this->nombre', '$this->descripcion', '$this->estado', '$this->fechaInicio', '$this->fechaFinalizacion', '$this->idUsuario_FK')";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
     //modificar un proyecto
-    public function modificarProyecto($idProyecto, $nombre, $descripcion, $estado, $fechaInicio, $fechaFinalizacion, $idUsuario_FK)
+    public function modificar($idProyectoAnterior)
     {
-        $cadenaSQL = "update proyecto set nombre = '$nombre', descripcion = '$descripcion', estado = '$estado', fechaInicio = '$fechaInicio', fechaFinalizacion = '$fechaFinalizacion', idUsuario_FK = '$idUsuario_FK' where idProyecto = '$idProyecto'";
+        $cadenaSQL = "update proyecto set nombre = '$this->nombre', descripcion = '$this->descripcion', estado = '$this->estado', fechaInicio = '$this->fechaInicio', fechaFinalizacion = '$this->fechaFinalizacion', idUsuario_FK = '$this->idUsuario_FK' where idProyecto = '$idProyectoAnterior'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 

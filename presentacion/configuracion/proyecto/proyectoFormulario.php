@@ -11,6 +11,13 @@ if (isset($_REQUEST['idProyecto'])) {
     $descripcion = "Descripcion";
     $idProyecto = "";
 }
+//conteo para seleccionar el director de proyecto
+$cadenaSQL = "select identificacion, nombre, apellido from usuario where tipoUsuario = 'D' "; //hacer la validacion de que el tipo de usuario sea 'D'
+$usuarios = ConectorBD::ejecutarQuery($cadenaSQL);
+$listaUsuarios = "";
+for ($i = 0; $i < count($usuarios); $i++) {
+    $listaUsuarios .= "<option value='" . $usuarios[$i]['identificacion'] . "'>" . $usuarios[$i]['nombre'] . $usuarios[$i]['apellido'] . "</option>";
+}
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +28,7 @@ if (isset($_REQUEST['idProyecto'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="../../../librerias/bootstrap5/css/bootstrap.min.css" />
     <script src="../../../librerias/bootstrap5/js/bootstrap.min.js"></script>
-    <title>Registro Proyecto</title>
+    <title><?= $titulo ?> Proyecto</title>
 </head>
 
 <body>
@@ -41,22 +48,28 @@ if (isset($_REQUEST['idProyecto'])) {
                                 <textarea class="form-control mt-2" id="descripcion" name="descripcion" placeholder="<?= $descripcion ?>" title="Descripcion" rows="3" required><?= $descripcion ?> </textarea>
                             </div>
 
-                            
-
-
                             <!-- inicio de peticion de fechas -->
                             <div class="form-group">
-                                Fecha Inicio (aaaa-mm-dd HH:mm:ss) <input class="mt-5" type="datetime" id="fechaInicio" name="fechaInicio" title="fecha de inicio" value="<?= $proyecto->getFechaInicio() ?>">
+                                Fecha Inicio (aaaa-mm-dd HH:mm:ss) <input class="mt-4" type="datetime" id="fechaInicio" name="fechaInicio" title="fecha de inicio" value="<?= $proyecto->getFechaInicio() ?>">
                             </div>
                             <div class="form-group">
-                                Fehca Fin (aaaa-mm-dd HH:mm:ss) <input class="mt-5" type="datetime" id="fechaFin" name="fechaFin" title="fecha de finalizacion" value="<?= $proyecto->getFechaFinalizacion() ?>">
+                                Fehca Fin (aaaa-mm-dd HH:mm:ss) <input class="mt-4" type="datetime" id="fechaFin" name="fechaFin" title="fecha de finalizacion" value="<?= $proyecto->getFechaFinalizacion() ?>">
                             </div>
                             <!-- fin peticion de fechas -->
 
-                            <div class="form-group">
+                            <!-- director de proyecto  -->
+                            <div class="form-group mt-4">
+                                <select class="form-control mt-2" id="directores" name="idUsuario" title="Directores de proeyecto del sistema">
+                                    <option value="">Directores de proyecto</option>
+                                    <?= $listaUsuarios ?>
+                                </select>
+                            </div>
+                            <!-- director de proyecto -->
+
+                            <div class="form-group ">
                                 <input type="hidden" name="idPerfil" value="<?= $idPerfil ?>">
                                 <input type="submit" class="btn btn-primary btn-block mt-2" name="accion" value="<?= $titulo ?>" title="confirmar" />
-                                <a href="principal.php?CONTENIDO=presentacion/vistas/perfil.php">
+                                <a href="principal.php?CONTENIDO=presentacion/vistas/proyectos.php">
                                     <input type="button" class="btn btn-danger btn-block mt-2" value="Cancelar" title="cancelar" />
                                 </a>
                             </div>
