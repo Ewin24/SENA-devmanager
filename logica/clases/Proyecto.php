@@ -3,7 +3,7 @@
 class Proyecto
 {
 
-    protected $id;
+    protected $idProyecto;
     protected $nombre;
     protected $descripcion;
     protected $estado;
@@ -15,11 +15,11 @@ class Proyecto
     {
         if ($campo != null) {
             if (!is_array($campo)) {
-                $cadenaSQL = "select id, nombre, descripcion, estado, fechaInicio, fechaFinalizacion, idUsuario_FK from proyecto where $campo = $valor";
+                $cadenaSQL = "select idProyecto, nombre, descripcion, estado, fechaInicio, fechaFinalizacion, idUsuario_FK from proyecto where $campo = $valor";
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
             }
             //asignacion de los datos
-            $this->id = $campo['id'];
+            $this->id = $campo['idProyecto'];
             $this->nombre = $campo['nombre'];
             $this->descripcion = $campo['descripcion'];
             $this->estado = $campo['estado'];
@@ -29,9 +29,9 @@ class Proyecto
         }
     }
 
-    public function getId()
+    public function getIdProyecto()
     {
-        return $this->id;
+        return $this->idProyecto;
     }
 
     public function getNombre()
@@ -44,29 +44,29 @@ class Proyecto
         return $this->descripcion;
     }
 
-    // public function getEstado()
-    // {
-    //     return $this->estado;
-    // }
-
-    //obtener el estado haciendo uso de la clase Fecha,  si la fecha de inicio es mayor a la de fin, entonces esta en estado "cerrado"  y si no, esta en estado "abierto" 
-    //  y si la fecha de inicio es igual a la de fin, esta en estado "abierto"  y si la fecha de inicio es menor a la de fin, esta en estado "abierto"  
     public function getEstado()
     {
-        $fechaActual = date('Y-m-d H:i:s');
-        // echo $fechaActual;
-        $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaInicio);
-        if ($diferenciaFechas < 0) {
-            return "Por ejecutar";
-        } else {
-            $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaFinalizacion);
-            if ($diferenciaFechas > 0) {
-                return "Terminado";
-            } else {
-                return "En ejecucion";
-            }
-        }
+        return $this->estado;
     }
+
+    //obtener el estado haciendo uso de la clase Fecha,  si la fecha de inicio es mayor a la de fin, entonces esta en estado "cerrado"  y si no, esta en estado "abierto" 
+    // y si la fecha de inicio es igual a la de fin, esta en estado "abierto"  y si la fecha de inicio es menor a la de fin, esta en estado "abierto"  
+    // public function getEstado()
+    // {
+    //     $fechaActual = date('Y-m-d H:i:s');
+    //     // echo $fechaActual;
+    //     $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaInicio);
+    //     if ($diferenciaFechas < 0) {
+    //         return "Por ejecutar";
+    //     } else {
+    //         $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaFinalizacion);
+    //         if ($diferenciaFechas > 0) {
+    //             return "Terminado";
+    //         } else {
+    //             return "En ejecucion";
+    //         }
+    //     }
+    // }
 
     public function getFechaInicio()
     {
