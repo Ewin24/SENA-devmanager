@@ -6,7 +6,7 @@ class Proyecto
     protected $idProyecto;
     protected $nombre;
     protected $descripcion;
-    protected $estado;
+    protected $estado; //terminado, en ejecucion, por iniciar
     protected $fechaInicio;
     protected $fechaFinalizacion;
     protected $idUsuario_FK; //puede tener como foranea el director de proyecto
@@ -19,7 +19,7 @@ class Proyecto
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
             }
             //asignacion de los datos
-            $this->id = $campo['idProyecto'];
+            $this->idProyecto = $campo['idProyecto'];
             $this->nombre = $campo['nombre'];
             $this->descripcion = $campo['descripcion'];
             $this->estado = $campo['estado'];
@@ -44,29 +44,24 @@ class Proyecto
         return $this->descripcion;
     }
 
+    // obtener el estado haciendo uso de la clase Fecha,  si la fecha de inicio es mayor a la de fin, entonces esta en estado "cerrado"  y si no, esta en estado "abierto" 
+    // y si la fecha de inicio es igual a la de fin, esta en estado "abierto"  y si la fecha de inicio es menor a la de fin, esta en estado "abierto"  
     public function getEstado()
     {
-        return $this->estado;
+        $fechaActual = date('Y-m-d H:i:s');
+        echo $fechaActual;
+        $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaInicio);
+        if ($diferenciaFechas < 0) {
+            return "Por ejecutar";
+        } else {
+            $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaFinalizacion);
+            if ($diferenciaFechas > 0) {
+                return "Terminado";
+            } else {
+                return "En ejecucion";
+            }
+        }
     }
-
-    //obtener el estado haciendo uso de la clase Fecha,  si la fecha de inicio es mayor a la de fin, entonces esta en estado "cerrado"  y si no, esta en estado "abierto" 
-    // y si la fecha de inicio es igual a la de fin, esta en estado "abierto"  y si la fecha de inicio es menor a la de fin, esta en estado "abierto"  
-    // public function getEstado()
-    // {
-    //     $fechaActual = date('Y-m-d H:i:s');
-    //     // echo $fechaActual;
-    //     $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaInicio);
-    //     if ($diferenciaFechas < 0) {
-    //         return "Por ejecutar";
-    //     } else {
-    //         $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaFinalizacion);
-    //         if ($diferenciaFechas > 0) {
-    //             return "Terminado";
-    //         } else {
-    //             return "En ejecucion";
-    //         }
-    //     }
-    // }
 
     public function getFechaInicio()
     {

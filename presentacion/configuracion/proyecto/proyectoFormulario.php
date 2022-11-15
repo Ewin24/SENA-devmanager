@@ -1,15 +1,26 @@
 <?php
 $titulo = $_REQUEST['accion'];
-$idProyecto;
 
 if (isset($_REQUEST['idProyecto'])) {
     $titulo = 'Modificar';
     $proyecto = new Proyecto('idProyecto', $_REQUEST['idProyecto']);
-    $descripcion = $proyecto->getDescripcion(); //se hace desde aqui ya que en el html da error
+    $estado = $proyecto->getEstado();
+
+    echo strtotime(date('d-m-y'));
+    echo "<br>";
+    echo getdate()[0];
+
+    //director de royecto que estaba seleccionado
+    $directorProyecto = $proyecto->getIdUsuario_FK();
+    $cadenaSQL = "select identificacion, nombre, apellido from usuario where identificacion = '$directorProyecto' "; //hacer la validacion de que el tipo de usuario sea 'D'
+    $usuarios = ConectorBD::ejecutarQuery($cadenaSQL);
+    $listaUsuarios = "";
+    for ($i = 0; $i < count($usuarios); $i++) {
+        $listaUsuarios .= "<option value='" . $usuarios[$i]['identificacion'] . "'>" . $usuarios[$i]['nombre'] . $usuarios[$i]['apellido'] . "</option>";
+    }
 } else {
     $proyecto = new Proyecto(null, null);
     $descripcion = "Descripcion";
-    $idProyecto = "";
 }
 //conteo para seleccionar el director de proyecto
 $cadenaSQL = "select identificacion, nombre, apellido from usuario where tipoUsuario = 'D' "; //hacer la validacion de que el tipo de usuario sea 'D'
@@ -40,12 +51,12 @@ for ($i = 0; $i < count($usuarios); $i++) {
                         <h3 class="h1 text-center"><?= $titulo ?> Proyecto</h3>
                     </div>
                     <div class="card-body">
-                        <form action="principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&idProyecto=<?= $idProyecto ?>" method="post">
+                        <form action="principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&idProyecto=<?= $_REQUEST['idProyecto'] ?>" method="post">
                             <div class="form-group">
                                 <input type="text" class="form-control mt-2" id="nombre" name="nombre" placeholder="Nombre" title="Nombres" value="<?= $proyecto->getNombre() ?>" required />
                             </div>
                             <div class="form-group">
-                                <textarea class="form-control mt-2" id="descripcion" name="descripcion" placeholder="<?= $descripcion ?>" title="Descripcion" rows="3" required><?= $descripcion ?> </textarea>
+                                <textarea class="form-control mt-2" id="descripcion" name="descripcion" placeholder="<?= $descripcion ?>" title="Descripcion" rows="3" required><?= $proyecto->getDescripcion() ?></textarea>
                             </div>
 
                             <!-- inicio de peticion de fechas -->
@@ -57,9 +68,19 @@ for ($i = 0; $i < count($usuarios); $i++) {
                             </div>
                             <!-- fin peticion de fechas -->
 
+                            <!-- estado del proyecto T= terminado, E= ejecucion, I= por iniciar  -->
+                            <div class="form-group mt-4">
+                                <select class="form-control mt-2" id="estado" name="estado" title="estadado del proyecto">
+                                    <option value="T">Terminado</option>
+                                    <option value="E">En ejecucion</option>
+                                    <option value="I">Por iniciar</option>
+                                </select>
+                            </div>
+                            <!-- estado del proyecto -->
+
                             <!-- director de proyecto  -->
                             <div class="form-group mt-4">
-                                <select class="form-control mt-2" id="directores" name="idUsuario" title="Directores de proeyecto del sistema">
+                                <select class="form-control mt-2" id="directores" name="idUsuario" title="Directores de proyecto del sistema">
                                     <option value="">Directores de proyecto</option>
                                     <?= $listaUsuarios ?>
                                 </select>

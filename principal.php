@@ -1,5 +1,6 @@
 <?php
 require_once 'logica/clasesGenericas/ConectorBD.php';
+require_once 'logica/clasesGenericas/Fecha.php';
 require_once 'logica/clases/Usuario.php';
 require_once 'logica/clases/TipoUsuario.php';
 require_once 'logica/clases/Proyecto.php';

@@ -21,9 +21,12 @@ switch ($_REQUEST['accion']) {
         break;
 
     case 'Modificar':
-        $habilidad->setIdHabilidad($idHabiliad);
-        $habilidad->setNombre($_REQUEST['nombre']);
-        $habilidad->setDescripcion($_REQUEST['descripcion']);
+        $proyecto->setNombre($_REQUEST['nombre']);
+        $proyecto->setDescripcion($_REQUEST['descripcion']);
+        $proyecto->setEstado($_REQUEST['estado']);
+        $proyecto->setFechaInicio($_REQUEST['fechaInicio']);
+        $proyecto->setFechaFinalizacion($_REQUEST['fechaFin']);
+        $proyecto->setIdUsuario_FK($_REQUEST['idUsuario']); //llega desde proyectos.php y es el director de proyecto
         $habilidad->modificar();
         break;
 
@@ -40,4 +43,4 @@ switch ($_REQUEST['accion']) {
         break;
 }
 
-header('location: principal.php?CONTENIDO=presentacion/vistas/estudio.php'); //regresa a la pagina para continuar las acciones
+header('location: principal.php?CONTENIDO=presentacion/vistas/proyectos.php'); //regresa a la pagina para continuar las acciones
