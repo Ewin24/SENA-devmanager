@@ -50,16 +50,18 @@ class Proyecto
     {
         $fechaActual = date('Y-m-d H:i:s');
         echo $fechaActual;
+        $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaFinalizacion);
+        if(strtotime($fechaActual) > strtotime($this->fechaInicio) && strtotime($fechaActual) < strtotime($this->fechaFinalizacion)){
+            return "En ejecucion";
+        }
+        
+        if ($diferenciaFechas > 0) {
+            return "Terminado";
+        } 
+        
         $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaInicio);
-        if ($diferenciaFechas < 0) {
+        if($diferenciaFechas < 0){
             return "Por ejecutar";
-        } else {
-            $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaFinalizacion);
-            if ($diferenciaFechas > 0) {
-                return "Terminado";
-            } else {
-                return "En ejecucion";
-            }
         }
     }
 

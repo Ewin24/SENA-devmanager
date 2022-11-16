@@ -5,10 +5,8 @@ if (isset($_REQUEST['idProyecto'])) {
     $titulo = 'Modificar';
     $proyecto = new Proyecto('idProyecto', $_REQUEST['idProyecto']);
     $estado = $proyecto->getEstado();
-
-    echo strtotime(date('d-m-y'));
-    echo "<br>";
-    echo getdate()[0];
+    //    print_r( getdate()['0']). "<br>" ; otra opcion para obtener fecha actual en un formato de arreglo
+    //    echo strtotime(date('Y-m-d'));  metodo que estoy usando para poder mandar fecha directamente del html
 
     //director de royecto que estaba seleccionado
     $directorProyecto = $proyecto->getIdUsuario_FK();
