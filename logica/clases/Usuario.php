@@ -29,7 +29,7 @@ class Usuario
             $this->identificacion = $campo['identificacion'];
             $this->nombre = $campo['nombre'];
             $this->apellido = $campo['apellido'];
-            $this->tipoUsuario = 'T'; //por defecto es trabajador ,tambien puede ser $campo['tipoUsuario']
+            $this->tipoUsuario = $campo['tipoUsuario']; //por defecto es trabajador ,tambien puede ser $campo['tipoUsuario']
             $this->clave = $campo['clave'];
             $this->nombreUsuario = $campo['identificacion']; //por defecto el nombre de usuario es la identificacion
             $this->correo = $campo['correo'];

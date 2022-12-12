@@ -18,7 +18,7 @@ for ($i = 0; $i < count($resultado); $i++) {
     $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/estudio/estudioFormulario.php&accion=Modificar&idEstudio={$estudio->getIdEstudio()}' title='modificar Estudio'> Modificar </a></td>";
     $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/estudio/estudioCRUD.php&accion=Eliminar&idEstudio={$estudio->getIdEstudio()}' onclick='eliminar({$estudio->getIdEstudio()})' title='Eliminar Estudio'>Eliminar</a></td>";
     //$lista .= "<a href='presentacion/candidatos/propuestas/{$candidato->getPropuesta()}' title= 'ver propuesta' target= '-blank'><img src='presentacion/imagenes/pdf.png'></a>";
-    
+
     $lista .= "<td></td>";
     $lista .= "</tr>";
 }
@@ -31,7 +31,17 @@ for ($i = 0; $i < count($resultado); $i++) {
             <th>Id</th>
             <th>Nombre</th>
             <th>Certificacion</th>
-            <th><a href='principal.php?CONTENIDO=presentacion/configuracion/estudio/estudioFormulario.php&accion=Adicionar'>Adicionar</a></th>
+            <?php
+            if (Usuario::esAdmin($USUARIO->getIdentificacion())) {
+                echo "<th><a href='principal.php?CONTENIDO=presentacion/configuracion/estudio/estudioFormulario.php&accion=Adicionar'>Adicionar</a></th>";
+            }
+
+            if (count($resultado) == 0) {
+                echo 'no se encontraron estudios registrados';
+            }
+
+            ?>
+
         </tr>
     </thead>
     <tbody>

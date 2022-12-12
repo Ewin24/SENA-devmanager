@@ -2,20 +2,17 @@
 
 class TipoUsuario
 {
-
-    private $codigo;
-
-    public function __construct($codigo)
+    public function __construct()
     { //video 8.1
-        $this->codigo = $codigo;
+
     }
 
-    public function getNombre()
+    public static function getNombre($codigo)
     {
         $menu = "<nav class='border border-1'>";
-        $menu .= "    <ul class='nav justify-content-center'>";
+        $menu .= "<ul class='nav justify-content-center'>";
 
-        switch ($this->codigo) {
+        switch ($codigo) {
             case 'A':
                 $nombre = 'Administrador';
                 break;
@@ -28,7 +25,7 @@ class TipoUsuario
         }
         return $nombre;
     }
-    public function getMenu()
+    public static function getMenu($codigo)
     {
         $menu = "<nav class='border border-1'>";
         $menu .= "<ul class='nav justify-content-center'>";
@@ -38,12 +35,11 @@ class TipoUsuario
         $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/estudio.php&accion=''&id='''>Estudios</a></li>";
         $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/habilidad.php&accion=''&id='''>Habilidades</a></li>";
 
-        switch ($this->codigo) {
+        switch ($codigo) {
             case 'A':
-                $menu .= "<li class='border nav-item '><a class='nav-link' href='#'>Usuarios</a></li>";
+                $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/usuario.php&accion=''&id='''>Usuarios</a></li>";
                 break;
             case 'T':
-
                 break;
             default:
 

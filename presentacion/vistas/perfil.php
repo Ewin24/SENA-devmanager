@@ -19,7 +19,6 @@ for ($i = 0; $i < count($resultado); $i++) {
     $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/perfil/perfilCRUD.php&accion=Eliminar&idPerfil={$perfil->getIdPerfil('nombre',$perfil->getNombre())[0][0]}' onclick='eliminar({$perfil->getIdPerfil('nombre',$perfil->getNombre())[0][0]})' title='Eliminar Perfil'>Eliminar</a></td>";
     $lista .= "<td></td>";
     $lista .= "</tr>";
-
 }
 ?>
 
@@ -30,7 +29,16 @@ for ($i = 0; $i < count($resultado); $i++) {
             <th>Id</th>
             <th>Nombre</th>
             <th>Descripcion</th>
-            <th><a href='principal.php?CONTENIDO=presentacion/configuracion/perfil/perfilFormulario.php&accion=Adicionar'>Adicionar</a></th>
+            <?php
+            if (Usuario::esAdmin($USUARIO->getIdentificacion())) {
+                echo "<th><a href='principal.php?CONTENIDO=presentacion/configuracion/perfil/perfilFormulario.php&accion=Adicionar'>Adicionar</a></th>";
+            }
+
+            if (count($resultado) == 0) {
+                echo 'no se encontraron perfiles registrados';
+            }
+
+            ?>
         </tr>
     </thead>
     <tbody>

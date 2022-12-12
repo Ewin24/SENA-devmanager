@@ -15,6 +15,8 @@ session_start();
 if (!isset($_SESSION['usuario'])) header('location: index.php?mensaje=Ya hay una sesion activa, acceso no autorizado'); //sesiones activas al tiempo
 else {
     $USUARIO = unserialize($_SESSION['usuario']);
+    $tipoUsuario = 'select tipoUsuario from usuario where identificacion = ' . $USUARIO->getIdentificacion(); //esta linea se hace para obtener el tipo de usuario nuevamente, ya que en serializacion se pierde en caso de actualizacion   
+    $menu = TipoUsuario::getMenu(ConectorBD::ejecutarQuery($tipoUsuario)[0][0]);
 }
 ?>
 
@@ -30,14 +32,14 @@ else {
 <body>
     <center>
         <div id="encabezado" class="m-4">
-            <a href="./principal.php" target="_blank">
+            <a href="./principal.php" target="">
                 <h1 class="display-1">DevManager</h1s>
             </a>
         </div>
     </center>
 
     <div id="menu" class="mt-5">
-        <?= $USUARIO->getTipoEnObjeto()->getMenu() ?>
+        <?= $menu ?>
     </div>
     <div id="contenido">
         <?= include $_REQUEST['CONTENIDO'] ?>

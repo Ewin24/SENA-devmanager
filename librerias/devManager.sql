@@ -1,5 +1,4 @@
---usuario admin
---contraseña utilizar
+
 create table empresa(
     nit varchar(20) primary key,
     nombre varchar(50) not null,
@@ -29,9 +28,7 @@ create table usuario(
 create table habilidad(
     idHabilidad int auto_increment primary key,
     nombre varchar(55) not null,
-    descripcion varchar(255) not null,
-    --experiencia varchar(500) not null,
-    --nivelDominio char not null
+    descripcion varchar(255) not null
 );
 
 create table proyecto(
@@ -42,7 +39,7 @@ create table proyecto(
     fechaInicio datetime not null,
     fechaFinalizacion datetime not null,
     idUsuario_FK varchar(15) not null,
-    foreign key (idUsuario_FK) references usuario(identificacion) on delete restrict on update cascade --revisar que este funcionando la foranea con usuario, los directores del proyecto son una lista de usuarios de tipo 'D' o director
+    foreign key (idUsuario_FK) references usuario(identificacion) on delete restrict on update cascade 
 );
 
 create table perfil(
@@ -78,6 +75,12 @@ create table postulaciones(
     foreign key (idProyecto_FK) references proyecto(idProyecto) on delete restrict on update cascade
 );
 
+create table perfilEstudio(
+    idPerfilEstudio int auto_increment primary key,
+    idPerfil_FK int not null,
+    foreign key (idPerfil_FK) references perfil(idPerfil) on delete restrict on update cascade
+);
+
 create table estudio(
     idEstudio int auto_increment primary key,
     idCertificacion int not null,
@@ -97,11 +100,6 @@ create table perfilProyecto(
     foreign key (idProyecto_FK) references proyecto(idProyecto) on delete restrict on update cascade
 );
 
-create table perfilEstudio(
-    idPerfilEstudio int auto_increment primary key,
-    idPerfil_FK int not null,
-    foreign key (idPerfil_FK) references perfil(idPerfil) on delete restrict on update cascade
-);
 
 create table perfilHabilidad(
     idHabilidad_FK int not null,
@@ -116,4 +114,5 @@ create table usuarioEstudio(
     idestudio_FK int
 );
 
-ALTER TABLE `usuarioestudio` ADD CONSTRAINT `fk1` FOREIGN KEY (`idEstudio_FK`) REFERENCES `estudio`(`idEstudio`) ON DELETE RESTRICT ON UPDATE CASCADE; ALTER TABLE `usuarioestudio` ADD CONSTRAINT `fk2` FOREIGN KEY (`identificacion_FK`) REFERENCES `usuario`(`identificacion`) ON DELETE RESTRICT ON UPDATE CASCADE; 
+ALTER TABLE `usuarioestudio` ADD CONSTRAINT `fk1` FOREIGN KEY (`idEstudio_FK`) REFERENCES `estudio`(`idEstudio`) ON DELETE RESTRICT ON UPDATE CASCADE; ALTER TABLE `usuarioestudio` ADD CONSTRAINT `fk2` FOREIGN KEY (`identificacion_FK`) REFERENCES `usuario`(`identificacion`) ON DELETE RESTRICT ON UPDATE CASCADE;
+

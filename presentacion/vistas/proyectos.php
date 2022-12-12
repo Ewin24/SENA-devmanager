@@ -9,7 +9,9 @@ $identificacion = $USUARIO->getIdentificacion();
 
 $resultado = Proyecto::getListaEnObjetos(null, null);
 
+
 for ($i = 0; $i < count($resultado); $i++) {
+
     $proyecto = $resultado[$i];
     //echo $proyecto;
     $lista .= '<tr>';
@@ -43,13 +45,19 @@ for ($i = 0; $i < count($resultado); $i++) {
             <th>Fecha de finalizacion</th>
             <?php
             if (Usuario::esAdmin($identificacion)) {
-                echo  "<th><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoFormulario.php&accion=Adicionar'>Adicionar</a></th>";
+                echo  "<th><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoFormulario.php&accion=Adicionar'>Adicionar</a></th>"; // deja adicionar si el user es admin
             }
+
             ?>
         </tr>
     </thead>
     <tbody>
         <?= $lista ?>
+        <?php
+        if (count($resultado) == 0) {
+            echo 'No se encontraron proyectos registrados'; //validar si se encontraron resultados
+        }
+        ?>
     </tbody>
 </table>
 
