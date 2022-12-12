@@ -8,27 +8,12 @@ for ($i = 0; $i < count($empresas); $i++) {
     $empresasRegistradas .= "<option value='" . $empresas[$i]['nit'] . "'>" . $empresas[$i]['nombre'] . "</option>";
 }
 
-
 $titulo = $_REQUEST['accion'];
 
-if (isset($_REQUEST['idProyecto'])) {
-    $titulo = 'Modificar';
-    $proyecto = new Proyecto('idProyecto', $_REQUEST['idProyecto']);
-    $estado = $proyecto->getEstado();
-    //    print_r( getdate()['0']). "<br>" ; otra opcion para obtener fecha actual en un formato de arreglo
-    //    echo strtotime(date('Y-m-d'));  metodo que estoy usando para poder mandar fecha directamente del html
-
-    //director de royecto que estaba seleccionado
-    $directorProyecto = $proyecto->getIdUsuario_FK();
-    $cadenaSQL = "select identificacion, nombre, apellido from usuario where identificacion = '$directorProyecto' "; //hacer la validacion de que el tipo de usuario sea 'D'
-    $usuarios = ConectorBD::ejecutarQuery($cadenaSQL);
-    $listaUsuarios = "";
-    for ($i = 0; $i < count($usuarios); $i++) {
-        $listaUsuarios .= "<option value='" . $usuarios[$i]['identificacion'] . "'>" . $usuarios[$i]['nombre'] . $usuarios[$i]['apellido'] . "</option>";
-    }
+if ($titulo == "Modificar") {
+    
 } else {
-    $proyecto = new Proyecto(null, null);
-    $descripcion = "Descripcion";
+
 }
 //conteo para seleccionar el director de proyecto
 $cadenaSQL = "select identificacion, nombre, apellido from usuario where tipoUsuario = 'D' "; //hacer la validacion de que el tipo de usuario sea 'D'
