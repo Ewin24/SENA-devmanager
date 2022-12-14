@@ -1,5 +1,6 @@
 <?php
 $titulo = $_REQUEST['accion'];
+$idProyecto = $_REQUEST['idProyecto'];
 
 if (isset($_REQUEST['idProyecto'])) {
     $titulo = 'Modificar';
@@ -19,6 +20,7 @@ if (isset($_REQUEST['idProyecto'])) {
 } else {
     $proyecto = new Proyecto(null, null);
     $descripcion = "Descripcion";
+    $idProyecto = '';
 }
 //conteo para seleccionar el director de proyecto
 $cadenaSQL = "select identificacion, nombre, apellido from usuario where tipoUsuario = 'D' "; //hacer la validacion de que el tipo de usuario sea 'D'
@@ -49,7 +51,7 @@ for ($i = 0; $i < count($usuarios); $i++) {
                         <h3 class="h1 text-center"><?= $titulo ?> Proyecto</h3>
                     </div>
                     <div class="card-body">
-                        <form action="principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&idProyecto=<?= $_REQUEST['idProyecto'] ?>" method="post">
+                        <form action="principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&idProyecto=<?= $idProyecto ?>" method="post">
                             <div class="form-group">
                                 <input type="text" class="form-control mt-2" id="nombre" name="nombre" placeholder="Nombre" title="Nombres" value="<?= $proyecto->getNombre() ?>" required />
                             </div>

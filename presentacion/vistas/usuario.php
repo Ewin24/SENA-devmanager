@@ -4,6 +4,14 @@ if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Ya h
 else {
     $USUARIO = unserialize($_SESSION['usuario']);
 }
+
+//codigo en caso de que se generen mensajes desde la adicion, eliminacion o edicion de un usuario
+$mensaje = '';
+if (isset($_REQUEST['mensaje'])) {
+    $mensaje = $_REQUEST['mensaje'];
+    $sms = "<div id='alerta' class='alert alert-danger text-center m-2 ' role='alert'>$mensaje</div>";
+}
+
 $lista = '';
 
 $resultado = Usuario::getListaEnObjetos(null, null);

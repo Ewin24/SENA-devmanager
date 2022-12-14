@@ -15,7 +15,7 @@ for ($i = 0; $i < count($resultado); $i++) {
     $lista .= "<td>{$habilidad->getNombre()}</td>";
     $lista .= "<td>{$habilidad->getDescripcion()}</td>";
     //$lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/habilidad/habilidadFormulario.php&accion=adicionar'>Adicionar</a></td>";
-    $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/habilidad/habilidadFormulario.php&accion=Modificar&idHabilidad={$habilidad->getIdHabilidad('nombre',$habilidad->getNombre())[0][0]}' title='modificar habilidad'> Modificar </a></td>";
+    $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/habilidad/habilidadFormulario.php&accion=Modificar&idHabilidad={$habilidad->getIdHabilidad('nombre',$habilidad->getNombre())[0][0]}' onclick='saludo()' title='modificar habilidad'> Modificar </a></td>";
     $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/habilidad/habilidadCRUD.php&accion=Eliminar&idHabilidad={$habilidad->getIdHabilidad('nombre',$habilidad->getNombre())[0][0]}' onclick='eliminar({$habilidad->getIdHabilidad('nombre',$habilidad->getNombre())[0][0]})' title='Eliminar Habilidad'>Eliminar</a></td>";
     $lista .= "<td></td>";
     $lista .= "</tr>";
@@ -45,5 +45,9 @@ for ($i = 0; $i < count($resultado); $i++) {
         if (respuesta) {
             location = "principal.php?CONTENIDO=presentacion/configuracion/habilidad/habilidadCRUD.php&accion=Eliminar&idHabilidad=" + id;
         }
+    }
+
+    function saludo(){
+        console.log("hola");
     }
 </script>

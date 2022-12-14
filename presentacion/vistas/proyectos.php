@@ -7,8 +7,23 @@ else {
 $lista = '';
 $identificacion = $USUARIO->getIdentificacion();
 
-$resultado = Proyecto::getListaEnObjetos(null, null);
+switch ($USUARIO->getTipoUsuario()){
+    case 'A':
+        # code... // get lista modificado para obtener solo en los casos de usuario
+        break;
+    
+    case 'D':
+        # code...
+        break;
+    
 
+    default:
+        //trabajador
+
+        break;
+}
+
+$resultado = Proyecto::getListaEnObjetos(null, null);
 
 for ($i = 0; $i < count($resultado); $i++) {
 
@@ -37,10 +52,12 @@ for ($i = 0; $i < count($resultado); $i++) {
 <table border="1">
     <thead>
         <tr>
+
+        <!-- FUNCION EN JS PARA ELIMINAR FILAS DE LA TABLA DEPENDIENDO DE UN FILTRO -->
             <th>Id</th>
             <th>Nombre</th>
             <th>Descripcion</th>
-            <th>Estado</th>
+            <th>Estado</button></th>
             <th>Fecha de Inicio</th>
             <th>Fecha de finalizacion</th>
             <?php

@@ -1,9 +1,9 @@
 <?php
+
 //codigo que consulta las empresas registradas en la base de datos y las agrega al menu de seleccion del formulario de registro de empresas
 $cadenaSQL = "select nit,nombre from empresa";
 $empresas = ConectorBD::ejecutarQuery($cadenaSQL);
 $empresasRegistradas = "";
-
 for ($i = 0; $i < count($empresas); $i++) {
     $empresasRegistradas .= "<option value='" . $empresas[$i]['nit'] . "'>" . $empresas[$i]['nombre'] . "</option>";
 }
@@ -11,16 +11,9 @@ for ($i = 0; $i < count($empresas); $i++) {
 $titulo = $_REQUEST['accion'];
 
 if ($titulo == "Modificar") {
-    
+    $identificacion = $_REQUEST['identificacion'];
 } else {
-
-}
-//conteo para seleccionar el director de proyecto
-$cadenaSQL = "select identificacion, nombre, apellido from usuario where tipoUsuario = 'D' "; //hacer la validacion de que el tipo de usuario sea 'D'
-$usuarios = ConectorBD::ejecutarQuery($cadenaSQL);
-$listaUsuarios = "";
-for ($i = 0; $i < count($usuarios); $i++) {
-    $listaUsuarios .= "<option value='" . $usuarios[$i]['identificacion'] . "'>" . $usuarios[$i]['nombre'] . $usuarios[$i]['apellido'] . "</option>";
+    $identificacion =  '';
 }
 ?>
 
@@ -41,10 +34,10 @@ for ($i = 0; $i < count($usuarios); $i++) {
             <div class="col-md-10">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="h1 text-center">Registro de usuarios</h3>
+                        <h3 class="h1 text-center"><?= $titulo ?> usuario</h3>
                     </div>
                     <div class="card-body">
-                        <form action="principal.php?CONTENIDO=presentacion/configuracion/usuario/usuarioCRUD.php&identificacion = <?= $_REQUEST['identificacion'] ?>" method="post">
+                        <form action="principal.php?CONTENIDO=presentacion/configuracion/usuario/usuarioCRUD.php&accion=<?= $_REQUEST['accion'] ?>&identificacion = <?= $identificacion ?>" method="post">
                             <div class="form-group">
                                 <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Usuario" title="Por defecto tu usuario sera tu identificacion" disabled />
                             </div>
@@ -71,8 +64,19 @@ for ($i = 0; $i < count($usuarios); $i++) {
                                     <option value="P">Pasaporte</option>
                                 </select>
                             </div>
+
                             <div class="form-group">
                                 <input type="text" class="form-control mt-2" id="identificacion" name="identificacion" placeholder="Identificacion" title="identificacion" />
+                            </div>
+
+                            <!-- como estamos accediendo a crear nuevos usuarios desde una interfaz de administrador, permitimos que se pueda gestionar el tipo de usuario
+                        desde la adicion y modificacion  -->
+                            <div class="form-group">
+                                <select class="form-control mt-2" id="tipo_usuario" name="tipo_usuario" title="tipo de usuario">
+                                    <option value="A">Administrador</option>
+                                    <option value="T">Trabajador</option>
+                                    <option value="D">Director de proyecto</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <select class="form-control mt-2" id="empresa" name="nit_empresa" title="empresa para la que trabaja">
@@ -87,8 +91,9 @@ for ($i = 0; $i < count($usuarios); $i++) {
                                 <input type="password" class="form-control mt-2" id="clave2" name="clave2" placeholder="Repetir contraseña" title="repetir contraseña" required />
                             </div>
                             <div class="form-group">
+                                <input type="hidden" name="identificacion_anterior" value="<?= $identificacion ?>">
                                 <input type="submit" class="btn btn-primary btn-block mt-2" value="Registrar" title="registrar" name="registro" />
-                                <a href="../../index.php">
+                                <a href="../">
                                     <input type="button" class="btn btn-danger btn-block mt-2" value="Cancelar" title="cancelar" />
                                 </a>
                             </div>
