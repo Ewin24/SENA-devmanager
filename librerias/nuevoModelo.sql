@@ -86,9 +86,39 @@ DELETE RESTRICT ON
 UPDATE CASCADE;
 
 
+CREATE TABLE `proyecto_habilidad` (
+  `idProyectoHabilidad` int(11) NOT NULL,
+  `idProyecto_FK` int(11) NOT NULL,
+  `idHabilidad_FK` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `proyecto_habilidad`
+  ADD PRIMARY KEY (`idProyectoHabilidad`);
+
+ALTER TABLE `proyecto_habilidad`
+  MODIFY `idProyectoHabilidad` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
 
 --empresa
 INSERT INTO `empresa` (`nit`, `nombre`, `direccion`, `correo`, `telefono`, `correoRepresentante`, `nombreRepresentante`) VALUES ('333', 'aguas de bogota', 'Bogotá, Cundinamarca ', 'aguas.bogota@gmail.com', '33333333', 'juan123@gmail.com', 'Juan Alvarez');
 
 --user
 INSERT INTO `usuario` (`identificacion`, `tipoUsuario`, `nombreUsuario`, `nombre`, `apellido`, `tipoIdentificacion`, `correo`, `clave`, `direccion`, `foto`, `telefono`, `nitEmpresa_FK`) VALUES ('1004023221', 'A', 'admin', 'admin', 'admin', 'C', 'admin@admin.com', MD5('admin'), 'admin', NULL, NULL, '333');
+INSERT INTO `usuario` (`identificacion`, `tipoUsuario`, `nombreUsuario`, `nombre`, `apellido`, `tipoIdentificacion`, `correo`, `clave`, `direccion`, `foto`, `telefono`, `nitEmpresa_FK`) VALUES
+('1', 'D', '1', 'William', 'Trigos', 'C', 'edwintrigos24@gmail.com', 'c4ca4238a0b923820dcc509a6f75849b', '222323', '', '2223232', '333'),
+('11', 'T', '11', 'Juan', 'Trigos', 'R', 'edwintrigos24@gmail.com', 'c4ca4238a0b923820dcc509a6f75849b', '222323', '', '2223232', '333'),
+('111', 'D', '111', 'Santiago', 'Rueda', 'T', 'sant@gmail.com', 'c4ca4238a0b923820dcc509a6f75849b', 'calle 14', '', '321424213', '333'),
+('123', 'T', '123', 'Edwin ', 'Robles', 'T', 'edwintrigos24@gmail.com', 'c4ca4238a0b923820dcc509a6f75849b', '222323', '', '2223232', '333'),
+('2', 'T', '2', 'Edwin ', 'Trigos', 'C', 'edwintrigos24@gmail.com', 'c4ca4238a0b923820dcc509a6f75849b', '222323', '', '2223232', '333'),
+('22', 'T', '22', 'Juan', 'Robles', 'P', 'edwintrigos24@gmail.com', 'c4ca4238a0b923820dcc509a6f75849b', '222323', '', '2223232', '333'),
+('222', 'T', '222', 'Manuel', 'Carranza', 'T', 'manu@gmail.com', 'c4ca4238a0b923820dcc509a6f75849b', 'calle 34 ', '', '232123214', '333'),
+('33', 'T', '33', 'Jose ', 'Carrillo', 'C', 'jose@gmail.co', 'c4ca4238a0b923820dcc509a6f75849b', 'calle 434983129', '', '233435', '333'),
+('333', 'A', '333', 'Ruben', 'Botella', 'C', 'ru@gmail.com', 'c4ca4238a0b923820dcc509a6f75849b', 'calle 11', '', '2313123', '333');
+
+INSERT INTO `proyecto` (`idProyecto`, `nombre`, `descripcion`, `estado`, `fechaInicio`, `fechaFinalizacion`, `idUsuario_FK`) VALUES
+(2, 'Proyecto para escuela', 'Software biblioteca de escuela', 'T', '2022-03-11 00:00:00', '2022-04-12 00:00:00', '1'),
+(3, 'Software para conjunto residencial', '333|', 'E', '2022-03-11 00:00:00', '2022-12-31 00:00:00', '1'),
+(4, 'Aerolinea app movil ', 'Aplicación móvil para aerolínea ', 'E', '2020-03-11 00:00:00', '2022-12-31 00:00:00', '1'),
+(5, 'Nequi plata infinita', 'Aplicacion movil', 'T', '2012-03-11 00:00:00', '2014-04-12 00:00:00', '111');
+

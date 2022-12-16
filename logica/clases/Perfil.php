@@ -1,9 +1,25 @@
 <?php
+//ahora esta clase tiene la finalidad de traer todos los datos que tine un usuario, en sus habilidades, proyectos y estudios
 class Perfil
 {
-    private $idPerfil;
-    private $nombre;
-    private $descripcion;
+    //datos de usuario
+
+    //datos de proyecto
+    protected $idProyecto;
+    protected $nombre;
+    protected $descripcion;
+    protected $estado; //terminado, en ejecucion, por iniciar
+    protected $fechaInicio;
+    protected $fechaFinalizacion;
+    protected $idUsuario_FK; //puede tener como foranea el director de proyecto
+
+    //datos de estudio
+    private $idEstudio;
+	private $idCertificacion;
+	private $nombreEstudio;
+	private $fechaCertificacion;
+	private $certificado;
+    
 
     //constructor con array
     public function __construct($campo, $valor)
@@ -14,10 +30,19 @@ class Perfil
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
                 print_r($campo);
             }
-            //asignacion de los datos
+            //datos usuario
             $this->idPerfil = $campo['idPerfil'];
             $this->nombre = $campo['nombre'];
             $this->descripcion = $campo['descripcion'];
+            
+            //datos proyecto
+            $this->idProyecto = $campo['idProyecto'];
+            $this->nombre = $campo['nombre'];
+            $this->descripcion = $campo['descripcion'];
+            $this->estado = $campo['estado'];
+            $this->fechaInicio = $campo['fechaInicio'];
+            $this->fechaFinalizacion = $campo['fechaFinalizacion'];
+            $this->idUsuario_FK = $campo['idUsuario_FK'];
         }
     }
 
