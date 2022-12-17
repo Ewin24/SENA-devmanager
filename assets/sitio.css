@@ -1,0 +1,49 @@
+/*https://stackoverflow.com/questions/38487394/how-to-set-the-color-and-font-style-of-placeholder-text*/
+::-webkit-input-placeholder {
+  text-align: center;
+  color: rgb(55, 0, 255);  
+  font-weight: 800;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+  text-align: center;
+  color: rgb(55, 0, 255);   
+  font-weight: 800;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+  text-align: center;
+  color: rgb(55, 0, 255);  
+  font-weight: 800;
+}
+
+:-ms-input-placeholder {  
+  text-align: center;
+  color: rgb(55, 0, 255);  
+  font-weight: 800;
+}
+
+input[type="text" i] {
+  width: 300px;
+  color: white;
+  /* background: rgb(190, 190, 190); */
+}
+
+/* Estilos para campos de búsqueda o seleccionados
+https://developer.mozilla.org/en-US/docs/Web/CSS/:focus*/
+input:focus {
+  background-color: lightblue;
+}
+
+select:focus {
+  background-color: ivory;
+}
+
+/* https://stackoverflow.com/questions/572768/styling-an-input-type-file-button 
+https://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/*/
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}
