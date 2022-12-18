@@ -15,11 +15,11 @@ class Proyecto
     {
         if ($campo != null) {
             if (!is_array($campo)) {
-                $cadenaSQL = "
-                SELECT  id, nombre, descripcion, estado, fecha_inicio, fecha_fin, id_usuario
+                $cadenaSQL = " SELECT id, nombre, descripcion, estado, fecha_inicio, fecha_fin, id_usuario
                 FROM    proyectos
                 WHERE   $campo = $valor";
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
+                print_r($campo);
             }
             //asignacion de los datos
             $this->idProyecto = $campo['id'];

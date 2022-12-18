@@ -21,33 +21,30 @@ else {
 }
 ?>
 
-<html>
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="librerias/bootstrap5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/sitio.css" type="text/css">
+        <title>DevManager</title>
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="librerias/bootstrap5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/sitio.css" type="text/css">
-    <title>DevManager</title>
-</head>
-
-<body>
-    <center>
-        <div id="encabezado" class="m-4">
+    <body>
+        <div id="encabezado" class="m-4 text-center">
             <a href="./principal.php" target="">
                 <h1 class="display-1">DevManager</h1s>
             </a>
         </div>
-    </center>
+        <div id="menu" class="mt-5">
+            <?= $menu ?>
+        </div>
+        <div id="contenido">
+            <?= include $_REQUEST['CONTENIDO'] ?>
+        </div>
 
-    <div id="menu" class="mt-5">
-        <?= $menu ?>
-    </div>
-    <div id="contenido">
-        <?= include $_REQUEST['CONTENIDO'] ?>
-    </div>
-
-    <script src="librerias/bootstrap5/js/bootstrap.min.js"></script>
-</body>
+        <script src="librerias/bootstrap5/js/bootstrap.min.js"></script>
+    </body>
 
 </html>

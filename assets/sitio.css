@@ -2,30 +2,30 @@
 ::-webkit-input-placeholder {
   text-align: center;
   color: rgb(55, 0, 255);  
-  font-weight: 800;
+  font-weight: 400;
 }
 
 :-moz-placeholder { /* Firefox 18- */
   text-align: center;
   color: rgb(55, 0, 255);   
-  font-weight: 800;
+  font-weight: 400;
 }
 
 ::-moz-placeholder {  /* Firefox 19+ */
   text-align: center;
   color: rgb(55, 0, 255);  
-  font-weight: 800;
+  font-weight: 400;
 }
 
 :-ms-input-placeholder {  
   text-align: center;
   color: rgb(55, 0, 255);  
-  font-weight: 800;
+  font-weight: 400;
 }
 
 input[type="text" i] {
-  width: 300px;
-  color: white;
+  width: 200px;
+  color: black;
   /* background: rgb(190, 190, 190); */
 }
 
@@ -33,10 +33,13 @@ input[type="text" i] {
 https://developer.mozilla.org/en-US/docs/Web/CSS/:focus*/
 input:focus {
   background-color: lightblue;
+  color: black;
+  font-weight: 400;
 }
 
 select:focus {
   background-color: ivory;
+  color: black;
 }
 
 /* https://stackoverflow.com/questions/572768/styling-an-input-type-file-button 
