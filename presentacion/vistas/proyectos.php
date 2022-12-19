@@ -19,8 +19,8 @@ for ($i = 0; $i < count($resultado); $i++)
         . '", nombre: "' . $proyecto->getNombre()
         . '", descripcion: "' . $proyecto->getDescripcion()
         . '", estado: "' . $proyecto->getEstado()
-        . '", fechaInicio: "' . $proyecto->getFechaInicio()
-        . '", fechaFinalizacion: "' . $proyecto->getFechaFinalizacion()
+        . '", fecha_inicio: "' . $proyecto->getFechaInicio()
+        . '", fecha_fin: "' . $proyecto->getFechaFinalizacion()
         . '"},';
 }
 $datos .= ']';
@@ -89,9 +89,9 @@ switch ($USUARIO->getTipoUsuario()) {
                 ?>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="bodyTabla">
         <!-- <tbody id="mostrarDatosJavascript">  -->
-        <div id="mostrarDatosJavascript"></div>
+            <div id="mostrarDatosJavascript"></div>
             <!-- < ?php
                 if (count($resultado) == 0) {
                     echo 'No se encontraron proyectos registrados'; //validar si se encontraron resultados
@@ -161,24 +161,18 @@ switch ($USUARIO->getTipoUsuario()) {
         const campoBuscar = document.getElementById(id);
         // campoBuscar.addEventListener('change', (e) => filtrarListaDatos(datos, objFiltroProyectos, event.target));
         arreglo.length = 0;
-        var tBody = document.getElementById("mostrarDatosJavascript");
-        tBody.innerHTML = '';
         arreglo = filtrarListaDatos(datos, objFiltroProyectos, event.target);
-        pintarTabla();
-    }
-
-    function pintarTabla(){
-        if (arreglo.length == 0 || arreglo == null){
-            arreglo = [...datos];
-            console.log("no hay datos");
-        }
         genera_tabla(arreglo);
     }
 
     // function genera_tabla(arreglo) {
-
+    //     console.log(arreglo);
     //     var tabla = document.getElementById("miTablaDatos");
-    //     var tBody = document.getElementById("mostrarDatosJavascript");
+    //     var divDatos = document.getElementById("mostrarDatosJavascript");
+    //     var tBody = document.getElementsByTagName("tbody")[0];
+
+    //     tBody.insertAdjacentHTML('beforebegin',
+    //     `<p>hola</p>`)
 
     //     // Crea las celdas
     //     for (var i = 0; i < arreglo.length; i++) {
@@ -196,7 +190,8 @@ switch ($USUARIO->getTipoUsuario()) {
     //         }
 
     //         // agrega la hilera al final de la tabla (al final del elemento tbody)
-    //         tBody.appendChild(hilera);
+    //         tBody.insertAdjacentHTML(hilera);
+    //         //  appendChild(hilera);
     //     }
 
     //     // posiciona el <tbody> debajo del elemento <table>
@@ -209,37 +204,36 @@ switch ($USUARIO->getTipoUsuario()) {
     // }
 
     // // https://stackoverflow.com/questions/14643617/create-table-using-javascript
-    // // https://linuxhint.com/create-table-from-array-objects-javascript/
+    // // // https://linuxhint.com/create-table-from-array-objects-javascript/
     function genera_tabla(arreglo) {
-        var tableBody = document.getElementById("mostrarDatosJavascript");
 
-        tableBody.insertAdjacentHTML('afterend',
-        `<table><tr>
-            <TD>${arreglo.map(e=>Object.values(e).join('<TD>')).join('<tr><TD>')}
-        </table>`)
-        // `<table><tr>
-        //     <th>${Object.keys(arreglo[0]).join('<th>')}
-        //     </th>
-        //     <tr>
-        //     <TD>${arreglo.map(e=>Object.values(e).join('<TD>')).join('<tr><TD>')}
-        // </table>`)
+        const tableBody = document.getElementById("bodyTabla");
 
-    //     // for (var i = 0; i < arreglo.length; i++) {
-    //     //     var tr = document.createElement('TR');
-    //     //     tableBody.appendChild(tr);
+        if (arreglo.length == 0 || arreglo == null){
+            tableBody.innerHTML = '';
+            console.log("no hay datos");
+            console.log(arreglo);
+            arreglo = [...datos];
+        }
 
-    //     //     for (var j = 0; j < arreglo[i].length; j++) {
-    //     //         var td = document.createElement('TD');
-    //     //         td.width = '75';
-    //     //         td.appendChild(document.createTextNode(arreglo[i].valor));
-    //     //         tr.appendChild(td);
-    //     //     }
-    //     // }
-    //     //tableBody.appendChild(table);
+        const tableData = arreglo.map(value => {
+        return (
+            `<tr>
+                <td>${value.nombre}</td>
+                <td>${value.descripcion}</td>
+                <td>${value.estado}</td>
+                <td>${value.fecha_inicio}</td>
+                <td>${value.fecha_fin}</td>
+            </tr>`
+        );
+        }).join('');
+
+        // const tableBody = document.getElementById("bodyTabla");
+        tableBody.insertAdjacentHTML('beforebegin',tableData);
     }
 
     let arreglo = [];
     <?php echo 'const datos = ' . $datos . ';'; ?>
-    pintarTabla()
+    genera_tabla(arreglo);
 
 </script>
