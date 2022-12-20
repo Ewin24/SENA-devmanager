@@ -50,3 +50,29 @@ https://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-wa
   padding: 6px 12px;
   cursor: pointer;
 }
+
+/* https://fontawesomeicons.com/bootstrap/icons/plus-square-fill */
+.bi-pencil-square {
+  font-size: 1.5rem; 
+  color: rgb(0, 128, 55); --darkreader-inline-color: #375c47;
+}
+
+.bi-trash-fill {
+  font-size: 1.5rem; 
+  color: rgb(255, 0, 0); --darkreader-inline-color: #b63d3d;
+}
+
+/* (B) EDITABLE TABLE */
+.editable {
+  border-collapse: collapse;
+}
+.editable th, .editable td {
+  text-align: left;
+  padding: 15px;
+}
+.editable tbody tr:nth-child(even) {
+  background: #f2f2f2;
+}
+.editable td.edit {
+  background: #f8ff88;
+}
