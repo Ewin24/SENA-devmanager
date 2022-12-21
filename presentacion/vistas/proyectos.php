@@ -27,10 +27,11 @@ $datos .= ']';
 
 switch ($USUARIO->getTipoUsuario()) {
     case 'A': //muestra todos los proyectos y opciones porque es admin
-        // $resultado = Proyecto::getListaEnObjetos(null, null);
+        //$resultado = Proyecto::getListaEnObjetos(null, null);
         // for ($i = 0; $i < count($resultado); $i++) {
 
         //     $proyecto = $resultado[$i];
+        //     echo $proyecto;
         //     $datos .=
         //         '{ id: "' . $proyecto->getIdProyecto()
         //         . '", nombre: "' . $proyecto->getNombre()
@@ -40,22 +41,22 @@ switch ($USUARIO->getTipoUsuario()) {
         //         . '", fechaFinalizacion: "' . $proyecto->getFechaFinalizacion()
         //         . '"},';
 
-            // $lista .= '<tr>';
-            // $lista .= "<td>{$proyecto->getIdProyecto()}</td>";
-            // $lista .= "<td>{$proyecto->getNombre()}</td>";
-            // $lista .= "<td>{$proyecto->getDescripcion()}</td>";
-            // $lista .= "<td>{$proyecto->getEstado()}</td>";
-            // $lista .= "<td>{$proyecto->getFechaInicio()}</td>";
-            // $lista .= "<td>{$proyecto->getFechaFinalizacion()}</td>";
+        //     $lista .= '<tr>';
+        //     $lista .= "<td>{$proyecto->getIdProyecto()}</td>";
+        //     $lista .= "<td>{$proyecto->getNombre()}</td>";
+        //     $lista .= "<td>{$proyecto->getDescripcion()}</td>";
+        //     $lista .= "<td>{$proyecto->getEstado()}</td>";
+        //     $lista .= "<td>{$proyecto->getFechaInicio()}</td>";
+        //     $lista .= "<td>{$proyecto->getFechaFinalizacion()}</td>";
 
-            // if ($USUARIO->esAdmin($USUARIO->getIdentificacion())) { //esta misma validación se hace para todos, en caso de que sea trabajador se deja que postule o agregue estudios o habilidades
-            //     $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoFormulario.php&accion=Modificar&idProyecto={$proyecto->getIdproyecto()}' title='modificar proyecto'> Modificar </a></td>";
-            //     $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Eliminar&idProyecto={$proyecto->getIdproyecto()}' onclick='eliminar({$proyecto->getIdproyecto()})' title='Eliminar proyecto'>Eliminar</a></td>";
-            // }
+        //     if ($USUARIO->esAdmin($USUARIO->getIdentificacion())) { //esta misma validación se hace para todos, en caso de que sea trabajador se deja que postule o agregue estudios o habilidades
+        //         $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoFormulario.php&accion=Modificar&idProyecto={$proyecto->getIdproyecto()}' title='modificar proyecto'> Modificar </a></td>";
+        //         $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Eliminar&idProyecto={$proyecto->getIdproyecto()}' onclick='eliminar({$proyecto->getIdproyecto()})' title='Eliminar proyecto'>Eliminar</a></td>";
+        //     }
 
-            // $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Postularse&idProyecto={$proyecto->getIdproyecto()}&idUsuario={$USUARIO->getIdentificacion()}' title='Postular a proyecto'>Postularse</a></td>";
-            // $lista .= "<td></td>";
-            // $lista .= "</tr>";
+        //     $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Postularse&idProyecto={$proyecto->getIdproyecto()}&idUsuario={$USUARIO->getIdentificacion()}' title='Postular a proyecto'>Postularse</a></td>";
+        //     $lista .= "<td></td>";
+        //     $lista .= "</tr>";
         // }
         break;
 
@@ -77,6 +78,7 @@ switch ($USUARIO->getTipoUsuario()) {
         echo  '<button type="button" id="NuevoProyecto" class="btn btn-primary" onclick="crearNuevoProyecto()">Nuevo Proyecto</button></span> ';
     }
 ?>
+
 <div class="row justify-content-center">
     <div class="col-auto">
         <table id="example" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
@@ -98,6 +100,7 @@ switch ($USUARIO->getTipoUsuario()) {
 
 
 <script type="text/javascript" src="assets/barraBusqueda.js"></script>
+<!-- <script type="text/javascript" src="librerias/datatable-inline-edit.js"></script> -->
 <script type="text/javascript">
     
     function editar(boton) {
@@ -137,74 +140,112 @@ switch ($USUARIO->getTipoUsuario()) {
     
     let arreglo = [];
     <?php echo 'const datos = ' . $datos . ';'; ?>
+    console.log(datos);
     if (arreglo.length == 0 || arreglo == null){
             arreglo = [...datos];
     }
 
     //genera_tabla(arreglo);    
 
-
+    // const url = "principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=";
+    // const updateField = (_id, data, callback) => {
+    //     $.ajax({
+    //         url: `${url}${_id}`,
+    //         data,
+    //         type: 'POST',
+    //         success: (data) => {
+    //             callback(null);
+    //         },
+    //         error: (err) => {
+    //             callback(err);
+    //         }
+    //     });
+    // };
+        
+    
     $(document).ready(function () {
         tabla = $('#example').DataTable({
-            select: true,
+            select:{style:'single'},
             searching: true,
             ordering: true,
-            data: arreglo,
+            data: arreglo,
+            createdRow:function(row){
+                $(".datecell", row).datepicker();
+            },
             fields: [
+                {   label: "id:",   name: "id" },
                 {   label: "Nombre:",   name: "nombre" },
                 {   label: "Descripcion:",  name: "descripcion" },
                 {   label: "Estado:",  name: "estado" },
                 {
                     label: "Fecha inicio:",
                     name: "fecha_inicio",
-                    type: "datetime",
+                    type:  'datetime',
+                    def:   function () { return new Date(); },
                     format: 'D-M-Y',
                 },
                 {
-                    label: "Fecha finalización:",
-                    name: "fecha_fin",
-                    type: "datetime",
+                    label: 'Fecha finalización:',
+                    name: 'fecha_fin',
+                    type:  'datetime',
+                    def:   function () { return new Date(); },
                     format: 'D-M-Y',
                 },
             ],
-            columns: [
-                {
-                    data: null,
-                    defaultContent: '',
-                    className: 'select-checkbox',
-                    orderable: false
-                },
-                { title: 'Nombre', data: 'nombre' },
-                { title: 'Descripcion', data: 'descripcion' },
-                { title: 'Estado', data: 'estado' },
-                { 
+            columns: [
+                // {
+                //     data: null,
+                //     defaultContent: '',
+                //     className: 'select-checkbox',
+                //     orderable: false
+                // },
+                { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
+                { title: 'id', data: 'id', visible: false },
+                { title: 'Nombre', data: 'nombre' },
+                { title: 'Descripcion', data: 'descripcion' },
+                { title: 'Estado', data: 'estado' },
+                { 
                     title: 'Fecha inicio' , 
                     data: 'fecha_inicio', 
-                    defaultContent: '<input type="text" class="datepicker-input" placeholder="Fecha de Inicio">',
+                    type: 'datetime',
+                    className: 'datecell',
+                    // defaultContent: '<input type="text" class="datepicker-input" placeholder="Fecha de Inicio">',
+                    // render: function (date){
+                    //     return "<input type='text' class='datecell' value='" + date + "'/>"
+                    // },
                 },
-                { title: 'Fecha finalización', data: 'fecha_fin', type: "datetime" },
-                {
-                    data: null,
-                    defaultContent: '<button class="bi bi-pencil-square" data-action="edit" onclick="editar(this)"></button>', //'<span class="bi bi-pencil-square tool" onclick="editar()">',
-                    className: 'row-edit dt-center',
-                    orderable: false
-                },
-                {
-                    data: null,
-                    defaultContent: '<button class="bi bi-trash-fill" data-action="delete" onclick="eliminar(this.id)"></button>',
-                    className: 'row-remove dt-center',
-                    orderable: false
-                },
-            ],
+                { title: 'Fecha finalización', data: 'fecha_fin', type: 'datetime', className: 'ui-datepicker-inline' },
+                {
+                    data: null,
+                    defaultContent: '<button class="bi bi-pencil-square" data-action="edit" onclick="editar(this)"></button>', //'<span class="bi bi-pencil-square tool" onclick="editar()">',
+                    className: 'row-edit dt-center',
+                    orderable: false
+                },
+                {
+                    data: null,
+                    defaultContent: '<button class="bi bi-trash-fill" data-action="delete" onclick="eliminar(this.id)"></button>',
+                    className: 'row-remove dt-center',
+                    orderable: false
+                },
+            ],
             buttons: [ {
-                    extend: "createInline",
-                    editor: this,
-                    formOptions: {
-                        submitTrigger: -2,
-                        submitHtml: '<span class="bi bi-trash-fill"></span>'
-                    }
-                } ],
-                ColumnDefs: [ { "Class": 'ui-datepicker-inline', "Targets": [ 4,5 ] } ],
+                extend: "createInline",
+                editor: this,
+                formOptions: {
+                    submitTrigger: -2,
+                    submitHtml: '<span class="bi bi-trash-fill"></span>'
+                }
+            } ],
+            columnDefs: [ 
+                { 
+                    target: 0,
+                    visible: false,
+                    searcheable: false,
+                },
+                // {
+                //     className: 'ui-datepicker-inline', "targets":[4,5]
+                // }
+            ],
         //     columnDefs: [
         //             {
         //                 targets: -1,
@@ -213,66 +254,38 @@ switch ($USUARIO->getTipoUsuario()) {
         //             },
         //         ],
         });
+    });
 
-    // // agregar selección de fila https://datatables.net/examples/api/select_single_row.html
-    // $('#example tbody').on('click', 'tr', function () {
-    //     if ($(this).hasClass('selected')) {
-    //         $(this).removeClass('selected');
-    //     } else {
-    //         tabla.$('tr.selected').removeClass('selected');
-    //         $(this).addClass('selected');
-    //     }
-    // });
-
-    // $('.datepicker-input').datepicker({
-    //     dateFormat: 'mm-dd-yy',
-    //     onClose: function(dateText, inst) {
-    //         $(this).parent().find('.date').focus().html(dateText).blur();
-    //     }
-    // });
-
-    // // Shows the datepicker when clicking on the content editable div
-    // $('.date').click(function() {
-    //     $(this).parent().find('.datepicker-input').datepicker("show");
-    // });
-
-    const url = "principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=" + id;";
-    const updateField = (_id, data, callback) => {
-        $.ajax({
-            url: `${url}${_id}`,
-            data,
-            type: 'POST',
-            success: (data) => {
-                callback(null);
-            },
-            error: (err) => {
-                callback(err);
-            }
-        });
-    };
-        
     // https://github.com/FilipeMazzon/Datatable-inline-Edit-Free
     $(document).ready(function () {
         var table = $('#example').DataTable();
         $("#example tbody").on('click', 'td', function () {
-            var myCell = table.cell(this);
-            var _id = myCell.context[0].aoData[0]._aData[0];
-            console.log(_id);
-            var column = myCell["0"][0].column;
-            var field = myCell.context[0].aoColumns[column].sTitle;
-            var data = myCell.data();
+            var celda = table.cell(this);
+            var celda_data = celda.context[0].aoData[0]._aData[0];
+            console.log(this, celda, celda_data);
+            var columna = celda["0"][0].column;
+            var campoId = celda.context[0].aoColumns[1];//.data();
+            var test = campoId.data();
+            var campo = celda.context[0].aoColumns[columna].sTitle;
+            var className = celda.context[0].aoColumns[columna].className
+            var data = celda.data();
             if (data.search('<input') === -1) {
-                myCell.data('<input type="text" id="input' + _id + '" value="' + data + '"/>');
-                var input = document.getElementById(`input${_id}`);
+                if(className==="datecell"){
+                    celda.data('<input type="text" class="datecell" id="input' + celda_data + '" value="' + data + '"/>');
+                    $(".datecell", celda).datepicker();    
+                }else{
+                    celda.data('<input type="text" id="input' + celda_data + '" value="' + data + '"/>');
+                }
+                var input = document.getElementById(`input${celda_data}`);
                 input.addEventListener("keyup", function (event) {
                     if (event.key === "Enter") {
                         event.preventDefault();
                         var newData = {};
-                        newData[field] = input.value;
-                        updateField(_id, newData, (err) => {
+                        newData[campo] = input.value;
+                        updateCampo(row_data, newData, (err) => {
                             if (err) alert(err);
                             else {
-                                myCell.data(input.value);
+                                celda.data(input.value);
                             }
                         });
                     }
@@ -280,6 +293,30 @@ switch ($USUARIO->getTipoUsuario()) {
             }
         })
     });
+
+
+    // // // agregar selección de fila https://datatables.net/examples/api/select_single_row.html
+    // // $('#example tbody').on('click', 'tr', function () {
+    // //     if ($(this).hasClass('selected')) {
+    // //         $(this).removeClass('selected');
+    // //     } else {
+    // //         tabla.$('tr.selected').removeClass('selected');
+    // //         $(this).addClass('selected');
+    // //     }
+    // // });
+
+    // // $('.datepicker-input').datepicker({
+    // //     dateFormat: 'mm-dd-yy',
+    // //     onClose: function(dateText, inst) {
+    // //         $(this).parent().find('.date').focus().html(dateText).blur();
+    // //     }
+    // // });
+
+    // // // Shows the datepicker when clicking on the content editable div
+    // // $('.date').click(function() {
+    // //     $(this).parent().find('.datepicker-input').datepicker("show");
+    // // });
+
     
 
 
@@ -287,109 +324,10 @@ switch ($USUARIO->getTipoUsuario()) {
     // https://datatables.net/forums/discussion/1723/editable-with-datepicker-inside-datatables
     // // select everything when editing field in focus
 
-    /*
-    function crearNuevoProyecto() {
-        
-        var tableRow = document.getElementById("miTablaDatos");
-        var row = tableRow.insertRow(0);
-        // var rowCount = table.rows.length;
-        row.insertCell(0).innerHTML= '<th> <input id="N_nombre" type="text" placeholder="Nombre del Proyecto"> </th>';
-        row.insertCell(1).innerHTML= '<th> <input id="N_descripcion" type="text" placeholder="Descripcion"></th>';
-        row.insertCell(2).innerHTML= '<th> <input id="N_estado" type="text" placeholder="Estado del Proyecto"></th>';
-        row.insertCell(3).innerHTML= '<th> <input id="N_fecha_inicio" type="text" placeholder="Fecha de Inicio"></th>';
-        row.insertCell(4).innerHTML= '<th> <input id="N_fecha_fin" type="text" placeholder="Fecha de finalizacion"></th>';
-        row.insertCell(5).innerHTML= '<th><button type="button" class="btn-close" aria-label="Close"></button></th>';
-    }
-
-    const objFiltroProyectos = {
-        nombre: {
-          valor: '',
-          tipoDato: tiposDatos.TEXT
-        },
-        descripcion: {
-          valor: '',
-          tipoDato: tiposDatos.TEXT
-        },
-        estado: {
-          valor: '',
-          tipoDato: tiposDatos.TEXT
-        },
-        fecha_inicio: {
-          valor: new Date('1900-01-01'),
-          tipoDato: tiposDatos.DATE,
-        },
-        fecha_fin: {
-          valor: new Date('2999-12-31'),
-          tipoDato: tiposDatos.DATE,
-        },
-      };
-
-    function filtrarListaDatos(ListaDatos, objFiltroPantalla, filtro) 
-    {
-        objFiltroPantalla[filtro.id].valor = filtro.value;
-
-        switch(objFiltroPantalla[filtro.id].tipoDato) {
-            case tiposDatos.TEXT:
-                return filtrarTexto(ListaDatos, filtro.id, filtro.value);
-                break;
-            // case tiposDatos.DATE:
-            //     const rangoFecha = {
-            //         fecha_inicio: filtros.fechaInicio.valor,
-            //         fecha_fin: filtros.fechaFin.valor,
-            //     };
-            //     nuevoArreglo = filtrarFecha(nuevoArray, filtro.id, rangoFecha);
-            //     break;
-            default:
-                return ListaDatos;
-        }
-    }
-
-    function busquedaColumna(id) {
-        const campoBuscar = document.getElementById(id);
-        // campoBuscar.addEventListener('change', (e) => filtrarListaDatos(datos, objFiltroProyectos, event.target));
-
-        if ( campoBuscar.nodeName == 'INPUT'){
-            const tabla = document.getElementById("miTablaDatos");
-            var tableBody = tabla.getElementsByTagName('tbody')[0];
-            tabla.removeChild(tableBody);
-            arreglo.length = 0;
-        }
-
-        arreglo = filtrarListaDatos(datos, objFiltroProyectos, event.target);
-        genera_tabla(arreglo);
-    }
+    
 
     // // https://stackoverflow.com/questions/14643617/create-table-using-javascript
     // // // https://linuxhint.com/create-table-from-array-objects-javascript/
-    function genera_tabla(arreglo) {
-
-        const tabla = document.getElementById("miTablaDatos");
-        // var tableBody = tabla.getElementsByTagName('tbody')[0];
-        var tableBody = document.createElement("tbody");
-        tableBody.setAttribute('id', 'miBodyDatos');
-        tabla.appendChild(tableBody);
-
-        if (arreglo.length == 0 || arreglo == null){
-            console.log("no hay datos");
-            console.log(arreglo);
-            //arreglo = [...datos];
-        }
-
-        const tableData = arreglo.map(value => {
-        return (
-            `<tr>
-                <td>${value.nombre}</td>
-                <td>${value.descripcion}</td>
-                <td>${value.estado}</td>
-                <td>${value.fecha_inicio}</td>
-                <td>${value.fecha_fin}</td>
-            </tr>`);
-        }).join('');
-
-        tableBody.innerHTML = tableData;
-    }
-    */
-
-    });
+    
 </script>
 

@@ -139,9 +139,9 @@ VALUES
 INSERT INTO devmanager2.usuarios
 (id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa)
 VALUES
-('499a9d4a-fbf1-4ea7-850b-01bf301a98af', '1098', 'C', 'William', 'Trigos', 'wtrigos@gmail.com', 'MD5(william)', 'Provenza', 'fwilliam.jpg', '334422', 'D', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec'),
+('499a9d4a-fbf1-4ea7-850b-01bf301a98af', '1098657073', 'C', 'William', 'Trigos', 'wtrigos@gmail.com', 'c4ca4238a0b923820dcc509a6f75849b', 'Provenza', 'fwilliam.jpg', '334422', 'D', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec'),
 ('8fa903bc-0789-43b2-901b-70d6c60334ba', '1095', 'C', 'Felipe', 'Garcia', 'fgarcia@gmail.com', 'MD5(felipe)', 'Concordia', 'ffelipe.jpg', '444222', 'D', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec'),
-('eb036f8a-75bd-4811-a477-1444e2521f3b', '10951', 'R', 'Edwin', 'Trigos', 'etrigos@gmail.com', 'MD5(edwin)', 'provenza', 'fedwin.jpg', '313316', 'T', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec'),
+('eb036f8a-75bd-4811-a477-1444e2521f3b', '10951', 'R', 'Edwin', 'Trigos', 'etrigos@gmail.com', 'c4ca4238a0b923820dcc509a6f75849b', 'provenza', 'fedwin.jpg', '313316', 'T', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec'),
 ('25c00e25-9042-4f04-b059-c34820b800f8', '10985', 'P', 'Pepito', 'Peréz', 'pper@aol.com', 'MD5(pepito)', 'maracay', 'fpepito.jpg', '039', 'T', 'b7f6046a-b834-48f0-856e-8a360b495406');
 
 

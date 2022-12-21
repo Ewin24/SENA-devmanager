@@ -195,7 +195,7 @@ class Proyecto
         else
             $orden = "ORDER BY $orden";
 
-        $cadenaSQL = "SELECT nombre, descripcion, estado, fecha_inicio, fecha_fin, id_usuario FROM proyectos $filtro $orden";
+        $cadenaSQL = "SELECT id, nombre, descripcion, estado, fecha_inicio, fecha_fin, id_usuario FROM proyectos $filtro $orden";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
