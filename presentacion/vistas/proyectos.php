@@ -75,13 +75,36 @@ switch ($USUARIO->getTipoUsuario()) {
     if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
         // deja adicionar si el user es ADMIN o Director
         // echo  '<span><button type="button" class="btn btn-primary"><a href="principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoFormulario.php&accion=Adicionar"></a>Nuevo Proyecto</button></span> ';
-        echo  '<button type="button" id="NuevoProyecto" class="btn btn-primary" onclick="crearNuevoProyecto()">Nuevo Proyecto</button></span> ';
+        // echo  '<button type="button" id="addRow" class="btn btn-primary">Nuevo Proyecto</button></span> ';
     }
 ?>
 
 <div class="row justify-content-center">
     <div class="col-auto">
         <table id="example" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+        
+        <table id="new-row-template" style="display:none">
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td>__id__</td>
+                    <td>__nombre__</td>
+                    <td>__descripcion__</td>
+                    <td>__estado__</td>
+                    <td>01/01/1900</td>
+                    <td>01/01/2099</td>
+                    <td>
+                        <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                        <i class="bi bi-trash-fill" aria-hidden="true"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="pull-right">
+        <button type="button" id="btn-cancel" class="btn btn-secondary" data-dismiss="modal">Revertir Cambios</button>
+        <button type="button" id="btn-save" class="btn btn-primary" data-dismiss="modal">Guardar Cambios</button>
     </div>
 </div>
     
@@ -103,22 +126,30 @@ switch ($USUARIO->getTipoUsuario()) {
 <!-- <script type="text/javascript" src="librerias/datatable-inline-edit.js"></script> -->
 <script type="text/javascript">
     
-    function editar(boton) {
-        var action     = boton.dataset.action,
-            row        = boton.closest('tr'),
-            row_cloned = row.cloneNode(true);
-            // id         = parseInt(row_cloned.id);
+    // function editar(boton) {
+    //     var action     = boton.dataset.action,
+    //         row        = boton.closest('tr'),
+    //         row_cloned = row.cloneNode(true);
+    //         // id         = parseInt(row_cloned.id);
 
-        switch ( action ) {
-                case 'edit':
-                    for (let index=0; index<row.cells.length-2; index++) { // omitir botones de edición
-                            row.cells[index].contentEditable = "true";
-                        }
-                        row.firstChild.focus();
-                break;
-            }
-    }
+    //     switch ( action ) {
+    //             case 'edit':
+    //                 for (let index=0; index<row.cells.length-2; index++) { // omitir botones de edición
+    //                         row.cells[index].contentEditable = "true";
+    //                         var campoId = row.cells[1].innerHTML;
+    //                         if(row.cells[index].className == "datecell"){
+    //                             row.cells[index].innerHTML ='<input type="text" class="datecell" id=' + campoId + ' value="' + data + '"/>';
+    //                             row.cells[index].datepicker();    
+    //                         }else{
+    //                             row.cells[index].innerHTML ='<input type="text" id=' + campoId + ' value="' + data + '"/>';
+    //                         }
+    //                     }
+    //                     row.firstChild.focus();
+    //             break;
+    //         }
+    // }
 
+    
 
     function eliminar(id) {
         var respuesta = confirm("Esta seguro de eliminar este registro?");
@@ -147,6 +178,175 @@ switch ($USUARIO->getTipoUsuario()) {
 
     //genera_tabla(arreglo);    
 
+    var dataUrl = 'principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=';
+    var ddl_estado_ops = [
+    { key : 'P', value : 'P' },
+    { key : 'E', value : 'E' },
+    { key : 'T', value : 'T' }
+    ];
+
+    $(document).ready(function() {
+        var $table = $('#example');
+        var dataTable = null;
+       
+        // eliminar
+        $table.on('mousedown', 'td .bi.bi-trash-fill', function(e) {
+            dataTable.row($(this).closest("tr")).remove().draw();
+        });
+        // editar
+        $table.on('mousedown.edit', 'i.bi.bi-pencil-square', function(e) {
+            enableRowEdit($(this));
+        });
+
+        // guardar
+        $table.on('mousedown.save', 'i.bi.bi-check-square-fill', function(e) {
+            updateRow($(this), true); // Pass save button to function.
+        });
+
+        $table.on('mousedown', 'input', function(e) {
+            e.stopPropagation();
+        });
+        $table.on('mousedown', '.select-basic', function(e) {
+            e.stopPropagation();
+        });
+        
+        dataTable = $table.DataTable({
+            // ajax: dataUrl,
+            data: arreglo,
+            rowReorder: {
+                dataSrc: 'order',
+                selector: 'tr'
+            },
+            createdRow:function(row){
+                $(".datepicker", row).datepicker();
+            },
+            columns: [
+                { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
+                { title: 'id', data: 'id', visible: false },
+                { title: 'Nombre', data: 'nombre' },
+                { title: 'Descripcion', data: 'descripcion' },
+                { title: 'Estado', data: 'estado', className: 'ddl' },
+                { 
+                    title: 'Fecha inicio' , 
+                    data: 'fecha_inicio', 
+                    type: 'date',
+                    format:    'DD-MM-YYYY',
+                    className: 'datepicker',
+                    // def:   function () { return new Date(); },
+                    // defaultContent: '<input type="text" class="datepicker-input" placeholder="Fecha de Inicio">',
+                    // render: function (date){
+                    //     return "<input type='text' class='datecell' value='" + date + "'/>"
+                    // },
+                },
+                {
+                    title: 'Fecha finalización', 
+                    data: 'fecha_fin', 
+                    type: 'date', 
+                    format:    'DD-MM-YYYY',
+                    className: 'datepicker' },
+                {    
+                    data: null,
+                    defaultContent: '<td><i class="bi bi-pencil-square" aria-hidden="true"></i><i class="bi bi-trash-fill" aria-hidden="true"></i></td>',   
+                    // className: 'row-edit dt-center',
+                    orderable: false
+                },
+            ],
+        });
+
+        // Guardar Cambios
+        $('#btn-save').on('click', function() {
+            updateRows(true); // Update all edited rows
+        });
+        // Cancelar Cambios
+        $('#btn-cancel').on('click', function() {
+            updateRows(false); // Revert all edited rows
+        });
+        
+        // Botón nuevo proyecto
+        $table.css('border-top', 'none')
+            .after($('<div>').addClass('addRow')
+            .append($('<button>').attr('id', 'addRow').text('Nuevo Proyecto')));
+
+        // Add row
+        $('#addRow').click(function() {
+            var $row = $("#new-row-template").find('tr').clone();
+            dataTable.row.add($row).draw();
+            // Toggle edit mode upon creation.
+            enableRowEdit($table.find('tbody tr:last-child td i.bi.bi-pencil-square'));
+        });
+
+        // habilitar edición
+        function enableRowEdit($editButton) {
+            $editButton.removeClass().addClass("bi bi-check-square-fill");
+            var $row = $editButton.closest("tr").off("mousedown");
+
+            $row.find("td").not(':first').not(':last').each(function(i, el) {
+                enableEditText($(this))
+            });
+
+            $row.find('td.ddl').each(function(i, el) {
+                enableEditSelect($(this))
+            });
+
+            $row.find('td.datepicker').each(function(i, el) {
+                enableDatePicker($(this))
+            });
+        }
+
+        function enableEditText($cell) {
+            var txt = $cell.text();
+            $cell.empty().append($('<input>', {
+                type : 'text',
+                value : txt
+            }).data('original-text', txt));
+        }
+
+        function enableEditSelect($cell) {
+            var txt = $cell.text();
+            $cell.empty().append($('<select>', {
+                class : 'select-basic'
+            })
+            .append(ddl_estado_ops.map(function(option) {
+            return $('<option>', {
+                    text  : option.key,
+                    value : option.value
+                })
+            })).data('original-value', txt));
+        }
+
+        function enableDatePicker($cell) {
+            var txt = $cell.context.childNodes[0].value;
+            $cell.empty().append($('<input>', {
+                class: 'datepicker',
+                type : 'date',
+                value : txt
+            }).data('original-text', txt));
+        }
+
+        function updateRows(commit) {
+            $table.find('tbody tr td i.bi.bi-check-square-fill').each(function(index, button) {
+                updateRow($(button), commit);
+            });
+        }
+
+        // recorrido por tipos de control en las columnas
+        function updateRow($saveButton, commit) {
+            $saveButton.removeClass().addClass('bi bi-pencil-square');
+            var $row = $saveButton.closest("tr");
+
+            $row.find('td').not(':first').not(':last').each(function(i, el) {
+                var $input = $(this).find('input');
+                $(this).text(commit ? $input.val() : $input.data('original-text'));
+            });
+
+            $row.find('td:first').each(function(i, el) {
+                var $input = $(this).find('select');
+                $(this).text(commit ? $input.val() : $input.data('original-value'));
+            });
+        }
+    });
+
+
     // const url = "principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=";
     // const updateField = (_id, data, callback) => {
     //     $.ajax({
@@ -162,36 +362,37 @@ switch ($USUARIO->getTipoUsuario()) {
     //     });
     // };
         
+    /*
     
     $(document).ready(function () {
         tabla = $('#example').DataTable({
-            select:{style:'single'},
+            // select:{style:'single'},
             searching: true,
             ordering: true,
             data: arreglo,
             createdRow:function(row){
                 $(".datecell", row).datepicker();
             },
-            fields: [
-                {   label: "id:",   name: "id" },
-                {   label: "Nombre:",   name: "nombre" },
-                {   label: "Descripcion:",  name: "descripcion" },
-                {   label: "Estado:",  name: "estado" },
-                {
-                    label: "Fecha inicio:",
-                    name: "fecha_inicio",
-                    type:  'datetime',
-                    def:   function () { return new Date(); },
-                    format: 'D-M-Y',
-                },
-                {
-                    label: 'Fecha finalización:',
-                    name: 'fecha_fin',
-                    type:  'datetime',
-                    def:   function () { return new Date(); },
-                    format: 'D-M-Y',
-                },
-            ],
+            // fields: [
+            //     {   label: "id:",   name: "id" },
+            //     {   label: "Nombre:",   name: "nombre" },
+            //     {   label: "Descripcion:",  name: "descripcion" },
+            //     {   label: "Estado:",  name: "estado" },
+            //     {
+            //         label: "Fecha inicio:",
+            //         name: "fecha_inicio",
+            //         type:  'datetime',
+            //         def:   function () { return new Date(); },
+            //         format: 'D-M-Y',
+            //     },
+            //     {
+            //         label: 'Fecha finalización:',
+            //         name: 'fecha_fin',
+            //         type:  'datetime',
+            //         def:   function () { return new Date(); },
+            //         format: 'D-M-Y',
+            //     },
+            // ],
             columns: [
                 // {
                 //     data: null,
@@ -215,27 +416,27 @@ switch ($USUARIO->getTipoUsuario()) {
                     // },
                 },
                 { title: 'Fecha finalización', data: 'fecha_fin', type: 'datetime', className: 'ui-datepicker-inline' },
-                {
-                    data: null,
-                    defaultContent: '<button class="bi bi-pencil-square" data-action="edit" onclick="editar(this)"></button>', //'<span class="bi bi-pencil-square tool" onclick="editar()">',
-                    className: 'row-edit dt-center',
-                    orderable: false
-                },
-                {
-                    data: null,
-                    defaultContent: '<button class="bi bi-trash-fill" data-action="delete" onclick="eliminar(this.id)"></button>',
-                    className: 'row-remove dt-center',
-                    orderable: false
-                },
+                // {
+                //     data: null,
+                //     defaultContent: '<button class="bi bi-pencil-square" data-action="edit" onclick="editar(this)"></button>', //'<span class="bi bi-pencil-square tool" onclick="editar()">',
+                //     className: 'row-edit dt-center',
+                //     orderable: false
+                // },
+                // {
+                //     data: null,
+                //     defaultContent: '<button class="bi bi-trash-fill" data-action="delete" onclick="eliminar(this.id)"></button>',
+                //     className: 'row-remove dt-center',
+                //     orderable: false
+                // },
             ],
-            buttons: [ {
-                extend: "createInline",
-                editor: this,
-                formOptions: {
-                    submitTrigger: -2,
-                    submitHtml: '<span class="bi bi-trash-fill"></span>'
-                }
-            } ],
+            // buttons: [ {
+            //     extend: "createInline",
+            //     editor: this,
+            //     formOptions: {
+            //         submitTrigger: -2,
+            //         submitHtml: '<span class="bi bi-trash-fill"></span>'
+            //     }
+            // } ],
             columnDefs: [ 
                 { 
                     target: 0,
@@ -256,27 +457,66 @@ switch ($USUARIO->getTipoUsuario()) {
         });
     });
 
+
+    // $("#example").on('click', 'tbody tr', function() {
+    //     var table = $('#example').DataTable({
+    //         //turn ordering off, just to demonstrate the rows actually are inserted the right place
+    //         ordering: false
+    //     })
+
+    //     var currentPage = table.page();
+        
+    //     //insert a test row
+    //     // http://jsfiddle.net/55rfa8zb/1/
+    //     //https://datatables.net/forums/discussion/28186/how-to-add-a-row-in-an-editable-table-and-keep-all-the-html-attributes
+    //     //https://codepen.io/quanghuy1294/pen/OgNELB
+    //     table.row.add({
+    //         "id" : "sasdas",
+    //         "nombre" : "sasdas",
+    //         "descripcion" : "work_code",
+    //         "estado" : "P",
+    //         "fecha_inicio" : "1/1/2022",
+    //         "fecha_fin" : "1/10/2022",
+    //     }).draw();
+        
+    //     //move added row to desired index (here the row we clicked on)
+    //     var index = table.row(this).index(),
+    //         rowCount = table.data().length-1,
+    //         insertedRow = table.row(rowCount).data(),
+    //         tempRow;
+    //         console.log(index);
+
+    //     for (var i=rowCount;i>index;i--) {
+    //         tempRow = table.row(i-1).data();
+    //         table.row(i).data(tempRow);
+    //         table.row(i-1).data(insertedRow);
+    //     }     
+    //     //refresh the page
+    //     table.page(currentPage).draw(false);
+    // });  
+
+
+    
     // https://github.com/FilipeMazzon/Datatable-inline-Edit-Free
     $(document).ready(function () {
         var table = $('#example').DataTable();
         $("#example tbody").on('click', 'td', function () {
             var celda = table.cell(this);
-            var celda_data = celda.context[0].aoData[0]._aData[0];
+            var celda_data = celda.context[0].aoData[0];//._aData[0];
             console.log(this, celda, celda_data);
             var columna = celda["0"][0].column;
-            var campoId = celda.context[0].aoColumns[1];//.data();
-            var test = campoId.data();
+            var campoId = celda.context[0].aoData[0].anCells[1].textContent;
             var campo = celda.context[0].aoColumns[columna].sTitle;
             var className = celda.context[0].aoColumns[columna].className
             var data = celda.data();
             if (data.search('<input') === -1) {
                 if(className==="datecell"){
-                    celda.data('<input type="text" class="datecell" id="input' + celda_data + '" value="' + data + '"/>');
+                    celda.data('<input type="text" class="datecell" id=' + campoId + ' value="' + data + '"/>');
                     $(".datecell", celda).datepicker();    
                 }else{
-                    celda.data('<input type="text" id="input' + celda_data + '" value="' + data + '"/>');
+                    celda.data('<input type="text" id=' + campoId + ' value="' + data + '"/>');
                 }
-                var input = document.getElementById(`input${celda_data}`);
+                var input = document.getElementById(campoId);
                 input.addEventListener("keyup", function (event) {
                     if (event.key === "Enter") {
                         event.preventDefault();
@@ -317,7 +557,7 @@ switch ($USUARIO->getTipoUsuario()) {
     // //     $(this).parent().find('.datepicker-input').datepicker("show");
     // // });
 
-    
+    */
 
 
 
