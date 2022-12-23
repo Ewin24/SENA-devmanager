@@ -55,7 +55,7 @@ class Proyecto
         echo $fechaActual;
         $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaFinalizacion);
         if (strtotime($fechaActual) > strtotime($this->fechaInicio) && strtotime($fechaActual) < strtotime($this->fechaFinalizacion)) {
-            return "En ejecucion";
+            return "Ejecución";
         }
 
         if ($diferenciaFechas > 0) {
@@ -64,7 +64,7 @@ class Proyecto
 
         $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaInicio);
         if ($diferenciaFechas < 0) {
-            return "Por ejecutar";
+            return "Pendiente";
         }
     }
 

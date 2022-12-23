@@ -94,8 +94,8 @@ switch ($USUARIO->getTipoUsuario()) {
                     <td>01/01/1900</td>
                     <td>01/01/2099</td>
                     <td>
-                        <i class="bi bi-pencil-square" aria-hidden="true"></i>
-                        <i class="bi bi-trash-fill" aria-hidden="true"></i>
+                        <i class='bi '+`${claseBotonEditarRow}` aria-hidden="true"></i>
+                        <i class='bi '+`${claseBotonEliminarRow}` aria-hidden="true"></i>
                     </td>
                 </tr>
             </tbody>
@@ -180,47 +180,17 @@ switch ($USUARIO->getTipoUsuario()) {
 
     var dataUrl = 'principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=';
     var ddl_estado_ops = [
-    { key : 'P', value : 'P' },
-    { key : 'E', value : 'E' },
-    { key : 'T', value : 'T' }
+    { value : 'X', key : '' },
+    { value : 'P', key : 'Pendiente' },
+    { value : 'E', key : 'Ejecución' },
+    { value : 'T', key : 'Terminado' }
     ];
 
     $(document).ready(function() {
         var $table = $('#example');
         var dataTable = null;
        
-        // eliminar
-        $table.on('mousedown', 'td .bi.bi-trash-fill', function(e) {
-            dataTable.row($(this).closest("tr")).remove().draw();
-        });
-        // editar
-        $table.on('mousedown.edit', 'i.bi.bi-pencil-square', function(e) {
-            enableRowEdit($(this));
-        });
-
-        // guardar
-        $table.on('mousedown.save', 'i.bi.bi-check-square-fill', function(e) {
-            updateRow($(this), true); // Pass save button to function.
-        });
-
-        $table.on('mousedown', 'input', function(e) {
-            e.stopPropagation();
-        });
-        $table.on('mousedown', '.select-basic', function(e) {
-            e.stopPropagation();
-        });
-        
-        dataTable = $table.DataTable({
-            // ajax: dataUrl,
-            data: arreglo,
-            rowReorder: {
-                dataSrc: 'order',
-                selector: 'tr'
-            },
-            createdRow:function(row){
-                $(".datepicker", row).datepicker();
-            },
-            columns: [
+        var cols = [
                 { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
                 { title: 'id', data: 'id', visible: false },
                 { title: 'Nombre', data: 'nombre' },
@@ -246,11 +216,52 @@ switch ($USUARIO->getTipoUsuario()) {
                     className: 'datepicker' },
                 {    
                     data: null,
-                    defaultContent: '<td><i class="bi bi-pencil-square" aria-hidden="true"></i><i class="bi bi-trash-fill" aria-hidden="true"></i></td>',   
+                    render:function(){return ultimaColumna;},
                     // className: 'row-edit dt-center',
                     orderable: false
                 },
-            ],
+        ];
+
+    // http://jsfiddle.net/awbq0p4e/
+    claseBotonEditarRow = 'bi-pencil-square';
+    claseBotonEliminarRow = 'bi-trash-fill';
+    claseBotonConfirmarRow = 'bi-check-circle';
+    claseBotonCancelarRow = 'bi-x-circle';
+
+    ultimaColumna = "<td><i class='bi "+claseBotonEditarRow +"' aria-hidden='true'></i><i class='bi "+claseBotonEliminarRow +"' aria-hidden='true'></i></td>";  
+    
+        // eliminar
+        $table.on('mousedown', 'td .bi.'+`${claseBotonEliminarRow}`, function(e) {
+            dataTable.row($(this).closest("tr")).remove().draw();
+        });
+        // editar
+        $table.on('mousedown.edit', 'i.bi.'+`${claseBotonEditarRow}`, function(e) {
+            enableRowEdit($(this));
+        });
+
+        // guardar
+        $table.on('mousedown.save', "i.bi."+claseBotonConfirmarRow, function(e) {
+            updateRow($(this), true); // Pass save button to function.
+        });
+
+        $table.on('mousedown', 'input', function(e) {
+            e.stopPropagation();
+        });
+        $table.on('mousedown', '.select-basic', function(e) {
+            e.stopPropagation();
+        });
+        
+        dataTable = $table.DataTable({
+            // ajax: dataUrl,
+            data: arreglo,
+            rowReorder: {
+                dataSrc: 'order',
+                selector: 'tr'
+            },
+            createdRow:function(row){
+                $(".datepicker", row).datepicker();
+            },
+            columns: cols,
         });
 
         // Guardar Cambios
@@ -272,12 +283,13 @@ switch ($USUARIO->getTipoUsuario()) {
             var $row = $("#new-row-template").find('tr').clone();
             dataTable.row.add($row).draw();
             // Toggle edit mode upon creation.
-            enableRowEdit($table.find('tbody tr:last-child td i.bi.bi-pencil-square'));
+            enableRowEdit($table.find("tbody tr:last-child td i.bi."+claseBotonEditarRow));
         });
 
         // habilitar edición
         function enableRowEdit($editButton) {
-            $editButton.removeClass().addClass("bi bi-check-square-fill");
+            $editButton.removeClass().addClass("bi "+claseBotonConfirmarRow);
+            $editButton.attr("aria-hidden", "true");
             var $row = $editButton.closest("tr").off("mousedown");
 
             $row.find("td").not(':first').not(':last').each(function(i, el) {
@@ -285,33 +297,39 @@ switch ($USUARIO->getTipoUsuario()) {
             });
 
             $row.find('td.ddl').each(function(i, el) {
-                enableEditSelect($(this))
+                enableddlEdit($(this))
             });
 
             $row.find('td.datepicker').each(function(i, el) {
                 enableDatePicker($(this))
             });
+
+            $cancelButton = $table.find("tbody tr:last-child td i.bi."+claseBotonEliminarRow);
+            $cancelButton.removeClass().addClass("bi "+claseBotonCancelarRow);
+            $cancelButton.attr("aria-hidden", "true");
         }
 
         function enableEditText($cell) {
             var txt = $cell.text();
+            var defa = $cell.context.lastChild.data;
+            var check = $cell.context.textContent;
             $cell.empty().append($('<input>', {
                 type : 'text',
                 value : txt
             }).data('original-text', txt));
         }
 
-        function enableEditSelect($cell) {
-            var txt = $cell.text();
+        function enableddlEdit($cell) {
+            var txt = $cell.context.childNodes[0].value;
             $cell.empty().append($('<select>', {
                 class : 'select-basic'
-            })
-            .append(ddl_estado_ops.map(function(option) {
+            }).append(ddl_estado_ops.map(function(option) {
             return $('<option>', {
-                    text  : option.key,
-                    value : option.value
+                    value : option.value,
+                    text : option.key
                 })
-            })).data('original-value', txt));
+            })).data('original-value', txt)).val(txt);
+
         }
 
         function enableDatePicker($cell) {
@@ -324,25 +342,35 @@ switch ($USUARIO->getTipoUsuario()) {
         }
 
         function updateRows(commit) {
-            $table.find('tbody tr td i.bi.bi-check-square-fill').each(function(index, button) {
+            $table.find("tbody tr td i.bi."+claseBotonConfirmarRow).each(function(index, button) {
                 updateRow($(button), commit);
             });
         }
 
         // recorrido por tipos de control en las columnas
         function updateRow($saveButton, commit) {
-            $saveButton.removeClass().addClass('bi bi-pencil-square');
+            $saveButton.removeClass().addClass('bi '+`${claseBotonEditarRow}`);
             var $row = $saveButton.closest("tr");
 
             $row.find('td').not(':first').not(':last').each(function(i, el) {
                 var $input = $(this).find('input');
-                $(this).text(commit ? $input.val() : $input.data('original-text'));
+                // $(this).text(commit ? $input.val() : $input.data('original-text'));
+                var nuevoValor = $input.context.firstChild.value;
+                var antiguoValor = $input.data('original-text');
+                $(this).text(commit ? nuevoValor : $input.data('original-text'));
             });
 
-            $row.find('td:first').each(function(i, el) {
+            $row.find('td.ddl').each(function(i, el) {
                 var $input = $(this).find('select');
-                $(this).text(commit ? $input.val() : $input.data('original-value'));
+                var nuevoValor = $input.context.textContent; //context.firstChild.data;
+                var antiguoValor = $input.context.value; //var antiguoValor = $input.data('original-text');
+                $(this).text(commit ? ddl_estado_ops[nuevoValor] : $input.data('original-value'));
+                // $(this).text(commit ? $input.val() : $input.data('original-value'));
             });
+
+            $cancelButton = $table.find("tbody tr:last-child td i.bi."+claseBotonCancelarRow);
+            $cancelButton.removeClass().addClass("bi "+claseBotonEliminarRow);
+            $cancelButton.attr("aria-hidden", "true");
         }
     });
 

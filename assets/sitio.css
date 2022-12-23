@@ -62,6 +62,24 @@ https://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-wa
   color: rgb(255, 0, 0); --darkreader-inline-color: #b63d3d;
 }
 
+.bi-check-square {
+  font-size: 1.5rem; 
+  color: rgb(0, 128, 55); --darkreader-inline-color: #375c47;
+}
+
+.bi-x-square {
+  font-size: 30px; 
+  color: rgb(255, 0, 0); --darkreader-inline-color: #b63d3d;
+}
+
+i.bi {
+  display: inline-block;
+          border-radius: 10px 10px;
+          box-shadow: 0px 0px 2px #6b6b6b;
+          padding: 0.2em 0.3em;
+ }
+ 
+
 /* (B) EDITABLE TABLE */
 .editable {
   border-collapse: collapse;
