@@ -51,21 +51,23 @@ class Proyecto
     // y si la fecha de inicio es igual a la de fin, esta en estado "abierto"  y si la fecha de inicio es menor a la de fin, esta en estado "abierto"  
     public function getEstado()
     {
-        $fechaActual = date('Y-m-d H:i:s');
-        echo $fechaActual;
-        $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaFinalizacion);
-        if (strtotime($fechaActual) > strtotime($this->fechaInicio) && strtotime($fechaActual) < strtotime($this->fechaFinalizacion)) {
-            return "Ejecución";
-        }
+        return $this->estado;
 
-        if ($diferenciaFechas > 0) {
-            return "Terminado";
-        }
+        // $fechaActual = date('Y-m-d H:i:s');
+        // echo $fechaActual;
+        // $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaFinalizacion);
+        // if (strtotime($fechaActual) > strtotime($this->fechaInicio) && strtotime($fechaActual) < strtotime($this->fechaFinalizacion)) {
+        //     return "E";
+        // }
 
-        $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaInicio);
-        if ($diferenciaFechas < 0) {
-            return "Pendiente";
-        }
+        // if ($diferenciaFechas > 0) {
+        //     return "T";
+        // }
+
+        // $diferenciaFechas = Fecha::calcularDiferenciaFechasEnSegundos($fechaActual, $this->fechaInicio);
+        // if ($diferenciaFechas < 0) {
+        //     return "P";
+        // }
     }
 
     public function getFechaInicio()

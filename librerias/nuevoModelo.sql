@@ -89,7 +89,7 @@ CREATE TABLE usuarios_estudios (
 CREATE TABLE proyectos (
   id VARCHAR(36) NOT NULL, /* UUID v4 */
   nombre VARCHAR(100) NOT NULL,
-  descripcion VARCHAR(500) NOT NULL,
+  descripcion VARCHAR(1000) NOT NULL,
   estado CHAR NOT NULL DEFAULT 'P' CHECK (estado IN ('T', 'P', 'E')), /* Tabla abajo */
   fecha_inicio DATE NOT NULL,
   fecha_fin DATE NOT NULL,
