@@ -107,7 +107,7 @@ switch ($USUARIO->getTipoUsuario()) {
                 </tbody>
             </table>
         </div>
-        <br> 
+        <!-- <br> 
         <div class="row">
             <div class="col align-self-start"></div>
             <div class="col align-self-center"></div>
@@ -115,7 +115,7 @@ switch ($USUARIO->getTipoUsuario()) {
                 <button type="button" id="btn-cancel" class="btn btn-secondary" data-dismiss="modal">Revertir Cambios</button>
                 <button type="button" id="btn-save" class="btn btn-primary" data-dismiss="modal">Guardar Cambios</button>
             </div>
-        </div>
+        </div> -->
     </div>
 
 </fieldset>
