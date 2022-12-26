@@ -44,6 +44,9 @@
 - Ubicar código fuente en htdocs (Xampp) (C:\xampp\htdocs\SENA-devmanager)
 - Acceder desde navegador a http://localhost/SENA-devmanager/
 
-
-
 ### Ejecutar el proyecto
+
+
+### Ejemplo de Ajax con datatable y PHP
+* [CRUD con Datatables y PHP](https://www.nicesnippets.com/blog/php-datatables-crud-example)
+* [Ejemplo de DataTable, Ajax, PHP y MySQL](https://evilnapsis.com/2022/09/19/ejemplo-de-datatable-ajax-php-y-mysql/)

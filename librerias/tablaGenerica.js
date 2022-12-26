@@ -20,6 +20,7 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops){
 
     var $table = $(selectorTabla);
     var dataTable = null;
+    var dataUrl = "./presentacion/vistas/proyectos.php";
 
     dataTable = $table.DataTable({
         // ajax: dataUrl,
@@ -33,7 +34,32 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops){
         createdRow:function(row){
             $(".datepicker", row).datepicker();
         },
-        dom: '<"row"<"col-sm-2"><"col-sm-5 text-center"f><"col-sm-5">>t<"row"<"col-sm-3"l><"col-sm-5 text-center"p><"col-sm-4"i>>'
+        dom: '<"row"<"col-sm-2"><"col-sm-5 text-center"f><"col-sm-5">>t<"row"<"col-sm-3"l><"col-sm-5 text-center"p><"col-sm-4"i>>',
+        "language":	{
+            "sProcessing":     "Procesando...",
+            "sLengthMenu":     "Mostrar _MENU_ registros",
+            "sZeroRecords":    "No se encontraron resultados",
+            "sEmptyTable":     "Ningún dato disponible en esta tabla",
+            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix":    "",
+            "sSearch":         "Buscar:",
+            "sUrl":            "",
+            "sInfoThousands":  ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst":    "Primero",
+                "sLast":     "Último",
+                "sNext":     "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        },
+
     });
 
     var idCtrlDescripcion = 'campoDescripcion'; //'desc'+nombreTabla;
