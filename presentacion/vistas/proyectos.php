@@ -85,9 +85,9 @@ switch ($USUARIO->getTipoUsuario()) {
             <legend class="w-auto px-2">Proyectos Disponibles</legend>
 
             <table id="tblProyectos" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-            <div class="col align-self-center">
-                <textarea id=campoDescripcion type="text" class="form-control" style="min-width: 100%" rows="5" disabled="disabled"></textarea>
-            </div>
+            <!-- <div class="col align-self-center">
+                <textarea id="campoDescripcion" type="text" class="form-control" style="min-width: 100%" rows="5" disabled="disabled"></textarea>
+            </div> -->
 
             <table id="new-row-template" style="display:none" class="col-auto">
                 <tbody>
@@ -154,7 +154,7 @@ switch ($USUARIO->getTipoUsuario()) {
 <!-- <script type="text/javascript" src="assets/barraBusqueda.js"></script> -->
 <script type="module"> 
 
-    import {cargarProyectos } from './presentacion/vistas/js/proyectos.js'
+    import { cargarProyectos } from './presentacion/vistas/js/proyectos.js'
 
     let lisProyectos = [];
     <?php echo 'const dProy = ' . $datosProyectos . ';'; ?>
@@ -165,7 +165,7 @@ switch ($USUARIO->getTipoUsuario()) {
     //genera_tabla(arreglo);    
 
     $(document).ready(function() {
-        cargarProyectos('#tblProyectos', lisProyectos);
+        cargarProyectos('tblProyectos', lisProyectos);
     });
 
 </script>

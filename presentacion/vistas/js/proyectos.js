@@ -68,7 +68,6 @@ export function cargarProyectos(nombreTabla, arreglo) {
     cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops);
 }
 
-
 // const url = "principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=";
 // const updateField = (_id, data, callback) => {
 //     $.ajax({

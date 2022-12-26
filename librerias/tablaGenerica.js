@@ -10,6 +10,7 @@ var existenCambiosPendientes = false;
 
 export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops){
     
+    var selectorTabla = '#'+nombreTabla
     cols.push({    
                 data: null,
                 render:function(){return ultimaColumna;},
@@ -17,7 +18,7 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops){
                 orderable: false
             });
 
-    var $table = $(nombreTabla);
+    var $table = $(selectorTabla);
     var dataTable = null;
 
     dataTable = $table.DataTable({
@@ -35,13 +36,18 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops){
         dom: '<"row"<"col-sm-2"><"col-sm-5 text-center"f><"col-sm-5">>t<"row"<"col-sm-3"l><"col-sm-5 text-center"p><"col-sm-4"i>>'
     });
 
+    var idCtrlDescripcion = 'campoDescripcion'; //'desc'+nombreTabla;
+    var selectorCtrlDescripcion = '#campoDescripcion'; //'desc'+nombreTabla;
+    var ctrlDescripcion = '<div class="w-auto p-3 align-self-center"><textarea id='+idCtrlDescripcion+' type="text" class="w-auto p-3 form-control" style="min-width: 100%" rows="5" disabled="disabled"></textarea></div>';
+    $table.after(ctrlDescripcion);
+
     // eventos de selección de fila
-    $(nombreTabla+' tbody').on('click', 'tr', function () {
+    $(selectorTabla+' tbody').on('click', 'tr', function () {
         if ($(this).hasClass('selected')) {
             $(this).removeClass('selected');
 
-            if ( $( "#campoDescripcion").length ) {
-                $('#campoDescripcion').hide();
+            if ( $( selectorCtrlDescripcion ).length ) {
+                $( selectorCtrlDescripcion ).hide();
             }
         } 
         else {
@@ -52,12 +58,11 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops){
             // var columna = celda["0"][0].column; // columna descripcion
             var tr = $(this).closest("tr");
             var rowindex = tr.index();
-            var campoId = celda.context[0].aoData[rowindex].anCells[1].textContent;
-            var descripcion = celda.context[0].aoData[rowindex].anCells[2].textContent
+            var data = dataTable.row( rowindex ).data();
 
-            if ( $( "#campoDescripcion").length ) {
-                $('#campoDescripcion').val(descripcion);
-                $('#campoDescripcion').show();
+            if ( $( selectorCtrlDescripcion ).length ) {
+                $( selectorCtrlDescripcion ).val(data.descripcion);
+                $( selectorCtrlDescripcion ).show();
             }
         }
     });
@@ -106,9 +111,9 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops){
         dataTable.row.add($row).draw();
         
         TODO: // esta logica activa campo descripción dentro de la tabla
-        if ( $( "#campoDescripcion").length ) {
-            $('#campoDescripcion').removeAttr("disabled");
-            $('#campoDescripcion').val('agregue una descripción');
+        if ( $( selectorCtrlDescripcion ).length ) {
+            $( selectorCtrlDescripcion ).removeAttr("disabled");
+            $( selectorCtrlDescripcion ).val('agregue una descripción');
         }
         if ( $( "#botonesGuardarCambios").length ) {
             $('#botonesGuardarCambios').show();
@@ -182,8 +187,8 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops){
         $table.find("tbody tr td i.bi."+claseBotonConfirmarRow).each(function(index, button) {
             updateRow($(button), commit);
         });
-        if ( $( "#campoDescripcion").length ) {
-            $('#campoDescripcion').attr("disabled", "disabled");
+        if ( $( selectorCtrlDescripcion ).length ) {
+            $( selectorCtrlDescripcion ).attr("disabled", "disabled");
         }
         existenCambiosPendientes = false;
     }
