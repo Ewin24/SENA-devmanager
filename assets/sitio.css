@@ -1,0 +1,96 @@
+/*https://stackoverflow.com/questions/38487394/how-to-set-the-color-and-font-style-of-placeholder-text*/
+::-webkit-input-placeholder {
+  text-align: center;
+  color: rgb(55, 0, 255);  
+  font-weight: 400;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+  text-align: center;
+  color: rgb(55, 0, 255);   
+  font-weight: 400;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+  text-align: center;
+  color: rgb(55, 0, 255);  
+  font-weight: 400;
+}
+
+:-ms-input-placeholder {  
+  text-align: center;
+  color: rgb(55, 0, 255);  
+  font-weight: 400;
+}
+
+input[type="text" i] {
+  width: 200px;
+  color: black;
+  /* background: rgb(190, 190, 190); */
+}
+
+/* Estilos para campos de búsqueda o seleccionados
+https://developer.mozilla.org/en-US/docs/Web/CSS/:focus*/
+input:focus {
+  background-color: lightblue;
+  color: black;
+  font-weight: 400;
+}
+
+select:focus {
+  background-color: ivory;
+  color: black;
+}
+
+/* https://stackoverflow.com/questions/572768/styling-an-input-type-file-button 
+https://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/*/
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+/* https://fontawesomeicons.com/bootstrap/icons/plus-square-fill */
+.bi-pencil-square {
+  font-size: 1.5rem; 
+  color: rgb(0, 128, 55); --darkreader-inline-color: #375c47;
+}
+
+.bi-trash-fill {
+  font-size: 1.5rem; 
+  color: rgb(255, 0, 0); --darkreader-inline-color: #b63d3d;
+}
+
+.bi-check-square {
+  font-size: 1.5rem; 
+  color: rgb(0, 128, 55); --darkreader-inline-color: #375c47;
+}
+
+.bi-x-square {
+  font-size: 30px; 
+  color: rgb(255, 0, 0); --darkreader-inline-color: #b63d3d;
+}
+
+i.bi {
+  display: inline-block;
+          border-radius: 10px 10px;
+          box-shadow: 0px 0px 2px #6b6b6b;
+          padding: 0.2em 0.3em;
+ }
+ 
+
+/* (B) EDITABLE TABLE */
+.editable {
+  border-collapse: collapse;
+}
+.editable th, .editable td {
+  text-align: left;
+  padding: 15px;
+}
+.editable tbody tr:nth-child(even) {
+  background: #f2f2f2;
+}
+.editable td.edit {
+  background: #f8ff88;
+}

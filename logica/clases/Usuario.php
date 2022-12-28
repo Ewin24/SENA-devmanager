@@ -16,28 +16,29 @@ class Usuario
     protected $direccion;
     protected $nitEmpresa;
 
+    //constructor con array
     public function __construct($campo, $valor)
     {
         if ($campo != null) {
             if (!is_array($campo)) {
-                $cadenaSQL = "select identificacion, nombre, apellido, tipoUsuario, clave, nombreUsuario, correo, "
-                    . "telefono, tipoIdentificacion, foto, direccion, nitEmpresa_FK from usuario where $campo = $valor";
+                $cadenaSQL = "  SELECT  id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa
+                                FROM    usuarios
+                                WHERE $campo = $valor;";
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
                 print_r($campo);
             }
-            //asignacion de los datos
+            //datos usuario
+            $this->id = $campo['id'];
             $this->identificacion = $campo['identificacion'];
-            $this->nombre = $campo['nombre'];
-            $this->apellido = $campo['apellido'];
-            $this->tipoUsuario = $campo['tipoUsuario']; //por defecto es trabajador ,tambien puede ser $campo['tipoUsuario']
-            $this->clave = $campo['clave'];
-            $this->nombreUsuario = $campo['identificacion']; //por defecto el nombre de usuario es la identificacion
+            $this->tipo_identificacion = $campo['tipo_identificacion'];            
+            $this->nombres = $campo['nombres'];
+            $this->apellidos = $campo['apellidos'];
             $this->correo = $campo['correo'];
-            $this->telefono = $campo['telefono'];
-            $this->tipoIdentificacion = $campo['tipoIdentificacion'];
-            $this->foto = $campo['foto'];
+            $this->clave_hash = $campo['clave_hash'];
             $this->direccion = $campo['direccion'];
-            $this->nitEmpresa = $campo['nitEmpresa_FK']; //la idea es que las empresas ya creadas se muestren como opcion en el formulario de registro
+            $this->telefono = $campo['telefono'];
+            $this->tipo_usuario = $campo['tipo_usuario'];
+            $this->id_empresa = $campo['id_empresa'];
         }
     }
 
@@ -176,7 +177,10 @@ class Usuario
     //metodo para registrar un usuario en la base de datos
     public function guardar()
     {
-        $cadenaSQL = "insert into usuario (identificacion,nombre,apellido,tipoUsuario,clave, nombreUsuario, correo, telefono, tipoIdentificacion, foto, direccion, nitEmpresa_FK) values ('$this->identificacion', '$this->nombre', '$this->apellido', '$this->tipoUsuario', md5('$this->clave'), '$this->nombreUsuario', '$this->correo', '$this->telefono', '$this->tipoIdentificacion', '$this->foto', '$this->direccion', '$this->nitEmpresa')";
+        $cadenaSQL = "
+        INSERT INTO usuarios
+        (id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa)
+        VALUES ('$this->v4_UUID()', $this->identificacion', '$this->tipoIdentificacion', '$this->nombre', '$this->apellido', '$this->correo', md5('$this->clave'), '$this->direccion', '$this->foto', '$this->telefono', '$this->tipoUsuario', '$this->nitEmpresa')";
         ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
@@ -185,19 +189,32 @@ class Usuario
         if (strlen($this->clave) < 32) {
             $this->clave = md5($this->clave); // si engresa clave, vendra sin una encriptacion, por ello antes de ingresarla se encripta
         }
-        $cadenaSQL = "update usuario set identificacion = '$this->identificacion', nombre = '$this->nombre', apellido = '$this->apellido', tipoUsuario = '$this->tipoUsuario', clave = '$this->clave', nombreUsuario = '$this->nombreUsuario', correo = '$this->correo', telefono = '$this->telefono', tipoIdentificacion = '$this->tipoIdentificacion', foto = '$this->foto', direccion = '$this->direccion', nitEmpresa_FK = '$this->nitEmpresa' where identificacion = '$identificacionAnterior'";
+        $cadenaSQL = "
+        UPDATE  usuarios
+        SET     identificacion='$this->identificacion', 
+                tipo_identificacion='$this->tipoIdentificacion', 
+                nombres='$this->nombre', 
+                apellidos='$this->apellido', 
+                correo='$this->correo', 
+                clave_hash='$this->clave', 
+                direccion='$this->direccion', 
+                nombre_foto='$this->foto', 
+                telefono='$this->telefono', 
+                tipo_usuario='$this->tipoUsuario', 
+                id_empresa='$this->nitEmpresa'
+        WHERE id='$this->id'";
         ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
     public function eliminarID($identificacionAnterior)
-    { // hace eliminacion de usuario con un id especifico
-        $cadenaSQL = "delete from usuario where identificacion = '$identificacionAnterior'";
+    { // hace eliminación de usuario con un id especifico
+        $cadenaSQL = "DELETE FROM usuarios WHERE identificacion='$identificacionAnterior'";
         ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
     public function eliminar()
     {
-        $cadenaSQL = "delete from usuario where identificacion = $this->identificacion;";
+        $cadenaSQL = "DELETE FROM usuarios WHERE identificacion = $this->identificacion;";
         ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
@@ -206,31 +223,50 @@ class Usuario
         if ($filtro == null || $filtro == '')
             $filtro = '';
         else
-            $filtro = "where $filtro";
+            $filtro = "WHERE $filtro";
         if ($orden == null || $orden == '')
             $orden = '';
         else
-            $orden = "order by $orden";
+            $orden = "ORDER BY $orden";
 
-        $cadenaSQL = "select identificacion, nombre, apellido, tipoUsuario, clave, nombreUsuario, correo, "
-            . "telefono, tipoIdentificacion, foto, direccion, nitEmpresa_FK from usuario $filtro $orden";
+        $cadenaSQL = "  SELECT  id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa
+                        FROM    usuarios
+                        $filtro 
+                        $orden";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
     public static function getListaEnObjetos($filtro, $orden)
     {
         $resultado = Usuario::getLista($filtro, $orden);
+
         $lista = array();
+
         for ($i = 0; $i < count($resultado); $i++) {
-            $persona = new Usuario($resultado[$i], null);
-            $lista[$i] = $persona;
+            $usuario = new Usuario($resultado[$i], null);
+            $lista[$i] = $usuario;
         }
         return $lista;
     }
 
+    public static function getListaEnJson($filtro, $orden)
+    {
+        $datos = Usuario::getListaEnObjetos($filtro, $orden);
+
+        $json_data = array(
+			//"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
+			"recordsTotal"    => intval( count($datos) ),  // total number of records
+			// "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
+			"data"            => $datos   // total data array
+			);
+
+        return  json_encode($json_data);  // send data as json format
+    }
+
     public static function validar($usuario, $clave)
     {
-        $resultado = Usuario::getListaEnObjetos("identificacion = '$usuario' and clave = md5('$clave')", null);
+        print_r($usuario, $clave);
+        $resultado = Usuario::getListaEnObjetos("identificacion = '$usuario' AND clave_hash = md5('$clave')", null);
         $usuario = null;
         if (count($resultado) > 0) {
             $usuario = $resultado[0];
@@ -238,11 +274,23 @@ class Usuario
         return $usuario;
     }
 
+    private static function obtenerTipoUsuario($identificacion){
+        $cadenaSQL = "SELECT tipo_usuario FROM usuarios WHERE identificacion = $identificacion";
+        $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
+        return $resultado;
+    }
+
     public static function esAdmin($identificacion)
     {
-        $cadenaSQL = "SELECT tipoUsuario FROM usuario WHERE identificacion = $identificacion";
-        $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
-        if ($resultado[0]['tipoUsuario'] == 'A') { //regresa de la base de datos como arreglo
+        $resultado = Usuario::obtenerTipoUsuario($identificacion);
+        if ($resultado[0]['tipo_usuario'] == 'A') { //regresa de la base de datos como arreglo
+            return true;
+        }
+    }
+    public static function esDirector($identificacion)
+    {
+        $resultado = Usuario::obtenerTipoUsuario($identificacion);
+        if ($resultado[0]['tipo_usuario'] == 'D') { //regresa de la base de datos como arreglo
             return true;
         }
     }
