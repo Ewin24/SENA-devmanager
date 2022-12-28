@@ -8,7 +8,12 @@ const ultimaColumna = "<td><i class='bi "+claseBotonEditarRow +"' aria-hidden='t
 
 var existenCambiosPendientes = false;
 
-export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops){
+var $table = null;
+var dataTable = null;
+var dataUrl = null;
+
+export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops)
+{
     
     var selectorTabla = '#'+nombreTabla
     cols.push({    
@@ -18,9 +23,9 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops){
                 orderable: false
             });
 
-    var $table = $(selectorTabla);
-    var dataTable = null;
-    var dataUrl = "./presentacion/vistas/proyectos.php";
+    $table = $(selectorTabla);
+    dataTable = null;
+    dataUrl = "./presentacion/vistas/proyectos.php";
 
     dataTable = $table.DataTable({
         // ajax: dataUrl,
@@ -31,6 +36,11 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops){
             selector: 'tr'
         },
         select:{style:'single'},
+        // fnInitComplete: function(oSettings, json) {
+        //         // Seleccionar primera fila automáticamente;
+        //         $(selectorTabla+' tbody tr:eq(0)').click();
+        //         alert( 'DataTables has finished its initialisation.' );
+        // },
         createdRow:function(row){
             $(".datepicker", row).datepicker();
         },
@@ -275,4 +285,19 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops){
         $cancelButton.attr("aria-hidden", "true");
         $cancelButton.show();
     }
+}
+
+// eventos de selección de fila
+export function getIdRegistroSeleccionado(idTabla)
+{
+    var selectorTabla = '#'+idTabla;
+    $(selectorTabla+' tbody').on('click', 'tr', function () {
+        if($(this).hasClass('selected')) {
+            // var celda = dataTable.cell(this);
+            var rowindex = $(this).closest("tr").index();
+            console.log(selectorTabla, rowindex);
+            var data = dataTable.row( rowindex ).data();
+            return data.id;
+        }
+    });  
 }

@@ -211,4 +211,42 @@ class Proyecto
         }
         return $lista;
     }
+
+    public static function getListaEnJson($filtro, $orden)
+    {
+        $datos = Proyecto::getListaEnObjetos($filtro, $orden);
+        $json_data = array(
+			//"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
+			"recordsTotal"    => intval( count($datos) ),  // total number of records
+			// "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
+			"data"            => $datos   // total data array
+			);
+
+        //echo json_encode($json_data);  // send data as json format
+        return json_encode($json_data);
+    }
+
+
+    public static function getPerfilesProyRequeridos($idProyectoSeleccionado){
+        
+    }
+
+    public static function getPerfilesProyDisponibles(){
+        
+    }
+
+    public static function getTrabajadoresAsignados($idProyectoSeleccionado){
+
+        $filtroProyDisponibles = "id_proyecto = $idProyectoSeleccionado AND estado = 'A'";
+        // Nueva forma de obtener datos en json
+        return Proyecto::getListaEnJson($filtro, null);
+    }
+
+    public static function getTrabajadoresDisponibles($idProyectoSeleccionado)
+    {
+        $filtroRHDisponible = "id_proyecto = $idProyectoSeleccionado AND estado <> 'A'";
+        $ordenRHDisponible  = "estado = 'E' desc";
+        // Nueva forma de obtener datos en json
+        return Proyecto::getListaEnJson($filtroRHDisponible, $ordenRHDisponible);        
+    }
 }

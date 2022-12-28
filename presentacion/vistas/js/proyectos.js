@@ -1,4 +1,4 @@
-import { cargarTablaGenerica } from "../../../librerias/tablaGenerica.js";
+import { cargarTablaGenerica, getIdRegistroSeleccionado } from "../../../librerias/tablaGenerica.js";
 
 export function cargarProyectos(nombreTabla, arreglo) {
 
@@ -66,7 +66,15 @@ export function cargarProyectos(nombreTabla, arreglo) {
     $('#botonesGuardarCambios').attr("disabled", "disabled");
 
     cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops);
+
 }
+
+export function getProyectoSeleccionado(nombreTabla){
+    var data_id = getIdRegistroSeleccionado(nombreTabla);
+    console.log(data_id);
+    $("#testo").html(data_id);  
+}
+
 
 // const url = "principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=";
 // const updateField = (_id, data, callback) => {

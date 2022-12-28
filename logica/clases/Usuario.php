@@ -16,32 +16,29 @@ class Usuario
     protected $direccion;
     protected $nitEmpresa;
 
+    //constructor con array
     public function __construct($campo, $valor)
     {
         if ($campo != null) {
             if (!is_array($campo)) {
-                $cadenaSQL = "
-                SELECT  id,
-                identificacion, tipo_identificacion, nombre_usuario, nombres, apellidos, correo, 
-                clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa
-                FROM usuarios
-                WHERE $campo = $valor";
+                $cadenaSQL = "  SELECT  id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa
+                                FROM    usuarios
+                                WHERE $campo = $valor;";
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
                 print_r($campo);
             }
-            //asignacion de los datos
+            //datos usuario
+            $this->id = $campo['id'];
             $this->identificacion = $campo['identificacion'];
-            $this->nombre = $campo['nombre'];
-            $this->apellido = $campo['apellido'];
-            $this->tipoUsuario = $campo['tipo_usuario']; //por defecto es trabajador ,tambien puede ser $campo['tipoUsuario']
-            $this->clave = $campo['clave_hash'];
-            $this->nombreUsuario = $campo['identificacion']; //por defecto el nombre de usuario es la identificacion
+            $this->tipo_identificacion = $campo['tipo_identificacion'];            
+            $this->nombres = $campo['nombres'];
+            $this->apellidos = $campo['apellidos'];
             $this->correo = $campo['correo'];
-            $this->telefono = $campo['telefono'];
-            $this->tipoIdentificacion = $campo['tipo_identificacion'];
-            $this->foto = $campo['nombre_foto'];
+            $this->clave_hash = $campo['clave_hash'];
             $this->direccion = $campo['direccion'];
-            $this->nitEmpresa = $campo['id_empresa']; //la idea es que las empresas ya creadas se muestren como opcion en el formulario de registro
+            $this->telefono = $campo['telefono'];
+            $this->tipo_usuario = $campo['tipo_usuario'];
+            $this->id_empresa = $campo['id_empresa'];
         }
     }
 
@@ -232,26 +229,43 @@ class Usuario
         else
             $orden = "ORDER BY $orden";
 
-        $cadenaSQL = "SELECT identificacion, nombres, apellidos, tipo_usuario, clave_hash, correo, telefono, tipo_identificacion, nombre_foto, direccion, id_empresa
-                      FROM usuarios 
-                      $filtro 
-                      $orden";
+        $cadenaSQL = "  SELECT  id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa
+                        FROM    usuarios
+                        $filtro 
+                        $orden";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
     public static function getListaEnObjetos($filtro, $orden)
     {
         $resultado = Usuario::getLista($filtro, $orden);
+
         $lista = array();
+
         for ($i = 0; $i < count($resultado); $i++) {
-            $persona = new Usuario($resultado[$i], null);
-            $lista[$i] = $persona;
+            $usuario = new Usuario($resultado[$i], null);
+            $lista[$i] = $usuario;
         }
         return $lista;
     }
 
+    public static function getListaEnJson($filtro, $orden)
+    {
+        $datos = Usuario::getListaEnObjetos($filtro, $orden);
+
+        $json_data = array(
+			//"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
+			"recordsTotal"    => intval( count($datos) ),  // total number of records
+			// "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
+			"data"            => $datos   // total data array
+			);
+
+        return  json_encode($json_data);  // send data as json format
+    }
+
     public static function validar($usuario, $clave)
     {
+        print_r($usuario, $clave);
         $resultado = Usuario::getListaEnObjetos("identificacion = '$usuario' AND clave_hash = md5('$clave')", null);
         $usuario = null;
         if (count($resultado) > 0) {

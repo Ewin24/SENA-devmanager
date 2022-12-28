@@ -14,29 +14,29 @@ if (isset($_REQUEST['mensaje'])) {
 
 $lista = '';
 
-$resultado = Usuario::getListaEnObjetos(null, null);
+$json_usuarios = Usuario::getListaEnObjetos(null, null);
 
-for ($i = 0; $i < count($resultado); $i++) {
-    $usuario = $resultado[$i];
-    $lista .= '<tr>';
-    $lista .= "<td>{$usuario->getIdentificacion()}</td>";
-    $lista .= "<td>{$usuario->getNombre()}</td>";
-    $lista .= "<td>{$usuario->getApellido()}</td>";
-    $lista .= "<td>{$usuario->getTipoUsuario()}</td>";
-    $lista .= "<td>{$usuario->getNombreUsuario()}</td>";
-    $lista .= "<td>{$usuario->getCorreo()}</td>";
-    $lista .= "<td>{$usuario->getTelefono()}</td>";
-    $lista .= "<td>{$usuario->getTipoIdentificacion()}</td>";
-    $lista .= "<td>{$usuario->getFoto()}</td>";
-    $lista .= "<td>{$usuario->getDireccion()}</td>";
-    $lista .= "<td>{$usuario->getNitEmpresa()}</td>";
+// for ($i = 0; $i < count($resultado); $i++) {
+//     $usuario = $resultado[$i];
+//     $lista .= '<tr>';
+//     $lista .= "<td>{$usuario->getIdentificacion()}</td>";
+//     $lista .= "<td>{$usuario->getNombre()}</td>";
+//     $lista .= "<td>{$usuario->getApellido()}</td>";
+//     $lista .= "<td>{$usuario->getTipoUsuario()}</td>";
+//     $lista .= "<td>{$usuario->getNombreUsuario()}</td>";
+//     $lista .= "<td>{$usuario->getCorreo()}</td>";
+//     $lista .= "<td>{$usuario->getTelefono()}</td>";
+//     $lista .= "<td>{$usuario->getTipoIdentificacion()}</td>";
+//     $lista .= "<td>{$usuario->getFoto()}</td>";
+//     $lista .= "<td>{$usuario->getDireccion()}</td>";
+//     $lista .= "<td>{$usuario->getNitEmpresa()}</td>";
 
-    //$lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/habilidad/habilidadFormulario.php&accion=adicionar'>Adicionar</a></td>";
-    $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/usuario/usuarioFormulario.php&accion=Modificar&identificacion={$usuario->getIdentificacion()}' title='modificar usuario'> Modificar </a></td>";
-    $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/usuario/usuarioCRUD.php&accion=Eliminar&identificacion={$usuario->getIdentificacion()}' onclick='eliminar({$usuario->getIdentificacion()})' title='Eliminar usuario'>Eliminar</a></td>";
-    $lista .= "<td></td>";
-    $lista .= "</tr>";
-}
+//     //$lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/habilidad/habilidadFormulario.php&accion=adicionar'>Adicionar</a></td>";
+//     $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/usuario/usuarioFormulario.php&accion=Modificar&identificacion={$usuario->getIdentificacion()}' title='modificar usuario'> Modificar </a></td>";
+//     $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/usuario/usuarioCRUD.php&accion=Eliminar&identificacion={$usuario->getIdentificacion()}' onclick='eliminar({$usuario->getIdentificacion()})' title='Eliminar usuario'>Eliminar</a></td>";
+//     $lista .= "<td></td>";
+//     $lista .= "</tr>";
+// }
 ?>
 
 <h3>LISTA DE USUARIOS</h3>
@@ -58,7 +58,7 @@ for ($i = 0; $i < count($resultado); $i++) {
         </tr>
     </thead>
     <tbody>
-        <?= $lista ?>
+        <?= $json_usuarios ?>
     </tbody>
 </table>
 

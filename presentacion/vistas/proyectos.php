@@ -24,6 +24,22 @@ for ($i = 0; $i < count($resultado); $i++)
 }
 $datosProyectos .= ']';
 
+// $idProySeleccionado = '';
+
+// if ($idProySeleccionado == null || $idProySeleccionado == '')
+// {
+//     $datPerfRequeridos = '[]';
+//     $datPerfDisponibles = '[]';
+//     $datTrabAsignados = '[]';
+//     $datTrabDisponibles = '[]';
+// }
+// else
+// {
+//     //Definiendo la lógica de negocio dentro de la clase
+//     $datTrabAsignados = Proyecto::getTrabajadoresAsignados($idProySeleccionado);
+//     $datTrabDisponibles = Proyecto::getTrabajadoresDisponibles($idProySeleccionado);
+// }
+
 switch ($USUARIO->getTipoUsuario()) {
     case 'A': //muestra todos los proyectos y opciones porque es admin
         //$resultado = Proyecto::getListaEnObjetos(null, null);
@@ -144,7 +160,7 @@ switch ($USUARIO->getTipoUsuario()) {
 
         </div>
         <div class="col-lg-6">
-            <h5 class="text-center">Postulados/Disponibles</h5>
+            <h5 id="testo" class="text-center">Postulados/Disponibles</h5>
             <table id="tblTrabajadoresDisp" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
         </div>
     </div>
@@ -167,6 +183,5 @@ switch ($USUARIO->getTipoUsuario()) {
     $(document).ready(function() {
         cargarProyectos('tblProyectos', lisProyectos);
     });
-
 </script>
 
