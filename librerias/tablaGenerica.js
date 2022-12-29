@@ -12,7 +12,7 @@ var $table = null;
 var dataTable = null;
 var dataUrl = null;
 
-export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops)
+function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops = [], campo_desc = false)
 {
     
     var selectorTabla = '#'+nombreTabla
@@ -72,11 +72,7 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops)
 
     });
 
-    var idCtrlDescripcion = 'campoDescripcion'; //'desc'+nombreTabla;
-    var selectorCtrlDescripcion = '#campoDescripcion'; //'desc'+nombreTabla;
-    var ctrlDescripcion = '<div class="w-auto p-3 align-self-center"><textarea id='+idCtrlDescripcion+' type="text" class="w-auto p-3 form-control" style="min-width: 100%" rows="5" disabled="disabled"></textarea></div>';
-    $table.after(ctrlDescripcion);
-
+    
     var idBotonesGuardar = "guardarCambios"+nombreTabla;
     var selectorBotonesGuardar = '#'+idBotonesGuardar;
     var ctrlBotonesGuardar = `<br> 
@@ -88,21 +84,37 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops)
             <button type="button" id="btn-save" class="btn btn-primary" data-dismiss="modal">Guardar Cambios</button>
         </div>
     </div>`;
-    $(selectorCtrlDescripcion).after(ctrlBotonesGuardar);
+    $table.after(ctrlBotonesGuardar);
     // $(selectorBotonesGuardar).children().attr("disabled","disabled");
     $( selectorBotonesGuardar ).hide();
 
+    if(campo_desc){
+        var idCtrlDescripcion = 'desc'+nombreTabla;
+        var selectorCtrlDescripcion = '#desc'+nombreTabla;
+        var ctrlDescripcion = '<br><div class="w-auto p-3 align-self-center"><textarea id='+idCtrlDescripcion+' type="text" class="w-auto p-3 form-control" style="min-width: 100%" rows="5" disabled="disabled"></textarea></div>';
+        $table.after(ctrlDescripcion);
+        $( selectorCtrlDescripcion ).hide();
+    }
+
     // eventos de selección de fila
     $(selectorTabla+' tbody').on('click', 'tr', function () {
+        
         if ($(this).hasClass('selected')) {
             $(this).removeClass('selected');
 
             if ( $( selectorCtrlDescripcion ).length ) {
+                if ( existenCambiosPendientes) {
+                    $( selectorCtrlDescripcion ).removeAttr("disabled");
+                }
+                $(this).addClass('selected');
+                $( selectorCtrlDescripcion ).show();
+            }
+            else{
                 $( selectorCtrlDescripcion ).hide();
             }
         } 
         else {
-            dataTable.$('tr.selected').removeClass('selected');
+            // dataTable.$('tr.selected').removeClass('selected');
             $(this).addClass('selected');
             var celda = dataTable.cell(this);
             // var celda_data = celda.context[0].aoData[0];//._aData[0];
@@ -111,7 +123,10 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops)
             var rowindex = tr.index();
             var data = dataTable.row( rowindex ).data();
 
-            if ( $( selectorCtrlDescripcion ).length ) {
+            if ( $( selectorCtrlDescripcion ).length ){
+                if ( existenCambiosPendientes) {
+                    $( selectorCtrlDescripcion ).removeAttr("disabled");
+                }
                 $( selectorCtrlDescripcion ).val(data.descripcion);
                 $( selectorCtrlDescripcion ).show();
             }
@@ -154,10 +169,12 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops)
     // Botón nuevo proyecto
     $table.css('border-top', 'none')
         .before($('<div>').addClass('addRow')
-        .append($('<button>').attr('id', 'addRow').text('Nuevo Proyecto')));
+        .append($('<button>').attr('id', 'addRow').text('Nuevo '+nombreTabla.substring(3,nombreTabla.length-1))));
 
     // Add row
     $('#addRow').click(function() {
+        existenCambiosPendientes = true;
+
         var $row = $("#new-row-template").find('tr').clone();
         dataTable.row.add($row).draw();
         	
@@ -183,7 +200,7 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops)
 
     // habilitar edición
     function enableRowEdit($editButton) {
-        existenCambiosPendientes = true;
+        
         if ( $( selectorBotonesGuardar ).length ) {
             $( selectorBotonesGuardar ).show();
         }
@@ -210,7 +227,6 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops)
         $cancelButton.removeClass().addClass("bi "+claseBotonCancelarRow);
         $cancelButton.attr("aria-hidden", "true");
         $cancelButton.hide();
-
     }
 
     function enableEditText($cell) {
@@ -254,7 +270,6 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops)
         if ( $( selectorBotonesGuardar ).length ) {
             $( selectorBotonesGuardar ).hide();
         }
-
         existenCambiosPendientes = false;
     }
 
@@ -287,17 +302,19 @@ export function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops)
     }
 }
 
-// eventos de selección de fila
-export function getIdRegistroSeleccionado(idTabla)
-{
-    var selectorTabla = '#'+idTabla;
-    $(selectorTabla+' tbody').on('click', 'tr', function () {
-        if($(this).hasClass('selected')) {
-            // var celda = dataTable.cell(this);
-            var rowindex = $(this).closest("tr").index();
-            console.log(selectorTabla, rowindex);
-            var data = dataTable.row( rowindex ).data();
-            return data.id;
-        }
-    });  
-}
+// // eventos de selección de fila
+// function getIdRegistroSeleccionado(idTabla)
+// {
+//     var selectorTabla = '#'+idTabla;
+//     $(selectorTabla+' tbody').on('click', 'tr', function () {
+//         if($(this).hasClass('selected')) {
+//             // var celda = dataTable.cell(this);
+//             var rowindex = $(this).closest("tr").index();
+//             console.log(selectorTabla, rowindex);
+//             var data = dataTable.row( rowindex ).data();
+//             return data.id;
+//         }
+//     });  
+// }
+
+export { cargarTablaGenerica } //, getIdRegistroSeleccionado }

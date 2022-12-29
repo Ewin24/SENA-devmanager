@@ -1,4 +1,7 @@
 <?php
+
+require_once 'logica/clases/ProyectoAdm.php';
+
 // session_start();
 if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Ya hay una sesión activa, acceso no autorizado'); //sesiones activas al tiempo
 else {
@@ -24,21 +27,10 @@ for ($i = 0; $i < count($resultado); $i++)
 }
 $datosProyectos .= ']';
 
-// $idProySeleccionado = '';
+// $idProySeleccionado = getProyectoSeleccionado(nombreTabla);
+$idProySeleccionado = 'f660bbbf-dd1a-4eab-9866-dba8092c94c5';
+ProyectoAdm::cargarTablasHijas($idProySeleccionado);
 
-// if ($idProySeleccionado == null || $idProySeleccionado == '')
-// {
-//     $datPerfRequeridos = '[]';
-//     $datPerfDisponibles = '[]';
-//     $datTrabAsignados = '[]';
-//     $datTrabDisponibles = '[]';
-// }
-// else
-// {
-//     //Definiendo la lógica de negocio dentro de la clase
-//     $datTrabAsignados = Proyecto::getTrabajadoresAsignados($idProySeleccionado);
-//     $datTrabDisponibles = Proyecto::getTrabajadoresDisponibles($idProySeleccionado);
-// }
 
 switch ($USUARIO->getTipoUsuario()) {
     case 'A': //muestra todos los proyectos y opciones porque es admin
@@ -137,22 +129,22 @@ switch ($USUARIO->getTipoUsuario()) {
 </fieldset>
 
 <fieldset class="form-group border p-3">
-    <legend class="w-auto px-2">Definir Perfiles</legend>
+    <legend class="w-auto px-2">Habilidades del proyecto</legend>
     <div class="row">
         <div class="col-lg-6">
-            <h5 class="col text-center">Requeridos</h1>
-            <table id="tblPerfiles" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            <h5 class="col text-center">Requeridas</h1>
+            <table id="tblHabReq" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
             
         </div>
         <div class="col-lg-6">
             <h5 class="text-center">Disponibles</h1>
-            <table id="tblPerfilesDisp" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            <table id="tblHabDisp" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
         </div>
     </div>
 </fieldset>
 
 <fieldset class="form-group border p-3">
-    <legend class="w-auto px-2">Asignar Trabajadores</legend>
+    <legend class="w-auto px-2">Trabajadores del proyecto</legend>
     <div class="row">
         <div class="row col-lg-6">
             <h5 class="col text-center">Asignados</h5>
@@ -170,10 +162,15 @@ switch ($USUARIO->getTipoUsuario()) {
 <!-- <script type="text/javascript" src="assets/barraBusqueda.js"></script> -->
 <script type="module"> 
 
-    import { cargarProyectos } from './presentacion/vistas/js/proyectos.js'
+    import { cargarProyectos, cargarHabilidades, cargarTrabajadores } from './presentacion/vistas/js/proyectos.js'
 
     let lisProyectos = [];
+    let lisHabReq = [];
+    let lisHabDisp = [];
+    let lisTrabReq = [];
+    let lisTrabDisp = [];
     <?php echo 'const dProy = ' . $datosProyectos . ';'; ?>
+    
     console.log(dProy);
     if (lisProyectos.length == 0 || lisProyectos == null){
         lisProyectos = [...dProy];
@@ -182,6 +179,27 @@ switch ($USUARIO->getTipoUsuario()) {
 
     $(document).ready(function() {
         cargarProyectos('tblProyectos', lisProyectos);
+
+
+
+
+        <?php echo 'const dHabReq  = ' . $datHabAsignados . ';'; ?>
+        <?php echo 'const dHabDisp = ' . $datHabDisponibles . ';'; ?>
+        <?php echo 'const dTrabReq  = ' . $datTrabAsignados . ';'; ?>
+        <?php echo 'const dTrabDisp = ' . $datTrabDisponibles . ';'; ?>
+
+        console.log(dProy);
+        if (lisHabReq.length == 0   || lisHabReq == null) lisHabReq = [...dHabReq];
+        if (lisHabDisp.length == 0  || lisHabDisp == null) lisHabReq = [...dHabDisp];
+        if (lisTrabReq.length == 0  || lisTrabReq == null) lisHabReq = [...dTrabReq];
+        if (lisTrabDisp.length == 0 || lisTrabDisp == null) lisHabReq = [...dTrabDisp];
+
+        cargarHabilidades('tblTrabajadores', lisHabReq);
+        cargarHabilidades('tblPerfilesDisp', lisHabDisp);
+
+        cargarTrabajadores('tblTrabajadores', lisTrabReq);
+        cargarTrabajadores('tblTrabajadoresDisp', lisTrabDisp);
     });
+
 </script>
 
