@@ -239,7 +239,7 @@ class Proyecto
 
         $filtroProyDisponibles = "id_proyecto = $idProyectoSeleccionado AND estado = 'A'";
         // Nueva forma de obtener datos en json
-        return Proyecto::getListaEnJson($filtro, null);
+        return Proyecto::getListaEnJson($filtroProyDisponibles, null);
     }
 
     public static function getTrabajadoresDisponibles($idProyectoSeleccionado)

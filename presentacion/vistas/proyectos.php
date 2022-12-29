@@ -10,8 +10,7 @@ $identificacion = $USUARIO->getIdentificacion();
 $datosProyectos = '[';
 
 $resultado = Proyecto::getListaEnObjetos(null, null);
-for ($i = 0; $i < count($resultado); $i++)
-{
+for ($i = 0; $i < count($resultado); $i++) {
     $proyecto = $resultado[$i];
     $datosProyectos .=
         '{ id: "' . $proyecto->getIdProyecto()
@@ -87,11 +86,11 @@ switch ($USUARIO->getTipoUsuario()) {
 
 <h3 class="text-center">LISTA DE PROYECTOS</h3>
 <?php
-    if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
-        // deja adicionar si el user es ADMIN o Director
-        // echo  '<span><button type="button" class="btn btn-primary"><a href="principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoFormulario.php&accion=Adicionar"></a>Nuevo Proyecto</button></span> ';
-        // echo  '<button type="button" id="addRow" class="btn btn-primary">Nuevo Proyecto</button></span> ';
-    }
+if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
+    // deja adicionar si el user es ADMIN o Director
+    // echo  '<span><button type="button" class="btn btn-primary"><a href="principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoFormulario.php&accion=Adicionar"></a>Nuevo Proyecto</button></span> ';
+    // echo  '<button type="button" id="addRow" class="btn btn-primary">Nuevo Proyecto</button></span> ';
+}
 ?>
 
 
@@ -116,8 +115,8 @@ switch ($USUARIO->getTipoUsuario()) {
                         <td>01/01/1900</td>
                         <td>01/01/2099</td>
                         <td>
-                            <i class='bi '+`${claseBotonEditarRow}` aria-hidden="true"></i>
-                            <i class='bi '+`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                            <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
+                            <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
                         </td>
                     </tr>
                 </tbody>
@@ -141,12 +140,12 @@ switch ($USUARIO->getTipoUsuario()) {
     <div class="row">
         <div class="col-lg-6">
             <h5 class="col text-center">Requeridos</h1>
-            <table id="tblPerfiles" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-            
+                <table id="tblPerfiles" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+
         </div>
         <div class="col-lg-6">
             <h5 class="text-center">Disponibles</h1>
-            <table id="tblPerfilesDisp" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+                <table id="tblPerfilesDisp" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
         </div>
     </div>
 </fieldset>
@@ -164,18 +163,19 @@ switch ($USUARIO->getTipoUsuario()) {
             <table id="tblTrabajadoresDisp" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
         </div>
     </div>
-    
+
 </fieldset>
 
 <!-- <script type="text/javascript" src="assets/barraBusqueda.js"></script> -->
-<script type="module"> 
-
-    import { cargarProyectos } from './presentacion/vistas/js/proyectos.js'
+<script type="module">
+    import {
+        cargarProyectos
+    } from './presentacion/vistas/js/proyectos.js'
 
     let lisProyectos = [];
     <?php echo 'const dProy = ' . $datosProyectos . ';'; ?>
     console.log(dProy);
-    if (lisProyectos.length == 0 || lisProyectos == null){
+    if (lisProyectos.length == 0 || lisProyectos == null) {
         lisProyectos = [...dProy];
     }
     //genera_tabla(arreglo);    
@@ -184,4 +184,3 @@ switch ($USUARIO->getTipoUsuario()) {
         cargarProyectos('tblProyectos', lisProyectos);
     });
 </script>
-
