@@ -67,7 +67,7 @@ function cargarProyectos(nombreTabla, arreglo) {
     $('#botonesGuardarCambios').attr("disabled", "disabled");
 
     cargarTablaGenerica(nombreTabla, arreglo, colsProyectos, ddl_estado_ops, true);
-    getProyectoSeleccionado(nombreTabla);
+    // getProyectoSeleccionado(nombreTabla);
 }
 
 function getProyectoSeleccionado(nombreTabla){
@@ -92,6 +92,7 @@ function cargarHabilidades(nombreTabla, arreglo){
         { title: 'id_proyecto', data: 'id_proyecto'},
         { title: 'id_habilidad', data: 'id_habilidad'}
     ];
+    console.log(arreglo);
     cargarTablaGenerica(nombreTabla, arreglo, colsHabilidades);
 }
 
@@ -105,7 +106,7 @@ function cargarTrabajadores(nombreTabla, arreglo){
         { title: 'id_usuario', data: 'id_usuario' }
     ];
 
-    cargarTablaGenerica(nombreTabla, arreglo, colsHabilidades);
+    cargarTablaGenerica(nombreTabla, arreglo, colsTrabajadores);
 
     // if (idProyecto == null || idProyecto == '')
     // {

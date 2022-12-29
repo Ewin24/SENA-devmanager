@@ -180,25 +180,38 @@ switch ($USUARIO->getTipoUsuario()) {
     $(document).ready(function() {
         cargarProyectos('tblProyectos', lisProyectos);
 
+        var IdProySeleccionado = '';
+        var selectorTabla = '#tblProyectos'
+        $(selectorTabla+' tbody').on('click', 'tr', function () {
+            if($(this).hasClass('selected')) {
+                // var celda = dataTable.cell(this);
+                var rowindex = $(this).closest("tr").index();
+                // console.log(selectorTabla, rowindex);
+                var data = $(selectorTabla).DataTable().row( rowindex ).data();
+                IdProySeleccionado = data.id;
+                console.log(IdProySeleccionado);
 
+                // peticion 
+                fetch('http://localhost/SENA-devmanager/api/ProyectoControlador.php?id='+IdProySeleccionado, {
+                    method: 'GET',
+                }).then((resp)=>{
+                    return resp.json();
+                }).then((json)=>{
+                    $('tblHabReq').DataTable().clear().draw();
+                    $('tblHabDisp').DataTable().clear().draw();
+                    $('tblTrabajadores').DataTable().clear().draw();
+                    $('tblTrabajadoresDisp').DataTable().clear().draw();
 
+                    const { dHabReq,dHabDisp,dTrabReq,dTrabDisp } = json;
 
-        <?php echo 'const dHabReq  = ' . $datHabAsignados . ';'; ?>
-        <?php echo 'const dHabDisp = ' . $datHabDisponibles . ';'; ?>
-        <?php echo 'const dTrabReq  = ' . $datTrabAsignados . ';'; ?>
-        <?php echo 'const dTrabDisp = ' . $datTrabDisponibles . ';'; ?>
-
-        console.log(dProy);
-        if (lisHabReq.length == 0   || lisHabReq == null) lisHabReq = [...dHabReq];
-        if (lisHabDisp.length == 0  || lisHabDisp == null) lisHabReq = [...dHabDisp];
-        if (lisTrabReq.length == 0  || lisTrabReq == null) lisHabReq = [...dTrabReq];
-        if (lisTrabDisp.length == 0 || lisTrabDisp == null) lisHabReq = [...dTrabDisp];
-
-        cargarHabilidades('tblTrabajadores', lisHabReq);
-        cargarHabilidades('tblPerfilesDisp', lisHabDisp);
-
-        cargarTrabajadores('tblTrabajadores', lisTrabReq);
-        cargarTrabajadores('tblTrabajadoresDisp', lisTrabDisp);
+                    cargarHabilidades('tblHabReq', dHabReq);
+                    cargarHabilidades('tblHabDisp', dHabDisp);
+                    cargarTrabajadores('tblTrabajadores', dTrabReq);
+                    cargarTrabajadores('tblTrabajadoresDisp', dTrabDisp);
+                });
+                // cargarTrabajadores(IdProySeleccionado);
+            }
+        });  
     });
 
 </script>

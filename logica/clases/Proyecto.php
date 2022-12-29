@@ -207,6 +207,8 @@ class Proyecto
 
     public static function getListaEnObjetos($filtro, $orden)
     {
+        print_r("aqui");
+
         $resultado = Proyecto::getLista($filtro, $orden);
         $lista = array();
         for ($i = 0; $i < count($resultado); $i++) {

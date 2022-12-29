@@ -2,11 +2,11 @@
 
 class Rh_proyecto
 {
-    protected $id;
-    protected $fecha_solicitud;
-    protected $estado;
-    protected $id_proyecto;
-    protected $id_usuario;
+    public $id;
+    public $fecha_solicitud;
+    public $estado;
+    public $id_proyecto;
+    public $id_usuario;
 
     public function __construct($campo, $valor)
     {
@@ -30,9 +30,9 @@ class Rh_proyecto
 
 class Habilidad_Proyectos
 {
-    protected $id;
-    protected $id_proyecto;
-    protected $id_habilidad;
+    public $id;
+    public $id_proyecto;
+    public $id_habilidad;
 
     public function __construct($campo, $valor)
     {
@@ -65,16 +65,16 @@ class ProyectoAdm
         //     $orden = '';
         // else
         //     $orden = "ORDER BY $orden";
+        $datos = array();
 
         switch ($Opcion) {
 
             case "HabRequerida":
-                $filtroHabRequerida = "id_proyecto = $idProyecto";
+                $filtroHabRequerida = "id_proyecto = '$idProyecto'";
                 $cadenaSQL ="   SELECT 	id, id_proyecto, id_habilidad
                                 FROM 	proyectos_habilidades
                                 WHERE 	$filtroHabRequerida $orden";
                 $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
-                print_r($resultado);
                 for ($i = 0; $i < count($resultado); $i++) {
                     $HabRequerida = new Habilidad_Proyectos($resultado[$i], null);
                     $datos[$i] = $HabRequerida;
@@ -82,7 +82,7 @@ class ProyectoAdm
                 break;
 
             case "HabDisponible":
-                $filtroHabDisponible = "id_proyecto = $idProyecto";
+                $filtroHabDisponible = "id_proyecto = '$idProyecto'";
                 $ordenHabDisponible   = "";
                 $cadenaSQL ="   SELECT 	id, id_proyecto, id_habilidad
                                 FROM 	proyectos_habilidades
@@ -95,7 +95,7 @@ class ProyectoAdm
                 break;
 
             case "TrabAsignados":
-                $filtroTrabRequeridas = "id_proyecto = $idProyecto AND estado = 'A'";
+                $filtroTrabRequeridas = "id_proyecto = '$idProyecto' AND estado = 'A'";
                 $cadenaSQL ="   SELECT 	id, fecha_solicitud, estado, id_proyecto, id_usuario
                                 FROM 	rh_proyectos
                                 WHERE 	$filtroTrabRequeridas $orden";
@@ -107,11 +107,10 @@ class ProyectoAdm
                 break;
 
             case "TrabDisponible":
-                $filtroTrabDisponible = "id_proyecto = $idProyecto AND estado <> 'A'";
-                $ordenTrabDisponible   = "estado = 'E' desc";
+                $filtroTrabDisponible = "id_proyecto = '$idProyecto' AND estado = 'E'";
                 $cadenaSQL ="   SELECT 	id, fecha_solicitud, estado, id_proyecto, id_usuario
                                 FROM 	rh_proyectos
-                                WHERE 	$filtroTrabDisponible $ordenTrabDisponible";
+                                WHERE 	$filtroTrabDisponible $orden";
                 $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
                 for ($i = 0; $i < count($resultado); $i++) {
                     $HabRequerida = new Rh_proyecto($resultado[$i], null);
@@ -120,44 +119,42 @@ class ProyectoAdm
                 break;
 
             default: //proyectos
-                $datos = Proyecto::getListaEnObjetos($filtro, $orden);
+                // $datos = Proyecto::getListaEnObjetos($filtro, $orden);
         }
 
-        $json_data = array(
-            //"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
-            "recordsTotal"    => intval( count($datos) ),  // total number of records
-            // "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
-            "data"            => $datos   // total data array
-            );
+        // $json_data = array(
+        //     //"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
+        //     "recordsTotal"    => intval( count($datos) ),  // total number of records
+        //     // "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
+        //     "data"            => $datos   // total data array
+        //     );
 
         //echo json_encode($json_data);  // send data as json format
-        return json_encode($json_data);
+        return $datos;
     }
 
     public static function getHabilidadesRequeridas($idProyectoSeleccionado){
-        return ProyectoAdm::getDatosJson("HabRequerida", $idProyectoSeleccionado);
+        return ProyectoAdm::getDatosJson(null, null, "HabRequerida", $idProyectoSeleccionado);
     }
 
     public static function getHabilidadesDisponibles($idProyectoSeleccionado){
-        return ProyectoAdm::getDatosJson("HabDisponible", $idProyectoSeleccionado);
+        return ProyectoAdm::getDatosJson(null, null, "HabDisponible", $idProyectoSeleccionado);
     }
 
     public static function getTrabajadoresAsignados($idProyectoSeleccionado){
         // tabla rh_proyectos donde estado A=(Asignado) para el proyecto pasado por parametro
-        return ProyectoAdm::getDatosJson("TrabAsignados", $idProyectoSeleccionado);
+        return ProyectoAdm::getDatosJson(null, null, "TrabAsignados", $idProyectoSeleccionado);
     }
 
     public static function getTrabajadoresDisponibles($idProyectoSeleccionado){
         // tabla habilidades donde estado diferente A=Asignado para el proyecto pasado por parametro
-        return ProyectoAdm::getDatosJson("TrabDisponible", $idProyectoSeleccionado);
+        return ProyectoAdm::getDatosJson(null, null, "TrabDisponible", $idProyectoSeleccionado);
     }
 
     public static function cargarTablasHijas($idProySeleccionado){
-        print_r("test");
 
         if ($idProySeleccionado != null || $idProySeleccionado != '')
         {
-            print_r("test");
             //// Definiendo la lógica de negocio dentro de la clase
             $datHabAsignados = ProyectoAdm::getHabilidadesRequeridas($idProySeleccionado);
             $datHabDisponibles = ProyectoAdm::getHabilidadesDisponibles($idProySeleccionado);
