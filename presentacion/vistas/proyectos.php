@@ -131,13 +131,13 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
     <legend class="w-auto px-2">Habilidades del proyecto</legend>
     <div class="row">
         <div class="col-lg-6">
-            <h5 class="col text-center">Requeridos</h1>
-                <table id="tblPerfiles" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-
+            <h5 class="col text-center">Requeridas</h1>
+            <table id="tblHabReq" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            
         </div>
         <div class="col-lg-6">
             <h5 class="text-center">Disponibles</h1>
-                <table id="tblPerfilesDisp" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            <table id="tblHabDisp" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
         </div>
     </div>
 </fieldset>
