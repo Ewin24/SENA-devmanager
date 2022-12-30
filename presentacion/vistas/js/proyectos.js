@@ -1,6 +1,7 @@
-import { cargarTablaGenerica, getIdRegistroSeleccionado } from "../../../librerias/tablaGenerica.js";
+import { cargarTablaGenerica } from "../../../librerias/tablaGenerica.js";
 
-export function cargarProyectos(nombreTabla, arreglo) {
+
+function cargarProyectos(nombreTabla, arreglo) {
 
     var dataUrl = 'principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=';
     var ddl_estado_ops = [
@@ -10,7 +11,7 @@ export function cargarProyectos(nombreTabla, arreglo) {
     { value : 'T', key : 'Terminado' }
     ];
 
-    var cols = [
+    var colsProyectos = [
         {   data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         {   title: 'id', data: 'id', visible: false },
         {   title: 'Nombre', data: 'nombre' },
@@ -65,16 +66,70 @@ export function cargarProyectos(nombreTabla, arreglo) {
     $('#botonesGuardarCambios').hide();
     $('#botonesGuardarCambios').attr("disabled", "disabled");
 
-    cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops);
-
+    cargarTablaGenerica(nombreTabla, arreglo, colsProyectos, ddl_estado_ops, true);
+    // getProyectoSeleccionado(nombreTabla);
 }
 
-export function getProyectoSeleccionado(nombreTabla){
-    var data_id = getIdRegistroSeleccionado(nombreTabla);
-    console.log(data_id);
-    $("#testo").html(data_id);  
+function getProyectoSeleccionado(nombreTabla){
+    var IdProySeleccionado = '';
+    var selectorTabla = '#'+nombreTabla;
+    $(selectorTabla+' tbody').on('click', 'tr', function () {
+        if($(this).hasClass('selected')) {
+            // var celda = dataTable.cell(this);
+            var rowindex = $(this).closest("tr").index();
+            // console.log(selectorTabla, rowindex);
+            var data = $(selectorTabla).DataTable().row( rowindex ).data();
+            IdProySeleccionado = data.id;
+            console.log(IdProySeleccionado);
+            // cargarTrabajadores(IdProySeleccionado);
+        }
+    });  
 }
 
+function cargarHabilidades(nombreTabla, arreglo){
+    var colsHabilidades = [
+        { title: 'id', data: 'id', visible: false },
+        { title: 'id_proyecto', data: 'id_proyecto'},
+        { title: 'id_habilidad', data: 'id_habilidad'}
+    ];
+    console.log(arreglo);
+    cargarTablaGenerica(nombreTabla, arreglo, colsHabilidades);
+}
+
+function cargarTrabajadores(nombreTabla, arreglo){
+    var colsTrabajadores = [
+        { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
+        { title: 'id', data: 'id', visible: false },
+        { title: 'fecha_solicitud', data: 'fecha_solicitud' },
+        { title: 'estado', data: 'estado' },
+        // { title: 'id_proyecto', data: 'id_proyecto' },
+        { title: 'id_usuario', data: 'id_usuario' }
+    ];
+
+    cargarTablaGenerica(nombreTabla, arreglo, colsTrabajadores);
+
+    // if (idProyecto == null || idProyecto == '')
+    // {
+    //     $datPerfRequeridos = '[]';
+    //     $datPerfDisponibles = '[]';
+    //     $datTrabAsignados = '[]';
+    //     $datTrabDisponibles = '[]';
+    // }
+    // // else
+    // // {
+    // //     // <?php echo 'const result = ' . Proyecto::getTrabajadoresAsignados($idProySeleccionado) . d';'; ?>
+    // //     // <?php echo ' . cargarTrabajadores( .' $idProySeleccionado .'); ' ?>;
+
+        
+    // //     // <?php echo 'const datTrabAsignados = ' . cargarTrabajadores($idProySeleccionado) . ';'; ?>
+    // //     // console.log(datTrabAsignados);
+    // //     //Definiendo la lógica de negocio dentro de la clase
+    // //     // $datTrabAsignados = 
+    // //     // $datTrabDisponibles = Proyecto::getTrabajadoresDisponibles($idProySeleccionado);
+    // // }
+}
+
+export { cargarProyectos, cargarHabilidades, cargarTrabajadores }
 
 // const url = "principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=";
 // const updateField = (_id, data, callback) => {

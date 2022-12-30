@@ -1,4 +1,7 @@
 <?php
+
+require_once 'logica/clases/ProyectoAdm.php';
+
 // session_start();
 if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Ya hay una sesión activa, acceso no autorizado'); //sesiones activas al tiempo
 else {
@@ -23,21 +26,10 @@ for ($i = 0; $i < count($resultado); $i++) {
 }
 $datosProyectos .= ']';
 
-// $idProySeleccionado = '';
+// $idProySeleccionado = getProyectoSeleccionado(nombreTabla);
+$idProySeleccionado = 'f660bbbf-dd1a-4eab-9866-dba8092c94c5';
+ProyectoAdm::cargarTablasHijas($idProySeleccionado);
 
-// if ($idProySeleccionado == null || $idProySeleccionado == '')
-// {
-//     $datPerfRequeridos = '[]';
-//     $datPerfDisponibles = '[]';
-//     $datTrabAsignados = '[]';
-//     $datTrabDisponibles = '[]';
-// }
-// else
-// {
-//     //Definiendo la lógica de negocio dentro de la clase
-//     $datTrabAsignados = Proyecto::getTrabajadoresAsignados($idProySeleccionado);
-//     $datTrabDisponibles = Proyecto::getTrabajadoresDisponibles($idProySeleccionado);
-// }
 
 switch ($USUARIO->getTipoUsuario()) {
     case 'A': //muestra todos los proyectos y opciones porque es admin
@@ -136,7 +128,7 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
 </fieldset>
 
 <fieldset class="form-group border p-3">
-    <legend class="w-auto px-2">Definir Perfiles</legend>
+    <legend class="w-auto px-2">Habilidades del proyecto</legend>
     <div class="row">
         <div class="col-lg-6">
             <h5 class="col text-center">Requeridos</h1>
@@ -151,7 +143,7 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
 </fieldset>
 
 <fieldset class="form-group border p-3">
-    <legend class="w-auto px-2">Asignar Trabajadores</legend>
+    <legend class="w-auto px-2">Trabajadores del proyecto</legend>
     <div class="row">
         <div class="row col-lg-6">
             <h5 class="col text-center">Asignados</h5>
@@ -173,7 +165,12 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
     } from './presentacion/vistas/js/proyectos.js'
 
     let lisProyectos = [];
+    let lisHabReq = [];
+    let lisHabDisp = [];
+    let lisTrabReq = [];
+    let lisTrabDisp = [];
     <?php echo 'const dProy = ' . $datosProyectos . ';'; ?>
+    
     console.log(dProy);
     if (lisProyectos.length == 0 || lisProyectos == null) {
         lisProyectos = [...dProy];
@@ -182,5 +179,38 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
 
     $(document).ready(function() {
         cargarProyectos('tblProyectos', lisProyectos);
+
+        var IdProySeleccionado = '';
+        var selectorTabla = '#tblProyectos'
+        $(selectorTabla+' tbody').on('click', 'tr', function () {
+            if($(this).hasClass('selected')) {
+                // var celda = dataTable.cell(this);
+                var rowindex = $(this).closest("tr").index();
+                // console.log(selectorTabla, rowindex);
+                var data = $(selectorTabla).DataTable().row( rowindex ).data();
+                IdProySeleccionado = data.id;
+                console.log(IdProySeleccionado);
+
+                // peticion 
+                fetch('http://localhost/SENA-devmanager/api/ProyectoControlador.php?id='+IdProySeleccionado, {
+                    method: 'GET',
+                }).then((resp)=>{
+                    return resp.json();
+                }).then((json)=>{
+                    $('tblHabReq').DataTable().clear().draw();
+                    $('tblHabDisp').DataTable().clear().draw();
+                    $('tblTrabajadores').DataTable().clear().draw();
+                    $('tblTrabajadoresDisp').DataTable().clear().draw();
+
+                    const { dHabReq,dHabDisp,dTrabReq,dTrabDisp } = json;
+
+                    cargarHabilidades('tblHabReq', dHabReq);
+                    cargarHabilidades('tblHabDisp', dHabDisp);
+                    cargarTrabajadores('tblTrabajadores', dTrabReq);
+                    cargarTrabajadores('tblTrabajadoresDisp', dTrabDisp);
+                });
+                // cargarTrabajadores(IdProySeleccionado);
+            }
+        });  
     });
 </script>

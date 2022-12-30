@@ -157,6 +157,8 @@ class Proyecto
     }
     */
 
+    ////////////////////////////////////////////////////////////////////////////////////
+    /* REGION CRUD proyectos */
     //eliminar un proyecto
     public function eliminar($idProyecto)
     {
@@ -186,6 +188,8 @@ class Proyecto
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////
+    /* REGION mapear proyectos */
     public static function getLista($filtro, $orden)
     {
         if ($filtro == null || $filtro == '')
@@ -203,6 +207,8 @@ class Proyecto
 
     public static function getListaEnObjetos($filtro, $orden)
     {
+        print_r("aqui");
+
         $resultado = Proyecto::getLista($filtro, $orden);
         $lista = array();
         for ($i = 0; $i < count($resultado); $i++) {
