@@ -82,7 +82,7 @@ class ProyectoAdm
                 break;
 
             case "HabDisponible":
-                $filtroHabDisponible = "id_proyecto = '$idProyecto'";
+                $filtroHabDisponible = "id_proyecto <> '$idProyecto'";
                 $ordenHabDisponible   = "";
                 $cadenaSQL ="   SELECT 	id, id_proyecto, id_habilidad
                                 FROM 	proyectos_habilidades

@@ -96,7 +96,7 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
                 <textarea id="campoDescripcion" type="text" class="form-control" style="min-width: 100%" rows="5" disabled="disabled"></textarea>
             </div> -->
 
-            <table id="new-row-template" style="display:none" class="col-auto">
+            <table id="new-Proyecto" style="display:none" class="col-auto">
                 <tbody>
                     <tr>
                         <td></td>
@@ -132,12 +132,12 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
     <div class="row">
         <div class="col-lg-6">
             <h5 class="col text-center">Requeridas</h1>
-            <table id="tblHabReq" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            <table id="tblHab_Requeridas" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
             
         </div>
         <div class="col-lg-6">
             <h5 class="text-center">Disponibles</h1>
-            <table id="tblHabDisp" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            <table id="tblHab_Disponibles" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
         </div>
     </div>
 </fieldset>
@@ -147,12 +147,12 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
     <div class="row">
         <div class="row col-lg-6">
             <h5 class="col text-center">Asignados</h5>
-            <table id="tblTrabajadores" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            <table id="tblContratados" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
 
         </div>
         <div class="col-lg-6">
             <h5 id="testo" class="text-center">Postulados/Disponibles</h5>
-            <table id="tblTrabajadoresDisp" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            <table id="tblCandidatos" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
         </div>
     </div>
 
@@ -165,52 +165,50 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
     } from './presentacion/vistas/js/proyectos.js'
 
     let lisProyectos = [];
-    let lisHabReq = [];
-    let lisHabDisp = [];
-    let lisTrabReq = [];
-    let lisTrabDisp = [];
     <?php echo 'const dProy = ' . $datosProyectos . ';'; ?>
     
-    console.log(dProy);
-    if (lisProyectos.length == 0 || lisProyectos == null) {
+    // console.log(dProy);
+    if (lisProyectos.length == 0 || lisProyectos == null){
         lisProyectos = [...dProy];
     }
     //genera_tabla(arreglo);    
 
     $(document).ready(function() {
         cargarProyectos('tblProyectos', lisProyectos);
-
         var IdProySeleccionado = '';
         var selectorTabla = '#tblProyectos'
+
         $(selectorTabla+' tbody').on('click', 'tr', function () {
-            if($(this).hasClass('selected')) {
+            // if($(this).hasClass('selected')) {
                 // var celda = dataTable.cell(this);
                 var rowindex = $(this).closest("tr").index();
-                // console.log(selectorTabla, rowindex);
+                console.log(selectorTabla, rowindex);
                 var data = $(selectorTabla).DataTable().row( rowindex ).data();
-                IdProySeleccionado = data.id;
-                console.log(IdProySeleccionado);
+                
+                if(data.id != IdProySeleccionado){
+                    $('tblHab_Requeridas').DataTable().clear().draw();
+                    $('tblHab_Disponibles').DataTable().clear().draw();
+                    $('tblContratados').DataTable().clear().draw();
+                    $('tblCandidatos').DataTable().clear().draw();
 
-                // peticion 
-                fetch('http://localhost/SENA-devmanager/api/ProyectoControlador.php?id='+IdProySeleccionado, {
-                    method: 'GET',
-                }).then((resp)=>{
-                    return resp.json();
-                }).then((json)=>{
-                    $('tblHabReq').DataTable().clear().draw();
-                    $('tblHabDisp').DataTable().clear().draw();
-                    $('tblTrabajadores').DataTable().clear().draw();
-                    $('tblTrabajadoresDisp').DataTable().clear().draw();
+                    IdProySeleccionado = data.id;
+                    console.log(IdProySeleccionado);
 
-                    const { dHabReq,dHabDisp,dTrabReq,dTrabDisp } = json;
+                     // peticion 
+                    fetch('http://localhost/SENA-devmanager/api/ProyectoControlador.php?id='+IdProySeleccionado, {
+                        method: 'GET',
+                    }).then((resp)=>{
+                        return resp.json();
+                    }).then((json)=>{
+                        const { dHabReq,dHabDisp,dTrabReq,dTrabDisp } = json;
 
-                    cargarHabilidades('tblHabReq', dHabReq);
-                    cargarHabilidades('tblHabDisp', dHabDisp);
-                    cargarTrabajadores('tblTrabajadores', dTrabReq);
-                    cargarTrabajadores('tblTrabajadoresDisp', dTrabDisp);
-                });
-                // cargarTrabajadores(IdProySeleccionado);
-            }
+                        cargarHabilidades('tblHab_Requeridas', dHabReq);
+                        cargarHabilidades('tblHab_Disponibles', dHabDisp);
+                        cargarTrabajadores('tblContratados', dTrabReq);
+                        cargarTrabajadores('tblCandidatos', dTrabDisp);
+                    });
+                }
+            // }
         });  
     });
 </script>
