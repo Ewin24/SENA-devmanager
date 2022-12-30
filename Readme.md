@@ -31,8 +31,43 @@
 - los botones de acción **confirmación** deben ser siempre `bi-check-square`
 - los botones de acción **cancelación** deben ser siempre `bi-x-square`
 
+**IMPORTANTE!!!** :warning:
+- Para id de tablas siempre usar prefijo **tbl** seguido de nombre en plural (ej: tblProyectos)
+- Para id de **Plantilla de Nuevo registro**, usar prefijo **new-**, nombre en singular del objeto (ej: new-Proyecto)
 
+Recordar que la estructura de la **Plantilla de Nuevo registro**, debe ir dentro de una tabla como se muestra en el siguiente ejemplo:
 
+``` html
+<table id="new-Proyecto" style="display:none" class="col-auto">
+      <tbody>
+         <tr>
+            <td></td>
+            <td>__id__</td>
+            <td>__nombre__</td>
+            <td>__descripcion__</td>
+            <td>__estado__</td>
+            <td>01/01/1900</td>
+            <td>01/01/2099</td>
+            <td>
+                  <i class='bi '+`${claseBotonEditarRow}` aria-hidden="true"></i>
+                  <i class='bi '+`${claseBotonEliminarRow}` aria-hidden="true"></i>
+            </td>
+         </tr>
+      </tbody>
+</table>
+```
+**Aclaraciones:**
+- La primera columma en el ejemplo se encuentra vacía en la plantilla, pues es un ejemplo en el que la primera columna de la tabla se usa con un control checkbox. Si no es su caso, puede omitir esa celda en la plantilla.
+- la última columna debe conservar la clase **'bi '+`${claseBotonEditarRow}`**
+
+### Tabla genérica
+Para invocar el metodo de crear tabla genérica, se tienen los parametros
+
+cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops = [], campo_desc = false)
+- **Obligatorios**: nombreTabla, arreglo, cols
+- **Opcionales**: 
+   - ddl_estado_ops: una estructura para llenar un campo ddl en una columna de la tabla
+   - campo_desc: Si se quiere que la tabla cuente con campo descripción (siempre se requiere que el campo de la base de datos, tenga nombre **descripcion**)
 
 ## Trabajando con código
 

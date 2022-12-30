@@ -12,7 +12,7 @@ var $table = null;
 var dataTable = null;
 var dataUrl = null;
 
-function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops = [], campo_desc = false)
+function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado_ops = [], campo_desc = false)
 {
     
     var selectorTabla = '#'+nombreTabla
@@ -35,6 +35,7 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops = [], ca
             dataSrc: 'order',
             selector: 'tr'
         },
+        destroy: true,
         select:{style:'single'},
         // fnInitComplete: function(oSettings, json) {
         //         // Seleccionar primera fila automáticamente;
@@ -97,41 +98,41 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops = [], ca
     }
 
     // eventos de selección de fila
-    $(selectorTabla+' tbody').on('click', 'tr', function () {
+    // $(selectorTabla+' tbody').on('click', 'tr', function () {
         
-        if ($(this).hasClass('selected')) {
-            $(this).removeClass('selected');
+    //     if ($(this).hasClass('selected')) {
+    //         $(this).removeClass('selected');
 
-            if ( $( selectorCtrlDescripcion ).length ) {
-                if ( existenCambiosPendientes) {
-                    $( selectorCtrlDescripcion ).removeAttr("disabled");
-                }
-                $(this).addClass('selected');
-                $( selectorCtrlDescripcion ).show();
-            }
-            else{
-                $( selectorCtrlDescripcion ).hide();
-            }
-        } 
-        else {
-            // dataTable.$('tr.selected').removeClass('selected');
-            $(this).addClass('selected');
-            var celda = dataTable.cell(this);
-            // var celda_data = celda.context[0].aoData[0];//._aData[0];
-            // var columna = celda["0"][0].column; // columna descripcion
-            var tr = $(this).closest("tr");
-            var rowindex = tr.index();
-            var data = dataTable.row( rowindex ).data();
+    //         if ( $( selectorCtrlDescripcion ).length ) {
+    //             if ( existenCambiosPendientes) {
+    //                 $( selectorCtrlDescripcion ).removeAttr("disabled");
+    //             }
+    //             $(this).addClass('selected');
+    //             $( selectorCtrlDescripcion ).show();
+    //         }
+    //         else{
+    //             $( selectorCtrlDescripcion ).hide();
+    //         }
+    //     } 
+    //     else {
+    //         // dataTable.$('tr.selected').removeClass('selected');
+    //         $(this).addClass('selected');
+    //         var celda = dataTable.cell(this);
+    //         // var celda_data = celda.context[0].aoData[0];//._aData[0];
+    //         // var columna = celda["0"][0].column; // columna descripcion
+    //         var tr = $(this).closest("tr");
+    //         var rowindex = tr.index();
+    //         var data = dataTable.row( rowindex ).data();
 
-            if ( $( selectorCtrlDescripcion ).length ){
-                if ( existenCambiosPendientes) {
-                    $( selectorCtrlDescripcion ).removeAttr("disabled");
-                }
-                $( selectorCtrlDescripcion ).val(data.descripcion);
-                $( selectorCtrlDescripcion ).show();
-            }
-        }
-    });
+    //         if ( $( selectorCtrlDescripcion ).length ){
+    //             if ( existenCambiosPendientes) {
+    //                 $( selectorCtrlDescripcion ).removeAttr("disabled");
+    //             }
+    //             $( selectorCtrlDescripcion ).val(data.descripcion);
+    //             $( selectorCtrlDescripcion ).show();
+    //         }
+    //     }
+    // });
 
     // eliminar
     $table.on('mousedown', 'td .bi.'+`${claseBotonEliminarRow}`, function(e) {
@@ -174,8 +175,9 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops = [], ca
     // Add row
     $('#addRow').click(function() {
         existenCambiosPendientes = true;
+        PlantillaNuevoRegistro = nombreTabla.substring(3,nombreTabla.length-1);
 
-        var $row = $("#new-row-template").find('tr').clone();
+        var $row = $("#new-"+PlantillaNuevoRegistro).find('tr').clone();
         dataTable.row.add($row).draw();
         	
         // https://datatables.net/beta/1.8/examples/api/add_row.html
