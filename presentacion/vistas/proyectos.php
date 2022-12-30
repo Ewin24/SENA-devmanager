@@ -134,11 +134,38 @@ switch ($USUARIO->getTipoUsuario()) {
         <div class="col-lg-6">
             <h5 class="col text-center">Requeridas</h1>
             <table id="tblHab_Requeridas" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-            
+            <table id="new-Hab_Requerida" style="display:none" class="col-auto">
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>__id__</td>
+                        <td>__Proyecto__</td>
+                        <td>__Habilidad__</td>
+                        <td>
+                            <i class='bi '+`${claseBotonEditarRow}` aria-hidden="true"></i>
+                            <i class='bi '+`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="col-lg-6">
             <h5 class="text-center">Disponibles</h1>
             <table id="tblHab_Disponibles" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            <table id="new-Hab_Disponible" style="display:none" class="col-auto">
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>__id__</td>
+                        <td>__Proyecto__</td>
+                        <td>__Habilidad__</td>
+                        <td>
+                            <i class='bi '+`${claseBotonEditarRow}` aria-hidden="true"></i>
+                            <i class='bi '+`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </fieldset>
@@ -149,11 +176,40 @@ switch ($USUARIO->getTipoUsuario()) {
         <div class="row col-lg-6">
             <h5 class="col text-center">Asignados</h5>
             <table id="tblContratados" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-
+            <table id="new-Contratado" style="display:none" class="col-auto">
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>__id__</td>
+                        <td>__id_usuario__</td>
+                        <td>__fecha_solicitud__</td>
+                        <td>__estado__</td>
+                        <td>
+                            <i class='bi '+`${claseBotonEditarRow}` aria-hidden="true"></i>
+                            <i class='bi '+`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="col-lg-6">
             <h5 id="testo" class="text-center">Postulados/Disponibles</h5>
             <table id="tblCandidatos" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            <table id="new-Candidato" style="display:none" class="col-auto">
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>__id__</td>
+                        <td>__id_usuario__</td>
+                        <td>__fecha_solicitud__</td>
+                        <td>__estado__</td>
+                        <td>
+                            <i class='bi '+`${claseBotonEditarRow}` aria-hidden="true"></i>
+                            <i class='bi '+`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     
@@ -162,7 +218,10 @@ switch ($USUARIO->getTipoUsuario()) {
 <!-- <script type="text/javascript" src="assets/barraBusqueda.js"></script> -->
 <script type="module"> 
 
-    import { cargarProyectos, cargarHabilidades, cargarTrabajadores } from './presentacion/vistas/js/proyectos.js'
+    import {    cargarProyectos, 
+                cargarHabilidades,
+                cargarTrabajadores  } 
+    from './presentacion/vistas/js/proyectos.js'
 
     let lisProyectos = [];
     <?php echo 'const dProy = ' . $datosProyectos . ';'; ?>
@@ -210,6 +269,14 @@ switch ($USUARIO->getTipoUsuario()) {
                 }
             // }
         });  
+
+        $('#addRowtblProyectos').click(function () {
+            $('#tblHab_Requeridas').DataTable().clear().draw();
+            $('#tblHab_Disponibles').DataTable().clear().draw();
+            $('#tblContratados').DataTable().clear().draw();
+            $('#tblCandidatos').DataTable().clear().draw();
+        });
+
     });
 
 </script>
