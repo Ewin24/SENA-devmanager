@@ -30,7 +30,7 @@ class Usuario
             //datos usuario
             $this->id = $campo['id'];
             $this->identificacion = $campo['identificacion'];
-            $this->tipo_identificacion = $campo['tipo_identificacion'];            
+            $this->tipo_identificacion = $campo['tipo_identificacion'];
             $this->nombres = $campo['nombres'];
             $this->apellidos = $campo['apellidos'];
             $this->correo = $campo['correo'];
@@ -254,11 +254,11 @@ class Usuario
         $datos = Usuario::getListaEnObjetos($filtro, $orden);
 
         $json_data = array(
-			//"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
-			"recordsTotal"    => intval( count($datos) ),  // total number of records
-			// "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
-			"data"            => $datos   // total data array
-			);
+            //"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
+            "recordsTotal"    => intval(count($datos)),  // total number of records
+            // "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
+            "data"            => $datos   // total data array
+        );
 
         return  json_encode($json_data);  // send data as json format
     }
@@ -274,7 +274,8 @@ class Usuario
         return $usuario;
     }
 
-    private static function obtenerTipoUsuario($identificacion){
+    private static function obtenerTipoUsuario($identificacion)
+    {
         $cadenaSQL = "SELECT tipo_usuario FROM usuarios WHERE identificacion = $identificacion";
         $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
         return $resultado;
