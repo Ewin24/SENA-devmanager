@@ -4,11 +4,10 @@ const claseBotonEliminarRow = 'bi-trash-fill';
 const claseBotonConfirmarRow = 'bi-check-circle';
 const claseBotonCancelarRow = 'bi-x-circle';
 
-const ultimaColumna = "<td><i class='bi "+claseBotonEditarRow +"' aria-hidden='true'></i><i class='bi "+claseBotonEliminarRow +"' aria-hidden='true'></i></td>";  
+const ultimaColumna = "<td><div><i class='bi "+claseBotonEditarRow +"' aria-hidden='true'></i><i class='bi "+claseBotonEliminarRow +"' aria-hidden='true'></i><div></td>";  
 
 var existenCambiosPendientes = false;
-
-var $table = null;
+var insertandoNuevoRegistro = false;
 var dataTable = null;
 var dataUrl = null;
 
@@ -23,11 +22,10 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
                 orderable: false
             });
 
-    $table = $(selectorTabla);
     dataTable = null;
     dataUrl = "./presentacion/vistas/proyectos.php";
 
-    dataTable = $table.DataTable({
+    dataTable = $(selectorTabla).DataTable({
         // ajax: dataUrl,
         data: arreglo,
         columns: cols,
@@ -73,7 +71,6 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
 
     });
 
-    
     var idBotonesGuardar = "guardarCambios"+nombreTabla;
     var selectorBotonesGuardar = '#'+idBotonesGuardar;
     var ctrlBotonesGuardar = `<br> 
@@ -85,7 +82,7 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
             <button type="button" id="btn-save" class="btn btn-primary" data-dismiss="modal">Guardar Cambios</button>
         </div>
     </div>`;
-    $table.after(ctrlBotonesGuardar);
+    $(selectorTabla).after(ctrlBotonesGuardar);
     // $(selectorBotonesGuardar).children().attr("disabled","disabled");
     $( selectorBotonesGuardar ).hide();
 
@@ -93,11 +90,76 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
         var idCtrlDescripcion = 'desc'+nombreTabla;
         var selectorCtrlDescripcion = '#desc'+nombreTabla;
         var ctrlDescripcion = '<br><div class="w-auto p-3 align-self-center"><textarea id='+idCtrlDescripcion+' type="text" class="w-auto p-3 form-control" style="min-width: 100%" rows="5" disabled="disabled"></textarea></div>';
-        $table.after(ctrlDescripcion);
+        $(selectorTabla).after(ctrlDescripcion);
         $( selectorCtrlDescripcion ).hide();
     }
 
-    // eventos de selección de fila
+    function bloquearAccionesPantalla(){
+        var clasesControlesBloquear = [
+            '.addRow', 
+            '.'+claseBotonConfirmarRow, 
+            '.'+claseBotonEditarRow,
+            '.'+claseBotonEliminarRow
+        ];
+        $.each(clasesControlesBloquear, function(cssClass){
+            $(".dataTables_wrapper *").children(cssClass).attr("disabled", "disabled");
+            $("body *").children(cssClass).off('mousedown', null); // bloquea botones editar en las filas
+            $(selectorBotonesGuardar).children(cssClass).removeAttr("disabled");
+        });
+    }
+
+    function desbloquearAccionesPantalla(){
+
+        var clasesControlesDesbloquear = [
+            '.addRow', 
+            '.'+claseBotonConfirmarRow, 
+            '.'+claseBotonEditarRow,
+            '.'+claseBotonEliminarRow
+        ];
+        $.each(clasesControlesDesbloquear, function(cssClass){
+            $(".dataTables_wrapper *").children(cssClass).removeAttr("disabled");
+            $("body *").children(cssClass).on('mousedown', null); // bloquea botones editar en las filas
+        });
+
+        if ( $( selectorBotonesGuardar ).length ) $(selectorBotonesGuardar).hide();
+
+        if( $(selectorCtrlDescripcion).length ) {
+            var ctrolDesc = document.getElementById(idCtrlDescripcion)
+            ctrolDesc.disabled = true;
+            $(selectorCtrlDescripcion).hide();
+            // $(selectorCtrlDescripcion).attr("disabled", "disabled"); 
+        }
+    }
+
+
+    $(selectorTabla+' tbody').on('click', 'tr', function () {
+        if ($(this).hasClass('selected')) {
+            if ( existenCambiosPendientes) {
+                $( selectorCtrlDescripcion ).show();
+            }
+            else{
+                $( selectorCtrlDescripcion ).hide();
+            }
+        }
+        else {
+            // $(this).addClass('selected');
+            // $(this).removeClass('selected');
+
+            if ( $( selectorCtrlDescripcion ).length ) {
+                if ( existenCambiosPendientes) {
+                    $( selectorCtrlDescripcion ).removeAttr("disabled");
+                }
+                $( selectorCtrlDescripcion ).show();
+
+                var tr = $(this).closest("tr");
+                var rowindex = tr.index();
+                var data = $(selectorTabla).DataTable().row( rowindex ).data();
+                $( selectorCtrlDescripcion ).val(data.descripcion);
+            }
+        }
+    });
+
+    // // // eventos de selección de fila
     // $(selectorTabla+' tbody').on('click', 'tr', function () {
         
     //     if ($(this).hasClass('selected')) {
@@ -117,12 +179,12 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
     //     else {
     //         // dataTable.$('tr.selected').removeClass('selected');
     //         $(this).addClass('selected');
-    //         var celda = dataTable.cell(this);
+    //         // var celda = dataTable.cell(this);
     //         // var celda_data = celda.context[0].aoData[0];//._aData[0];
     //         // var columna = celda["0"][0].column; // columna descripcion
     //         var tr = $(this).closest("tr");
     //         var rowindex = tr.index();
-    //         var data = dataTable.row( rowindex ).data();
+    //         var data = $(selectorTabla).DataTable().row( rowindex ).data();
 
     //         if ( $( selectorCtrlDescripcion ).length ){
     //             if ( existenCambiosPendientes) {
@@ -135,24 +197,25 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
     // });
 
     // eliminar
-    $table.on('mousedown', 'td .bi.'+`${claseBotonEliminarRow}`, function(e) {
-        dataTable.row($(this).closest("tr")).remove().draw();
+    $(selectorTabla).on('mousedown', 'td .bi.'+`${claseBotonEliminarRow}`, function(e) {
+        $(selectorTabla).DataTable().row($(this).closest("tr")).remove().draw();
     });
     // editar
-    $table.on('mousedown.edit', 'i.bi.'+`${claseBotonEditarRow}`, function(e) {
+    $(selectorTabla).on('mousedown.edit', 'i.bi.'+`${claseBotonEditarRow}`, function(e) {
         enableRowEdit($(this));
         existenCambiosPendientes = true;
+        e.stopPropagation();
     });
 
     // boton confirmar
-    $table.on('mousedown.save', "i.bi."+claseBotonConfirmarRow, function(e) {
+    $(selectorTabla).on('mousedown.save', "i.bi."+claseBotonConfirmarRow, function(e) {
         updateRow($(this), true); // Pass save button to function.
     });
 
-    $table.on('mousedown', 'input', function(e) {
+    $(selectorTabla).on('mousedown', 'input', function(e) {
         e.stopPropagation();
     });
-    $table.on('mousedown', '.select-basic', function(e) {
+    $(selectorTabla).on('mousedown', '.select-basic', function(e) {
         e.stopPropagation();
     });
     
@@ -160,25 +223,52 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
     $('#btn-save').on('click', function() {
         updateRows(true); // Update all edited rows
         existenCambiosPendientes = false;
+        insertandoNuevoRegistro = false;
     });
     // Cancelar Cambios
     $('#btn-cancel').on('click', function() {
         updateRows(false); // Revert all edited rows
         existenCambiosPendientes = false;
+
+        if ( insertandoNuevoRegistro ){
+            insertandoNuevoRegistro = false;
+            $(selectorTabla).DataTable().row(0).remove().draw();
+        }
+        desbloquearAccionesPantalla();
     });
     
     // Botón nuevo proyecto
-    $table.css('border-top', 'none')
+    $(selectorTabla).css('border-top', 'none')
         .before($('<div>').addClass('addRow')
-        .append($('<button>').attr('id', 'addRow').text('Nuevo '+nombreTabla.substring(3,nombreTabla.length-1))));
+        .append($('<button>').attr('id', 'addRow'+nombreTabla).text('Nuevo '+nombreTabla.substring(3,nombreTabla.length-1))));
 
     // Add row
-    $('#addRow').click(function() {
+    $('#addRow'+nombreTabla).click(function() {
         existenCambiosPendientes = true;
-        PlantillaNuevoRegistro = nombreTabla.substring(3,nombreTabla.length-1);
+        insertandoNuevoRegistro = true;
 
-        var $row = $("#new-"+PlantillaNuevoRegistro).find('tr').clone();
-        dataTable.row.add($row).draw();
+        var PlantillaNuevoRegistro = nombreTabla.substring(3,nombreTabla.length-1);
+
+        var $NewRow = $("#new-"+PlantillaNuevoRegistro).find('tr').clone();
+        $(selectorTabla).DataTable().row.add($NewRow).draw();
+
+        //move added row to desired index (here the row we clicked on)
+        var currentPage = $(selectorTabla).DataTable().page();
+        var rowElement = $(selectorTabla).find("tbody tr:last-child");
+        var index = $(selectorTabla).DataTable().row(rowElement).index(),
+            rowCount = $(selectorTabla).DataTable().data().length-1,
+            insertedRow = $(selectorTabla).DataTable().row(rowCount).data(),
+            tempRow;
+        console.log(index-1, rowCount, insertedRow);
+
+        for (var i=rowCount; i>0; i--) {
+            tempRow = $(selectorTabla).DataTable().row(i-1).data();
+            $(selectorTabla).DataTable().row(i).data(tempRow);
+            $(selectorTabla).DataTable().row(i-1).data(insertedRow);
+        }     
+        //refresh the page
+        $(selectorTabla).DataTable().row(0).select();
+        $(selectorTabla).DataTable().page(currentPage).draw(false);
         	
         // https://datatables.net/beta/1.8/examples/api/add_row.html
         // https://stackoverflow.com/questions/52792749/how-to-get-datatables-header-name
@@ -187,23 +277,20 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
         // //$(selectorTabla).dataTable().fnAddData(headerNames);
         // var t = dataTable.row.add(headerNames).draw(true);
 
-        TODO: // esta logica activa campo descripción dentro de la tabla
-        if ( $( selectorCtrlDescripcion ).length ) {
-            $( selectorCtrlDescripcion ).removeAttr("disabled");
-            $( selectorCtrlDescripcion ).val('agregue una descripción');
-        }
-        if ( $( selectorBotonesGuardar).length ) {
-            $( selectorBotonesGuardar ).show();
-        }
-
         // Toggle edit mode upon creation.
-        enableRowEdit($table.find("tbody tr:last-child td i.bi."+claseBotonEditarRow));
+        enableRowEdit($(selectorTabla).find("tbody tr:first-child td i.bi."+claseBotonEditarRow));
     });
 
     // habilitar edición
     function enableRowEdit($editButton) {
         
-        if ( $( selectorBotonesGuardar ).length ) {
+        // esta logica activa campo descripción dentro de la tabla
+        if ( $( selectorCtrlDescripcion ).length ) {
+            $( selectorCtrlDescripcion ).removeAttr("disabled");
+            $( selectorCtrlDescripcion ).val('agregue una descripción');
+            $( selectorCtrlDescripcion ).show();
+        }
+        if ( $( selectorBotonesGuardar).length ) {
             $( selectorBotonesGuardar ).show();
         }
 
@@ -225,7 +312,7 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
             enableDatePicker($(this))
         });
 
-        var $cancelButton = $table.find("tbody tr:last-child td i.bi."+claseBotonEliminarRow);
+        var $cancelButton = $(selectorTabla).find("tbody tr:last-child td i.bi."+claseBotonEliminarRow);
         $cancelButton.removeClass().addClass("bi "+claseBotonCancelarRow);
         $cancelButton.attr("aria-hidden", "true");
         $cancelButton.hide();
@@ -263,7 +350,7 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
     }
 
     function updateRows(commit) {
-        $table.find("tbody tr td i.bi."+claseBotonConfirmarRow).each(function(index, button) {
+        $(selectorTabla).find("tbody tr td i.bi."+claseBotonConfirmarRow).each(function(index, button) {
             updateRow($(button), commit);
         });
         if ( $( selectorCtrlDescripcion ).length ) {
@@ -297,10 +384,16 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
             // $(this).text(commit ? $input.val() : $input.data('original-value'));
         });
 
-        var $cancelButton = $table.find("tbody tr:last-child td i.bi."+claseBotonCancelarRow);
+        var $cancelButton = $(selectorTabla).find("tbody tr:last-child td i.bi."+claseBotonCancelarRow);
         $cancelButton.removeClass().addClass("bi "+claseBotonEliminarRow);
         $cancelButton.attr("aria-hidden", "true");
         $cancelButton.show();
+    }
+
+    function activarModoCRUD(modoelegido){
+        if(modoelegido.toUpperCase().contains('C')){
+            
+        }
     }
 }
 

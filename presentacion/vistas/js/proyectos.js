@@ -71,29 +71,14 @@ function cargarProyectos(nombreTabla, arreglo) {
     // getProyectoSeleccionado(nombreTabla);
 }
 
-function getProyectoSeleccionado(nombreTabla){
-    var IdProySeleccionado = '';
-    var selectorTabla = '#'+nombreTabla;
-    $(selectorTabla+' tbody').on('click', 'tr', function () {
-        if($(this).hasClass('selected')) {
-            // var celda = dataTable.cell(this);
-            var rowindex = $(this).closest("tr").index();
-            // console.log(selectorTabla, rowindex);
-            var data = $(selectorTabla).DataTable().row( rowindex ).data();
-            IdProySeleccionado = data.id;
-            console.log(IdProySeleccionado);
-            // cargarTrabajadores(IdProySeleccionado);
-        }
-    });  
-}
-
 function cargarHabilidades(nombreTabla, arreglo){
     var colsHabilidades = [
+        { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         { title: 'id', data: 'id', visible: false },
         { title: 'id_proyecto', data: 'id_proyecto'},
         { title: 'id_habilidad', data: 'id_habilidad'}
     ];
-    console.log("hab", arreglo);
+    // console.log("hab", arreglo);
     cargarTablaGenerica(nombreTabla, arreglo, colsHabilidades);
 }
 
@@ -101,13 +86,12 @@ function cargarTrabajadores(nombreTabla, arreglo){
     var colsTrabajadores = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         { title: 'id', data: 'id', visible: false },
+        { title: 'id_usuario', data: 'id_usuario' },
         { title: 'fecha_solicitud', data: 'fecha_solicitud' },
         { title: 'estado', data: 'estado' },
-        // { title: 'id_proyecto', data: 'id_proyecto' },
-        { title: 'id_usuario', data: 'id_usuario' }
     ];
 
-    console.log("Trab:", arreglo);
+    // console.log("Trab:", arreglo);
     cargarTablaGenerica(nombreTabla, arreglo, colsTrabajadores);
 
     // if (idProyecto == null || idProyecto == '')
