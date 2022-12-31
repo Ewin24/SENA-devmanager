@@ -1,75 +1,40 @@
-import {
-  cargarTablaGenerica,
-  getIdRegistroSeleccionado,
-} from "../../../librerias/tablaGenerica.js";
+import { cargarTablaGenerica } from "../../../librerias/tablaGenerica.js";
 
-export function cargarUsuarios(nombreTabla, arreglo) {
-  var dataUrl =
-    "principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=";
-  var ddl_estado_ops = [
-    { value: "X", key: "" },
-    { value: "P", key: "Pendiente" },
-    { value: "E", key: "Ejecución" },
-    { value: "T", key: "Terminado" },
-  ];
 
-  var cols = [
-    {
-      data: null,
-      render: function () {
-        return "<input type='checkbox'/>";
-      },
-      visible: true,
-    },
-    { title: "Identificacion", data: "identificacion", visible: true },
-    { title: "Nombre", data: "nombre", visible: true },
-    { title: "Apellido", data: "apellido", visible: true },
-    { title: "Tipo de Usuario", data: "tipoUsuario", visible: true },
-    { title: "Nombre de Usuario", data: "nombreUsuario", visible: true },
-    { title: "Correo", data: "correo", visible: true },
-    {
-      title: "Tipo de Identificacion",
-      data: "tipoIdentificacion",
-      className: "ddl",
-      //     render: function (data, type, row) {
-      //         var $select = $('<select class="select-basic" disabled="disabled" ></select>',
-      //         {
-      //             id: row.id,
-      //             value: data
-      //         });
-      //     $.each(ddl_estado_ops, function (k, v) {
-      //         // if (1 == 1) {   //changed this, not sure why the original code has it
-      //         var $option = $("<option></option>",
-      //         {
-      //             text: v.key,
-      //             value: v.value
-      //         });
-      //         //if selected_id = id then this is the selected value
-      //         if (row.estado == v.value) {  //use == instead of ===
-      //             $option.attr("selected", "selected");
-      //         }
-      //         $select.append($option);
-      //         // }
-      //     });
-      //     return $select.prop("outerHTML");
-      //   }
-    },
-    { title: "Foto", data: "foto", visible: true },
-    { title: "Telefono", data: "telefono", visible: true },
-    { title: "Direccion", data: "direccion", visible: true },
-    { title: "Empresa", data: "nitEmpresa", visible: true },
-  ];
+function cargarProyectos(nombreTabla, arreglo) {
 
-  // configuración de carga inicial
-  //$('#campoDescripcion').hide();
-  $("#botonesGuardarCambios").hide();
-  $("#botonesGuardarCambios").attr("disabled", "disabled");
+    var dataUrl = 'principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=';
+    var ddl_estado_ops = [
+    { value : 'X', key : '' },
+    { value : 'P', key : 'Pendiente' },
+    { value : 'E', key : 'Ejecución' },
+    { value : 'T', key : 'Terminado' }
+    ];
 
-  cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops);
+    var colsProyectos = [
+        {   data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
+        {   title: 'id', data: 'id', visible: false },
+        {   title: 'Nit', data: 'nit' },
+        {   title: 'Nombre', data: 'nombre', visible: false },
+        {   title: 'Direccion', data: 'direccion', visible: true},
+        {   title: 'Correo', data: 'correo', visible: true},
+        {   title: 'Telefono', data: 'telefono', visible: true},
+        {   title: 'Nombre Representante', data: 'nomRepre', visible: true},
+        {   title: 'Correo Representante', data: 'correoRepre', visible: true},
+    ];
+
+    // configuración de carga inicial
+    // $('#campoDescripcion').hide();
+    $('#botonesGuardarCambios').hide();
+    $('#botonesGuardarCambios').attr("disabled", "disabled");
+
+    var modoTabla = 'CRUD'; // definir que acciones está disponibles para la tabla
+    cargarTablaGenerica(nombreTabla, arreglo, colsProyectos, modoTabla, ddl_estado_ops, true);
+    // getProyectoSeleccionado(nombreTabla);
 }
 
-export function getUsuarioSeleccionado(nombreTabla){
-    var IdProySeleccionado = '';
+function getProyectoSeleccionado(nombreTabla){
+    var IdEmpreSeleccionada = '';
     var selectorTabla = '#'+nombreTabla;
     $(selectorTabla+' tbody').on('click', 'tr', function () {
         if($(this).hasClass('selected')) {
@@ -77,12 +42,48 @@ export function getUsuarioSeleccionado(nombreTabla){
             var rowindex = $(this).closest("tr").index();
             // console.log(selectorTabla, rowindex);
             var data = $(selectorTabla).DataTable().row( rowindex ).data();
-            IdProySeleccionado = data.id;
-            console.log(IdProySeleccionado);
+            IdEmpreSeleccionada = data.id;
+            console.log(IdEmpreSeleccionada);
             // cargarTrabajadores(IdProySeleccionado);
         }
     });  
 }
+
+function cargarTrabajadores(nombreTabla, arreglo){
+    var colsTrabajadores = [
+        { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
+        { title: 'id', data: 'id', visible: false },
+        { title: 'fecha_solicitud', data: 'fecha_solicitud' },
+        { title: 'estado', data: 'estado' },
+        // { title: 'id_proyecto', data: 'id_proyecto' },
+        { title: 'id_usuario', data: 'id_usuario' }
+    ];
+
+    console.log("Trab:", arreglo);
+    cargarTablaGenerica(nombreTabla, arreglo, colsTrabajadores);
+
+    // if (idProyecto == null || idProyecto == '')
+    // {
+    //     $datPerfRequeridos = '[]';
+    //     $datPerfDisponibles = '[]';
+    //     $datTrabAsignados = '[]';
+    //     $datTrabDisponibles = '[]';
+    // }
+    // // else
+    // // {
+    // //     // <?php echo 'const result = ' . Proyecto::getTrabajadoresAsignados($idProySeleccionado) . d';'; ?>
+    // //     // <?php echo ' . cargarTrabajadores( .' $idProySeleccionado .'); ' ?>;
+
+        
+    // //     // <?php echo 'const datTrabAsignados = ' . cargarTrabajadores($idProySeleccionado) . ';'; ?>
+    // //     // console.log(datTrabAsignados);
+    // //     //Definiendo la lógica de negocio dentro de la clase
+    // //     // $datTrabAsignados = 
+    // //     // $datTrabDisponibles = Proyecto::getTrabajadoresDisponibles($idProySeleccionado);
+    // // }
+}
+
+export { cargarProyectos, cargarHabilidades, cargarTrabajadores }
 
 // const url = "principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=";
 // const updateField = (_id, data, callback) => {
@@ -98,7 +99,7 @@ export function getUsuarioSeleccionado(nombreTabla){
 //         }
 //     });
 // };
-
+    
 /*
 
 $(document).ready(function () {
@@ -296,8 +297,12 @@ $(document).ready(function () {
 
 */
 
+
+
 // https://datatables.net/forums/discussion/1723/editable-with-datepicker-inside-datatables
 // // select everything when editing field in focus
+
+
 
 // // https://stackoverflow.com/questions/14643617/create-table-using-javascript
 // // // https://linuxhint.com/create-table-from-array-objects-javascript/

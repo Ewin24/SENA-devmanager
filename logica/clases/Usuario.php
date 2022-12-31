@@ -4,7 +4,7 @@ class Usuario
 {
 
     protected $identificacion;
-    protected $nombre; //nombre real del usuario
+    public $nombre; //nombre real del usuario
     protected $apellido;
     protected $tipoUsuario;
     protected $clave;

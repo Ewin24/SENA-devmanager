@@ -1,5 +1,5 @@
 <?php
-session_start();
+//session_start();
 if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Ya hay una sesion activa, acceso no autorizado'); //sesiones activas al tiempo
 else {
     $USUARIO = unserialize($_SESSION['usuario']);
@@ -14,26 +14,23 @@ if (isset($_REQUEST['mensaje'])) {
 }
 
 //$json_usuarios = Usuario::getListaEnObjetos(null, null);
-$json_usuarios = '[';
-$resultado = Usuario::getListaEnObjetos(null, null);
+$json_empresa = '[';
+$resultado = Empresa::getListaEnObjetos(null, null);
 for ($i = 0; $i < count($resultado); $i++) {
-    $usuario = $resultado[$i];
-    $json_usuarios .= '{ identificacion: "' . $usuario->getIdentificacion()
-        . '", nombre: "' . $usuario->getNombre()
-        . '", apellido: "' . $usuario->getApellido()
-        . '", tipoUsuario: "' . $usuario->getTipoUsuario()
-        . '", nombreUsuario: "' . $usuario->getNombreUsuario()
-        . '", correo: "' . $usuario->getCorreo()
-        . '", telefono: "' . $usuario->getTelefono()
-        . '", tipoIdentificacion: "' . $usuario->getTipoIdentificacion()
-        . '", foto: "' . $usuario->getFoto()
-        . '", direccion: "' . $usuario->getDireccion()
-        . '", nitEmpresa: "' . $usuario->getNitEmpresa()
+    $empresa = $resultado[$i];
+    $json_usuarios .= '{ id: "' . $empresa->getId()
+        . '", nit: "' . $empresa->getNit()
+        . '", nombre: "' . $empresa->getNombre()
+        . '", direccion: "' . $empresa->getDireccion()
+        . '", correo: "' . $empresa->getCorreo()
+        . '", telefono: "' . $empresa->getTelefono()
+        . '", nomRepre: "' . $empresa->getNombreRepresentante()
+        . '", correoRepre: "' . $empresa->getCorreoRepresentante()
         . '"},';
 }
-$json_usuarios .= ']';
+$json_empresa .= ']';
 
-print_r($json_usuarios);
+print_r($json_empresa);
 ?>
 
 <h3 class="text-center">GESTION DE USUSARIOS</h3>

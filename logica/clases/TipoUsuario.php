@@ -37,7 +37,7 @@ class TipoUsuario
 
         switch ($codigo) {
             case 'A':
-                $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/usuarios.php&accion=''&id='''>Usuarios</a></li>";
+                $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/empresas.php&accion=''&id='''>Usuarios</a></li>";
                 break;
             case 'T':
                 break;

@@ -161,7 +161,9 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
 <!-- <script type="text/javascript" src="assets/barraBusqueda.js"></script> -->
 <script type="module">
     import {
-        cargarProyectos
+        cargarProyectos,
+        cargarHabilidades,
+        cargarTrabajadores
     } from './presentacion/vistas/js/proyectos.js'
 
     let lisProyectos = [];
