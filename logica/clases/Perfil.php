@@ -1,4 +1,5 @@
 <?php
+
 //ahora esta clase tiene la finalidad de traer todos los datos que tine un usuario, en sus habilidades, proyectos y estudios
 class Perfil
 {
@@ -14,6 +15,9 @@ class Perfil
     public $nombre_foto;
     public $direccion;
     public $id_empresa;
+
+    private $estudios;
+    private $habilidades;
 
     //constructor con array
     public function __construct($campo, $valor) {
@@ -113,6 +117,14 @@ class Perfil
         return $this->idPerfil;
     }
 
+    public static function cargarTablasHijas($idUsuario){
 
-    
+        if ($idUsuario != null || $idUsuario != '')
+        {
+            $datEstudios = EstudiosAdm::getEstudiosUsuario($idUsuario);
+            $datHabilidades = HabilidadesAdm::getHabilidadesUsuario($idUsuario);
+        }
+
+        return [$datEstudios, $datHabilidades];
+    }
 }

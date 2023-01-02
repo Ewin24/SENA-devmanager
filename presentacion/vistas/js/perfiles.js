@@ -20,7 +20,7 @@ function cargarPerfiles(nombreTabla, arreglo, modoTabla='CRUD') {
         { title: "Nombres", data: "nombres", visible: true },
         { title: "Apellidos", data: "apellidos", visible: true },
         { title: "Correo", data: "correo", visible: true },
-        { title: "Clave", data: "clave_hash", visible: false },
+        { title: "Clave", data: "clave_hash", visible: true, type: "password" },
         { title: "Dirección", data: "direccion", visible: true },
         { title: "Foto", data: "nombre_foto", visible: true },
         { title: "Telefono", data: "telefono", visible: true },
@@ -31,4 +31,6 @@ function cargarPerfiles(nombreTabla, arreglo, modoTabla='CRUD') {
     cargarTablaGenerica(nombreTabla, arreglo, colsPerfiles, modoTabla);
 }
 
-export { cargarPerfiles }
+// TODO: Crear metodos cargarEstudios, cargarHabilidades
+
+export { cargarPerfiles, cargarEstudios, cargarHabilidades }
