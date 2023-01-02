@@ -1,7 +1,7 @@
 import { cargarTablaGenerica } from "../../../librerias/tablaGenerica.js";
 
 
-function cargarProyectos(nombreTabla, arreglo) {
+function cargarProyectos(nombreTabla, arreglo, modoTabla='CRUD') {
 
     var dataUrl = 'principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=';
     var ddl_estado_ops = [
@@ -66,12 +66,11 @@ function cargarProyectos(nombreTabla, arreglo) {
     $('#botonesGuardarCambios').hide();
     $('#botonesGuardarCambios').attr("disabled", "disabled");
 
-    var modoTabla = 'CRUD'; // definir que acciones está disponibles para la tabla
     cargarTablaGenerica(nombreTabla, arreglo, colsProyectos, modoTabla, ddl_estado_ops, true);
     // getProyectoSeleccionado(nombreTabla);
 }
 
-function cargarHabilidades(nombreTabla, arreglo){
+function cargarHabilidades(nombreTabla, arreglo, modoTabla='CRUD'){
     var colsHabilidades = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         { title: 'id', data: 'id', visible: false },
@@ -79,10 +78,10 @@ function cargarHabilidades(nombreTabla, arreglo){
         { title: 'id_habilidad', data: 'id_habilidad'}
     ];
     // console.log("hab", arreglo);
-    cargarTablaGenerica(nombreTabla, arreglo, colsHabilidades);
+    cargarTablaGenerica(nombreTabla, arreglo, colsHabilidades, modoTabla);
 }
 
-function cargarTrabajadores(nombreTabla, arreglo){
+function cargarTrabajadores(nombreTabla, arreglo, modoTabla='CRUD'){
     var colsTrabajadores = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         { title: 'id', data: 'id', visible: false },
@@ -92,7 +91,7 @@ function cargarTrabajadores(nombreTabla, arreglo){
     ];
 
     // console.log("Trab:", arreglo);
-    cargarTablaGenerica(nombreTabla, arreglo, colsTrabajadores);
+    cargarTablaGenerica(nombreTabla, arreglo, colsTrabajadores, modoTabla='CRUD');
 
     // if (idProyecto == null || idProyecto == '')
     // {
