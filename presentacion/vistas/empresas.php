@@ -4,7 +4,9 @@ if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Ya h
 else {
     $USUARIO = unserialize($_SESSION['usuario']);
     $identificacion = $USUARIO->getIdentificacion();
-    echo $USUARIO->getTipoUsuario();
+    echo $USUARIO->getApellido();
+
+    //echo $identificacion;
 }
 
 //codigo en caso de que se generen mensajes desde la adicion, eliminacion o edicion de un usuario
