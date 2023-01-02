@@ -44,7 +44,7 @@ switch ($USUARIO->getTipoUsuario()) {
 
             <table id="tblPerfiles" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
             
-            <?= $json_Perfiles ?>
+            //< ?= $json_Perfiles ?>
 
         </div>
     </div>
