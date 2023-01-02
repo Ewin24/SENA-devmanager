@@ -30,15 +30,15 @@ class Usuario
             //datos usuario
             $this->id = $campo['id'];
             $this->identificacion = $campo['identificacion'];
-            $this->tipo_identificacion = $campo['tipo_identificacion'];
+            $this->tipoIdentificacion = $campo['tipo_identificacion'];
             $this->nombres = $campo['nombres'];
             $this->apellidos = $campo['apellidos'];
             $this->correo = $campo['correo'];
-            $this->clave_hash = $campo['clave_hash'];
+            $this->clave = $campo['clave_hash'];
             $this->direccion = $campo['direccion'];
             $this->telefono = $campo['telefono'];
-            $this->tipo_usuario = $campo['tipo_usuario'];
-            $this->id_empresa = $campo['id_empresa'];
+            $this->tipoUsuario = $campo['tipo_usuario'];
+            $this->nitempresa = $campo['id_empresa'];
         }
     }
 

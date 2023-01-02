@@ -5,7 +5,7 @@ require_once '../logica/clasesGenericas/ConectorBD.php';
 
 //validar que la identificacion no exista en la base de datos
 $identificacion = $_POST['identificacion'];
-$cadenaSQL = "select identificacion from usuario where identificacion = $identificacion";
+$cadenaSQL = "select identificacion from usuarios where identificacion = $identificacion";
 $identificaciones = ConectorBD::ejecutarQuery($cadenaSQL);
 if (count($identificaciones) > 0) {
     header("Location: ../index.php ?mensaje= ya existe un usuario con esa identificacion en el sistema");

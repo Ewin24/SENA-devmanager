@@ -2,7 +2,7 @@
 
 require_once '../../logica/clasesGenericas/ConectorBD.php';
 //codigo que consulta las empresas registradas en la base de datos y las agrega al menu de seleccion del formulario de registro de empresas
-$cadenaSQL = "select nit,nombre from empresa";
+$cadenaSQL = "select nit,nombre from empresas";
 $empresas = ConectorBD::ejecutarQuery($cadenaSQL);
 $empresasRegistradas = "";
 

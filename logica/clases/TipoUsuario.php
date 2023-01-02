@@ -40,6 +40,11 @@ class TipoUsuario
                 $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/empresas.php&accion=''&id='''>Usuarios</a></li>";
                 break;
             case 'T':
+                $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/empresas.php&accion=''&id='''>Usuarios</a></li>"; //director tambien accede a pantalla usuarios
+
+                break;
+            case 'D':
+                $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/empresas.php&accion=''&id='''>Usuarios</a></li>"; //director tambien accede a pantalla usuarios
                 break;
             default:
 

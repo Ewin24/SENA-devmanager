@@ -4,6 +4,7 @@ if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Ya h
 else {
     $USUARIO = unserialize($_SESSION['usuario']);
     $identificacion = $USUARIO->getIdentificacion();
+    echo $USUARIO->getTipoUsuario();
 }
 
 //codigo en caso de que se generen mensajes desde la adicion, eliminacion o edicion de un usuario
@@ -58,14 +59,12 @@ if (Usuario::esAdmin($identificacion)) {
                 <tbody>
                     <tr>
                         <td></td>
-                        <td>__identificacion__</td>
-                        <td>__nombre__</td>
-                        <td>__apellido__</td>
-                        <td>__tipoUsuario__</td>
-                        <td>__nombre Usuario__</td>
+                        <td>__nit__</td>
+                        <td>__direccion__</td>
                         <td>__correo__</td>
-                        <td>__tipo identificacion__</td>
                         <td>__telefono__</td>
+                        <td>__nombre representante__</td>
+                        <td>__correo representante__</td>
                         <td>
                             <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
                             <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
@@ -100,15 +99,12 @@ if (Usuario::esAdmin($identificacion)) {
             <table id="new-Usuario" style="display:none" class="col-auto">
                 <tbody>
                     <tr>
-                        <td></td>
-                        <td>__identificacion__</td>
-                        <td>__nombre__</td>
+                        <td>__Nit__</td>
                         <td>__apellido__</td>
                         <td>__tipoUsuario__</td>
                         <td>__nombre Usuario__</td>
                         <td>__correo__</td>
                         <td>__tipo identificacion__</td>
-                        <td><input type="file" name="foto" id=""></td>
                         <td>__telefono__</td>
                         <td>__direccion__</td>
                         <td>__Empresa__</td>
@@ -149,7 +145,7 @@ if (Usuario::esAdmin($identificacion)) {
     }
 
     $(document).ready(function() {
-        cargarEmpresas('tblEmpresas', lisEmpresas);
+        cargarEmpresas('tblEmpresas', lisEmpresas); //nombreTabla, arreglo, colsEmpresas, modoTabla, ddl_estado_ops
         var $idEmpresaSeleccionada = '';
         var selectorTabla = '#tblEmpresas'
         //console.log(lisEmpresas);
@@ -172,8 +168,15 @@ if (Usuario::esAdmin($identificacion)) {
                 }).then((resp) => {
                     return resp.json();
                 }).then((json) => {
-                    const { trabajadores } = json;
-                    cargarUsuarios('tblUsuarios', trabajadores);
+                    const {
+                        trabajadores
+                    } = json;
+
+                    //opciones de crud en los usuarios, dependiendo del usuario de sesion
+                    <?php
+                        echo " 'const tUsuario = ' .  $USUARIO->getTipoUsuario() . ';' " ;
+                    ?>
+                    //cargarUsuarios('tblUsuarios', trabajadores, 'R');
                 });
             }
             // }
