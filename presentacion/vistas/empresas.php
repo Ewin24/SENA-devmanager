@@ -144,8 +144,25 @@ if (Usuario::esAdmin($identificacion)) {
     }
 
     $(document).ready(function() {
-        let modoTabla = 'RUD'
-        cargarEmpresas('tblEmpresas', lisEmpresas, modoTabla); //nombreTabla, arreglo, colsEmpresas, modoTabla, ddl_estado_ops
+        //  opciones de crud, dependiendo del usuario de sesion
+        let modoTabla = ''
+        <?php
+        echo "const tUsuario = '{$USUARIO->getTipoUsuario()}' ;"; //traer tipo de usuario de sesion
+        ?>
+        switch (tUsuario) {
+            case 'A':
+                modoTabla = 'CRUD';
+                break;
+            case 'D':
+                modoTabla = 'R';
+                break;
+            case 'T':
+                modoTabla = 'R';
+                break;
+            default:
+                break;
+        }
+        cargarEmpresas('tblEmpresas', lisEmpresas, modoTabla);
         var $idEmpresaSeleccionada = '';
         var selectorTabla = '#tblEmpresas'
         //console.log(lisEmpresas);
@@ -172,25 +189,22 @@ if (Usuario::esAdmin($identificacion)) {
                         trabajadores
                     } = json;
 
-                    // // opciones de crud en los usuarios, dependiendo del usuario de sesion
-                    // <?php
-                    // echo 'const tUsuario = ' .  $USUARIO->getTipoUsuario() . ';'; //traer tipo de usuario de sesion
-                    // ?>
-                    // let modoTabla = '';
-                    // switch (tUsuario) {
-                    //     case 'A':
-                    //         modoTabla = 'CRUD';
-                    //         break;
-                    //     case 'D':
-                    //         modoTabla = 'CRU';
-                    //         break;
-                    //     case 'T':
-                    //         modoTabla = 'R';
-                    //         break;
-                    //     default:
-                    //         break;
-                    // }
-                    cargarUsuarios('tblUsuarios', trabajadores,'C');
+                    //  opciones de crud, dependiendo del usuario de sesion
+                    let modoTabla = '';
+                    switch (tUsuario) {
+                        case 'A':
+                            modoTabla = 'CRUD';
+                            break;
+                        case 'D':
+                            modoTabla = 'CRU';
+                            break;
+                        case 'T':
+                            modoTabla = 'R';
+                            break;
+                        default:
+                            break;
+                    }
+                    cargarUsuarios('tblUsuarios', trabajadores, modoTabla);
                 });
             }
             // }
