@@ -2,18 +2,18 @@
 
 class TrabEmpresa {
 
-    protected $identificacion;
-    public $nombre; //nombre real del usuario
-    public $apellido;
-    public $tipoUsuario;
-    public $clave;
-    public $nombreUsuario; //nombre que se usa para identificar al usuario y darle ingreso al sistema, por defecto N.identificacion
+    public $id;
+    public $identificacion;
+    public $nombres; //nombre real del usuario
+    public $apellidos;
+    public $tipo_usuario;
+    public $clave_hash;
     public $correo;
     public $telefono;
-    public $tipoIdentificacion;
-    public $foto;
+    public $tipo_identificacion;
+    public $nombre_foto;
     public $direccion;
-    public $nitEmpresa;
+    public $id_empresa;
 
     //constructor con array
     public function __construct($campo, $valor) {
@@ -23,7 +23,7 @@ class TrabEmpresa {
                                 FROM    usuarios
                                 WHERE $campo = $valor;";
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
-                print_r($campo);
+                // print_r($campo);
             }
             //datos usuario
             $this->id = $campo['id'];
@@ -36,10 +36,10 @@ class TrabEmpresa {
             $this->direccion = $campo['direccion'];
             $this->telefono = $campo['telefono'];
             $this->tipo_usuario = $campo['tipo_usuario'];
+            $this->nombre_foto = $campo['nombre_foto'];
             $this->id_empresa = $campo['id_empresa'];
         }
     }
-
 }
 
 class EmpresaAdm {    ////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +71,6 @@ class EmpresaAdm {    //////////////////////////////////////////////////////////
 
     public static function getTrabajadoresEmpresa($nitEmpresa) {
         //la empresa que se selecciona es pasada por parametro
-        print_r($nitEmpresa) ;
         return EmpresaAdm::getDatosJson(null, null, "TrabEmpresa", $nitEmpresa);
     }
 
@@ -81,7 +80,6 @@ class EmpresaAdm {    //////////////////////////////////////////////////////////
             //// Definiendo la lógica de negocio dentro de la clase
             $datTrabEmpresa = EmpresaAdm::getTrabajadoresEmpresa($nitEmpresa);
         }
-        print_r($datTrabEmpresa);
         return [$datTrabEmpresa];
     }
 

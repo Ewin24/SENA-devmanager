@@ -24,8 +24,8 @@ for ($i = 0; $i < count($resultado); $i++) {
         . '", direccion: "' . $empresa->getDireccion()
         . '", correo: "' . $empresa->getCorreo()
         . '", telefono: "' . $empresa->getTelefono()
-        . '", nomRepre: "' . $empresa->getNombreRepresentante()
-        . '", correoRepre: "' . $empresa->getCorreoRepresentante()
+        . '", nombre_representante: "' . $empresa->getNombreRepresentante()
+        . '", correo_representante: "' . $empresa->getCorreoRepresentante()
         . '"},';
 }
 $json_empresa .= ']';
@@ -163,22 +163,17 @@ if (Usuario::esAdmin($identificacion)) {
 
             if (data.id != $idEmpresaSeleccionada) {
                 $('tblUsuarios').DataTable().clear().draw();
-
                 $idEmpresaSeleccionada = data.id;
-                console.log($idEmpresaSeleccionada);
+                // console.log($idEmpresaSeleccionada);
 
                 // peticion 
-                fetch('http://localhost/SENA-devmanager/api/EmpresaControlador.php?nit=' + $idEmpresaSeleccionada, {
+                fetch('http://localhost/SENA-devmanager/api/EmpresaControlador.php?id=' + $idEmpresaSeleccionada, {
                     method: 'GET',
                 }).then((resp) => {
                     return resp.json();
                 }).then((json) => {
-                    const {
-                        trabajadores
-                    } = json;
-                    console.log(trabajadores);
+                    const { trabajadores } = json;
                     cargarUsuarios('tblUsuarios', trabajadores);
-
                 });
             }
             // }
@@ -188,6 +183,5 @@ if (Usuario::esAdmin($identificacion)) {
         $('#addRowtblEmpresa').click(function() {
             $('#tblUsuarios').DataTable().clear().draw();
         });
-
     });
 </script>

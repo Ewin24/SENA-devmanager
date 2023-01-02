@@ -19,8 +19,8 @@ function cargarEmpresas(nombreTabla, arreglo) {
         {   title: 'Direccion', data: 'direccion', visible: true},
         {   title: 'Correo', data: 'correo', visible: true},
         {   title: 'Telefono', data: 'telefono', visible: true},
-        {   title: 'Nombre Representante', data: 'nomRepre', visible: true},
-        {   title: 'Correo Representante', data: 'correoRepre', visible: true},
+        {   title: 'Nombre Representante', data: 'nombre_representante', visible: true},
+        {   title: 'Correo Representante', data: 'correo_representante', visible: true},
     ];
 
     // configuración de carga inicial
@@ -29,7 +29,7 @@ function cargarEmpresas(nombreTabla, arreglo) {
     $('#botonesGuardarCambios').attr("disabled", "disabled");
 
     var modoTabla = 'CRUD'; // definir que acciones está disponibles para la tabla
-    cargarTablaGenerica(nombreTabla, arreglo, colsEmpresas, modoTabla, ddl_estado_ops, true);
+    cargarTablaGenerica(nombreTabla, arreglo, colsEmpresas, modoTabla, ddl_estado_ops);
     // getProyectoSeleccionado(nombreTabla);
 }
 
@@ -67,44 +67,22 @@ function cargarUsuarios(nombreTabla, arreglo) {
         },
         visible: true,
       },
-      { title: "Id", data: "id", visible: true },
+      { title: "Id", data: "id", visible: false },
       { title: "Identificacion", data: "identificacion", visible: true },
-      { title: "Nombre", data: "nombres", visible: true },
-      { title: "Apellido", data: "apellidos", visible: true },
-      { title: "Tipo de Usuario", data: "tipoUsuario", visible: true },
-      { title: "Nombre de Usuario", data: "nombreUsuario", visible: true },
-      { title: "Correo", data: "correo", visible: true },
       {
-        title: "Tipo de Identificacion",
-        data: "tipoIdentificacion",
+        title: "Tipo Ident.",
+        data: "tipo_identificacion",
         className: "ddl",
-        //     render: function (data, type, row) {
-        //         var $select = $('<select class="select-basic" disabled="disabled" ></select>',
-        //         {
-        //             id: row.id,
-        //             value: data
-        //         });
-        //     $.each(ddl_estado_ops, function (k, v) {
-        //         // if (1 == 1) {   //changed this, not sure why the original code has it
-        //         var $option = $("<option></option>",
-        //         {
-        //             text: v.key,
-        //             value: v.value
-        //         });
-        //         //if selected_id = id then this is the selected value
-        //         if (row.estado == v.value) {  //use == instead of ===
-        //             $option.attr("selected", "selected");
-        //         }
-        //         $select.append($option);
-        //         // }
-        //     });
-        //     return $select.prop("outerHTML");
-        //   }
       },
-      { title: "Foto", data: "foto", visible: true },
+      { title: "Nombres", data: "nombres", visible: true },
+      { title: "Apellidos", data: "apellidos", visible: true },
+      { title: "Correo", data: "correo", visible: true },
+      { title: "Clave", data: "clave_hash", visible: false },
+      { title: "Dirección", data: "direccion", visible: true },
+      { title: "Foto", data: "nombre_foto", visible: true },
       { title: "Telefono", data: "telefono", visible: true },
-      { title: "Direccion", data: "direccion", visible: true },
-      { title: "Empresa", data: "nitEmpresa", visible: true },
+      { title: "Tipo de Usuario", data: "tipo_usuario", visible: true },
+      { title: "nitEmpresa", data: "id_empresa", visible: false },
     ];
 
     console.log("Trab:", arreglo);

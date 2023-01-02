@@ -3,10 +3,8 @@
 require_once '../logica/clasesGenericas/ConectorBD.php';
 require_once '../logica/clases/EmpresaAdm.php';
 
-//$idProySeleccionado = 'f660bbbf-dd1a-4eab-9866-dba8092c94c5';
-
-[$t1] = EmpresaAdm::cargarTablasHijas($_GET["nit"]); //se manda por protocolo
-
+[$t1] = EmpresaAdm::cargarTablasHijas($_GET["id"]); //se manda por protocolo
+// print_r($t1);
 $response = array(
     "trabajadores" => $t1
 );

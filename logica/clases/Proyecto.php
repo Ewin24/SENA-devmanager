@@ -233,26 +233,26 @@ class Proyecto
     }
 
 
-    public static function getPerfilesProyRequeridos($idProyectoSeleccionado){
+    // public static function getPerfilesProyRequeridos($idProyectoSeleccionado){
         
-    }
+    // }
 
-    public static function getPerfilesProyDisponibles(){
+    // public static function getPerfilesProyDisponibles(){
         
-    }
+    // }
 
-    public static function getTrabajadoresAsignados($idProyectoSeleccionado){
+    // public static function getTrabajadoresAsignados($idProyectoSeleccionado){
 
-        $filtroProyDisponibles = "id_proyecto = $idProyectoSeleccionado AND estado = 'A'";
-        // Nueva forma de obtener datos en json
-        return Proyecto::getListaEnJson($filtroProyDisponibles, null);
-    }
+    //     $filtroProyDisponibles = "id_proyecto = $idProyectoSeleccionado AND estado = 'A'";
+    //     // Nueva forma de obtener datos en json
+    //     return Proyecto::getListaEnJson($filtroProyDisponibles, null);
+    // }
 
-    public static function getTrabajadoresDisponibles($idProyectoSeleccionado)
-    {
-        $filtroRHDisponible = "id_proyecto = $idProyectoSeleccionado AND estado <> 'A'";
-        $ordenRHDisponible  = "estado = 'E' desc";
-        // Nueva forma de obtener datos en json
-        return Proyecto::getListaEnJson($filtroRHDisponible, $ordenRHDisponible);        
-    }
+    // public static function getTrabajadoresDisponibles($idProyectoSeleccionado)
+    // {
+    //     $filtroRHDisponible = "id_proyecto = $idProyectoSeleccionado AND estado <> 'A'";
+    //     $ordenRHDisponible  = "estado = 'E' desc";
+    //     // Nueva forma de obtener datos en json
+    //     return Proyecto::getListaEnJson($filtroRHDisponible, $ordenRHDisponible);        
+    // }
 }
