@@ -35,7 +35,7 @@ $json_empresa .= ']';
 //EmpresaAdm::cargarTablasHijas($idEmpresaSeleccionada);
 ?>
 
-<h3 class="text-center">GESTION DE USUARIOS</h3>
+<h3 class="text-center">ADMINISTRACION</h3>
 <?php
 if (Usuario::esAdmin($identificacion)) {
     // deja manipular usuarios si el user de sesion es ADMIN 
