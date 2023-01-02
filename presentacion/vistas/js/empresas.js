@@ -1,7 +1,7 @@
 import { cargarTablaGenerica } from "../../../librerias/tablaGenerica.js";
 
 
-function cargarEmpresas(nombreTabla, arreglo) {
+function cargarEmpresas(nombreTabla, arreglo,modeloTabla) {
 
     var dataUrl = 'principal.php?CONTENIDO=presentacion/configuracion/empresa/empresaCRUD.php&accion=Modificar&idEstudio=';//no existe el crud de empresas
     var ddl_estado_ops = [
@@ -49,7 +49,7 @@ function getEmpresaSeleccionada(nombreTabla){
     });  
 }
 
-function cargarUsuarios(nombreTabla, arreglo) {
+function cargarUsuarios(nombreTabla, arreglo,modeloTabla) {
     var dataUrl =
       "principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=";
     var ddl_estado_ops = [
@@ -86,7 +86,7 @@ function cargarUsuarios(nombreTabla, arreglo) {
     ];
 
     console.log("Trab:", arreglo);
-    cargarTablaGenerica(nombreTabla, arreglo, colsTrabajadores);
+    cargarTablaGenerica(nombreTabla, arreglo, colsTrabajadores,modeloTabla);
 
     // if (idProyecto == null || idProyecto == '')
     // {
