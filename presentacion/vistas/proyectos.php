@@ -232,7 +232,10 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
     //genera_tabla(arreglo);    
 
     $(document).ready(function() {
-        cargarProyectos('tblProyectos', lisProyectos);
+
+        // TODO: Ajustar según permisos del usuario
+        var modoTabla = 'RUD'
+        cargarProyectos('tblProyectos', lisProyectos, modoTabla);
         var IdProySeleccionado = '';
         var selectorTabla = '#tblProyectos'
 
@@ -265,12 +268,17 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
                         dTrabDisp
                     } = json;
 
-                    cargarHabilidades('tblHab_Requeridas', dHabReq);
-                    cargarHabilidades('tblHab_Disponibles', dHabDisp);
-                    cargarTrabajadores('tblContratados', dTrabReq);
-                    cargarTrabajadores('tblCandidatos', dTrabDisp);
-                });
-            }
+
+                        // TODO: Ajustar según permisos del usuario
+                        var modoTabla = 'RUD'
+
+                        cargarHabilidades('tblHab_Requeridas', dHabReq, modoTabla);
+                        cargarHabilidades('tblHab_Disponibles', dHabDisp, modoTabla);
+                        cargarTrabajadores('tblContratados', dTrabReq, modoTabla);
+                        cargarTrabajadores('tblCandidatos', dTrabDisp, modoTabla);
+                    });
+                }
+
             // }
         });
 

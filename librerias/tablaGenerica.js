@@ -4,14 +4,14 @@ const claseBotonEliminarRow = 'bi-trash-fill';
 const claseBotonConfirmarRow = 'bi-check-circle';
 const claseBotonCancelarRow = 'bi-x-circle';
 
-const ultimaColumna = "<td><div><i class='bi "+claseBotonEditarRow +"' aria-hidden='true'></i><i class='bi "+claseBotonEliminarRow +"' aria-hidden='true'></i><div></td>";  
+const ultimaColumna = "<td><div><button id='edit_row' class='bi "+claseBotonEditarRow +"' aria-hidden='true'></button><button id='delete_row' class='bi "+claseBotonEliminarRow +"' aria-hidden='true'></button><div></td>";  
 
 var existenCambiosPendientes = false;
 var insertandoNuevoRegistro = false;
 var dataTable = null;
 var dataUrl = null;
 
-function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado_ops = [], campo_desc = false)
+function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', ddl_estado_ops = [], campo_desc = false)
 {
     
     var selectorTabla = '#'+nombreTabla
@@ -34,7 +34,7 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
             selector: 'tr'
         },
         destroy: true,
-        select:{style:'single'},
+        select:{ style:'single' }, //toggleable: false},
         // fnInitComplete: function(oSettings, json) {
         //         // Seleccionar primera fila automáticamente;
         //         $(selectorTabla+' tbody tr:eq(0)').click();
@@ -109,7 +109,6 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
     }
 
     function desbloquearAccionesPantalla(){
-
         var clasesControlesDesbloquear = [
             '.addRow', 
             '.'+claseBotonConfirmarRow, 
@@ -164,7 +163,6 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
         
     //     if ($(this).hasClass('selected')) {
     //         $(this).removeClass('selected');
-
     //         if ( $( selectorCtrlDescripcion ).length ) {
     //             if ( existenCambiosPendientes) {
     //                 $( selectorCtrlDescripcion ).removeAttr("disabled");
@@ -175,7 +173,7 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
     //         else{
     //             $( selectorCtrlDescripcion ).hide();
     //         }
-    //     } 
+    //    } 
     //     else {
     //         // dataTable.$('tr.selected').removeClass('selected');
     //         $(this).addClass('selected');
@@ -196,20 +194,58 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
     //     }
     // });
 
-    // eliminar
-    $(selectorTabla).on('mousedown', 'td .bi.'+`${claseBotonEliminarRow}`, function(e) {
-        $(selectorTabla).DataTable().row($(this).closest("tr")).remove().draw();
-    });
+    
     // editar
     $(selectorTabla).on('mousedown.edit', 'i.bi.'+`${claseBotonEditarRow}`, function(e) {
         enableRowEdit($(this));
         existenCambiosPendientes = true;
-        e.stopPropagation();
+        $(selectorTabla).DataTable().row($(this)).select().draw();
     });
+
+    // TODO: metodo para bloquear botones cuando edición esté activa
+    // $(selectorTabla+' tbody').on('click', 'tr', function () {
+
+    //     // https://datatables.net/forums/discussion/25833/is-there-any-way-to-programmatically-select-rows
+    //     var tabla = $(selectorTabla).DataTable();
+    //     tabla.rows().indexes().each(
+    //         function( idx ){
+    //             var $node = tabla.row( idx ).node();
+    //             if ( tabla.row( idx ).node().hasClass('selected')){
+    //                 oTT.fnSelect( $('#'+table+' tbody tr')[idx] );
+    //             }
+    //             else
+    //             {
+    //                 tabla.row( idx ).node().addClass('ignoreme');
+    //             }
+    //             // if ( tabla.row( idx ).data().dept === dept ){
+    //             //     oTT.fnSelect( $('#'+table+' tbody tr')[idx] );
+    //             // }
+    //         }
+    //     );
+
+    //     // https://www.grepper.com/tpc/datatables+get+all+rows
+    //     $(selectorTabla).DataTable().rows().map((rowId) => {
+    //         // each row is an array where each column is an element in the array
+    //         // as a string
+    //         var row = $(selectorTabla).DataTable().rows(rowId);
+    //         if(!row.hasClass('selected')){
+    //             console.log(index);
+    //         }
+    //         else
+    //         {
+    //             $(selectorTabla).DataTable().row(rowId).addClass('ignoreme');
+    //         }
+    //         var d = this.data();
+    //     });
+    // });
 
     // boton confirmar
     $(selectorTabla).on('mousedown.save', "i.bi."+claseBotonConfirmarRow, function(e) {
         updateRow($(this), true); // Pass save button to function.
+    });
+    // eliminar
+    $(selectorTabla).on('mousedown', 'td .bi.'+`${claseBotonEliminarRow}`, function(e) {
+        $(selectorTabla).DataTable().row($(this).closest("tr")).remove().draw();
     });
 
     $(selectorTabla).on('mousedown', 'input', function(e) {
@@ -390,12 +426,33 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modo='CRUD', ddl_estado
         $cancelButton.show();
     }
 
-    function activarModoCRUD(modoelegido){
-        if(modoelegido.toUpperCase().contains('C')){
-            
+    function activarModoCRUD(modoelegido, nombreTabla){
+        var probar = modoelegido.toUpperCase();
+        var selectorBtnCrear =  '#addRow'+nombreTabla;
+        var test = probar.indexOf('C');
+        if( probar.indexOf('C') < 0 ){
+            var btnCrear = $( selectorBtnCrear )
+            btnCrear.hide();
+        }
+        if( probar.indexOf('U') < 0 ){
+            $( '#'+nombreTabla+' #edit_row' ).hide();
+            // botn.attr("disabled", "disabled"); //.remove();
+        }
+        if( probar.indexOf('D') < 0 ){
+            $( '#'+nombreTabla+' #delete_row' ).hide();
         }
     }
+    
+    activarModoCRUD(modoTabla, nombreTabla);
 }
+
+// https://datatables.net/reference/event/user-select
+// // Disparado en el evento de seleccion de una fila
+// $( '#'+nombreTabla ).DataTable().on( 'user-select', function ( e, dt, type, cell, originalEvent ) {
+//     if ( !existenCambiosPendientes && originalEvent.target.nodeName.toLowerCase() === 'div' ) {
+//         e.preventDefault();
+//     }
+// } );
 
 // // eventos de selección de fila
 // function getIdRegistroSeleccionado(idTabla)
