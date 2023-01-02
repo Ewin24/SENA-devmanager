@@ -2,12 +2,11 @@
 
 class TrabEmpresa {
 
-    protected $identificacion;
+    public $identificacion;
     public $nombre; //nombre real del usuario
     public $apellido;
     public $tipoUsuario;
     public $clave;
-    //public $nombreUsuario; //nombre que se usa para identificar al usuario y darle ingreso al sistema, por defecto N.identificacion
     public $correo;
     public $telefono;
     public $tipoIdentificacion;
@@ -28,18 +27,17 @@ class TrabEmpresa {
             //datos usuario
             $this->id = $campo['id'];
             $this->identificacion = $campo['identificacion'];
-            $this->tipo_identificacion = $campo['tipo_identificacion'];
+            $this->tipoIdentificacion = $campo['tipo_identificacion'];
             $this->nombres = $campo['nombres'];
             $this->apellidos = $campo['apellidos'];
             $this->correo = $campo['correo'];
-            $this->clave_hash = $campo['clave_hash'];
+            $this->clave = $campo['clave_hash'];
             $this->direccion = $campo['direccion'];
             $this->telefono = $campo['telefono'];
-            $this->tipo_usuario = $campo['tipo_usuario'];
-            $this->id_empresa = $campo['id_empresa'];
+            $this->tipoUsuario = $campo['tipo_usuario'];
+            $this->nitEmpresa = $campo['id_empresa'];
         }
     }
-
 }
 
 class EmpresaAdm {    ////////////////////////////////////////////////////////////////////////////////////
@@ -65,23 +63,20 @@ class EmpresaAdm {    //////////////////////////////////////////////////////////
 
             default:
         }
-
         return $datos;
     }
 
     public static function getTrabajadoresEmpresa($nitEmpresa) {
         //la empresa que se selecciona es pasada por parametro
-        print_r($nitEmpresa) ;
         return EmpresaAdm::getDatosJson(null, null, "TrabEmpresa", $nitEmpresa);
     }
 
     public static function cargarTablasHijas($nitEmpresa) {
 
         if ($nitEmpresa != null || $nitEmpresa != '') {
-            //// Definiendo la lógica de negocio dentro de la clase
+            // Definiendo la lógica de negocio dentro de la clase
             $datTrabEmpresa = EmpresaAdm::getTrabajadoresEmpresa($nitEmpresa);
         }
-        print_r($datTrabEmpresa);
         return [$datTrabEmpresa];
     }
 

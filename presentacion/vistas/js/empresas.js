@@ -1,7 +1,7 @@
 import { cargarTablaGenerica } from "../../../librerias/tablaGenerica.js";
 
 
-function cargarEmpresas(nombreTabla, arreglo,modeloTabla) {
+function cargarEmpresas(nombreTabla, arreglo,modoTabla) {
 
     var dataUrl = 'principal.php?CONTENIDO=presentacion/configuracion/empresa/empresaCRUD.php&accion=Modificar&idEstudio=';//no existe el crud de empresas
     var ddl_estado_ops = [
@@ -28,7 +28,6 @@ function cargarEmpresas(nombreTabla, arreglo,modeloTabla) {
     $('#botonesGuardarCambios').hide();
     $('#botonesGuardarCambios').attr("disabled", "disabled");
 
-    var modoTabla = 'CRUD'; // definir que acciones está disponibles para la tabla
     cargarTablaGenerica(nombreTabla, arreglo, colsEmpresas, modoTabla, ddl_estado_ops);
     // getProyectoSeleccionado(nombreTabla);
 }
@@ -49,7 +48,7 @@ function getEmpresaSeleccionada(nombreTabla){
     });  
 }
 
-function cargarUsuarios(nombreTabla, arreglo,modeloTabla) {
+function cargarUsuarios(nombreTabla, arreglo,modoTabla) {
     var dataUrl =
       "principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=";
     var ddl_estado_ops = [
@@ -71,22 +70,22 @@ function cargarUsuarios(nombreTabla, arreglo,modeloTabla) {
       { title: "Identificacion", data: "identificacion", visible: true },
       {
         title: "Tipo Ident.",
-        data: "tipo_identificacion",
+        data: "tipoIdentificacion",
         className: "ddl",
       },
       { title: "Nombres", data: "nombres", visible: true },
       { title: "Apellidos", data: "apellidos", visible: true },
       { title: "Correo", data: "correo", visible: true },
-      { title: "Clave", data: "clave_hash", visible: false },
+      { title: "Clave", data: "clave", visible: false },
       { title: "Dirección", data: "direccion", visible: true },
-      { title: "Foto", data: "nombre_foto", visible: true },
+      { title: "Foto", data: "foto", visible: true },
       { title: "Telefono", data: "telefono", visible: true },
-      { title: "Tipo de Usuario", data: "tipo_usuario", visible: true },
-      { title: "nitEmpresa", data: "id_empresa", visible: false },
+      { title: "Tipo de Usuario", data: "tipoUsuario", visible: true },
+      { title: "nit de Empresa", data: "nitEmpresa", visible: false },
     ];
 
     console.log("Trab:", arreglo);
-    cargarTablaGenerica(nombreTabla, arreglo, colsTrabajadores,modeloTabla);
+    cargarTablaGenerica(nombreTabla, arreglo, colsTrabajadores,modoTabla);
 
     // if (idProyecto == null || idProyecto == '')
     // {

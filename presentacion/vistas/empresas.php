@@ -4,9 +4,6 @@ if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Ya h
 else {
     $USUARIO = unserialize($_SESSION['usuario']);
     $identificacion = $USUARIO->getIdentificacion();
-    echo $USUARIO->getApellido();
-
-    //echo $identificacion;
 }
 
 //codigo en caso de que se generen mensajes desde la adicion, eliminacion o edicion de un usuario
@@ -147,7 +144,25 @@ if (Usuario::esAdmin($identificacion)) {
     }
 
     $(document).ready(function() {
-        cargarEmpresas('tblEmpresas', lisEmpresas); //nombreTabla, arreglo, colsEmpresas, modoTabla, ddl_estado_ops
+        //  opciones de crud, dependiendo del usuario de sesion
+        let modoTabla = ''
+        <?php
+        echo "const tUsuario = '{$USUARIO->getTipoUsuario()}' ;"; //traer tipo de usuario de sesion
+        ?>
+        switch (tUsuario) {
+            case 'A':
+                modoTabla = 'CRUD';
+                break;
+            case 'D':
+                modoTabla = 'R';
+                break;
+            case 'T':
+                modoTabla = 'R';
+                break;
+            default:
+                break;
+        }
+        cargarEmpresas('tblEmpresas', lisEmpresas, modoTabla);
         var $idEmpresaSeleccionada = '';
         var selectorTabla = '#tblEmpresas'
         //console.log(lisEmpresas);
@@ -165,7 +180,7 @@ if (Usuario::esAdmin($identificacion)) {
                 // console.log($idEmpresaSeleccionada);
 
                 // peticion 
-                fetch('http://localhost/SENA-devmanager/api/EmpresaControlador.php?id=' + $idEmpresaSeleccionada, {
+                fetch('http://localhost/SENA-devmanager/api/EmpresaControlador.php?nit=' + $idEmpresaSeleccionada, {
                     method: 'GET',
                 }).then((resp) => {
                     return resp.json();
@@ -174,11 +189,22 @@ if (Usuario::esAdmin($identificacion)) {
                         trabajadores
                     } = json;
 
-                    //opciones de crud en los usuarios, dependiendo del usuario de sesion
-                    <?php
-                        echo " 'const tUsuario = ' .  $USUARIO->getTipoUsuario() . ';' " ;
-                    ?>
-                    //cargarUsuarios('tblUsuarios', trabajadores, 'R');
+                    //  opciones de crud, dependiendo del usuario de sesion
+                    let modoTabla = '';
+                    switch (tUsuario) {
+                        case 'A':
+                            modoTabla = 'CRUD';
+                            break;
+                        case 'D':
+                            modoTabla = 'CRU';
+                            break;
+                        case 'T':
+                            modoTabla = 'R';
+                            break;
+                        default:
+                            break;
+                    }
+                    cargarUsuarios('tblUsuarios', trabajadores, modoTabla);
                 });
             }
             // }

@@ -163,12 +163,6 @@ class Usuario
         return $tipoUsuario;
     }
 
-    // public function __toString()
-    // {
-    //     $cadena = "identificacion: $this->identificacion <br>nombre : $this->nombre  <br>apellido: $this->apellido";
-    //     return $cadena;
-    // }
-
     //metodo para registrar un usuario en la base de datos
     public function guardar()
     {
