@@ -6,8 +6,10 @@ require_once 'logica/clases/Usuario.php';
 require_once 'logica/clases/TipoUsuario.php';
 require_once 'logica/clases/Proyecto.php';
 require_once 'logica/clases/Habilidad.php';
+require_once 'logica/clases/Empresa.php';
 require_once 'logica/clases/Estudio.php';
 require_once 'logica/clases/Perfil.php';
+require_once 'logica/clases/EmpresaAdm.php';
 
 
 date_default_timezone_set('America/Bogota'); //establecer zona horaria de colombia

@@ -1,6 +1,6 @@
 <?php
 
-class TrabEmpresa extends Usuario {
+class TrabEmpresa {
 
     protected $identificacion;
     public $nombre; //nombre real del usuario
@@ -52,7 +52,7 @@ class EmpresaAdm {    //////////////////////////////////////////////////////////
         switch ($Opcion) {
 
             case "TrabEmpresa":
-                $filtroTrabajadores = "id_empresa = '$idProyecto'"; //lo que en el usuario se llama id empresa, es en realidad el nit, hay que modificar el diseño logico
+                $filtroTrabajadores = "id_empresa = '$nitEmpresa'"; //lo que en el usuario se llama id empresa, es en realidad el nit, hay que modificar el diseï¿½o logico
                 $cadenaSQL = "  SELECT 	id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa
                                 FROM 	usuarios
                                 WHERE 	$filtroTrabajadores $orden";
@@ -70,14 +70,14 @@ class EmpresaAdm {    //////////////////////////////////////////////////////////
 
     public static function getTrabajadoresEmpresa($nitEmpresa) {
         //la empresa que se selecciona es pasada por parametro
-        return ProyectoAdm::getDatosJson(null, null, "TrabEmpresa", $nitEmpresa);
+        return EmpresaAdm::getDatosJson(null, null, "TrabEmpresa", $nitEmpresa);
     }
 
     public static function cargarTablasHijas($nitEmpresa) {
 
         if ($nitEmpresa != null || $nitEmpresa != '') {
             //// Definiendo la lÃ³gica de negocio dentro de la clase
-            $datTrabEmpresa = ProyectoAdm::getTrabajadoresEmpresa($nitEmpresa);
+            $datTrabEmpresa = EmpresaAdm::getTrabajadoresEmpresa($nitEmpresa);
         }
         return [$datTrabEmpresa];
     }

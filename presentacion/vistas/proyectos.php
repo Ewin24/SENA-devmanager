@@ -132,39 +132,39 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
     <div class="row">
         <div class="col-lg-6">
             <h5 class="col text-center">Requeridas</h1>
-            <table id="tblHab_Requeridas" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-            <table id="new-Hab_Requerida" style="display:none" class="col-auto">
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td>__id__</td>
-                        <td>__Proyecto__</td>
-                        <td>__Habilidad__</td>
-                        <td>
-                            <i class='bi '+`${claseBotonEditarRow}` aria-hidden="true"></i>
-                            <i class='bi '+`${claseBotonEliminarRow}` aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                <table id="tblHab_Requeridas" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+                <table id="new-Hab_Requerida" style="display:none" class="col-auto">
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td>__id__</td>
+                            <td>__Proyecto__</td>
+                            <td>__Habilidad__</td>
+                            <td>
+                                <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
+                                <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
         </div>
         <div class="col-lg-6">
             <h5 class="text-center">Disponibles</h1>
-            <table id="tblHab_Disponibles" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-            <table id="new-Hab_Disponible" style="display:none" class="col-auto">
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td>__id__</td>
-                        <td>__Proyecto__</td>
-                        <td>__Habilidad__</td>
-                        <td>
-                            <i class='bi '+`${claseBotonEditarRow}` aria-hidden="true"></i>
-                            <i class='bi '+`${claseBotonEliminarRow}` aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                <table id="tblHab_Disponibles" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+                <table id="new-Hab_Disponible" style="display:none" class="col-auto">
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td>__id__</td>
+                            <td>__Proyecto__</td>
+                            <td>__Habilidad__</td>
+                            <td>
+                                <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
+                                <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
         </div>
     </div>
 </fieldset>
@@ -184,8 +184,8 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
                         <td>__fecha_solicitud__</td>
                         <td>__estado__</td>
                         <td>
-                            <i class='bi '+`${claseBotonEditarRow}` aria-hidden="true"></i>
-                            <i class='bi '+`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                            <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
+                            <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
                         </td>
                     </tr>
                 </tbody>
@@ -203,8 +203,8 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
                         <td>__fecha_solicitud__</td>
                         <td>__estado__</td>
                         <td>
-                            <i class='bi '+`${claseBotonEditarRow}` aria-hidden="true"></i>
-                            <i class='bi '+`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                            <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
+                            <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
                         </td>
                     </tr>
                 </tbody>
@@ -222,12 +222,11 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
         cargarTrabajadores
     } from './presentacion/vistas/js/proyectos.js'
 
-
     let lisProyectos = [];
     <?php echo 'const dProy = ' . $datosProyectos . ';'; ?>
-    
+
     // console.log(dProy);
-    if (lisProyectos.length == 0 || lisProyectos == null){
+    if (lisProyectos.length == 0 || lisProyectos == null) {
         lisProyectos = [...dProy];
     }
     //genera_tabla(arreglo);    
@@ -237,40 +236,45 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
         var IdProySeleccionado = '';
         var selectorTabla = '#tblProyectos'
 
-        $(selectorTabla+' tbody').on('click', 'tr', function () {
+        $(selectorTabla + ' tbody').on('click', 'tr', function() {
             // if($(this).hasClass('selected')) {
-                // var celda = dataTable.cell(this);
-                var rowindex = $(this).closest("tr").index();
-                console.log(selectorTabla, rowindex);
-                var data = $(selectorTabla).DataTable().row( rowindex ).data();
-                
-                if(data.id != IdProySeleccionado){
-                    $('tblHab_Requeridas').DataTable().clear().draw();
-                    $('tblHab_Disponibles').DataTable().clear().draw();
-                    $('tblContratados').DataTable().clear().draw();
-                    $('tblCandidatos').DataTable().clear().draw();
+            // var celda = dataTable.cell(this);
+            var rowindex = $(this).closest("tr").index();
+            console.log(selectorTabla, rowindex);
+            var data = $(selectorTabla).DataTable().row(rowindex).data();
 
-                    IdProySeleccionado = data.id;
-                    console.log(IdProySeleccionado);
+            if (data.id != IdProySeleccionado) {
+                $('tblHab_Requeridas').DataTable().clear().draw();
+                $('tblHab_Disponibles').DataTable().clear().draw();
+                $('tblContratados').DataTable().clear().draw();
+                $('tblCandidatos').DataTable().clear().draw();
 
-                     // peticion 
-                    fetch('http://localhost/SENA-devmanager/api/ProyectoControlador.php?id='+IdProySeleccionado, {
-                        method: 'GET',
-                    }).then((resp)=>{
-                        return resp.json();
-                    }).then((json)=>{
-                        const { dHabReq,dHabDisp,dTrabReq,dTrabDisp } = json;
+                IdProySeleccionado = data.id;
+                console.log(IdProySeleccionado);
 
-                        cargarHabilidades('tblHab_Requeridas', dHabReq);
-                        cargarHabilidades('tblHab_Disponibles', dHabDisp);
-                        cargarTrabajadores('tblContratados', dTrabReq);
-                        cargarTrabajadores('tblCandidatos', dTrabDisp);
-                    });
-                }
+                // peticion 
+                fetch('http://localhost/SENA-devmanager/api/ProyectoControlador.php?id=' + IdProySeleccionado, {
+                    method: 'GET',
+                }).then((resp) => {
+                    return resp.json();
+                }).then((json) => {
+                    const {
+                        dHabReq,
+                        dHabDisp,
+                        dTrabReq,
+                        dTrabDisp
+                    } = json;
+
+                    cargarHabilidades('tblHab_Requeridas', dHabReq);
+                    cargarHabilidades('tblHab_Disponibles', dHabDisp);
+                    cargarTrabajadores('tblContratados', dTrabReq);
+                    cargarTrabajadores('tblCandidatos', dTrabDisp);
+                });
+            }
             // }
-        });  
+        });
 
-        $('#addRowtblProyectos').click(function () {
+        $('#addRowtblProyectos').click(function() {
             $('#tblHab_Requeridas').DataTable().clear().draw();
             $('#tblHab_Disponibles').DataTable().clear().draw();
             $('#tblContratados').DataTable().clear().draw();

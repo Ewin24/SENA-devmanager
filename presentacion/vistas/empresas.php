@@ -18,7 +18,7 @@ $json_empresa = '[';
 $resultado = Empresa::getListaEnObjetos(null, null);
 for ($i = 0; $i < count($resultado); $i++) {
     $empresa = $resultado[$i];
-    $json_usuarios .= '{ id: "' . $empresa->getId()
+    $json_empresa .= '{ id: "' . $empresa->getId()
         . '", nit: "' . $empresa->getNit()
         . '", nombre: "' . $empresa->getNombre()
         . '", direccion: "' . $empresa->getDireccion()
@@ -31,9 +31,11 @@ for ($i = 0; $i < count($resultado); $i++) {
 $json_empresa .= ']';
 
 print_r($json_empresa);
+$idEmpresaSeleccionada = '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec';
+EmpresaAdm::cargarTablasHijas($idEmpresaSeleccionada);
 ?>
 
-<h3 class="text-center">GESTION DE USUSARIOS</h3>
+<h3 class="text-center">GESTION DE USUARIOS</h3>
 <?php
 if (Usuario::esAdmin($identificacion)) {
     // deja manipular usuarios si el user de sesion es ADMIN 
@@ -45,7 +47,7 @@ if (Usuario::esAdmin($identificacion)) {
 <fieldset class="form-group border p-3">
     <div class="container col-auto justify-content-center">
         <div class="row">
-            <legend class="w-auto px-2">Usuarios Registrados</legend>
+            <legend class="w-auto px-2">EMPRESAS REGISTRADAS</legend>
 
             <table id="tblUsuarios" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
             <!-- <div class="col align-self-center">
@@ -91,18 +93,55 @@ if (Usuario::esAdmin($identificacion)) {
 <!-- <script type="text/javascript" src="assets/barraBusqueda.js"></script> -->
 <script type="module">
     import {
+        cargarEmpresas,
         cargarUsuarios
-    } from './presentacion/vistas/js/usuarios.js'
+    } from './presentacion/vistas/js/empresas.js'
 
-    let lisUsuarios = [];
-    <?php echo 'const dProy = ' . $json_usuarios . ';'; ?>
-    console.log(dProy);
-    if (lisUsuarios.length == 0 || lisUsuarios == null) {
-        lisUsuarios = [...dProy];
+    let lisEmpresas = [];
+    <?php echo 'const dEmpr = ' . $json_empresa . ';'; ?>
+
+    // console.log(dProy);
+    if (lisEmpresas.length == 0 || lisEmpresas == null) {
+        lisEmpresas = [...dEmpr];
     }
     //genera_tabla(arreglo);    
 
     $(document).ready(function() {
-        cargarUsuarios('tblUsuarios', lisUsuarios);
+        cargarEmpresas('tblEmpresa', lisEmpresas);
+        var $idEmpresaSeleccionada = '';
+        var selectorTabla = '#tblEmpresa'
+
+        $(selectorTabla + ' tbody').on('click', 'tr', function() {
+            // if($(this).hasClass('selected')) {
+            // var celda = dataTable.cell(this);
+            var rowindex = $(this).closest("tr").index();
+            console.log(selectorTabla, rowindex);
+            var data = $(selectorTabla).DataTable().row(rowindex).data();
+
+            if (data.id != $idEmpresaSeleccionada) {
+                $('tblUsuarios').DataTable().clear().draw();
+
+                $idEmpresaSeleccionada = data.id;
+                console.log($idEmpresaSeleccionada);
+
+                // peticion 
+                fetch('http://localhost/SENA-devmanager/api/EmpresaControlador.php?id=' + $idEmpresaSeleccionada, {
+                    method: 'GET',
+                }).then((resp) => {
+                    return resp.json();
+                }).then((json) => {
+                    const {
+                        trabajadores
+                    } = json;
+                    cargarTrabajadores('tblUsuarios', trabajadores);
+                });
+            }
+            // }
+        });
+
+        $('#addRowtblEmpresa').click(function() {
+            $('#tblUsuarios').DataTable().clear().draw();
+        });
+
     });
 </script>

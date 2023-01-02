@@ -1,9 +1,9 @@
 import { cargarTablaGenerica } from "../../../librerias/tablaGenerica.js";
 
 
-function cargarProyectos(nombreTabla, arreglo) {
+function cargarEmpresas(nombreTabla, arreglo) {
 
-    var dataUrl = 'principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=';
+    var dataUrl = 'principal.php?CONTENIDO=presentacion/configuracion/empresa/empresaCRUD.php&accion=Modificar&idEstudio=';//no existe el crud de empresas
     var ddl_estado_ops = [
     { value : 'X', key : '' },
     { value : 'P', key : 'Pendiente' },
@@ -11,7 +11,7 @@ function cargarProyectos(nombreTabla, arreglo) {
     { value : 'T', key : 'Terminado' }
     ];
 
-    var colsProyectos = [
+    var colsEmpresas = [
         {   data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         {   title: 'id', data: 'id', visible: false },
         {   title: 'Nit', data: 'nit' },
@@ -29,11 +29,11 @@ function cargarProyectos(nombreTabla, arreglo) {
     $('#botonesGuardarCambios').attr("disabled", "disabled");
 
     var modoTabla = 'CRUD'; // definir que acciones está disponibles para la tabla
-    cargarTablaGenerica(nombreTabla, arreglo, colsProyectos, modoTabla, ddl_estado_ops, true);
+    cargarTablaGenerica(nombreTabla, arreglo, colsEmpresas, modoTabla, ddl_estado_ops, true);
     // getProyectoSeleccionado(nombreTabla);
 }
 
-function getProyectoSeleccionado(nombreTabla){
+function getEmpresaSeleccionada(nombreTabla){
     var IdEmpreSeleccionada = '';
     var selectorTabla = '#'+nombreTabla;
     $(selectorTabla+' tbody').on('click', 'tr', function () {
@@ -49,7 +49,7 @@ function getProyectoSeleccionado(nombreTabla){
     });  
 }
 
-function cargarTrabajadores(nombreTabla, arreglo){
+function cargarUsuarios(nombreTabla, arreglo){
     var colsTrabajadores = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         { title: 'id', data: 'id', visible: false },
@@ -83,7 +83,7 @@ function cargarTrabajadores(nombreTabla, arreglo){
     // // }
 }
 
-export { cargarProyectos, cargarHabilidades, cargarTrabajadores }
+export { cargarEmpresas, cargarUsuarios }
 
 // const url = "principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=";
 // const updateField = (_id, data, callback) => {
