@@ -31,6 +31,9 @@ function cargarPerfiles(nombreTabla, arreglo, modoTabla='CRUD') {
     cargarTablaGenerica(nombreTabla, arreglo, colsPerfiles, modoTabla);
 }
 
+function cargarEstudios(nombreTabla, arreglo, modoTabla='CRUD'){}
+
+function cargarHabilidades(nombreTabla, arreglo, modoTabla='CRUD'){}
 // TODO: Crear metodos cargarEstudios, cargarHabilidades
 
 export { cargarPerfiles, cargarEstudios, cargarHabilidades }
