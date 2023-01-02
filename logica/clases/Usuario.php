@@ -283,6 +283,7 @@ class Usuario
 
     public static function esAdmin($identificacion)
     {
+        print_r($identificacion);
         $resultado = Usuario::obtenerTipoUsuario($identificacion);
         if ($resultado[0]['tipo_usuario'] == 'A') { //regresa de la base de datos como arreglo
             return true;
