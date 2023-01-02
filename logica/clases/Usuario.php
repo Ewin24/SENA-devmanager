@@ -3,18 +3,18 @@
 class Usuario
 {
 
-    protected $identificacion;
-    public $nombre; //nombre real del usuario
-    protected $apellido;
-    protected $tipoUsuario;
-    protected $clave;
-    protected $nombreUsuario; //nombre que se usa para identificar al usuario y darle ingreso al sistema, por defecto N.identificacion
-    protected $correo;
-    protected $telefono;
-    protected $tipoIdentificacion;
-    protected $foto;
-    protected $direccion;
-    protected $nitEmpresa;
+    public $identificacion;
+    public $nombres; //nombre real del usuario
+    public $apellidos;
+    public $tipoUsuario;
+    public $clave;
+    //protected $nombreUsuario; //nombre que se usa para identificar al usuario y darle ingreso al sistema, por defecto N.identificacion
+    public $correo;
+    public $telefono;
+    public $tipoIdentificacion;
+    public $foto;
+    public $direccion;
+    public $nitEmpresa;
 
     //constructor con array
     public function __construct($campo, $valor)
@@ -25,7 +25,7 @@ class Usuario
                                 FROM    usuarios
                                 WHERE $campo = $valor;";
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
-                print_r($campo);
+                print_r($campo); 
             }
             //datos usuario
             $this->id = $campo['id'];
@@ -49,12 +49,12 @@ class Usuario
 
     public function getNombre()
     {
-        return $this->nombre;
+        return $this->nombres;
     }
 
     public function getApellido()
     {
-        return $this->apellido;
+        return $this->apellidos;
     }
 
     public function getTipoUsuario()
@@ -65,11 +65,6 @@ class Usuario
     public function getClave()
     {
         return $this->clave;
-    }
-
-    public function getNombreUsuario()
-    {
-        return $this->nombreUsuario;
     }
 
     public function getCorreo()
