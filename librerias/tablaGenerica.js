@@ -133,11 +133,13 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', ddl_e
 
     $(selectorTabla+' tbody').on('click', 'tr', function () {
         if ($(this).hasClass('selected')) {
-            if ( existenCambiosPendientes) {
-                $( selectorCtrlDescripcion ).show();
-            }
-            else{
-                $( selectorCtrlDescripcion ).hide();
+            if ( $( selectorCtrlDescripcion ).length ) {
+                if ( existenCambiosPendientes) {
+                    $( selectorCtrlDescripcion ).show();
+                }
+                else{
+                    $( selectorCtrlDescripcion ).hide();
+                }
             }
         }
         else {
