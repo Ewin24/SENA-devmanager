@@ -26,9 +26,9 @@ for ($i = 0; $i < count($resultado); $i++) {
 }
 $datosProyectos .= ']';
 
-// $idProySeleccionado = getProyectoSeleccionado(nombreTabla);
-$idProySeleccionado = 'f660bbbf-dd1a-4eab-9866-dba8092c94c5';
-ProyectoAdm::cargarTablasHijas($idProySeleccionado);
+// // $idProySeleccionado = getProyectoSeleccionado(nombreTabla);
+// $idProySeleccionado = 'f660bbbf-dd1a-4eab-9866-dba8092c94c5';
+// ProyectoAdm::cargarTablasHijas($idProySeleccionado);
 
 
 switch ($USUARIO->getTipoUsuario()) {
