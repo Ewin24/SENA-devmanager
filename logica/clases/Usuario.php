@@ -163,12 +163,6 @@ class Usuario
         return $tipoUsuario;
     }
 
-    // public function __toString()
-    // {
-    //     $cadena = "identificacion: $this->identificacion <br>nombre : $this->nombres  <br>apellido: $this->apellidos";
-    //     return $cadena;
-    // }
-
     //metodo para registrar un usuario en la base de datos
     public function guardar()
     {
@@ -278,6 +272,7 @@ class Usuario
 
     public static function esAdmin($identificacion)
     {
+        print_r($identificacion);
         $resultado = Usuario::obtenerTipoUsuario($identificacion);
         if ($resultado[0]['tipo_usuario'] == 'A') { //regresa de la base de datos como arreglo
             return true;
