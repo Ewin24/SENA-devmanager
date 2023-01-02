@@ -49,14 +49,62 @@ function getEmpresaSeleccionada(nombreTabla){
     });  
 }
 
-function cargarUsuarios(nombreTabla, arreglo){
+function cargarUsuarios(nombreTabla, arreglo) {
+    var dataUrl =
+      "principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=";
+    var ddl_estado_ops = [
+      { value: "X", key: "" },
+      { value: "P", key: "Pendiente" },
+      { value: "E", key: "Ejecución" },
+      { value: "T", key: "Terminado" },
+    ];
+  
     var colsTrabajadores = [
-        { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
-        { title: 'id', data: 'id', visible: false },
-        { title: 'fecha_solicitud', data: 'fecha_solicitud' },
-        { title: 'estado', data: 'estado' },
-        // { title: 'id_proyecto', data: 'id_proyecto' },
-        { title: 'id_usuario', data: 'id_usuario' }
+      {
+        data: null,
+        render: function () {
+          return "<input type='checkbox'/>";
+        },
+        visible: true,
+      },
+      { title: "Id", data: "id", visible: true },
+      { title: "Identificacion", data: "identificacion", visible: true },
+      { title: "Nombre", data: "nombres", visible: true },
+      { title: "Apellido", data: "apellidos", visible: true },
+      { title: "Tipo de Usuario", data: "tipoUsuario", visible: true },
+      { title: "Nombre de Usuario", data: "nombreUsuario", visible: true },
+      { title: "Correo", data: "correo", visible: true },
+      {
+        title: "Tipo de Identificacion",
+        data: "tipoIdentificacion",
+        className: "ddl",
+        //     render: function (data, type, row) {
+        //         var $select = $('<select class="select-basic" disabled="disabled" ></select>',
+        //         {
+        //             id: row.id,
+        //             value: data
+        //         });
+        //     $.each(ddl_estado_ops, function (k, v) {
+        //         // if (1 == 1) {   //changed this, not sure why the original code has it
+        //         var $option = $("<option></option>",
+        //         {
+        //             text: v.key,
+        //             value: v.value
+        //         });
+        //         //if selected_id = id then this is the selected value
+        //         if (row.estado == v.value) {  //use == instead of ===
+        //             $option.attr("selected", "selected");
+        //         }
+        //         $select.append($option);
+        //         // }
+        //     });
+        //     return $select.prop("outerHTML");
+        //   }
+      },
+      { title: "Foto", data: "foto", visible: true },
+      { title: "Telefono", data: "telefono", visible: true },
+      { title: "Direccion", data: "direccion", visible: true },
+      { title: "Empresa", data: "nitEmpresa", visible: true },
     ];
 
     console.log("Trab:", arreglo);

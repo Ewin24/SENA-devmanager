@@ -30,9 +30,9 @@ for ($i = 0; $i < count($resultado); $i++) {
 }
 $json_empresa .= ']';
 
-print_r($json_empresa);
-$idEmpresaSeleccionada = '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec';
-EmpresaAdm::cargarTablasHijas($idEmpresaSeleccionada);
+//print_r($json_empresa);
+//$idEmpresaSeleccionada = '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec';
+//EmpresaAdm::cargarTablasHijas($idEmpresaSeleccionada);
 ?>
 
 <h3 class="text-center">GESTION DE USUARIOS</h3>
@@ -49,12 +49,55 @@ if (Usuario::esAdmin($identificacion)) {
         <div class="row">
             <legend class="w-auto px-2">EMPRESAS REGISTRADAS</legend>
 
+            <table id="tblEmpresas" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            <!-- <div class="col align-self-center">
+                <textarea id="campoDescripcion" type="text" class="form-control" style="min-width: 100%" rows="5" disabled="disabled"></textarea>
+            </div> -->
+
+            <table id="new-Empresa" style="display:none" class="col-auto">
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>__identificacion__</td>
+                        <td>__nombre__</td>
+                        <td>__apellido__</td>
+                        <td>__tipoUsuario__</td>
+                        <td>__nombre Usuario__</td>
+                        <td>__correo__</td>
+                        <td>__tipo identificacion__</td>
+                        <td>__telefono__</td>
+                        <td>
+                            <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
+                            <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- <br> 
+        <div class="row">
+            <div class="col align-self-start"></div>
+            <div class="col align-self-center"></div>
+            <div id="botonesGuardarCambios" class="col align-self-end" disabled="disabled">
+                <button type="button" id="btn-cancel" class="btn btn-secondary" data-dismiss="modal">Revertir Cambios</button>
+                <button type="button" id="btn-save" class="btn btn-primary" data-dismiss="modal">Guardar Cambios</button>
+            </div>
+        </div> -->
+    </div>
+
+</fieldset>
+
+<fieldset class="form-group border p-3">
+    <div class="container col-auto justify-content-center">
+        <div class="row">
+            <legend class="w-auto px-2">USUARIOS EMPRESA</legend>
+
             <table id="tblUsuarios" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
             <!-- <div class="col align-self-center">
                 <textarea id="campoDescripcion" type="text" class="form-control" style="min-width: 100%" rows="5" disabled="disabled"></textarea>
             </div> -->
 
-            <table id="new-row-template" style="display:none" class="col-auto">
+            <table id="new-Usuario" style="display:none" class="col-auto">
                 <tbody>
                     <tr>
                         <td></td>
@@ -104,12 +147,12 @@ if (Usuario::esAdmin($identificacion)) {
     if (lisEmpresas.length == 0 || lisEmpresas == null) {
         lisEmpresas = [...dEmpr];
     }
-    //genera_tabla(arreglo);    
 
     $(document).ready(function() {
-        cargarEmpresas('tblEmpresa', lisEmpresas);
+        cargarEmpresas('tblEmpresas', lisEmpresas);
         var $idEmpresaSeleccionada = '';
-        var selectorTabla = '#tblEmpresa'
+        var selectorTabla = '#tblEmpresas'
+        //console.log(lisEmpresas);
 
         $(selectorTabla + ' tbody').on('click', 'tr', function() {
             // if($(this).hasClass('selected')) {
@@ -125,7 +168,7 @@ if (Usuario::esAdmin($identificacion)) {
                 console.log($idEmpresaSeleccionada);
 
                 // peticion 
-                fetch('http://localhost/SENA-devmanager/api/EmpresaControlador.php?id=' + $idEmpresaSeleccionada, {
+                fetch('http://localhost/SENA-devmanager/api/EmpresaControlador.php?nit=' + $idEmpresaSeleccionada, {
                     method: 'GET',
                 }).then((resp) => {
                     return resp.json();
@@ -133,12 +176,15 @@ if (Usuario::esAdmin($identificacion)) {
                     const {
                         trabajadores
                     } = json;
-                    cargarTrabajadores('tblUsuarios', trabajadores);
+                    console.log(trabajadores);
+                    cargarUsuarios('tblUsuarios', trabajadores);
+
                 });
             }
             // }
         });
 
+        //limpia tablas hijas cuando se hace addRow
         $('#addRowtblEmpresa').click(function() {
             $('#tblUsuarios').DataTable().clear().draw();
         });

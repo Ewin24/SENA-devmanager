@@ -65,11 +65,13 @@ class EmpresaAdm {    //////////////////////////////////////////////////////////
 
             default:
         }
+
         return $datos;
     }
 
     public static function getTrabajadoresEmpresa($nitEmpresa) {
         //la empresa que se selecciona es pasada por parametro
+        print_r($nitEmpresa) ;
         return EmpresaAdm::getDatosJson(null, null, "TrabEmpresa", $nitEmpresa);
     }
 
@@ -79,6 +81,7 @@ class EmpresaAdm {    //////////////////////////////////////////////////////////
             //// Definiendo la lógica de negocio dentro de la clase
             $datTrabEmpresa = EmpresaAdm::getTrabajadoresEmpresa($nitEmpresa);
         }
+        print_r($datTrabEmpresa);
         return [$datTrabEmpresa];
     }
 
