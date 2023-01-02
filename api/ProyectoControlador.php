@@ -17,4 +17,8 @@ $response = array(
 
 echo json_encode($response);
 
+function acciones($accion){
+    
+}
+
 ?>

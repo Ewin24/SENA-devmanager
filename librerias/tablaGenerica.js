@@ -431,18 +431,16 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', ddl_e
         var selectorBtnCrear =  '#addRow'+nombreTabla;
         var test = probar.indexOf('C');
         if( probar.indexOf('C') < 0 ){
-            var btnCrear = $( selectorBtnCrear )
-            btnCrear.hide();
+            $( selectorBtnCrear ).hide();
         }
         if( probar.indexOf('U') < 0 ){
             $( '#'+nombreTabla+' #edit_row' ).hide();
-            // botn.attr("disabled", "disabled"); //.remove();
         }
         if( probar.indexOf('D') < 0 ){
             $( '#'+nombreTabla+' #delete_row' ).hide();
         }
     }
-    
+
     activarModoCRUD(modoTabla, nombreTabla);
 }
 

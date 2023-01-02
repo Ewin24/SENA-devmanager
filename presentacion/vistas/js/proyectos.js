@@ -91,7 +91,7 @@ function cargarTrabajadores(nombreTabla, arreglo, modoTabla='CRUD'){
     ];
 
     // console.log("Trab:", arreglo);
-    cargarTablaGenerica(nombreTabla, arreglo, colsTrabajadores, modoTabla='CRUD');
+    cargarTablaGenerica(nombreTabla, arreglo, colsTrabajadores, modoTabla);
 
     // if (idProyecto == null || idProyecto == '')
     // {
