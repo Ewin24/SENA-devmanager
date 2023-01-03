@@ -59,6 +59,8 @@ function cargarProyectos(nombreTabla, arreglo, modoTabla='CRUD') {
             format:    'DD-MM-YYYY',
             className: 'datepicker' 
         },
+        {   title: 'id Director', data: 'id_director', visible: false },
+        {   title: 'Correo del Director', data: 'correo_director', visible: true },
     ];
 
     // configuración de carga inicial
