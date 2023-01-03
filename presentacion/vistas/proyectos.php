@@ -12,49 +12,53 @@ $identificacion = $USUARIO->getIdentificacion();
 
 $datosProyectos = '[';
 
-$resultado = Proyecto::getListaEnObjetos(null, null);
-for ($i = 0; $i < count($resultado); $i++) {
-    $proyecto = $resultado[$i];
-    $datosProyectos .=
-        '{ id: "' . $proyecto->getIdProyecto()
-        . '", nombre: "' . $proyecto->getNombre()
-        . '", descripcion: "' . $proyecto->getDescripcion()
-        . '", estado: "' . $proyecto->getEstado()
-        . '", fecha_inicio: "' . $proyecto->getFechaInicio()
-        . '", fecha_fin: "' . $proyecto->getFechaFinalizacion()
-        . '"},';
-}
-$datosProyectos .= ']';
+// $resultado = Proyecto::getListaEnObjetos(null, null);
+// for ($i = 0; $i < count($resultado); $i++) {
+//     $proyecto = $resultado[$i];
+//     $datosProyectos .=
+//         '{ id: "' . $proyecto->getIdProyecto()
+//         . '", nombre: "' . $proyecto->getNombre()
+//         . '", descripcion: "' . $proyecto->getDescripcion()
+//         . '", estado: "' . $proyecto->getEstado()
+//         . '", fecha_inicio: "' . $proyecto->getFechaInicio()
+//         . '", fecha_fin: "' . $proyecto->getFechaFinalizacion()
+//         . '"},';
+// }
+// $datosProyectos .= ']';
 
 // // $idProySeleccionado = getProyectoSeleccionado(nombreTabla);
 // $idProySeleccionado = 'f660bbbf-dd1a-4eab-9866-dba8092c94c5';
 // ProyectoAdm::cargarTablasHijas($idProySeleccionado);
 
 
+$modoTabla = '';
+echo $USUARIO->getTipoUsuario();
+
 switch ($USUARIO->getTipoUsuario()) {
-    case 'A': //muestra todos los proyectos y opciones porque es admin
-       
+    case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
+        $datosProyectos = Proyecto::getListaEnJson(null, null);
+        $modoTabla = "'CRUD'";
+        echo "Usuario A";
+
+    case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
+        $idUsuario = $USUARIO->getId();
+        $filtroUsuario = "id_usuario='$idUsuario'";
+        $datosProyectos = Proyecto::getListaEnJson($filtroUsuario, null);
+        echo "Usuario D";
+        // R solo lectura
+        $modoTabla = "'CRUD'";
         break;
 
-    case 'D': //proyectos de los que es director
-
-        break;
-
-    default:
-        //trabajador: proyectos en los que esta activo, o proyectos en los que puede postularse según sus habilidades
+    default: //trabajador (modo: Solo lectura): perfiles existentes
+        $datosProyectos = $USUARIO->getProyectosUsuario($USUARIO->getId());
+        $modoTabla = "'R'";
+        echo "Usuario T";
         break;
 }
+print_r($datosProyectos);
 ?>
 
 <h3 class="text-center">LISTA DE PROYECTOS</h3>
-<?php
-if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
-    // deja adicionar si el user es ADMIN o Director
-    // echo  '<span><button type="button" class="btn btn-primary"><a href="principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoFormulario.php&accion=Adicionar"></a>Nuevo Proyecto</button></span> ';
-    // echo  '<button type="button" id="addRow" class="btn btn-primary">Nuevo Proyecto</button></span> ';
-}
-?>
-
 
 <fieldset class="form-group border p-3">
     <div class="container col-auto justify-content-center">
@@ -76,6 +80,8 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
                         <td>__estado__</td>
                         <td>01/01/1900</td>
                         <td>01/01/2099</td>
+                        <td>__idDirector__</td>
+                        <td>__Correo@Director__</td>
                         <td>
                             <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
                             <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
@@ -194,6 +200,7 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
 
     let lisProyectos = [];
     <?php echo 'const dProy = ' . $datosProyectos . ';'; ?>
+    <?php echo 'const modoTabla = ' . $modoTabla . ';'; ?>
 
     // console.log(dProy);
     if (lisProyectos.length == 0 || lisProyectos == null) {
@@ -203,8 +210,6 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
 
     $(document).ready(function() {
 
-        // TODO: Ajustar según permisos del usuario
-        var modoTabla = 'RUD'
         cargarProyectos('tblProyectos', lisProyectos, modoTabla);
         var IdProySeleccionado = '';
         var selectorTabla = '#tblProyectos'
@@ -237,11 +242,6 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
                         dTrabReq,
                         dTrabDisp
                     } = json;
-
-
-                        // TODO: Ajustar según permisos del usuario
-                        var modoTabla = 'RUD'
-
                         cargarHabilidades('tblHab_Requeridas', dHabReq, modoTabla);
                         cargarHabilidades('tblHab_Disponibles', dHabDisp, modoTabla);
                         cargarTrabajadores('tblContratados', dTrabReq, modoTabla);

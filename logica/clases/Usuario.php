@@ -25,7 +25,7 @@ class Usuario
                                 FROM    usuarios
                                 WHERE $campo = $valor;";
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
-                print_r($campo); 
+                // print_r($campo);
             }
             //datos usuario
             $this->id = $campo['id'];
@@ -40,6 +40,11 @@ class Usuario
             $this->tipoUsuario = $campo['tipo_usuario'];
             $this->nitempresa = $campo['id_empresa'];
         }
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function getIdentificacion()
@@ -284,5 +289,19 @@ class Usuario
         if ($resultado[0]['tipo_usuario'] == 'D') { //regresa de la base de datos como arreglo
             return true;
         }
+    }
+    public static function getProyectosUsuario($idUsuario)
+    {
+        $cadenaSQL = "  SELECT      p.id, p.nombre, p.descripcion, p.estado, p.fecha_inicio, p.fecha_fin, p.id_usuario, u.correo
+                        FROM 		(proyectos p
+                        INNER JOIN 	usuarios u ON u.id = p.id_usuario
+                        INNER JOIN 	rh_proyectos rp ON rp.id_proyecto = p.id AND rp.id_usuario = '$idUsuario')";
+        // echo $cadenaSQL;
+        $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
+        $datos = array();
+        for ($i = 0; $i < count($resultado); $i++) {
+            $datos[$i] = new Proyecto($resultado[$i], null);
+        }
+        return json_encode($datos);
     }
 }
