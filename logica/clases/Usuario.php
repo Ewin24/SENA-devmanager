@@ -25,7 +25,7 @@ class Usuario
                                 FROM    usuarios
                                 WHERE $campo = $valor;";
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
-                print_r($campo); 
+                //print_r($campo); 
             }
             //datos usuario
             $this->id = $campo['id'];
@@ -45,6 +45,11 @@ class Usuario
     public function getIdentificacion()
     {
         return $this->identificacion;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function getNombre()
