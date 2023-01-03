@@ -20,7 +20,8 @@ class Perfil
     private $habilidades;
 
     //constructor con array
-    public function __construct($campo, $valor) {
+    public function __construct($campo, $valor)
+    {
         if ($campo != null) {
             if (!is_array($campo)) {
                 $cadenaSQL = "  SELECT  id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa
@@ -43,6 +44,66 @@ class Perfil
             $this->nombre_foto = $campo['nombre_foto'];
             $this->id_empresa = $campo['id_empresa'];
         }
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getIdentificacion()
+    {
+        return $this->identificacion;
+    }
+
+    public function getNombres()
+    {
+        return $this->nombres;
+    }
+
+    public function getApellidos()
+    {
+        return $this->apellidos;
+    }
+
+    public function getTipoUsuario()
+    {
+        return $this->tipo_usuario;
+    }
+
+    public function getClave()
+    {
+        return $this->clave_hash;
+    }
+
+    public function getCorreo()
+    {
+        return $this->correo;
+    }
+
+    public function getTelefono()
+    {
+        return $this->telefono;
+    }
+
+    public function getTipoIdentificacion()
+    {
+        return $this->tipo_identificacion;
+    }
+
+    public function getFoto()
+    {
+        return $this->nombre_foto;
+    }
+
+    public function getDireccion()
+    {
+        return $this->direccion;
+    }
+
+    public function getIdEmpresa()
+    {
+        return $this->id_empresa;
     }
 
     // public function guardar()
@@ -75,7 +136,7 @@ class Perfil
         else
             $orden = "order by $orden";
 
-            $cadenaSQL = "  SELECT  id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa
+        $cadenaSQL = "  SELECT  id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa
                             FROM    usuarios
                             $filtro 
                             $orden";
@@ -86,45 +147,18 @@ class Perfil
     {
         $resultado = Perfil::getLista($filtro, $orden);
         $lista = array();
-
         for ($i = 0; $i < count($resultado); $i++) {
             $perfil = new Perfil($resultado[$i], null);
             $lista[$i] = $perfil;
         }
-
         return $lista;
     }
 
-    public static function getListaEnJson($filtro, $orden)
-    {
-        $datos = Perfil::getListaEnObjetos($filtro, $orden);
-
-        // $json_data = array(
-		// 	//"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
-		// 	"recordsTotal"    => intval( count($datos) ),  // total number of records
-		// 	// "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
-		// 	"data"            => $datos   // total data array
-		// 	);
-
-        return  json_encode($datos);  // send data as json format
-    }
-
-    public function getIdPerfil($campo,$valor)
+    public function getIdPerfil($campo, $valor)
     {
         $cadenaSQL = "SELECT idPerfil FROM perfil WHERE $campo = '$valor';";
         $id = ConectorBD::ejecutarQuery($cadenaSQL);
-        $this->idPerfil = $id;
-        return $this->idPerfil;
-    }
-
-    public static function cargarTablasHijas($idUsuario){
-
-        if ($idUsuario != null || $idUsuario != '')
-        {
-            $datEstudios = EstudiosAdm::getEstudiosUsuario($idUsuario);
-            $datHabilidades = HabilidadesAdm::getHabilidadesUsuario($idUsuario);
-        }
-
-        return [$datEstudios, $datHabilidades];
+        $this->id = $id;
+        return $this->id;
     }
 }

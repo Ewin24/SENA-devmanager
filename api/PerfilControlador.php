@@ -1,11 +1,9 @@
 <?php
 
 require_once '../logica/clasesGenericas/ConectorBD.php';
-require_once '../logica/clases/Perfil.php';
+require_once '../logica/clases/PerfilAdm.php';
 
-[$estudios, $habilidades] = Perfil::cargarTablasHijas($_GET["id"]);
-
-print_r($estudios);
+[$estudios, $habilidades] = PerfilAdm::cargarTablasHijas($_GET["id"]);
 
 $response = array(
     "dEstudios" => $estudios,

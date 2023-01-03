@@ -96,7 +96,7 @@ class Empresa {
 
     public function guardar() {
         //echo $this->nombre, $this->descripcion;
-        $cadenaSQL = "INSERT INTO empresas (id, nit, nombre, direccion, correo, telefono, nombre_representante, correo_representante) VALUES ('{$this->identificacion}', '{$this->nit}', '{$this->nombre}', '{$this->direccion}', '{$this->correo}', '{$this->telefono}', '{$this->nombreRepresentante}', '{$this->correoRepresentante}');";
+        $cadenaSQL = "INSERT INTO empresas (id, nit, nombre, direccion, correo, telefono, nombre_representante, correo_representante) VALUES ('{$this->id}', '{$this->nit}', '{$this->nombre}', '{$this->direccion}', '{$this->correo}', '{$this->telefono}', '{$this->nombreRepresentante}', '{$this->correoRepresentante}');";
         ConectorBD::ejecutarQuery($cadenaSQL);
     }
 

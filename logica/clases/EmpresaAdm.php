@@ -2,6 +2,7 @@
 
 class TrabEmpresa {
 
+    public $id;
     public $identificacion;
     public $nombre; //nombre real del usuario
     public $apellido;
@@ -28,8 +29,8 @@ class TrabEmpresa {
             $this->id = $campo['id'];
             $this->identificacion = $campo['identificacion'];
             $this->tipoIdentificacion = $campo['tipo_identificacion'];
-            $this->nombres = $campo['nombres'];
-            $this->apellidos = $campo['apellidos'];
+            $this->nombre = $campo['nombres'];
+            $this->apellido = $campo['apellidos'];
             $this->correo = $campo['correo'];
             $this->clave = $campo['clave_hash'];
             $this->direccion = $campo['direccion'];
