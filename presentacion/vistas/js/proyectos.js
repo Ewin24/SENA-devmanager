@@ -1,9 +1,9 @@
-import { cargarTablaGenerica } from "../../../librerias/tablaGenerica.js";
+import {    cargarTablaGenerica, claseBotonEditarRow, claseBotonEliminarRow     } from "../../../librerias/tablaGenerica.js";
 
+var dataUrl = 'http://localhost/SENA-devmanager/api/ProyectoControlador.php';
 
 function cargarProyectos(nombreTabla, arreglo, modoTabla='CRUD') {
 
-    var dataUrl = 'principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=';
     var ddl_estado_ops = [
     { value : 'X', key : '' },
     { value : 'P', key : 'Pendiente' },
@@ -70,6 +70,24 @@ function cargarProyectos(nombreTabla, arreglo, modoTabla='CRUD') {
 
     cargarTablaGenerica(nombreTabla, arreglo, colsProyectos, modoTabla, ddl_estado_ops, true);
     // getProyectoSeleccionado(nombreTabla);
+
+    // const claseBotonEditarRow = 'bi-pencil-square';
+    // const claseBotonEliminarRow = 'bi-trash-fill';
+    // const claseBotonConfirmarRow = 'bi-check-circle';
+    // const claseBotonCancelarRow = 'bi-x-circle';
+
+    // $('#addRow'+nombreTabla).click(function() {
+    //     $('#fsHabilidades').prop("disabled", true);
+    //     $('#fsTrabajadores').prop("disabled", true);
+    // });
+
+
+
+    $('#btn-cancel-'+nombreTabla).click(function() {
+        $('#fsHabilidades').prop("disabled", false);
+        $('#fsTrabajadores').prop("disabled", false);
+    });
+
 }
 
 function cargarHabilidades(nombreTabla, arreglo, modoTabla='CRUD'){

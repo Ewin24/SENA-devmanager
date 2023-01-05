@@ -3,7 +3,7 @@
 class Proyecto
 {
 
-    public $idProyecto;
+    public $id;
     public $nombre;
     public $descripcion;
     public $estado; //terminado, en ejecucion, por iniciar
@@ -23,7 +23,7 @@ class Proyecto
                 print_r($campo);
             }
             //asignacion de los datos
-            $this->idProyecto = $campo['id'];
+            $this->id = $campo['id'];
             $this->nombre = $campo['nombre'];
             $this->descripcion = $campo['descripcion'];
             $this->estado = $campo['estado'];
@@ -36,7 +36,7 @@ class Proyecto
 
     public function getIdProyecto()
     {
-        return $this->idProyecto;
+        return $this->id;
     }
 
     public function getNombre()
@@ -114,17 +114,17 @@ class Proyecto
 
     public function setFechaInicio($fechaInicio)
     {
-        $this->fechaInicio = $fechaInicio;
+        $this->fecha_inicio = $fechaInicio;
     }
 
     public function setFechaFinalizacion($fechaFinalizacion)
     {
-        $this->fechaFinalizacion = $fechaFinalizacion;
+        $this->fecha_fin = $fechaFinalizacion;
     }
 
     public function setIdDirector($IdDirector)
     {
-        $this->IdDirector = $IdDirector;
+        $this->id_director = $IdDirector;
     }
 
     public function getProyectoPorNombre($nombre)
@@ -176,8 +176,30 @@ class Proyecto
     //adicionar un proyecto
     public function guardar()
     {
-        $cadenaSQL = "INSERT INTO proyectos (nombre, descripcion, estado, fechaInicio, fechaFinalizacion, id_usuario) 
-                      VALUES( '$this->nombre', '$this->descripcion', '$this->estado', '$this->fechaInicio', '$this->fechaFinalizacion', '$this->IdDirector')";
+        $cadenaSQL = "INSERT INTO proyectos 
+                            (id, nombre, descripcion, estado, fecha_inicio, fecha_fin, id_usuario)
+                      VALUES(   $this->id',
+                                $this->nombre',
+                                $this->descripcion',
+                                $this->estado',
+                                $this->fecha_inicio',
+                                $this->fecha_fin',
+                                $this->id_director')";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    public static function guardarObj($proyecto)
+    {
+
+        $cadenaSQL = "INSERT INTO proyectos (id, nombre, descripcion, estado, fecha_inicio, fecha_fin, id_usuario)
+                      VALUES (  '$proyecto->id', 
+                                '$proyecto->nombre', 
+                                '$proyecto->descripcion', 
+                                '$proyecto->estado', 
+                                '$proyecto->fecha_inicio', 
+                                '$proyecto->fecha_fin', 
+                                '$proyecto->id_director')";
+        // echo $cadenaSQL;
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
