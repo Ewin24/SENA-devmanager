@@ -32,13 +32,13 @@ $datosProyectos = '[';
 
 
 $modoTabla = '';
-echo $USUARIO->getTipoUsuario();
 
 switch ($USUARIO->getTipoUsuario()) {
     case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
         $datosProyectos = Proyecto::getListaEnJson(null, null);
         $modoTabla = "'CRUD'";
         echo "Usuario A";
+        break;
 
     case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
         $idUsuario = $USUARIO->getId();
@@ -55,7 +55,7 @@ switch ($USUARIO->getTipoUsuario()) {
         echo "Usuario T";
         break;
 }
-print_r($datosProyectos);
+// print_r($datosProyectos);
 ?>
 
 <h3 class="text-center">LISTA DE PROYECTOS</h3>
@@ -77,7 +77,7 @@ print_r($datosProyectos);
                         <td>__id__</td>
                         <td>__nombre__</td>
                         <td>__descripcion__</td>
-                        <td>__estado__</td>
+                        <td>__P__</td>
                         <td>01/01/1900</td>
                         <td>01/01/2099</td>
                         <td>__idDirector__</td>
@@ -103,7 +103,7 @@ print_r($datosProyectos);
 
 </fieldset>
 
-<fieldset class="form-group border p-3">
+<fieldset id='fsHabilidades' class="form-group border p-3">
     <legend class="w-auto px-2">Habilidades del proyecto</legend>
     <div class="row">
         <div class="col-lg-6">
@@ -145,7 +145,7 @@ print_r($datosProyectos);
     </div>
 </fieldset>
 
-<fieldset class="form-group border p-3">
+<fieldset id='fsTrabajadores' class="form-group border p-3">
     <legend class="w-auto px-2">Trabajadores del proyecto</legend>
     <div class="row">
         <div class="row col-lg-6">
@@ -209,7 +209,7 @@ print_r($datosProyectos);
     //genera_tabla(arreglo);    
 
     $(document).ready(function() {
-
+        // console.log(lisProyectos);
         cargarProyectos('tblProyectos', lisProyectos, modoTabla);
         var IdProySeleccionado = '';
         var selectorTabla = '#tblProyectos'
@@ -218,7 +218,7 @@ print_r($datosProyectos);
             // if($(this).hasClass('selected')) {
             // var celda = dataTable.cell(this);
             var rowindex = $(this).closest("tr").index();
-            console.log(selectorTabla, rowindex);
+            // console.log(selectorTabla, rowindex);
             var data = $(selectorTabla).DataTable().row(rowindex).data();
 
             if (data.id != IdProySeleccionado) {
@@ -228,28 +228,44 @@ print_r($datosProyectos);
                 $('tblCandidatos').DataTable().clear().draw();
 
                 IdProySeleccionado = data.id;
-                console.log(IdProySeleccionado);
+                // console.log(IdProySeleccionado);
 
-                // peticion 
-                fetch('http://localhost/SENA-devmanager/api/ProyectoControlador.php?id=' + IdProySeleccionado, {
-                    method: 'GET',
-                }).then((resp) => {
-                    return resp.json();
-                }).then((json) => {
-                    const {
-                        dHabReq,
-                        dHabDisp,
-                        dTrabReq,
-                        dTrabDisp
-                    } = json;
+                //// peticion - https://coderszine.com/live-datatables-crud-with-ajax-php-mysql/
+                var dataReq = {
+                    idProy : IdProySeleccionado, 
+                    action : 'cargarTablasHijas'
+                };
+                $.ajax({
+                    url:"http://localhost/SENA-devmanager/api/ProyectoControlador.php",
+                    method:"POST",
+                    data: dataReq,
+                    dataType:"json",
+                    success:function(datos){
+                        var { dHabReq, dHabDisp, dTrabReq, dTrabDisp } = datos;
                         cargarHabilidades('tblHab_Requeridas', dHabReq, modoTabla);
                         cargarHabilidades('tblHab_Disponibles', dHabDisp, modoTabla);
                         cargarTrabajadores('tblContratados', dTrabReq, modoTabla);
                         cargarTrabajadores('tblCandidatos', dTrabDisp, modoTabla);
-                    });
-                }
-
-            // }
+                    }
+                });
+                
+                // fetch('http://localhost/SENA-devmanager/api/ProyectoControlador.php?id=' + IdProySeleccionado, {
+                //     method: 'GET',
+                // }).then((resp) => {
+                //     return resp.json();
+                // }).then((json) => {
+                //     const {
+                //         dHabReq,
+                //         dHabDisp,
+                //         dTrabReq,
+                //         dTrabDisp
+                //     } = json;
+                //         cargarHabilidades('tblHab_Requeridas', dHabReq, modoTabla);
+                //         cargarHabilidades('tblHab_Disponibles', dHabDisp, modoTabla);
+                //         cargarTrabajadores('tblContratados', dTrabReq, modoTabla);
+                //         cargarTrabajadores('tblCandidatos', dTrabDisp, modoTabla);
+                // });
+            }
         });
 
         $('#addRowtblProyectos').click(function() {
