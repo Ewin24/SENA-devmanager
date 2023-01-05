@@ -2,7 +2,7 @@
 
 require_once '../logica/clasesGenericas/ConectorBD.php';
 require_once '../logica/clases/ProyectoAdm.php';
-// require_once '../logica/clases/Proyecto.php';
+require_once '../logica/clases/Proyecto.php';
 
 
 if(!empty($_POST['action'])) {
@@ -14,6 +14,8 @@ if(!empty($_POST['action'])) {
             header('Content-type: application/json; charset=utf-8');
             $newProyecto = json_decode($_POST['datos']);
             $newProyecto->id = ConectorBD::get_UUIDv4();
+            // echo $newProyecto->nombre;
+            // echo $newProyecto->estado;
             ProyectoAdm::guardarObj($newProyecto);
             $response = "Success";
             break;
@@ -41,6 +43,7 @@ if(!empty($_POST['action'])) {
             );
 
         default:
+            
             # code...
             break;
             

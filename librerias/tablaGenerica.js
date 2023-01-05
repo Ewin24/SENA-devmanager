@@ -25,8 +25,26 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlCo
 
     dataTable = null;
 
+    //// definir id para cada fila: 
+    //// https://datatables.net/reference/option/rowId
+    //// https://editor.datatables.net/examples/advanced/jsonId.html
     dataTable = $(selectorTabla).DataTable({
-        // ajax: dataUrl,
+        // ajax: {
+        //     url: urlControlador,
+        //     method:"POST",
+        //     data: payload,
+        //     dataType:"json",
+        //     success:function(response){
+        //         // alert("Status: "+response);
+        //         // console.log(rowdata);
+        //         existenCambiosPendientes = false;
+        //         insertandoNuevoRegistro = false;
+        //     }, 
+        //     error: function(XMLHttpRequest, textStatus, errorThrown) { 
+        //         alert("Status: " + textStatus); 
+        //         alert("Error: " + errorThrown); 
+        //     }
+        // },
         data: arreglo,
         columns: cols,
         rowReorder: {
@@ -34,15 +52,38 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlCo
             selector: 'tr'
         },
         destroy: true,
+        processing: true,
         select:{ style:'single', toggleable: false},
         // fnInitComplete: function(oSettings, json) {
         //         // Seleccionar primera fila automáticamente;
         //         $(selectorTabla+' tbody tr:eq(0)').click();
         //         alert( 'DataTables has finished its initialisation.' );
         // },
-        createdRow:function(row){
+
+        //// http://live.datatables.net/bobeluza/16/edit
+        // rowId: function (row) {
+        //     return row[1] + '-' + row[2];
+        // },
+        createdRow:function(row, data, dataIndex){
             $(".datepicker", row).datepicker();
+            $(row).attr('id', data.id);
         },
+        "columnDefs": [ 
+            {
+                targets: '_all',
+                "createdCell": function (td, cellData, rowData, row, col) {
+                    if(col != 0 && col != cols.length){
+                        $(td).attr('id', cols[col].name);
+                    }
+                }
+            }
+        ],
+        // "columnDefs": [ {
+        //         targets: '_all',
+        //         render: function ( data, type, row, name ) {
+        //             return '<a id="'+data+'">'+name+'</a>';
+        //     }
+        // }],
         dom: '<"row"<"col-sm-2"><"col-sm-5 text-center"f><"col-sm-5">>t<"row"<"col-sm-3"l><"col-sm-5 text-center"p><"col-sm-4"i>>',
         "language":	{
             "sProcessing":     "Procesando...",
@@ -293,19 +334,35 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlCo
         
         var rowdata = null;
         var accionCRUD = '';
+
         if(insertandoNuevoRegistro){
-            rowdata = $(selectorTabla).DataTable().row(0).data();
+            var row = $(selectorTabla).DataTable().row(0);
+            rowdata = row.data();
+
+            var fila = $(selectorTabla+' tbody tr:first');
+            var cells = fila.find("td").not(':first').not(':last');
+            cells.each(function(i, elemento) {
+                rowdata[elemento.id] = elemento.value;
+            });
             accionCRUD = 'Insertar';
         }
-        else{
-            var idx = $(selectorTabla).DataTable().rows({selected: true}).index();
+        else{   
+            var idx = $(selectorTabla).DataTable().rows({selected: true}).indexes()[0];
             rowdata = $(selectorTabla).DataTable().row(idx).data();
+
+            var fila = $(selectorTabla+' tbody tr:eq('+idx+')');
+            var cells = fila.find("td").not(':first').not(':last');
+            cells.each(function(i, elemento) {
+                rowdata[elemento.id] = elemento.value;
+            });
+
             accionCRUD = 'Modificar';
         }
         // Si existe campo descripción, hay que llenar los datos con la nueva información
         if(selectorCtrlDescripcion.length) rowdata.descripcion = $(selectorCtrlDescripcion).val();
 
         //// peticion - https://coderszine.com/live-datatables-crud-with-ajax-php-mysql/
+        //// https://pastebin.com/raw/tuwVTa4D
         //// https://www.geeksforgeeks.org/how-to-pass-multiple-json-objects-as-data-using-jquerys-ajax/
         //// https://gabrieleromanato.name/jquery-sending-json-data-to-php-with-ajax
         var dataReq = {
@@ -318,8 +375,8 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlCo
             data: dataReq,
             dataType:"json",
             success:function(response){
-                alert("Status: "+response);
-                console.log(rowdata);
+                // alert("Status: "+response);
+                // console.log(rowdata);
                 existenCambiosPendientes = false;
                 insertandoNuevoRegistro = false;
             }, 
@@ -328,6 +385,7 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlCo
                 alert("Error: " + errorThrown); 
             }
         });
+        $(selectorTabla).DataTable().ajax.reload();
     });
 
     // Cancelar Cambios
@@ -482,15 +540,21 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlCo
             // $(this).text(commit ? $input.val() : $input.data('original-text'));
             var nuevoValor = $input.context.firstChild.value;
             var antiguoValor = $input.data('original-text');
-            $(this).text(commit ? nuevoValor : $input.data('original-text'));
+
+            // $input.val(commit ? nuevoValor : antiguoValor);
+            // $(this).val(commit ? nuevoValor : antiguoValor).trigger( "change" );
+            // $(this).val(commit ? nuevoValor : antiguoValor).trigger( "change" );
+            $(this).prop('value', commit ? nuevoValor : antiguoValor);
         });
 
         $row.find('td.ddl').each(function(i, el) {
             var $input = $(this).find('select');
             var nuevoValor = $input.context.textContent; //context.firstChild.data;
             var antiguoValor = $input.context.value; //var antiguoValor = $input.data('original-text');
-            $(this).text(commit ? ddl_estado_ops[nuevoValor] : $input.data('original-value'));
-            // $(this).text(commit ? $input.val() : $input.data('original-value'));
+            // $input.val(commit ? ddl_estado_ops[nuevoValor] : $input.data('original-value')).change();
+            // $input.val(commit ? ddl_estado_ops[nuevoValor] : $input.data('original-value')).trigger('change');
+            // $(this).text(commit ? $input.val() : antiguoValor).trigger( "change" );
+            $(this).prop('value', commit ? $input.val() : antiguoValor);
         });
 
         var $cancelButton = $saveButton.closest('tr').find("td:last-child i.bi."+claseBotonCancelarRow);
