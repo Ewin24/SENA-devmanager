@@ -163,4 +163,37 @@ class ProyectoAdm
         }
         return [$datHabAsignados, $datHabDisponibles, $datTrabAsignados, $datTrabDisponibles];
     }
+
+    public static function guardarObj($proyecto)
+    {
+        $cadenaSQL = "INSERT INTO proyectos (id, nombre, descripcion, estado, fecha_inicio, fecha_fin, id_usuario)
+                      VALUES (  '$proyecto->id', 
+                                '$proyecto->nombre', 
+                                '$proyecto->descripcion', 
+                                '$proyecto->estado', 
+                                '$proyecto->fecha_inicio', 
+                                '$proyecto->fecha_fin', 
+                                '$proyecto->id_director')";
+        // echo $cadenaSQL;
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    public static function modificarObj($proyecto)
+    {
+        $cadenaSQL = "UPDATE proyectos 
+                      SET   nombre = '$proyecto->nombre', 
+                            descripcion = '$proyecto->descripcion', 
+                            estado = '$proyecto->estado', 
+                            fecha_inicio = '$proyecto->fecha_inicio', 
+                            fecha_fin = '$proyecto->fecha_fin', 
+                            id_usuario = '$proyecto->id_director' 
+                      WHERE id = '$proyecto->id'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    public static function eliminarObj($idProyecto)
+    {
+        $cadenaSQL = "DELETE FROM proyectos WHERE id = '$idProyecto'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
 }

@@ -169,7 +169,7 @@ class Proyecto
     //eliminar un proyecto
     public function eliminar($idProyecto)
     {
-        $cadenaSQL = "DELETE FROM proyectos WHERE idProyecto = '$idProyecto'";
+        $cadenaSQL = "DELETE FROM proyectos WHERE id = '$idProyecto'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
@@ -188,21 +188,6 @@ class Proyecto
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
-    public static function guardarObj($proyecto)
-    {
-
-        $cadenaSQL = "INSERT INTO proyectos (id, nombre, descripcion, estado, fecha_inicio, fecha_fin, id_usuario)
-                      VALUES (  '$proyecto->id', 
-                                '$proyecto->nombre', 
-                                '$proyecto->descripcion', 
-                                '$proyecto->estado', 
-                                '$proyecto->fecha_inicio', 
-                                '$proyecto->fecha_fin', 
-                                '$proyecto->id_director')";
-        // echo $cadenaSQL;
-        return ConectorBD::ejecutarQuery($cadenaSQL);
-    }
-
     //modificar un proyecto
     public function modificar($idProyectoAnterior)
     {
@@ -210,10 +195,10 @@ class Proyecto
                       SET   nombre = '$this->nombre', 
                             descripcion = '$this->descripcion', 
                             estado = '$this->estado', 
-                            fechaInicio = '$this->fechaInicio', 
-                            fechaFinalizacion = '$this->fechaFinalizacion', 
-                            id_usuario = '$this->IdDirector' 
-                      WHERE idProyecto = '$idProyectoAnterior'";
+                            fecha_inicio = '$this->fecha_inicio', 
+                            fecha_fin = '$this->fecha_fin', 
+                            id_usuario = '$this->id_director' 
+                      WHERE id = '$idProyectoAnterior'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 

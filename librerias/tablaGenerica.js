@@ -12,7 +12,7 @@ var insertandoNuevoRegistro = false;
 var dataTable = null;
 var dataUrl = null;
 
-function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', ddl_estado_ops = [], campo_desc = false)
+function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlControlador='', ddl_estado_ops = [], campo_desc = false)
 {
     
     var selectorTabla = '#'+nombreTabla
@@ -24,7 +24,6 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', ddl_e
             });
 
     dataTable = null;
-    dataUrl = "./presentacion/vistas/proyectos.php";
 
     dataTable = $(selectorTabla).DataTable({
         // ajax: dataUrl,
@@ -314,7 +313,7 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', ddl_e
             action : accionCRUD
         };
         $.ajax({
-            url:"http://localhost/SENA-devmanager/api/ProyectoControlador.php",
+            url: urlControlador,
             method:"POST",
             data: dataReq,
             dataType:"json",

@@ -1,6 +1,6 @@
 import {    cargarTablaGenerica, claseBotonEditarRow, claseBotonEliminarRow     } from "../../../librerias/tablaGenerica.js";
 
-var dataUrl = 'http://localhost/SENA-devmanager/api/ProyectoControlador.php';
+var dataUrl = "http://localhost/SENA-devmanager/api/ProyectoControlador.php";
 
 function cargarProyectos(nombreTabla, arreglo, modoTabla='CRUD') {
 
@@ -68,7 +68,7 @@ function cargarProyectos(nombreTabla, arreglo, modoTabla='CRUD') {
     $('#botonesGuardarCambios').hide();
     $('#botonesGuardarCambios').attr("disabled", "disabled");
 
-    cargarTablaGenerica(nombreTabla, arreglo, colsProyectos, modoTabla, ddl_estado_ops, true);
+    cargarTablaGenerica(nombreTabla, arreglo, colsProyectos, modoTabla, dataUrl, ddl_estado_ops, true);
     // getProyectoSeleccionado(nombreTabla);
 
     // const claseBotonEditarRow = 'bi-pencil-square';
