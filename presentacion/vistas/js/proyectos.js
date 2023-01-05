@@ -11,12 +11,25 @@ function cargarProyectos(nombreTabla, arreglo, modoTabla='CRUD') {
     { value : 'T', key : 'Terminado' }
     ];
 
-    var colsProyectos = [
+    // var labProy = [
+    //     {   label: '' },
+    //     {   label: 'id', name: 'id' },
+    //     {   label: 'Nombre', name: 'nombre' },
+    //     {   label: 'Descripcion', name: 'descripcion' },
+    //     {   label: 'Estado', name: 'estado' },
+    //     {   label: 'Fecha inicio' , name: 'fecha_inicio' },
+    //     {   label: 'Fecha finalización', name: 'fecha_fin' },
+    //     {   label: 'id Director', name: 'id_director' },
+    //     {   label: 'Correo del Director', name: 'correo_director' },
+    // ];
+
+    var colProy = [
         {   data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
-        {   title: 'id', data: 'id', visible: false },
-        {   title: 'Nombre', data: 'nombre' },
-        {   title: 'Descripcion', data: 'descripcion', visible: false },
-        {   title: 'Estado', data: 'estado', className: 'ddl'
+        {   title: 'id', data: 'id', name:'id', visible: false },
+        {   title: 'Nombre', data: 'nombre', name:'nombre' },
+        {   title: 'Descripcion', data: 'descripcion', name:'descripcion', visible: false },
+        {   title: 'Estado', data: 'estado', name:'estado', type: "select", className: 'ddl', 
+            // render: function() {'<option value='+ ddl_estado_ops['key'] +'>' + ddl_estado_ops['value']  + '</option>' }
             //     render: function (data, type, row) {
             //         var $select = $('<select class="select-basic" disabled="disabled" ></select>',
             //         {
@@ -43,6 +56,7 @@ function cargarProyectos(nombreTabla, arreglo, modoTabla='CRUD') {
         { 
             title: 'Fecha inicio' , 
             data: 'fecha_inicio', 
+            name: 'fecha_inicio', 
             type: 'date',
             format:    'DD-MM-YYYY',
             className: 'datepicker',
@@ -55,12 +69,13 @@ function cargarProyectos(nombreTabla, arreglo, modoTabla='CRUD') {
         {
             title: 'Fecha finalización', 
             data: 'fecha_fin', 
+            name: 'fecha_fin', 
             type: 'date', 
             format:    'DD-MM-YYYY',
             className: 'datepicker' 
         },
-        {   title: 'id Director', data: 'id_director', visible: false },
-        {   title: 'Correo del Director', data: 'correo_director', visible: true },
+        {   title: 'id Director', data: 'id_director', name: 'id_director', visible: false },
+        {   title: 'Correo del Director', data: 'correo_director', name: 'correo_director', visible: true },
     ];
 
     // configuración de carga inicial
@@ -68,7 +83,8 @@ function cargarProyectos(nombreTabla, arreglo, modoTabla='CRUD') {
     $('#botonesGuardarCambios').hide();
     $('#botonesGuardarCambios').attr("disabled", "disabled");
 
-    cargarTablaGenerica(nombreTabla, arreglo, colsProyectos, modoTabla, dataUrl, ddl_estado_ops, true);
+    cargarTablaGenerica(nombreTabla, arreglo, colProy, modoTabla, dataUrl, ddl_estado_ops, true);
+
     // getProyectoSeleccionado(nombreTabla);
 
     // const claseBotonEditarRow = 'bi-pencil-square';
@@ -81,13 +97,10 @@ function cargarProyectos(nombreTabla, arreglo, modoTabla='CRUD') {
     //     $('#fsTrabajadores').prop("disabled", true);
     // });
 
-
-
     $('#btn-cancel-'+nombreTabla).click(function() {
         $('#fsHabilidades').prop("disabled", false);
         $('#fsTrabajadores').prop("disabled", false);
     });
-
 }
 
 function cargarHabilidades(nombreTabla, arreglo, modoTabla='CRUD'){
