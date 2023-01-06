@@ -2,15 +2,13 @@
 
 require_once '../../logica/clasesGenericas/ConectorBD.php';
 //codigo que consulta las empresas registradas en la base de datos y las agrega al menu de seleccion del formulario de registro de empresas
-$cadenaSQL = "select nit,nombre from empresas";
+$cadenaSQL = "select id,nombre from empresas";
 $empresas = ConectorBD::ejecutarQuery($cadenaSQL);
 $empresasRegistradas = "";
 
 for ($i = 0; $i < count($empresas); $i++) {
-  $empresasRegistradas .= "<option value='" . $empresas[$i]['nit'] . "'>" . $empresas[$i]['nombre'] . "</option>";
+  $empresasRegistradas .= "<option value='" . $empresas[$i]['id'] . "'>" . $empresas[$i]['nombre'] . "</option>";
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -38,10 +36,10 @@ for ($i = 0; $i < count($empresas); $i++) {
                 <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Usuario" title="Por defecto tu usuario sera tu identificacion" disabled />
               </div>
               <div class="form-group">
-                <input type="text" class="form-control mt-2" id="nombre" name="nombre" placeholder="Nombres" title="Nombres" required />
+                <input type="text" class="form-control mt-2" id="nombre" name="nombres" placeholder="Nombres" title="Nombres" required />
               </div>
               <div class="form-group">
-                <input type="text" class="form-control mt-2" id="apellido" name="apellido" placeholder="Apellidos" title="apellidos" required />
+                <input type="text" class="form-control mt-2" id="apellido" name="apellidos" placeholder="Apellidos" title="apellidos" required />
               </div>
               <div class="form-group">
                 <input type="email" class="form-control mt-2" id="correo" name="correo" placeholder="Correo Electronico" title="correo electronico" required />
@@ -64,7 +62,7 @@ for ($i = 0; $i < count($empresas); $i++) {
                 <input type="text" class="form-control mt-2" id="identificacion" name="identificacion" placeholder="Identificacion" title="identificacion" />
               </div>
               <div class="form-group">
-                <select class="form-control mt-2" id="empresa" name="nit_empresa" title="empresa para la que trabaja">
+                <select class="form-control mt-2" id="empresa" name="id_empresa" title="empresa para la que trabaja">
                   <option value="">Empresas</option>
                   <?= $empresasRegistradas ?>
                 </select>

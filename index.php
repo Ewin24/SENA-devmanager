@@ -4,7 +4,6 @@ session_start();
 session_unset();
 session_destroy();
 
-
 $mensaje = '';
 if (isset($_REQUEST['mensaje'])) {
     $mensaje = $_REQUEST['mensaje'];
