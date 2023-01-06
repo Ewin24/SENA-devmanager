@@ -265,7 +265,7 @@ class Usuario
             $usuario = new Usuario($resultado[$i], null);
             $lista[$i] = $usuario;
         }
-        // print_r($lista);
+        //print_r($lista);
         return $lista;
     }
 
@@ -291,13 +291,14 @@ class Usuario
         $hashGuardado = ConectorBD::ejecutarQuery($consultaSQL);
         $bandera = Usuario::verify($clave, $hashGuardado[0]['clave_hash']);
         
+        $userObj = array();
         if ($bandera == 1) {
             $resultado = Usuario::getListaEnObjetos("identificacion = '$usuario'", null);
             if (count($resultado) > 0) {
-                $usuario = $resultado[0];
+                $userObj = $resultado[0];
             }
         }
-        return $usuario;
+        return $userObj;
     }
 
     private static function obtenerTipoUsuario($identificacion)

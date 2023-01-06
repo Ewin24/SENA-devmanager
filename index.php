@@ -5,6 +5,7 @@ session_unset();
 session_destroy();
 
 $mensaje = '';
+
 if (isset($_REQUEST['mensaje'])) {
     $mensaje = $_REQUEST['mensaje'];
     $sms = "<div id='alerta' class='alert alert-danger text-center m-2 ' role='alert'>$mensaje</div>";
