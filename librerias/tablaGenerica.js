@@ -12,7 +12,7 @@ var insertandoNuevoRegistro = false;
 var dataTable = null;
 var dataUrl = null;
 
-function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlControlador='', ddl_estado_ops = [], campo_desc = false)
+function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlControlador='', payloadInicial = {}, ddl_estado_ops = [], campo_desc = false)
 {
     
     var selectorTabla = '#'+nombreTabla
@@ -29,22 +29,22 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlCo
     //// https://datatables.net/reference/option/rowId
     //// https://editor.datatables.net/examples/advanced/jsonId.html
     dataTable = $(selectorTabla).DataTable({
-        // ajax: {
-        //     url: urlControlador,
-        //     method:"POST",
-        //     data: payload,
-        //     dataType:"json",
-        //     success:function(response){
-        //         // alert("Status: "+response);
-        //         // console.log(rowdata);
-        //         existenCambiosPendientes = false;
-        //         insertandoNuevoRegistro = false;
-        //     }, 
-        //     error: function(XMLHttpRequest, textStatus, errorThrown) { 
-        //         alert("Status: " + textStatus); 
-        //         alert("Error: " + errorThrown); 
-        //     }
-        // },
+        ajax: {
+            url: urlControlador,
+            method:"POST",
+            data: payloadInicial,
+            dataType:"json",
+            success:function(response){
+                alert("Status: "+response);
+                console.log(response);
+                existenCambiosPendientes = false;
+                insertandoNuevoRegistro = false;
+            }, 
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                alert("Status: " + textStatus); 
+                alert("Error: " + errorThrown); 
+            }
+        },
         data: arreglo,
         columns: cols,
         rowReorder: {
@@ -367,7 +367,8 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlCo
         //// https://gabrieleromanato.name/jquery-sending-json-data-to-php-with-ajax
         var dataReq = {
             datos : JSON.stringify( rowdata ), 
-            action : accionCRUD
+            action : accionCRUD,
+            html_table : nombreTabla
         };
         $.ajax({
             url: urlControlador,

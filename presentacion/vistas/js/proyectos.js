@@ -2,7 +2,7 @@ import {    cargarTablaGenerica, claseBotonEditarRow, claseBotonEliminarRow     
 
 var dataUrl = "http://localhost/SENA-devmanager/api/ProyectoControlador.php";
 
-function cargarProyectos(nombreTabla, arreglo, modoTabla='CRUD') {
+function cargarProyectos(nombreTabla, idUsuario, arreglo=[], modoTabla='CRUD') {
 
     var ddl_estado_ops = [
     { value : 'X', key : '' },
@@ -83,7 +83,19 @@ function cargarProyectos(nombreTabla, arreglo, modoTabla='CRUD') {
     $('#botonesGuardarCambios').hide();
     $('#botonesGuardarCambios').attr("disabled", "disabled");
 
-    cargarTablaGenerica(nombreTabla, arreglo, colProy, modoTabla, dataUrl, ddl_estado_ops, true);
+    var payloadProyecto = {
+        datos : idUsuario,
+        action : 'cargarDatos',
+        html_table : nombreTabla
+    }
+
+    // var payloadTablaHija = {
+    //     datos : JSON.stringify( IdProySeleccionado ),
+    //     action : 'cargarDatos',
+    //     html_table : nombreTabla
+    // }
+
+    cargarTablaGenerica(nombreTabla, arreglo, colProy, modoTabla, dataUrl, payloadProyecto, ddl_estado_ops, true);
 
     // getProyectoSeleccionado(nombreTabla);
 

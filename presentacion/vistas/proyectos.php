@@ -31,9 +31,10 @@ $datosProyectos = '[';
 // ProyectoAdm::cargarTablasHijas($idProySeleccionado);
 
 
-$modoTabla = '';
-
-switch ($USUARIO->getTipoUsuario()) {
+$idUsuario = $USUARIO->getId();
+$tipoUsuario = $USUARIO->getTipoUsuario();
+echo $idUsuario, $identificacion, $tipoUsuario;
+switch ($tipoUsuario) {
     case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
         $datosProyectos = Proyecto::getListaEnJson(null, null);
         $modoTabla = "'CRUD'";
@@ -52,7 +53,7 @@ switch ($USUARIO->getTipoUsuario()) {
     default: //trabajador (modo: Solo lectura): perfiles existentes
         $datosProyectos = $USUARIO->getProyectosUsuario($USUARIO->getId());
         $modoTabla = "'R'";
-        echo "Usuario T";
+        // echo "Usuario T";
         break;
 }
 // print_r($datosProyectos);
@@ -199,18 +200,19 @@ switch ($USUARIO->getTipoUsuario()) {
     } from './presentacion/vistas/js/proyectos.js'
 
     let lisProyectos = [];
+    <?php echo 'const idUsuario = "' . $idUsuario . '";'; ?>
     <?php echo 'const dProy = ' . $datosProyectos . ';'; ?>
-    <?php echo 'const modoTabla = ' . $modoTabla . ';'; ?>
 
-    // console.log(dProy);
     if (lisProyectos.length == 0 || lisProyectos == null) {
         lisProyectos = [...dProy];
     }
-    //genera_tabla(arreglo);    
+    console.log(lisProyectos);
+
+    // //genera_tabla(arreglo);    
+
 
     $(document).ready(function() {
-        // console.log(lisProyectos);
-        cargarProyectos('tblProyectos', lisProyectos, modoTabla);
+        cargarProyectos('tblProyectos', idUsuario);
         var IdProySeleccionado = '';
         var selectorTabla = '#tblProyectos'
 
