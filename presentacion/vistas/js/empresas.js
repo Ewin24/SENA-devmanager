@@ -13,14 +13,14 @@ function cargarEmpresas(nombreTabla, arreglo,modoTabla) {
 
     var colsEmpresas = [
         {   data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
-        {   title: 'id', data: 'id', visible: false },
-        {   title: 'Nit', data: 'nit' },
-        {   title: 'Nombre', data: 'nombre', visible: false },
-        {   title: 'Direccion', data: 'direccion', visible: true},
-        {   title: 'Correo', data: 'correo', visible: true},
-        {   title: 'Telefono', data: 'telefono', visible: true},
-        {   title: 'Nombre Representante', data: 'nombre_representante', visible: true},
-        {   title: 'Correo Representante', data: 'correo_representante', visible: true},
+        {   title: 'id', data: 'id', name: 'id',  visible: false },
+        {   title: 'Nit', data: 'nit',name: 'nit' },
+        {   title: 'Nombre', data: 'nombre',name: 'nombre' ,visible: false },
+        {   title: 'Direccion', data: 'direccion',name: 'direccion',visible: true},
+        {   title: 'Correo', data: 'correo',name:'correo', visible: true},
+        {   title: 'Telefono', data: 'telefono',name: 'telefono', visible: true},
+        {   title: 'Nombre Representante', data: 'nombre_representante',name:'nombre_representante', visible: true},
+        {   title: 'Correo Representante', data: 'correo_representante',name: 'correo_representante',visible: true}
     ];
 
     // configuración de carga inicial
@@ -43,12 +43,11 @@ function getEmpresaSeleccionada(nombreTabla){
             var data = $(selectorTabla).DataTable().row( rowindex ).data();
             IdEmpreSeleccionada = data.id;
             console.log(IdEmpreSeleccionada);
-            // cargarTrabajadores(IdProySeleccionado);
         }
     });  
 }
 
-function cargarUsuarios(nombreTabla, arreglo,modoTabla) {
+function cargarTrabajadores(nombreTabla, arreglo,modoTabla) {
     var dataUrl =
       "principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=";
     var ddl_estado_ops = [
@@ -66,22 +65,18 @@ function cargarUsuarios(nombreTabla, arreglo,modoTabla) {
         },
         visible: true,
       },
-      { title: "Id", data: "id", visible: false },
-      { title: "Identificacion", data: "identificacion", visible: true },
-      {
-        title: "Tipo Ident.",
-        data: "tipoIdentificacion",
-        className: "ddl",
-      },
-      { title: "Nombres", data: "nombres", visible: true },
-      { title: "Apellidos", data: "apellidos", visible: true },
-      { title: "Correo", data: "correo", visible: true },
-      { title: "Clave", data: "clave", visible: false },
-      { title: "Dirección", data: "direccion", visible: true },
-      { title: "Foto", data: "foto", visible: true },
-      { title: "Telefono", data: "telefono", visible: true },
-      { title: "Tipo de Usuario", data: "tipoUsuario", visible: true },
-      { title: "nit de Empresa", data: "nitEmpresa", visible: false },
+      { title: "Id", data: "id", name: 'id', visible: false },
+      { title: "Identificacion", data: "identificacion", name: 'identificacion', visible: true },
+      {title: "Tipo Ident.",data: "tipo_identificacion", name:'tipo_identificacion', className: "ddl" },
+      { title: "Nombres", data: "nombres",name: "nombres", visible: true },
+      { title: "Apellidos", data: "apellidos",name: "apellidos", visible: true },
+      { title: "Correo", data: "correo", name: "correo", visible: true },
+      { title: "Clave", data: "clave_hash", name: "clave_hash", visible: false },
+      { title: "Dirección", data: "direccion",name: "direccion", visible: true },
+      { title: "Foto", data: "nombre_foto", name: "nombre_foto", visible: true },
+      { title: "Telefono", data: "telefono", name: "telefono", visible: true },
+      { title: "Tipo de Usuario", data: "tipo_usuario", name: "tipo_usuario",  visible: true },
+      { title: "nit de Empresa", data: "id_empresa", name: "id_mpresa", visible: false }
     ];
 
     console.log("Trab:", arreglo);
@@ -108,7 +103,7 @@ function cargarUsuarios(nombreTabla, arreglo,modoTabla) {
     // // }
 }
 
-export { cargarEmpresas, cargarUsuarios }
+export { cargarEmpresas, cargarTrabajadores }
 
 // const url = "principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Modificar&idEstudio=";
 // const updateField = (_id, data, callback) => {

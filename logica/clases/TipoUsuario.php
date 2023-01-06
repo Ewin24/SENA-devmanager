@@ -31,7 +31,7 @@ class TipoUsuario
         $menu .= "<ul class='nav justify-content-center'>";
         // $menu .= "<li class='border nav-item me-4'><a class='nav-link active' aria-current='page' href='#'>Inicio</a></li>";
         $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/proyectos.php&accion=''&id='''>Proyectos</a></li>";
-        $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/perfil.php&accion=''&id='''>Perfil</a></li>";
+        $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/perfiles.php&accion=''&id='''>Perfil</a></li>";
         // $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/estudio.php&accion=''&id='''>Usua</a></li>";
         // $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/habilidad.php&accion=''&id='''>Habilidades</a></li>";
 

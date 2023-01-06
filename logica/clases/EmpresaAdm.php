@@ -2,17 +2,18 @@
 
 class TrabEmpresa {
 
+    public $id;
     public $identificacion;
-    public $nombre; //nombre real del usuario
-    public $apellido;
-    public $tipoUsuario;
-    public $clave;
+    public $nombres; //nombre real del usuario
+    public $apellidos;
+    public $tipo_usuario;
+    public $clave_hash;
     public $correo;
     public $telefono;
-    public $tipoIdentificacion;
-    public $foto;
+    public $tipo_identificacion;
+    public $nombre_foto;
     public $direccion;
-    public $nitEmpresa;
+    public $id_empresa;
 
     //constructor con array
     public function __construct($campo, $valor) {
@@ -27,15 +28,15 @@ class TrabEmpresa {
             //datos usuario
             $this->id = $campo['id'];
             $this->identificacion = $campo['identificacion'];
-            $this->tipoIdentificacion = $campo['tipo_identificacion'];
+            $this->tipo_identificacion = $campo['tipo_identificacion'];
             $this->nombres = $campo['nombres'];
             $this->apellidos = $campo['apellidos'];
             $this->correo = $campo['correo'];
-            $this->clave = $campo['clave_hash'];
+            $this->clave_hash = $campo['clave_hash'];
             $this->direccion = $campo['direccion'];
             $this->telefono = $campo['telefono'];
-            $this->tipoUsuario = $campo['tipo_usuario'];
-            $this->nitEmpresa = $campo['id_empresa'];
+            $this->tipo_usuario = $campo['tipo_usuario'];
+            $this->id_empresa = $campo['id_empresa'];
         }
     }
 }

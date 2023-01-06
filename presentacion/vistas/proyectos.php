@@ -12,79 +12,53 @@ $identificacion = $USUARIO->getIdentificacion();
 
 $datosProyectos = '[';
 
-$resultado = Proyecto::getListaEnObjetos(null, null);
-for ($i = 0; $i < count($resultado); $i++) {
-    $proyecto = $resultado[$i];
-    $datosProyectos .=
-        '{ id: "' . $proyecto->getIdProyecto()
-        . '", nombre: "' . $proyecto->getNombre()
-        . '", descripcion: "' . $proyecto->getDescripcion()
-        . '", estado: "' . $proyecto->getEstado()
-        . '", fecha_inicio: "' . $proyecto->getFechaInicio()
-        . '", fecha_fin: "' . $proyecto->getFechaFinalizacion()
-        . '"},';
-}
-$datosProyectos .= ']';
+// $resultado = Proyecto::getListaEnObjetos(null, null);
+// for ($i = 0; $i < count($resultado); $i++) {
+//     $proyecto = $resultado[$i];
+//     $datosProyectos .=
+//         '{ id: "' . $proyecto->getIdProyecto()
+//         . '", nombre: "' . $proyecto->getNombre()
+//         . '", descripcion: "' . $proyecto->getDescripcion()
+//         . '", estado: "' . $proyecto->getEstado()
+//         . '", fecha_inicio: "' . $proyecto->getFechaInicio()
+//         . '", fecha_fin: "' . $proyecto->getFechaFinalizacion()
+//         . '"},';
+// }
+// $datosProyectos .= ']';
 
 // // $idProySeleccionado = getProyectoSeleccionado(nombreTabla);
 // $idProySeleccionado = 'f660bbbf-dd1a-4eab-9866-dba8092c94c5';
 // ProyectoAdm::cargarTablasHijas($idProySeleccionado);
 
 
+$modoTabla = '';
+
 switch ($USUARIO->getTipoUsuario()) {
-    case 'A': //muestra todos los proyectos y opciones porque es admin
-        //$resultado = Proyecto::getListaEnObjetos(null, null);
-        // for ($i = 0; $i < count($resultado); $i++) {
-
-        //     $proyecto = $resultado[$i];
-        //     echo $proyecto;
-        //     $datos .=
-        //         '{ id: "' . $proyecto->getIdProyecto()
-        //         . '", nombre: "' . $proyecto->getNombre()
-        //         . '", descripcion: "' . $proyecto->getDescripcion()
-        //         . '", estado: "' . $proyecto->getEstado()
-        //         . '", fechaInicio: "' . $proyecto->getFechaInicio()
-        //         . '", fechaFinalizacion: "' . $proyecto->getFechaFinalizacion()
-        //         . '"},';
-
-        //     $lista .= '<tr>';
-        //     $lista .= "<td>{$proyecto->getIdProyecto()}</td>";
-        //     $lista .= "<td>{$proyecto->getNombre()}</td>";
-        //     $lista .= "<td>{$proyecto->getDescripcion()}</td>";
-        //     $lista .= "<td>{$proyecto->getEstado()}</td>";
-        //     $lista .= "<td>{$proyecto->getFechaInicio()}</td>";
-        //     $lista .= "<td>{$proyecto->getFechaFinalizacion()}</td>";
-
-        //     if ($USUARIO->esAdmin($USUARIO->getIdentificacion())) { //esta misma validación se hace para todos, en caso de que sea trabajador se deja que postule o agregue estudios o habilidades
-        //         $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoFormulario.php&accion=Modificar&idProyecto={$proyecto->getIdproyecto()}' title='modificar proyecto'> Modificar </a></td>";
-        //         $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Eliminar&idProyecto={$proyecto->getIdproyecto()}' onclick='eliminar({$proyecto->getIdproyecto()})' title='Eliminar proyecto'>Eliminar</a></td>";
-        //     }
-
-        //     $lista .= "<td><a href='principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoCRUD.php&accion=Postularse&idProyecto={$proyecto->getIdproyecto()}&idUsuario={$USUARIO->getIdentificacion()}' title='Postular a proyecto'>Postularse</a></td>";
-        //     $lista .= "<td></td>";
-        //     $lista .= "</tr>";
-        // }
+    case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
+        $datosProyectos = Proyecto::getListaEnJson(null, null);
+        $modoTabla = "'CRUD'";
+        echo "Usuario A";
         break;
 
-    case 'D': //proyectos de los que es director
-
+    case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
+        $idUsuario = $USUARIO->getId();
+        $filtroUsuario = "id_usuario='$idUsuario'";
+        $datosProyectos = Proyecto::getListaEnJson($filtroUsuario, null);
+        echo "Usuario D";
+        // R solo lectura
+        $modoTabla = "'CRUD'";
         break;
 
-    default:
-        //trabajador: proyectos en los que esta activo, o proyectos en los que puede postularse según sus habilidades
+    default: //trabajador (modo: Solo lectura): perfiles existentes
+        $datosProyectos = $USUARIO->getProyectosUsuario($USUARIO->getId());
+        $modoTabla = "'R'";
+        echo "Usuario T";
         break;
 }
+// print_r($datosProyectos);
 ?>
 
 <h3 class="text-center">LISTA DE PROYECTOS</h3>
-<?php
-if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
-    // deja adicionar si el user es ADMIN o Director
-    // echo  '<span><button type="button" class="btn btn-primary"><a href="principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoFormulario.php&accion=Adicionar"></a>Nuevo Proyecto</button></span> ';
-    // echo  '<button type="button" id="addRow" class="btn btn-primary">Nuevo Proyecto</button></span> ';
-}
-?>
-
 
 <fieldset class="form-group border p-3">
     <div class="container col-auto justify-content-center">
@@ -103,9 +77,11 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
                         <td>__id__</td>
                         <td>__nombre__</td>
                         <td>__descripcion__</td>
-                        <td>__estado__</td>
+                        <td>__P__</td>
                         <td>01/01/1900</td>
                         <td>01/01/2099</td>
+                        <td>__idDirector__</td>
+                        <td>__Correo@Director__</td>
                         <td>
                             <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
                             <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
@@ -127,7 +103,7 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
 
 </fieldset>
 
-<fieldset class="form-group border p-3">
+<fieldset id='fsHabilidades' class="form-group border p-3">
     <legend class="w-auto px-2">Habilidades del proyecto</legend>
     <div class="row">
         <div class="col-lg-6">
@@ -169,7 +145,7 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
     </div>
 </fieldset>
 
-<fieldset class="form-group border p-3">
+<fieldset id='fsTrabajadores' class="form-group border p-3">
     <legend class="w-auto px-2">Trabajadores del proyecto</legend>
     <div class="row">
         <div class="row col-lg-6">
@@ -224,6 +200,7 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
 
     let lisProyectos = [];
     <?php echo 'const dProy = ' . $datosProyectos . ';'; ?>
+    <?php echo 'const modoTabla = ' . $modoTabla . ';'; ?>
 
     // console.log(dProy);
     if (lisProyectos.length == 0 || lisProyectos == null) {
@@ -232,9 +209,7 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
     //genera_tabla(arreglo);    
 
     $(document).ready(function() {
-
-        // TODO: Ajustar según permisos del usuario
-        var modoTabla = 'RUD'
+        // console.log(lisProyectos);
         cargarProyectos('tblProyectos', lisProyectos, modoTabla);
         var IdProySeleccionado = '';
         var selectorTabla = '#tblProyectos'
@@ -243,7 +218,7 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
             // if($(this).hasClass('selected')) {
             // var celda = dataTable.cell(this);
             var rowindex = $(this).closest("tr").index();
-            console.log(selectorTabla, rowindex);
+            // console.log(selectorTabla, rowindex);
             var data = $(selectorTabla).DataTable().row(rowindex).data();
 
             if (data.id != IdProySeleccionado) {
@@ -253,33 +228,44 @@ if (Usuario::esAdmin($identificacion) || Usuario::esDirector($identificacion)) {
                 $('tblCandidatos').DataTable().clear().draw();
 
                 IdProySeleccionado = data.id;
-                console.log(IdProySeleccionado);
+                // console.log(IdProySeleccionado);
 
-                // peticion 
-                fetch('http://localhost/SENA-devmanager/api/ProyectoControlador.php?id=' + IdProySeleccionado, {
-                    method: 'GET',
-                }).then((resp) => {
-                    return resp.json();
-                }).then((json) => {
-                    const {
-                        dHabReq,
-                        dHabDisp,
-                        dTrabReq,
-                        dTrabDisp
-                    } = json;
-
-
-                        // TODO: Ajustar según permisos del usuario
-                        var modoTabla = 'RUD'
-
+                //// peticion - https://coderszine.com/live-datatables-crud-with-ajax-php-mysql/
+                var dataReq = {
+                    idProy : IdProySeleccionado, 
+                    action : 'cargarTablasHijas'
+                };
+                $.ajax({
+                    url:"http://localhost/SENA-devmanager/api/ProyectoControlador.php",
+                    method:"POST",
+                    data: dataReq,
+                    dataType:"json",
+                    success:function(datos){
+                        var { dHabReq, dHabDisp, dTrabReq, dTrabDisp } = datos;
                         cargarHabilidades('tblHab_Requeridas', dHabReq, modoTabla);
                         cargarHabilidades('tblHab_Disponibles', dHabDisp, modoTabla);
                         cargarTrabajadores('tblContratados', dTrabReq, modoTabla);
                         cargarTrabajadores('tblCandidatos', dTrabDisp, modoTabla);
-                    });
-                }
-
-            // }
+                    }
+                });
+                
+                // fetch('http://localhost/SENA-devmanager/api/ProyectoControlador.php?id=' + IdProySeleccionado, {
+                //     method: 'GET',
+                // }).then((resp) => {
+                //     return resp.json();
+                // }).then((json) => {
+                //     const {
+                //         dHabReq,
+                //         dHabDisp,
+                //         dTrabReq,
+                //         dTrabDisp
+                //     } = json;
+                //         cargarHabilidades('tblHab_Requeridas', dHabReq, modoTabla);
+                //         cargarHabilidades('tblHab_Disponibles', dHabDisp, modoTabla);
+                //         cargarTrabajadores('tblContratados', dTrabReq, modoTabla);
+                //         cargarTrabajadores('tblCandidatos', dTrabDisp, modoTabla);
+                // });
+            }
         });
 
         $('#addRowtblProyectos').click(function() {

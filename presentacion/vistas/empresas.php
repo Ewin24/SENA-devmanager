@@ -132,7 +132,7 @@ if (Usuario::esAdmin($identificacion)) {
 <script type="module">
     import {
         cargarEmpresas,
-        cargarUsuarios
+        cargarTrabajadores
     } from './presentacion/vistas/js/empresas.js'
 
     let lisEmpresas = [];
@@ -147,7 +147,7 @@ if (Usuario::esAdmin($identificacion)) {
         //  opciones de crud, dependiendo del usuario de sesion
         let modoTabla = ''
         <?php
-        echo "const tUsuario = '{$USUARIO->getTipoUsuario()}' ;"; //traer tipo de usuario de sesion
+        echo "const tUsuario = '{$USUARIO->getTipo_Usuario()}' ;"; //traer tipo de usuario de sesion
         ?>
         switch (tUsuario) {
             case 'A':
@@ -204,7 +204,7 @@ if (Usuario::esAdmin($identificacion)) {
                         default:
                             break;
                     }
-                    cargarUsuarios('tblUsuarios', trabajadores, modoTabla);
+                    cargarTrabajadores('tblUsuarios', trabajadores, modoTabla);
                 });
             }
             // }

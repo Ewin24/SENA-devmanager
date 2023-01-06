@@ -3,38 +3,40 @@
 class Proyecto
 {
 
-    protected $idProyecto;
-    protected $nombre;
-    protected $descripcion;
-    protected $estado; //terminado, en ejecucion, por iniciar
-    protected $fechaInicio;
-    protected $fechaFinalizacion;
-    protected $IdDirector; //puede tener como foranea el director de proyecto
+    public $id;
+    public $nombre;
+    public $descripcion;
+    public $estado; //terminado, en ejecucion, por iniciar
+    public $fecha_inicio;
+    public $fecha_fin;
+    public $id_director; //puede tener como foranea el director de proyecto
+    public $correo_director; //puede tener como foranea el director de proyecto
 
     public function __construct($campo, $valor)
     {
         if ($campo != null) {
             if (!is_array($campo)) {
-                $cadenaSQL = " SELECT id, nombre, descripcion, estado, fecha_inicio, fecha_fin, id_usuario
+                $cadenaSQL = " SELECT id, nombre, descripcion, estado, fecha_inicio, fecha_fin, id_usuario, correo
                 FROM    proyectos
                 WHERE   $campo = $valor";
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
                 print_r($campo);
             }
             //asignacion de los datos
-            $this->idProyecto = $campo['id'];
+            $this->id = $campo['id'];
             $this->nombre = $campo['nombre'];
             $this->descripcion = $campo['descripcion'];
             $this->estado = $campo['estado'];
-            $this->fechaInicio = $campo['fecha_inicio'];
-            $this->fechaFinalizacion = $campo['fecha_fin'];
-            $this->IdDirector = $campo['id_usuario'];
+            $this->fecha_inicio = $campo['fecha_inicio'];
+            $this->fecha_fin = $campo['fecha_fin'];
+            $this->id_director = $campo['id_usuario'];
+            $this->correo_director = $campo['correo'];
         }
     }
 
     public function getIdProyecto()
     {
-        return $this->idProyecto;
+        return $this->id;
     }
 
     public function getNombre()
@@ -72,17 +74,22 @@ class Proyecto
 
     public function getFechaInicio()
     {
-        return $this->fechaInicio;
+        return $this->fecha_inicio;
     }
 
     public function getFechaFinalizacion()
     {
-        return $this->fechaFinalizacion;
+        return $this->fecha_fin;
     }
 
     public function getIdDirector()
     {
-        return $this->IdDirector;
+        return $this->id_director;
+    }
+
+    public function getCorreoDirector()
+    {
+        return $this->correo_director;
     }
 
     public function setId($id)
@@ -107,17 +114,17 @@ class Proyecto
 
     public function setFechaInicio($fechaInicio)
     {
-        $this->fechaInicio = $fechaInicio;
+        $this->fecha_inicio = $fechaInicio;
     }
 
     public function setFechaFinalizacion($fechaFinalizacion)
     {
-        $this->fechaFinalizacion = $fechaFinalizacion;
+        $this->fecha_fin = $fechaFinalizacion;
     }
 
     public function setIdDirector($IdDirector)
     {
-        $this->IdDirector = $IdDirector;
+        $this->id_director = $IdDirector;
     }
 
     public function getProyectoPorNombre($nombre)
@@ -162,15 +169,22 @@ class Proyecto
     //eliminar un proyecto
     public function eliminar($idProyecto)
     {
-        $cadenaSQL = "DELETE FROM proyectos WHERE idProyecto = '$idProyecto'";
+        $cadenaSQL = "DELETE FROM proyectos WHERE id = '$idProyecto'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
     //adicionar un proyecto
     public function guardar()
     {
-        $cadenaSQL = "INSERT INTO proyectos (nombre, descripcion, estado, fechaInicio, fechaFinalizacion, id_usuario) 
-                      VALUES( '$this->nombre', '$this->descripcion', '$this->estado', '$this->fechaInicio', '$this->fechaFinalizacion', '$this->IdDirector')";
+        $cadenaSQL = "INSERT INTO proyectos 
+                            (id, nombre, descripcion, estado, fecha_inicio, fecha_fin, id_usuario)
+                      VALUES(   $this->id',
+                                $this->nombre',
+                                $this->descripcion',
+                                $this->estado',
+                                $this->fecha_inicio',
+                                $this->fecha_fin',
+                                $this->id_director')";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
@@ -181,10 +195,10 @@ class Proyecto
                       SET   nombre = '$this->nombre', 
                             descripcion = '$this->descripcion', 
                             estado = '$this->estado', 
-                            fechaInicio = '$this->fechaInicio', 
-                            fechaFinalizacion = '$this->fechaFinalizacion', 
-                            id_usuario = '$this->IdDirector' 
-                      WHERE idProyecto = '$idProyectoAnterior'";
+                            fecha_inicio = '$this->fecha_inicio', 
+                            fecha_fin = '$this->fecha_fin', 
+                            id_usuario = '$this->id_director' 
+                      WHERE id = '$idProyectoAnterior'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
@@ -201,14 +215,16 @@ class Proyecto
         else
             $orden = "ORDER BY $orden";
 
-        $cadenaSQL = "SELECT id, nombre, descripcion, estado, fecha_inicio, fecha_fin, id_usuario FROM proyectos $filtro $orden";
+        $cadenaSQL = "  SELECT 		p.id, p.nombre, p.descripcion, p.estado, p.fecha_inicio, p.fecha_fin, p.id_usuario, u.correo
+                        FROM 		(proyectos p
+                        INNER JOIN 	usuarios u ON u.id = p.id_usuario)
+                        $filtro $orden";
+        // print_r($cadenaSQL);
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
     public static function getListaEnObjetos($filtro, $orden)
     {
-        print_r("aqui");
-
         $resultado = Proyecto::getLista($filtro, $orden);
         $lista = array();
         for ($i = 0; $i < count($resultado); $i++) {
@@ -221,17 +237,16 @@ class Proyecto
     public static function getListaEnJson($filtro, $orden)
     {
         $datos = Proyecto::getListaEnObjetos($filtro, $orden);
-        $json_data = array(
-			//"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
-			"recordsTotal"    => intval( count($datos) ),  // total number of records
-			// "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
-			"data"            => $datos   // total data array
-			);
+        // $json_data = array(
+		// 	//"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
+		// 	"recordsTotal"    => intval( count($datos) ),  // total number of records
+		// 	// "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
+		// 	"data"            => $datos   // total data array
+		// 	);
 
         //echo json_encode($json_data);  // send data as json format
-        return json_encode($json_data);
+        return json_encode($datos);
     }
-
 
     // public static function getPerfilesProyRequeridos($idProyectoSeleccionado){
         

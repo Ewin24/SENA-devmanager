@@ -3,18 +3,18 @@
 class Usuario
 {
 
+    public $id;
     public $identificacion;
     public $nombres; //nombre real del usuario
     public $apellidos;
-    public $tipoUsuario;
-    public $clave;
-    //protected $nombreUsuario; //nombre que se usa para identificar al usuario y darle ingreso al sistema, por defecto N.identificacion
+    public $tipo_usuario;
+    public $clave_hash;
     public $correo;
     public $telefono;
-    public $tipoIdentificacion;
-    public $foto;
+    public $tipo_identificacion;
+    public $nombre_foto;
     public $direccion;
-    public $nitEmpresa;
+    public $id_empresa;
 
     //constructor con array
     public function __construct($campo, $valor)
@@ -25,21 +25,26 @@ class Usuario
                                 FROM    usuarios
                                 WHERE $campo = $valor;";
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
-                print_r($campo); 
+                // print_r($campo);
             }
             //datos usuario
             $this->id = $campo['id'];
             $this->identificacion = $campo['identificacion'];
-            $this->tipoIdentificacion = $campo['tipo_identificacion'];
+            $this->tipo_identificacion = $campo['tipo_identificacion'];
             $this->nombres = $campo['nombres'];
             $this->apellidos = $campo['apellidos'];
             $this->correo = $campo['correo'];
-            $this->clave = $campo['clave_hash'];
+            $this->clave_hash = $campo['clave_hash'];
             $this->direccion = $campo['direccion'];
             $this->telefono = $campo['telefono'];
-            $this->tipoUsuario = $campo['tipo_usuario'];
-            $this->nitempresa = $campo['id_empresa'];
+            $this->tipo_usuario = $campo['tipo_usuario'];
+            $this->id_empresa = $campo['id_empresa'];
         }
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function getIdentificacion()
@@ -47,24 +52,24 @@ class Usuario
         return $this->identificacion;
     }
 
-    public function getNombre()
+    public function getNombres()
     {
         return $this->nombres;
     }
 
-    public function getApellido()
+    public function getApellidos()
     {
         return $this->apellidos;
     }
 
-    public function getTipoUsuario()
+    public function getTipo_usuario()
     {
-        return $this->tipoUsuario;
+        return $this->tipo_usuario;
     }
 
-    public function getClave()
+    public function getClave_hash()
     {
-        return $this->clave;
+        return $this->clave_hash;
     }
 
     public function getCorreo()
@@ -77,14 +82,14 @@ class Usuario
         return $this->telefono;
     }
 
-    public function getTipoIdentificacion()
+    public function getTipo_identificacion()
     {
-        return $this->tipoIdentificacion;
+        return $this->tipo_identificacion;
     }
 
-    public function getFoto()
+    public function getNombre_foto()
     {
-        return $this->foto;
+        return $this->nombre_foto;
     }
 
     public function getDireccion()
@@ -92,9 +97,14 @@ class Usuario
         return $this->direccion;
     }
 
-    public function getNitEmpresa()
+    public function getId_empresa()
     {
-        return $this->nitEmpresa;
+        return $this->id_empresa;
+    }
+
+    public function setId($id): void
+    {
+        $this->id = $id;
     }
 
     public function setIdentificacion($identificacion): void
@@ -102,29 +112,24 @@ class Usuario
         $this->identificacion = $identificacion;
     }
 
-    public function setNombre($nombre): void
+    public function setNombres($nombres): void
     {
-        $this->nombre = $nombre;
+        $this->nombres = $nombres;
     }
 
-    public function setApellido($apellido): void
+    public function setApellidos($apellidos): void
     {
-        $this->apellido = $apellido;
+        $this->apellidos = $apellidos;
     }
 
-    public function setTipoUsuario($tipoUsuario): void
+    public function setTipo_usuario($tipo_usuario): void
     {
-        $this->tipoUsuario = $tipoUsuario;
+        $this->tipo_usuario = $tipo_usuario;
     }
 
-    public function setClave($clave): void
+    public function setClave_hash($clave_hash): void
     {
-        $this->clave = $clave;
-    }
-
-    public function setNombreUsuario($nombreUsuario): void
-    {
-        $this->nombreUsuario = $nombreUsuario;
+        $this->clave_hash = $clave_hash;
     }
 
     public function setCorreo($correo): void
@@ -137,14 +142,14 @@ class Usuario
         $this->telefono = $telefono;
     }
 
-    public function setTipoIdentificacion($tipoIdentificacion): void
+    public function setTipo_identificacion($tipo_identificacion): void
     {
-        $this->tipoIdentificacion = $tipoIdentificacion;
+        $this->tipo_identificacion = $tipo_identificacion;
     }
 
-    public function setFoto($foto): void
+    public function setNombre_foto($nombre_foto): void
     {
-        $this->foto = $foto;
+        $this->nombre_foto = $nombre_foto;
     }
 
     public function setDireccion($direccion): void
@@ -152,22 +157,16 @@ class Usuario
         $this->direccion = $direccion;
     }
 
-    public function setNitEmpresa($nitEmpresa): void
+    public function setId_empresa($id_empresa): void
     {
-        $this->nitEmpresa = $nitEmpresa;
+        $this->id_empresa = $id_empresa;
     }
 
     public function getTipoEnObjeto()
     {
-        $tipoUsuario = new TipoUsuario($this->tipoUsuario);
+        $tipoUsuario = new TipoUsuario($this->tipo_usuario);
         return $tipoUsuario;
     }
-
-    // public function __toString()
-    // {
-    //     $cadena = "identificacion: $this->identificacion <br>nombre : $this->nombres  <br>apellido: $this->apellidos";
-    //     return $cadena;
-    // }
 
     //metodo para registrar un usuario en la base de datos
     public function guardar()
@@ -175,28 +174,28 @@ class Usuario
         $cadenaSQL = "
         INSERT INTO usuarios
         (id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa)
-        VALUES ('$this->v4_UUID()', $this->identificacion', '$this->tipoIdentificacion', '$this->nombre', '$this->apellido', '$this->correo', md5('$this->clave'), '$this->direccion', '$this->foto', '$this->telefono', '$this->tipoUsuario', '$this->nitEmpresa')";
+        VALUES ('$this->v4_UUID()', $this->identificacion', '$this->tipo_identificacion', '$this->nombres', '$this->apellidos', '$this->correo', md5('$this->clave_hash'), '$this->direccion', '$this->nombre_foto', '$this->telefono', '$this->tipo_usuario', '$this->id_empresa')";
         ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
-    public function modificar($identificacionAnterior)
+    public function modificar()
     {
-        if (strlen($this->clave) < 32) {
-            $this->clave = md5($this->clave); // si engresa clave, vendra sin una encriptacion, por ello antes de ingresarla se encripta
+        if (strlen($this->clave_hash) < 32) {
+            $this->clave_hash = md5($this->clave_hash); // si engresa clave, vendra sin una encriptacion, por ello antes de ingresarla se encripta
         }
         $cadenaSQL = "
         UPDATE  usuarios
         SET     identificacion='$this->identificacion', 
-                tipo_identificacion='$this->tipoIdentificacion', 
-                nombres='$this->nombre', 
-                apellidos='$this->apellido', 
+                tipo_identificacion='$this->tipo_identificacion', 
+                nombres='$this->nombres', 
+                apellidos='$this->apellidos', 
                 correo='$this->correo', 
-                clave_hash='$this->clave', 
+                clave_hash='$this->clave_hash', 
                 direccion='$this->direccion', 
-                nombre_foto='$this->foto', 
+                nombre_foto='$this->nombre_foto', 
                 telefono='$this->telefono', 
-                tipo_usuario='$this->tipoUsuario', 
-                id_empresa='$this->nitEmpresa'
+                tipo_usuario='$this->tipo_usuario', 
+                id_empresa='$this->id_empresa'
         WHERE id='$this->id'";
         ConectorBD::ejecutarQuery($cadenaSQL);
     }
@@ -250,12 +249,12 @@ class Usuario
 
         $json_data = array(
             //"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
-            "recordsTotal"    => intval(count($datos)),  // total number of records
+            "recordsTotal" => intval(count($datos)), // total number of records
             // "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
-            "data"            => $datos   // total data array
+            "data" => $datos   // total data array
         );
 
-        return  json_encode($json_data);  // send data as json format
+        return json_encode($json_data);  // send data as json format
     }
 
     public static function validar($usuario, $clave)
@@ -278,16 +277,33 @@ class Usuario
 
     public static function esAdmin($identificacion)
     {
+        print_r($identificacion);
         $resultado = Usuario::obtenerTipoUsuario($identificacion);
         if ($resultado[0]['tipo_usuario'] == 'A') { //regresa de la base de datos como arreglo
             return true;
         }
     }
+
     public static function esDirector($identificacion)
     {
         $resultado = Usuario::obtenerTipoUsuario($identificacion);
         if ($resultado[0]['tipo_usuario'] == 'D') { //regresa de la base de datos como arreglo
             return true;
         }
+    }
+
+    public static function getProyectosUsuario($idUsuario)
+    {
+        $cadenaSQL = "  SELECT      p.id, p.nombre, p.descripcion, p.estado, p.fecha_inicio, p.fecha_fin, p.id_usuario, u.correo
+                        FROM 		(proyectos p
+                        INNER JOIN 	usuarios u ON u.id = p.id_usuario
+                        INNER JOIN 	rh_proyectos rp ON rp.id_proyecto = p.id AND rp.id_usuario = '$idUsuario')";
+        // echo $cadenaSQL;
+        $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
+        $datos = array();
+        for ($i = 0; $i < count($resultado); $i++) {
+            $datos[$i] = new Proyecto($resultado[$i], null);
+        }
+        return json_encode($datos);
     }
 }
