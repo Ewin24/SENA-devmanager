@@ -55,7 +55,7 @@ class Habilidad_Proyectos
 class ProyectoAdm
 {    ////////////////////////////////////////////////////////////////////////////////////
     /* REGION lógica negocio para administrar proyectos */
-    public static function getDatosJson($filtro, $orden, $Opcion="", $idProyecto="")
+    public static function getDatosCrudos($filtro, $orden, $Opcion="", $idProyecto="")
     {
         // if ($filtro == null || $filtro == '')
         //     $filtro = '';
@@ -70,7 +70,7 @@ class ProyectoAdm
         switch ($Opcion) {
 
             case "HabRequerida":
-                $filtroHabRequerida = "id_proyecto = '$idProyecto'";
+                $filtroHabRequerida = "id_proyecto = $idProyecto";
                 $cadenaSQL ="   SELECT 	id, id_proyecto, id_habilidad
                                 FROM 	proyectos_habilidades
                                 WHERE 	$filtroHabRequerida $orden";
@@ -82,7 +82,7 @@ class ProyectoAdm
                 break;
 
             case "HabDisponible":
-                $filtroHabDisponible = "id_proyecto <> '$idProyecto'";
+                $filtroHabDisponible = "id_proyecto <> $idProyecto";
                 $ordenHabDisponible   = "";
                 $cadenaSQL ="   SELECT 	id, id_proyecto, id_habilidad
                                 FROM 	proyectos_habilidades
@@ -95,7 +95,7 @@ class ProyectoAdm
                 break;
 
             case "TrabAsignados":
-                $filtroTrabRequeridas = "id_proyecto = '$idProyecto' AND estado = 'A'";
+                $filtroTrabRequeridas = "id_proyecto = $idProyecto AND estado = 'A'";
                 $cadenaSQL ="   SELECT 	id, fecha_solicitud, estado, id_proyecto, id_usuario
                                 FROM 	rh_proyectos
                                 WHERE 	$filtroTrabRequeridas $orden";
@@ -107,7 +107,7 @@ class ProyectoAdm
                 break;
 
             case "TrabDisponible":
-                $filtroTrabDisponible = "id_proyecto = '$idProyecto' AND estado = 'E'";
+                $filtroTrabDisponible = "id_proyecto = $idProyecto AND estado = 'E'";
                 $cadenaSQL ="   SELECT 	id, fecha_solicitud, estado, id_proyecto, id_usuario
                                 FROM 	rh_proyectos
                                 WHERE 	$filtroTrabDisponible $orden";
@@ -130,25 +130,26 @@ class ProyectoAdm
         //     );
 
         //echo json_encode($json_data);  // send data as json format
+        // echo $cadenaSQL;
         return $datos;
     }
 
     public static function getHabilidadesRequeridas($idProyectoSeleccionado){
-        return ProyectoAdm::getDatosJson(null, null, "HabRequerida", $idProyectoSeleccionado);
+        return ProyectoAdm::getDatosCrudos(null, null, "HabRequerida", $idProyectoSeleccionado);
     }
 
     public static function getHabilidadesDisponibles($idProyectoSeleccionado){
-        return ProyectoAdm::getDatosJson(null, null, "HabDisponible", $idProyectoSeleccionado);
+        return ProyectoAdm::getDatosCrudos(null, null, "HabDisponible", $idProyectoSeleccionado);
     }
 
     public static function getTrabajadoresAsignados($idProyectoSeleccionado){
         // tabla rh_proyectos donde estado A=(Asignado) para el proyecto pasado por parametro
-        return ProyectoAdm::getDatosJson(null, null, "TrabAsignados", $idProyectoSeleccionado);
+        return ProyectoAdm::getDatosCrudos(null, null, "TrabAsignados", $idProyectoSeleccionado);
     }
 
     public static function getTrabajadoresDisponibles($idProyectoSeleccionado){
         // tabla habilidades donde estado diferente A=Asignado para el proyecto pasado por parametro
-        return ProyectoAdm::getDatosJson(null, null, "TrabDisponible", $idProyectoSeleccionado);
+        return ProyectoAdm::getDatosCrudos(null, null, "TrabDisponible", $idProyectoSeleccionado);
     }
 
     public static function cargarTablasHijas($idProySeleccionado){

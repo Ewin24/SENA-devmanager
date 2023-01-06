@@ -32,7 +32,7 @@ $datosProyectos = '[';
 
 
 $idUsuario = $USUARIO->getId();
-$tipoUsuario = $USUARIO->getTipoUsuario();
+$tipoUsuario = $USUARIO->getTipo_usuario();
 echo $idUsuario, $identificacion, $tipoUsuario;
 switch ($tipoUsuario) {
     case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
@@ -201,18 +201,19 @@ switch ($tipoUsuario) {
 
     let lisProyectos = [];
     <?php echo 'const idUsuario = "' . $idUsuario . '";'; ?>
+    <?php echo 'const modoTabla = "' . $modoTabla . '";'; ?>
     <?php echo 'const dProy = ' . $datosProyectos . ';'; ?>
 
     if (lisProyectos.length == 0 || lisProyectos == null) {
         lisProyectos = [...dProy];
     }
-    console.log(lisProyectos);
+    // console.log(lisProyectos);
 
     // //genera_tabla(arreglo);    
 
 
     $(document).ready(function() {
-        cargarProyectos('tblProyectos', idUsuario);
+        cargarProyectos('tblProyectos', idUsuario, lisProyectos);
         var IdProySeleccionado = '';
         var selectorTabla = '#tblProyectos'
 
@@ -224,32 +225,39 @@ switch ($tipoUsuario) {
             var data = $(selectorTabla).DataTable().row(rowindex).data();
 
             if (data.id != IdProySeleccionado) {
-                $('tblHab_Requeridas').DataTable().clear().draw();
-                $('tblHab_Disponibles').DataTable().clear().draw();
-                $('tblContratados').DataTable().clear().draw();
-                $('tblCandidatos').DataTable().clear().draw();
+                // $('tblHab_Requeridas').DataTable().clear().draw();
+                // $('tblHab_Disponibles').DataTable().clear().draw();
+                // $('tblContratados').DataTable().clear().draw();
+                // $('tblCandidatos').DataTable().clear().draw();
 
                 IdProySeleccionado = data.id;
                 // console.log(IdProySeleccionado);
-
-                //// peticion - https://coderszine.com/live-datatables-crud-with-ajax-php-mysql/
-                var dataReq = {
-                    idProy : IdProySeleccionado, 
-                    action : 'cargarTablasHijas'
-                };
-                $.ajax({
-                    url:"http://localhost/SENA-devmanager/api/ProyectoControlador.php",
-                    method:"POST",
-                    data: dataReq,
-                    dataType:"json",
-                    success:function(datos){
-                        var { dHabReq, dHabDisp, dTrabReq, dTrabDisp } = datos;
-                        cargarHabilidades('tblHab_Requeridas', dHabReq, modoTabla);
-                        cargarHabilidades('tblHab_Disponibles', dHabDisp, modoTabla);
-                        cargarTrabajadores('tblContratados', dTrabReq, modoTabla);
-                        cargarTrabajadores('tblCandidatos', dTrabDisp, modoTabla);
-                    }
-                });
+                var dHabReq, dHabDisp, dTrabReq, dTrabDisp = null;
+                
+                console.clear();
+                cargarHabilidades('tblHab_Requeridas', IdProySeleccionado, dHabReq, modoTabla);
+                cargarHabilidades('tblHab_Disponibles',IdProySeleccionado, dHabDisp, modoTabla);
+                cargarTrabajadores('tblContratados', IdProySeleccionado, dTrabReq, modoTabla);
+                cargarTrabajadores('tblCandidatos', IdProySeleccionado, dTrabDisp, modoTabla);
+                // //// peticion - https://coderszine.com/live-datatables-crud-with-ajax-php-mysql/
+                // var dataReq = {
+                //     datos : IdProySeleccionado, 
+                //     action : 'cargarTablasHijas'
+                // };
+                // $.ajax({
+                //     url:"http://localhost/SENA-devmanager/api/ProyectoControlador.php",
+                //     method:"POST",
+                //     data: dataReq,
+                //     dataType:"json",
+                //     success:function(datos){
+                //         var { dHabReq, dHabDisp, dTrabReq, dTrabDisp } = datos.data;
+                //         console.log(datos);
+                //         cargarHabilidades('tblHab_Requeridas', dHabReq, modoTabla);
+                //         cargarHabilidades('tblHab_Disponibles', dHabDisp, modoTabla);
+                //         cargarTrabajadores('tblContratados', dTrabReq, modoTabla);
+                //         cargarTrabajadores('tblCandidatos', dTrabDisp, modoTabla);
+                //     }
+                // });
                 
                 // fetch('http://localhost/SENA-devmanager/api/ProyectoControlador.php?id=' + IdProySeleccionado, {
                 //     method: 'GET',

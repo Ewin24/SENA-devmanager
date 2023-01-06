@@ -34,18 +34,25 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlCo
             method:"POST",
             data: payloadInicial,
             dataType:"json",
-            success:function(response){
-                alert("Status: "+response);
-                console.log(response);
-                existenCambiosPendientes = false;
-                insertandoNuevoRegistro = false;
+            // dataSrc: 'data',
+            dataSrc: function ( json ) {
+                //Make your callback here.
+                // alert("Done!");
+                console.log(json);
+                return json.data;
             }, 
-            error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                alert("Status: " + textStatus); 
-                alert("Error: " + errorThrown); 
-            }
+            // success:function(response){
+            //     alert("Status: "+response);
+            //     console.log(response);
+            //     existenCambiosPendientes = false;
+            //     insertandoNuevoRegistro = false;
+            // }, 
+            // error: function(XMLHttpRequest, textStatus, errorThrown) { 
+            //     alert("Status: " + textStatus); 
+            //     alert("Error: " + errorThrown); 
+            // }
         },
-        data: arreglo,
+        // data: arreglo,
         columns: cols,
         rowReorder: {
             dataSrc: 'order',

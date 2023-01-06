@@ -85,15 +85,9 @@ function cargarProyectos(nombreTabla, idUsuario, arreglo=[], modoTabla='CRUD') {
 
     var payloadProyecto = {
         datos : idUsuario,
-        action : 'cargarDatos',
+        action : 'cargar_'+nombreTabla,
         html_table : nombreTabla
     }
-
-    // var payloadTablaHija = {
-    //     datos : JSON.stringify( IdProySeleccionado ),
-    //     action : 'cargarDatos',
-    //     html_table : nombreTabla
-    // }
 
     cargarTablaGenerica(nombreTabla, arreglo, colProy, modoTabla, dataUrl, payloadProyecto, ddl_estado_ops, true);
 
@@ -115,7 +109,7 @@ function cargarProyectos(nombreTabla, idUsuario, arreglo=[], modoTabla='CRUD') {
     });
 }
 
-function cargarHabilidades(nombreTabla, arreglo, modoTabla='CRUD'){
+function cargarHabilidades(nombreTabla, IdProySeleccionado, arreglo=[], modoTabla='CRUD'){
     var colsHabilidades = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         { title: 'id', data: 'id', visible: false },
@@ -123,10 +117,17 @@ function cargarHabilidades(nombreTabla, arreglo, modoTabla='CRUD'){
         { title: 'id_habilidad', data: 'id_habilidad'}
     ];
     // console.log("hab", arreglo);
-    cargarTablaGenerica(nombreTabla, arreglo, colsHabilidades, modoTabla);
+    
+    var payloadHabilidades = {
+        datos : JSON.stringify( IdProySeleccionado ),
+        action : 'cargar_'+nombreTabla,
+        html_table : nombreTabla
+    }
+    if($('#'+nombreTabla).lenght) $('#'+nombreTabla).DataTable().clear().draw();
+    cargarTablaGenerica(nombreTabla, arreglo, colsHabilidades, modoTabla, dataUrl, payloadHabilidades);
 }
 
-function cargarTrabajadores(nombreTabla, arreglo, modoTabla='CRUD'){
+function cargarTrabajadores(nombreTabla, IdProySeleccionado, arreglo=[], modoTabla='CRUD'){
     var colsTrabajadores = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         { title: 'id', data: 'id', visible: false },
@@ -136,7 +137,14 @@ function cargarTrabajadores(nombreTabla, arreglo, modoTabla='CRUD'){
     ];
 
     // console.log("Trab:", arreglo);
-    cargarTablaGenerica(nombreTabla, arreglo, colsTrabajadores, modoTabla);
+    var payloadTrabajadores = {
+        datos : JSON.stringify( IdProySeleccionado ),
+        action : 'cargar_'+nombreTabla,
+        html_table : nombreTabla
+    }
+
+    if($('#'+nombreTabla).lenght) $('#'+nombreTabla).DataTable().clear().draw();
+    cargarTablaGenerica(nombreTabla, arreglo, colsTrabajadores, modoTabla, dataUrl, payloadTrabajadores);
 
     // if (idProyecto == null || idProyecto == '')
     // {

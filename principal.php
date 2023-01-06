@@ -10,7 +10,6 @@ require_once 'logica/clases/Empresa.php';
 require_once 'logica/clases/Estudio.php';
 require_once 'logica/clases/Perfil.php';
 require_once 'logica/clases/EmpresaAdm.php';
-require_once 'logica/clases/PerfilAdm.php';
 
 
 date_default_timezone_set('America/Bogota'); //establecer zona horaria de colombia
@@ -54,6 +53,9 @@ else {
     <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/select/1.5.0/js/dataTables.select.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+
+    <!-- <script src="librerias/ajax.js"></script>	 -->
+    
 
     <!-- 
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
