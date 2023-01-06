@@ -251,6 +251,7 @@ class Usuario
                         FROM    usuarios
                         $filtro 
                         $orden";
+        // echo $cadenaSQL;
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
@@ -264,6 +265,7 @@ class Usuario
             $usuario = new Usuario($resultado[$i], null);
             $lista[$i] = $usuario;
         }
+        // print_r($lista);
         return $lista;
     }
 
@@ -334,6 +336,7 @@ class Usuario
         for ($i = 0; $i < count($resultado); $i++) {
             $datos[$i] = new Proyecto($resultado[$i], null);
         }
-        return json_encode($datos);
+        // return json_encode($datos);
+        return $datos;
     }
 }
