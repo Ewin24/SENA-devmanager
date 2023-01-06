@@ -147,7 +147,7 @@ if (Usuario::esAdmin($identificacion)) {
         //  opciones de crud, dependiendo del usuario de sesion
         let modoTabla = ''
         <?php
-        echo "const tUsuario = '{$USUARIO->getTipoUsuario()}' ;"; //traer tipo de usuario de sesion
+        echo "const tUsuario = '{$USUARIO->getTipo_Usuario()}' ;"; //traer tipo de usuario de sesion
         ?>
         switch (tUsuario) {
             case 'A':
