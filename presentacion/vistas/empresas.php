@@ -132,7 +132,7 @@ if (Usuario::esAdmin($identificacion)) {
 <script type="module">
     import {
         cargarEmpresas,
-        cargarUsuarios
+        cargarTrabajadores
     } from './presentacion/vistas/js/empresas.js'
 
     let lisEmpresas = [];
@@ -204,7 +204,7 @@ if (Usuario::esAdmin($identificacion)) {
                         default:
                             break;
                     }
-                    cargarUsuarios('tblUsuarios', trabajadores, modoTabla);
+                    cargarTrabajadores('tblUsuarios', trabajadores, modoTabla);
                 });
             }
             // }
