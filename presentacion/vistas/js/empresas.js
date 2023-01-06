@@ -76,7 +76,7 @@ function cargarTrabajadores(nombreTabla, arreglo,modoTabla) {
       { title: "Foto", data: "nombre_foto", name: "nombre_foto", visible: true },
       { title: "Telefono", data: "telefono", name: "telefono", visible: true },
       { title: "Tipo de Usuario", data: "tipo_usuario", name: "tipo_usuario",  visible: true },
-      { title: "nit de Empresa", data: "id_mpresa", name: "id_mpresa", visible: false }
+      { title: "nit de Empresa", data: "id_empresa", name: "id_mpresa", visible: false }
     ];
 
     console.log("Trab:", arreglo);
