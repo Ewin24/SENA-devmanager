@@ -9,54 +9,32 @@ else {
 }
 
 $identificacion = $USUARIO->getIdentificacion();
-
-$datosProyectos = '[';
-
-// $resultado = Proyecto::getListaEnObjetos(null, null);
-// for ($i = 0; $i < count($resultado); $i++) {
-//     $proyecto = $resultado[$i];
-//     $datosProyectos .=
-//         '{ id: "' . $proyecto->getIdProyecto()
-//         . '", nombre: "' . $proyecto->getNombre()
-//         . '", descripcion: "' . $proyecto->getDescripcion()
-//         . '", estado: "' . $proyecto->getEstado()
-//         . '", fecha_inicio: "' . $proyecto->getFechaInicio()
-//         . '", fecha_fin: "' . $proyecto->getFechaFinalizacion()
-//         . '"},';
-// }
-// $datosProyectos .= ']';
-
-// // $idProySeleccionado = getProyectoSeleccionado(nombreTabla);
-// $idProySeleccionado = 'f660bbbf-dd1a-4eab-9866-dba8092c94c5';
-// ProyectoAdm::cargarTablasHijas($idProySeleccionado);
-
-
 $idUsuario = $USUARIO->getId();
 $tipoUsuario = $USUARIO->getTipo_usuario();
 echo $idUsuario, $identificacion, $tipoUsuario;
 switch ($tipoUsuario) {
     case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
-        $datosProyectos = Proyecto::getListaEnJson(null, null);
+        // $datosProyectos = Proyecto::getListaEnJson(null, null);
         $modoTabla = "'CRUD'";
         echo "Usuario A";
         break;
 
     case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
-        $idUsuario = $USUARIO->getId();
-        $filtroUsuario = "id_usuario='$idUsuario'";
-        $datosProyectos = Proyecto::getListaEnJson($filtroUsuario, null);
-        echo "Usuario D";
+        // $idUsuario = $USUARIO->getId();
+        // $filtroUsuario = "id_usuario='$idUsuario'";
+        // $datosProyectos = Proyecto::getListaEnJson($filtroUsuario, null);
+        // echo "Usuario D";
         // R solo lectura
         $modoTabla = "'CRUD'";
         break;
 
     default: //trabajador (modo: Solo lectura): perfiles existentes
-        $datosProyectos = $USUARIO->getProyectosUsuario($USUARIO->getId());
+        // $datosProyectos = $USUARIO->getProyectosUsuario($USUARIO->getId());
         $modoTabla = "'R'";
         // echo "Usuario T";
         break;
 }
-// print_r($datosProyectos);
+// // print_r($datosProyectos);
 ?>
 
 <h3 class="text-center">LISTA DE PROYECTOS</h3>
@@ -91,15 +69,6 @@ switch ($tipoUsuario) {
                 </tbody>
             </table>
         </div>
-        <!-- <br> 
-        <div class="row">
-            <div class="col align-self-start"></div>
-            <div class="col align-self-center"></div>
-            <div id="botonesGuardarCambios" class="col align-self-end" disabled="disabled">
-                <button type="button" id="btn-cancel" class="btn btn-secondary" data-dismiss="modal">Revertir Cambios</button>
-                <button type="button" id="btn-save" class="btn btn-primary" data-dismiss="modal">Guardar Cambios</button>
-            </div>
-        </div> -->
     </div>
 
 </fieldset>
@@ -191,7 +160,6 @@ switch ($tipoUsuario) {
 
 </fieldset>
 
-<!-- <script type="text/javascript" src="assets/barraBusqueda.js"></script> -->
 <script type="module">
     import {
         cargarProyectos,
@@ -202,18 +170,18 @@ switch ($tipoUsuario) {
     let lisProyectos = [];
     <?php echo 'const idUsuario = "' . $idUsuario . '";'; ?>
     <?php echo 'const modoTabla = "' . $modoTabla . '";'; ?>
-    <?php echo 'const dProy = ' . $datosProyectos . ';'; ?>
+    <?php //echo 'const dProy = ' . $datosProyectos . ';'; ?>
 
-    if (lisProyectos.length == 0 || lisProyectos == null) {
-        lisProyectos = [...dProy];
-    }
+    // if (lisProyectos.length == 0 || lisProyectos == null) {
+    //     lisProyectos = [...dProy];
+    // }
     // console.log(lisProyectos);
 
     // //genera_tabla(arreglo);    
 
 
     $(document).ready(function() {
-        cargarProyectos('tblProyectos', idUsuario, lisProyectos);
+        cargarProyectos('tblProyectos', idUsuario);
         var IdProySeleccionado = '';
         var selectorTabla = '#tblProyectos'
 
@@ -225,20 +193,15 @@ switch ($tipoUsuario) {
             var data = $(selectorTabla).DataTable().row(rowindex).data();
 
             if (data.id != IdProySeleccionado) {
-                // $('tblHab_Requeridas').DataTable().clear().draw();
-                // $('tblHab_Disponibles').DataTable().clear().draw();
-                // $('tblContratados').DataTable().clear().draw();
-                // $('tblCandidatos').DataTable().clear().draw();
 
                 IdProySeleccionado = data.id;
                 // console.log(IdProySeleccionado);
-                var dHabReq, dHabDisp, dTrabReq, dTrabDisp = null;
                 
                 console.clear();
-                cargarHabilidades('tblHab_Requeridas', IdProySeleccionado, dHabReq, modoTabla);
-                cargarHabilidades('tblHab_Disponibles',IdProySeleccionado, dHabDisp, modoTabla);
-                cargarTrabajadores('tblContratados', IdProySeleccionado, dTrabReq, modoTabla);
-                cargarTrabajadores('tblCandidatos', IdProySeleccionado, dTrabDisp, modoTabla);
+                cargarHabilidades('tblHab_Requeridas', IdProySeleccionado, modoTabla);
+                cargarHabilidades('tblHab_Disponibles',IdProySeleccionado, modoTabla);
+                cargarTrabajadores('tblContratados', IdProySeleccionado, modoTabla);
+                cargarTrabajadores('tblCandidatos', IdProySeleccionado, modoTabla);
                 // //// peticion - https://coderszine.com/live-datatables-crud-with-ajax-php-mysql/
                 // var dataReq = {
                 //     datos : IdProySeleccionado, 

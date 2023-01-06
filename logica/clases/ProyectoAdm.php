@@ -57,14 +57,6 @@ class ProyectoAdm
     /* REGION lógica negocio para administrar proyectos */
     public static function getDatosCrudos($filtro, $orden, $Opcion="", $idProyecto="")
     {
-        // if ($filtro == null || $filtro == '')
-        //     $filtro = '';
-        // else
-        //     $filtro = "WHERE $filtro";
-        // if ($orden == null || $orden == '')
-        //     $orden = '';
-        // else
-        //     $orden = "ORDER BY $orden";
         $datos = array();
 
         switch ($Opcion) {
@@ -118,19 +110,10 @@ class ProyectoAdm
                 }
                 break;
 
-            default: //proyectos
-                // $datos = Proyecto::getListaEnObjetos($filtro, $orden);
+            default: 
+                break;
         }
 
-        // $json_data = array(
-        //     //"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
-        //     "recordsTotal"    => intval( count($datos) ),  // total number of records
-        //     // "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
-        //     "data"            => $datos   // total data array
-        //     );
-
-        //echo json_encode($json_data);  // send data as json format
-        // echo $cadenaSQL;
         return $datos;
     }
 
