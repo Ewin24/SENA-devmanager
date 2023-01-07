@@ -111,6 +111,53 @@ class PerfilAdm //encargada de hacer las consultas y devolver datos en json
         }
         return [$datEstTrabajador , $datHabTrabajador]; //mandar en el orden en que se reciben en el controlador
     }
+
+    public static function guardarObj($usuario)
+    {
+        $clave = Usuario::hash($usuario->identificacion); //a clave es la identificacion encriptada
+        $UUID = Usuario::guidv4(); //genera el UUID
+        $cadenaSQL = "INSERT INTO usuarios
+                            (id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa)
+                            VALUES ('$UUID',
+                             '$usuario->identificacion', 
+                             '$usuario->tipo_identificacion', 
+                             '$usuario->nombres', 
+                             '$usuario->apellidos', 
+                             '$usuario->correo', 
+                             '$clave', 
+                             '$usuario->direccion', 
+                             '$usuario->nombre_foto', 
+                             '$usuario->telefono', 
+                             '$usuario->tipo_usuario', 
+                             '$usuario->id_empresa')";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    //modificar usuario
+    public static function modificarObj($usuario)
+    {
+        $cadenaSQL = "UPDATE  usuarios
+                      SET   identificacion='$usuario->identificacion', 
+                            tipo_identificacion='$usuario->tipo_identificacion', 
+                            nombres='$usuario->nombres', 
+                            apellidos='$usuario->apellidos', 
+                            correo='$usuario->correo', 
+                            direccion='$usuario->direccion', 
+                            nombre_foto='$usuario->nombre_foto', 
+                            telefono='$usuario->telefono', 
+                            tipo_usuario='$usuario->tipo_usuario', 
+                            id_empresa='$usuario->id_empresa'
+                       WHERE id='$usuario->id'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+        //clave_hash='$this->clave_hash',  *por el momento no esta implementado cambiar la clave* 
+    }
+
+    public static function eliminarObj($id)
+    { // hace eliminación de usuario con un id especifico
+        $cadenaSQL = "DELETE FROM usuarios WHERE identificacion='$id'";
+        ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
 }
 
 

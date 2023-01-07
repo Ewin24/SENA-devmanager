@@ -1,6 +1,7 @@
 <?php
 
-class TrabEmpresa {
+class TrabEmpresa
+{
 
     public $id;
     public $identificacion;
@@ -16,7 +17,8 @@ class TrabEmpresa {
     public $id_empresa;
 
     //constructor con array
-    public function __construct($campo, $valor) {
+    public function __construct($campo, $valor)
+    {
         if ($campo != null) {
             if (!is_array($campo)) {
                 $cadenaSQL = "  SELECT  id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa
@@ -41,10 +43,12 @@ class TrabEmpresa {
     }
 }
 
-class EmpresaAdm {    ////////////////////////////////////////////////////////////////////////////////////
+class EmpresaAdm
+{    ////////////////////////////////////////////////////////////////////////////////////
     /* REGION lógica negocio para administrar empresas */
 
-    public static function getDatosJson($filtro, $orden, $Opcion = "", $nitEmpresa = "") {
+    public static function getDatosJson($filtro, $orden, $Opcion = "", $nitEmpresa = "")
+    {
 
         $datos = array();
 
@@ -67,12 +71,14 @@ class EmpresaAdm {    //////////////////////////////////////////////////////////
         return $datos;
     }
 
-    public static function getTrabajadoresEmpresa($nitEmpresa) {
+    public static function getTrabajadoresEmpresa($nitEmpresa)
+    {
         //la empresa que se selecciona es pasada por parametro
         return EmpresaAdm::getDatosJson(null, null, "TrabEmpresa", $nitEmpresa);
     }
 
-    public static function cargarTablasHijas($nitEmpresa) {
+    public static function cargarTablasHijas($nitEmpresa)
+    {
 
         if ($nitEmpresa != null || $nitEmpresa != '') {
             // Definiendo la lógica de negocio dentro de la clase
@@ -81,4 +87,37 @@ class EmpresaAdm {    //////////////////////////////////////////////////////////
         return [$datTrabEmpresa];
     }
 
+    public static function guardarObj($empresa)
+    {
+        $cadenaSQL = "INSERT INTO empresas(id, nit, nombre, direccion, correo, telefono, nombre_representante, correo_representante) 
+                      VALUES (  '{$empresa->id}', 
+                                '{$empresa->nit}', 
+                                '{$empresa->nombre}', 
+                                '{$empresa->direccion}', 
+                                '{$empresa->correo}', 
+                                '{$empresa->telefono}', 
+                                '{$empresa->nombreRepresentante}', 
+                                '{$empresa->correoRepresentante}');";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    public static function modificarObj($empresa)
+    {
+        $cadenaSQL = "UPDATE `empresas` 
+                      SET nit = '{$empresa->nit}' ,
+                      `nombre` = '{$empresa->nombre}', 
+                      `direccion` = '{$empresa->direccion}', 
+                      `correo` = '{$empresa->correo}', 
+                      `telefono` = '{$empresa->telefono}', 
+                      `nombre_representante` = '{$empresa->nombreRepresentante}',
+                      `correo_representante` = '{$empresa->correoRepresentante}' 
+                       WHERE `empresas`.`nit` = '{$empresa->nit}'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    public static function eliminarObj($idEmpresa)
+    {
+        $cadenaSQL = "DELETE FROM empresas WHERE id = '$idEmpresa'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
 }

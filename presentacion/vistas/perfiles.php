@@ -12,25 +12,25 @@ if (isset($_REQUEST['mensaje'])) {
     $sms = "<div id='alerta' class='alert alert-danger text-center m-2 ' role='alert'>$mensaje</div>";
 }
 
-$json_perfiles = '[';
-$resultado = Perfil::getListaEnObjetos(null, null);
-for ($i = 0; $i < count($resultado); $i++) {
-    $perfil = $resultado[$i];
-    $json_perfiles .= '{ id: "' . $perfil->getId()
-        . '", identificacion: "' . $perfil->getIdentificacion()
-        . '", nombres: "' . $perfil->getNombres()
-        . '", apellidos: "' . $perfil->getApellidos()
-        . '", correo: "' . $perfil->getCorreo()
-        . '", tipo_identificacion: "' . $perfil->getTipoIdentificacion()
-        . '", clave_hash: "' . $perfil->getClave()
-        . '", direccion: "' . $perfil->getDireccion()
-        . '", nombre_foto: "' . $perfil->getFoto()
-        . '", telefono: "' . $perfil->getTelefono()
-        . '", tipo_usuario: "' . $perfil->getTipoUsuario()
-        . '", id_empresa: "' . $perfil->getIdEmpresa()
-        . '"},';
-}
-$json_perfiles .= ']';
+// $json_perfiles = '[';
+// $resultado = Perfil::getListaEnObjetos(null, null);
+// for ($i = 0; $i < count($resultado); $i++) {
+//     $perfil = $resultado[$i];
+//     $json_perfiles .= '{ id: "' . $perfil->getId()
+//         . '", identificacion: "' . $perfil->getIdentificacion()
+//         . '", nombres: "' . $perfil->getNombres()
+//         . '", apellidos: "' . $perfil->getApellidos()
+//         . '", correo: "' . $perfil->getCorreo()
+//         . '", tipo_identificacion: "' . $perfil->getTipoIdentificacion()
+//         . '", clave_hash: "' . $perfil->getClave()
+//         . '", direccion: "' . $perfil->getDireccion()
+//         . '", nombre_foto: "' . $perfil->getFoto()
+//         . '", telefono: "' . $perfil->getTelefono()
+//         . '", tipo_usuario: "' . $perfil->getTipoUsuario()
+//         . '", id_empresa: "' . $perfil->getIdEmpresa()
+//         . '"},';
+// }
+// $json_perfiles .= ']';
 
 ?>
 
@@ -46,7 +46,7 @@ $json_perfiles .= ']';
     </div>
 </fieldset>
 
-<fieldset class="form-group border p-3">
+<fieldset id="fsEstudios" class="form-group border p-3">
     <div class="container col-auto justify-content-center">
         <div class="row">
             <legend class="w-auto px-2">Estudios</legend>
@@ -56,7 +56,7 @@ $json_perfiles .= ']';
     </div>
 </fieldset>
 
-<fieldset class="form-group border p-3">
+<fieldset id="fsHabilidades" class="form-group border p-3">
     <div class="container col-auto justify-content-center">
         <div class="row">
             <legend class="w-auto px-2">Habilidades</legend>

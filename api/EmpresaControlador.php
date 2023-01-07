@@ -2,12 +2,129 @@
 
 require_once '../logica/clasesGenericas/ConectorBD.php';
 require_once '../logica/clases/EmpresaAdm.php';
+require_once '../logica/clases/Usuario.php';
+require_once '../logica/clases/Empresa.php';
 
-[$t1] = EmpresaAdm::cargarTablasHijas($_GET["nit"]); //se manda por protocolo
-//print_r($t1);
-$response = array(
-    "trabajadores" => $t1
-);
+if (!empty($_POST['action'])) {
 
-echo json_encode($response);
-?>
+    try {
+
+        $accion = $_POST['action'];
+        $response = '';
+        switch ($accion) {
+            case 'Insertar_tblEmpresas':
+                header('Content-type: application/json; charset=utf-8');
+                $newEmpresa = json_decode($_POST['datos']);
+                // echo $newProyecto->nombre;
+                // echo $newProyecto->estado;
+                if ($newEmpresa != null) {
+                    $newEmpresa->id = ConectorBD::get_UUIDv4();
+                    EmpresaAdm::guardarObj($newEmpresa);
+                }
+
+                $response = array(
+                    "data" => $newEmpresa->id,
+                    "accion" => $accion
+                );
+                break;
+
+            case 'Modificar_tblEmpresas':
+                header('Content-type: application/json; charset=utf-8');
+                $editarEmpresa = json_decode($_POST['datos']);
+
+                if ($editarEmpresa != null || $editarEmpresa != '') {
+                    EmpresaAdm::modificarObj($editarEmpresa);
+                }
+
+                $response = array(
+                    "data" => $editarEmpresa,
+                    "accion" => $accion
+                );
+                break;
+
+            case 'Eliminar_tblEmpresas':
+                header('Content-type: application/json; charset=utf-8');
+                $eliminarEmpresa = json_decode($_POST['datos']);
+
+                if ($eliminarEmpresa != null || $eliminarEmpresa != '') {
+                    EmpresaAdm::eliminarObj($eliminarEmpresa->id);
+                }
+
+                $response = array(
+                    "data" => $eliminarEmpresa,
+                    "accion" => $accion
+                );
+                break;
+
+            case 'cargar_tblEmpresas':
+                header('Content-type: application/json; charset=utf-8');
+                $idUsuario = $_POST['datos'];
+                $USUARIO = Usuario::getListaEnObjetos("id='$idUsuario'", null)[0];
+                $tipoUsuario = $USUARIO->getTipo_usuario();
+
+                switch ($tipoUsuario) {
+                    case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
+                        $datosEmpresas = Empresa::getListaEnObjetos(null, null);
+                        $modoTabla = "'CRUD'";
+                        break;
+
+                    case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
+                        $filtroUsuario = "id_usuario='$idUsuario'";
+                        $datosEmpresas = Empresa::getListaEnObjetos($filtroUsuario, null);
+                        // R solo lectura
+                        $modoTabla = "'CRUD'";
+                        break;
+
+                    default: //trabajador (modo: Solo lectura): perfiles existentes
+                        $datosEmpresas = Usuario::getProyectosUsuario($idUsuario);
+                        $modoTabla = "'R'";
+                        break;
+                }
+
+                $response = array(
+                    "data" => $datosEmpresas,
+                    "tipoUsuario" => $tipoUsuario
+                );
+                // $response = $datosProyectos;
+                break;
+
+            case 'cargar_tblTrabajadores':
+                header('Content-type: application/json; charset=utf-8');
+                $idEmpresaSeleccionada = $_POST['datos'];
+
+                if ($idEmpresaSeleccionada != null || $idEmpresaSeleccionada != '') {
+                    //// Definiendo la lógica de negocio dentro de la clase
+                    $datTrabajadores = EmpresaAdm::getTrabajadoresEmpresa($idEmpresaSeleccionada);
+                }
+
+                $response = array(
+                    "data" => $datTrabajadores,
+                    "idEmpresaSeleccionada" => $idEmpresaSeleccionada,
+                    "accion" => $accion
+                );
+                break;
+
+            default:
+                $response = array(
+                    "data" => array(),
+                    "accion" => "Acción no definida"
+                );
+                break;
+        }
+    } catch (customException $e) {
+        $response = array(
+            "data" => array(),
+            "accion" => "Error generado en $accion",
+            "error" => $e->errorMessage()
+        );
+    } catch (Exception $e) {
+        $response = array(
+            "data" => array(),
+            "accion" => "Error generado en $accion",
+            "error" => $e->getMessage()
+        );
+    }
+
+    // Enviando respuesta hacia el frontEnd
+    echo json_encode($response);
+}
