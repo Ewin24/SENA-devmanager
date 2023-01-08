@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <?php
+
 session_start();
 session_unset();
 session_destroy();
@@ -10,6 +11,9 @@ if (isset($_REQUEST['mensaje'])) {
     $mensaje = $_REQUEST['mensaje'];
     $sms = "<div id='alerta' class='alert alert-danger text-center m-2 ' role='alert'>$mensaje</div>";
 }
+
+//print_r(EmpresaAdm::getDatosJson(null, null, "TrabEmpresa", '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec'));
+
 ?>
 
 <html>

@@ -23,35 +23,35 @@ if(!empty($_POST['action'])) {
                 }
 
                 $response = array(
-                    "data" => $newProyecto->id,
+                    "data" => $newPerfil->id,
                     "accion" => $accion
                 );
                 break;
         
-            case 'Modificar_tblPerfil':
+            case 'Modificar_tblPerfiles':
                 header('Content-type: application/json; charset=utf-8');
-                $editarProyecto = json_decode($_POST['datos']);
+                $editarPerfil = json_decode($_POST['datos']);
 
-                    if ($editarProyecto != null || $editarProyecto != ''){
-                        ProyectoAdm::modificarObj($editarProyecto);
+                    if ($editarPerfil != null || $editarPerfil != ''){
+                        PerfilAdm::modificarObj($editarPerfil);
                     }
 
                 $response = array(
-                    "data" => $editarProyecto,
+                    "data" => $editarPerfil,
                     "accion" => $accion
                 );
                 break;
         
-            case 'Eliminar_tblProyectos':
+            case 'Eliminar_tblPerfiles':
                 header('Content-type: application/json; charset=utf-8');
-                $eliminarProyecto = json_decode($_POST['datos']);
+                $eliminarPerfil = json_decode($_POST['datos']);
 
-                    if ($eliminarProyecto != null || $eliminarProyecto != ''){
-                        ProyectoAdm::eliminarObj($eliminarProyecto->id);
+                    if ($eliminarPerfil != null || $eliminarPerfil != ''){
+                        PerfilAdm::eliminarObj($eliminarPerfil->id);
                     }
 
                 $response = array(
-                    "data" => $eliminarProyecto,
+                    "data" => $eliminarPerfil,
                     "accion" => $accion
                 );
                 break;

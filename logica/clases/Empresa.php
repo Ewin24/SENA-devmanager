@@ -3,14 +3,14 @@
 class Empresa
 {
 
-    private $id;
-    private $nit;
-    private $nombre;
-    private $direccion;
-    private $correo;
-    private $telefono;
-    private $nombreRepresentante;
-    private $correoRepresentante;
+    public $id;
+    public $nit;
+    public $nombre;
+    public $direccion;
+    public $correo;
+    public $telefono;
+    public $nombre_representante;
+    public $correo_representante;
 
     public function __construct($campo, $valor)
     {
@@ -29,8 +29,8 @@ class Empresa
             $this->direccion = $campo['direccion'];
             $this->correo = $campo['correo'];
             $this->telefono = $campo['telefono'];
-            $this->nombreRepresentante = $campo['nombre_representante'];
-            $this->correoRepresentante = $campo['correo_representante'];
+            $this->nombre_representante = $campo['nombre_representante'];
+            $this->correo_representante = $campo['correo_representante'];
         }
     }
 
@@ -66,12 +66,12 @@ class Empresa
 
     public function getNombreRepresentante()
     {
-        return $this->nombreRepresentante;
+        return $this->nombre_representante;
     }
 
     public function getCorreoRepresentante()
     {
-        return $this->correoRepresentante;
+        return $this->correo_representante;
     }
 
     public function setId($id): void
@@ -104,14 +104,14 @@ class Empresa
         $this->telefono = $telefono;
     }
 
-    public function setNombreRepresentante($nombreRepresentante): void
+    public function setNombreRepresentante($nombre_representante): void
     {
-        $this->nombreRepresentante = $nombreRepresentante;
+        $this->nombre_representante = $nombre_representante;
     }
 
-    public function setCorreoRepresentante($correoRepresentante): void
+    public function setCorreoRepresentante($correo_representante): void
     {
-        $this->correoRepresentante = $correoRepresentante;
+        $this->correo_representante = $correo_representante;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
@@ -129,8 +129,8 @@ class Empresa
                                 '{$this->direccion}', 
                                 '{$this->correo}', 
                                 '{$this->telefono}', 
-                                '{$this->nombreRepresentante}', 
-                                '{$this->correoRepresentante}');";
+                                '{$this->nombre_representante}', 
+                                '{$this->correo_representante}');";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
@@ -143,8 +143,8 @@ class Empresa
                       `direccion` = '{$this->direccion}', 
                       `correo` = '{$this->correo}', 
                       `telefono` = '{$this->telefono}', 
-                      `nombre_representante` = '{$this->nombreRepresentante}',
-                      `correo_representante` = '{$this->correoRepresentante}' 
+                      `nombre_representante` = '{$this->nombre_representante}',
+                      `correo_representante` = '{$this->correo_representante}' 
                        WHERE `empresas`.`nit` = '{$this->nit}'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
@@ -176,6 +176,7 @@ class Empresa
 
         $cadenaSQL = "SELECT id, nit, nombre, direccion, correo, telefono, nombre_representante, correo_representante 
                       FROM empresas $filtro $orden";
+        //print_r(ConectorBD::ejecutarQuery($cadenaSQL));
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 

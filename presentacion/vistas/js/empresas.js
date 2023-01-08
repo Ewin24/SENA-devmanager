@@ -1,9 +1,9 @@
 import { cargarTablaGenerica } from "../../../librerias/tablaGenerica.js";
 
+var dataUrl = 'http://localhost/SENA-devmanager/api/EmpresaControlador.php';//hay que configurar algun tipo de variable para que la url sirva si el proyecto cambia de nombre o de server
 
 function cargarEmpresas(nombreTabla, idUsuario, modoTabla = 'R') {
 
-    var dataUrl = 'http://localhost/SENA-devmanager/api/EmpresaControlador.php';//hay que configurar algun tipo de variable para que la url sirva si el proyecto cambia de nombre o de server
     var ddl_estado_ops = [
     { value : 'X', key : '' },
     { value : 'P', key : 'Pendiente' },
@@ -14,8 +14,8 @@ function cargarEmpresas(nombreTabla, idUsuario, modoTabla = 'R') {
     var colsEmpresas = [
         {   data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         {   title: 'id', data: 'id', name: 'id',  visible: false },
-        {   title: 'Nit', data: 'nit',name: 'nit' },
-        {   title: 'Nombre', data: 'nombre',name: 'nombre' ,visible: false },
+        {   title: 'Nit', data: 'nit',name: 'nit' ,visible: true},
+        {   title: 'Nombre', data: 'nombre',name: 'nombre' ,visible: true },
         {   title: 'Direccion', data: 'direccion',name: 'direccion',visible: true},
         {   title: 'Correo', data: 'correo',name:'correo', visible: true},
         {   title: 'Telefono', data: 'telefono',name: 'telefono', visible: true},
@@ -35,7 +35,7 @@ function cargarEmpresas(nombreTabla, idUsuario, modoTabla = 'R') {
         html_table : nombreTabla
     }
 
-    cargarTablaGenerica(nombreTabla, colsEmpresas, modoTabla, dataUrl, payloadEmpresas, ddl_estado_ops, true);
+    cargarTablaGenerica(nombreTabla, colsEmpresas, modoTabla, dataUrl, payloadEmpresas);
 
     //TODO: preguntar el funcionamiento de este codigo
     $('#btn-cancel-'+nombreTabla).click(function() {
@@ -44,7 +44,6 @@ function cargarEmpresas(nombreTabla, idUsuario, modoTabla = 'R') {
 }
 
 function cargarTrabajadores(nombreTabla, idEmpresaSeleccionada, modoTabla ='R') {
-    // var dataUrl = "";
     var colsTrabajadores = [
       {data: null,render: function () {return "<input type='checkbox'/>";},visible: true,},
       { title: "Id", data: "id", name: 'id', visible: false },

@@ -38,21 +38,21 @@ switch ($tipoUsuario) {
 
 
 //$json_usuarios = Usuario::getListaEnObjetos(null, null);
-$json_empresa = '[';
-$resultado = Empresa::getListaEnObjetos(null, null);
-for ($i = 0; $i < count($resultado); $i++) {
-    $empresa = $resultado[$i];
-    $json_empresa .= '{ id: "' . $empresa->getId()
-        . '", nit: "' . $empresa->getNit()
-        . '", nombre: "' . $empresa->getNombre()
-        . '", direccion: "' . $empresa->getDireccion()
-        . '", correo: "' . $empresa->getCorreo()
-        . '", telefono: "' . $empresa->getTelefono()
-        . '", nombre_representante: "' . $empresa->getNombreRepresentante()
-        . '", correo_representante: "' . $empresa->getCorreoRepresentante()
-        . '"},';
-}
-$json_empresa .= ']';
+// $json_empresa = '[';
+// $resultado = Empresa::getListaEnObjetos(null, null);
+// for ($i = 0; $i < count($resultado); $i++) {
+//     $empresa = $resultado[$i];
+//     $json_empresa .= '{ id: "' . $empresa->getId()
+//         . '", nit: "' . $empresa->getNit()
+//         . '", nombre: "' . $empresa->getNombre()
+//         . '", direccion: "' . $empresa->getDireccion()
+//         . '", correo: "' . $empresa->getCorreo()
+//         . '", telefono: "' . $empresa->getTelefono()
+//         . '", nombre_representante: "' . $empresa->getNombreRepresentante()
+//         . '", correo_representante: "' . $empresa->getCorreoRepresentante()
+//         . '"},';
+// }
+// $json_empresa .= ']';
 //print_r($json_empresa);
 //$idEmpresaSeleccionada = '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec';
 //EmpresaAdm::cargarTablasHijas($idEmpresaSeleccionada);
@@ -101,17 +101,17 @@ $json_empresa .= ']';
 
 </fieldset>
 
-<fieldset id='fsTrabajadores' class="form-group border p-3">
+<fieldset id='fsEmpleados' class="form-group border p-3">
     <div class="container col-auto justify-content-center">
         <div class="row">
             <legend class="w-auto px-2">USUARIOS EMPRESA</legend>
 
-            <table id="tblTrabajadores" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            <table id="tblEmpleados" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
             <!-- <div class="col align-self-center">
                 <textarea id="campoDescripcion" type="text" class="form-control" style="min-width: 100%" rows="5" disabled="disabled"></textarea>
             </div> -->
 
-            <table id="new-Usuario" style="display:none" class="col-auto">
+            <table id="new-Empleado" style="display:none" class="col-auto">
                 <tbody>
                     <tr>
                         <td>__identificacion__</td>
@@ -151,15 +151,15 @@ $json_empresa .= ']';
         cargarTrabajadores
     } from './presentacion/vistas/js/empresas.js'
 
-    let lisEmpresas = [];
-    <?php echo 'const  idUsuario = ' . $idUsuario ?>
-    <?php echo 'const  modoTabla = ' . $modoTabla ?>
-    <?php echo 'const dEmpr = ' . $json_empresa . ';'; ?>
+    //let lisEmpresas = [];
+    <?php echo 'const  idUsuario = "' . $idUsuario . '";';?>
+    <?php echo 'const  modoTabla = "' . $modoTabla . '";';?>
 
-    // console.log(dProy);
-    if (lisEmpresas.length == 0 || lisEmpresas == null) {
-        lisEmpresas = [...dEmpr];
-    }
+
+    // // console.log(dProy);
+    // if (lisEmpresas.length == 0 || lisEmpresas == null) {
+    //     lisEmpresas = [...dEmpr];
+    // }
 
     $(document).ready(function() {
         cargarEmpresas('tblEmpresas', idUsuario);
@@ -179,7 +179,8 @@ $json_empresa .= ']';
                 // console.log(IdProySeleccionado);
 
                 console.clear();
-                cargarTrabajadores('tblTrabajadores', idEmpresaSeleccionada, modoTabla);
+                cargarTrabajadores('tblEmpleados', idEmpresaSeleccionada, modoTabla);
+                console.log(idEmpresaSeleccionada);
                 // peticion - https://coderszine.com/live-datatables-crud-with-ajax-php-mysql/
                 // var dataReq = {
                 //     datos : IdProySeleccionado, 
@@ -220,7 +221,7 @@ $json_empresa .= ']';
         });
 
         $('#addRowtblEmpresas').click(function() {
-            $('#tblTrabajadores').DataTable().clear().draw();
+            $('#tblEmpleados').DataTable().clear().draw();
         });
 
     });

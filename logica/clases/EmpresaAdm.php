@@ -1,5 +1,5 @@
 <?php
-
+//require_once '../clasesGenericas/ConectorBD.php';
 class TrabEmpresa
 {
 
@@ -27,7 +27,6 @@ class TrabEmpresa
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
                 print_r($campo);
             }
-            //datos usuario
             $this->id = $campo['id'];
             $this->identificacion = $campo['identificacion'];
             $this->tipo_identificacion = $campo['tipo_identificacion'];
@@ -47,7 +46,7 @@ class EmpresaAdm
 {    ////////////////////////////////////////////////////////////////////////////////////
     /* REGION lógica negocio para administrar empresas */
 
-    public static function getDatosJson($filtro, $orden, $Opcion = "", $nitEmpresa = "")
+    public static function getDatosJson($filtro, $orden, $Opcion = "", $idEmpresa = "")
     {
 
         $datos = array();
@@ -55,7 +54,7 @@ class EmpresaAdm
         switch ($Opcion) {
 
             case "TrabEmpresa":
-                $filtroTrabajadores = "id_empresa = '$nitEmpresa'"; //lo que en el usuario se llama id empresa, es en realidad el nit, hay que modificar el dise�o logico
+                $filtroTrabajadores = "id_empresa = '$idEmpresa'"; //lo que en el usuario se llama id empresa, es en realidad el nit, hay que modificar el dise�o logico
                 $cadenaSQL = "  SELECT 	id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa
                                 FROM 	usuarios
                                 WHERE 	$filtroTrabajadores $orden";
@@ -68,13 +67,13 @@ class EmpresaAdm
 
             default:
         }
-        return $datos;
+        return $idEmpresa;
     }
 
-    public static function getTrabajadoresEmpresa($nitEmpresa)
+    public static function getTrabajadoresEmpresa($idEmpresa)
     {
         //la empresa que se selecciona es pasada por parametro
-        return EmpresaAdm::getDatosJson(null, null, "TrabEmpresa", $nitEmpresa);
+        return EmpresaAdm::getDatosJson(null, null, "TrabEmpresa", $idEmpresa);
     }
 
     public static function cargarTablasHijas($nitEmpresa)

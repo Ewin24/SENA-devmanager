@@ -65,6 +65,7 @@ if (!empty($_POST['action'])) {
                 switch ($tipoUsuario) {
                     case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
                         $datosEmpresas = Empresa::getListaEnObjetos(null, null);
+
                         $modoTabla = "'CRUD'";
                         break;
 
@@ -72,7 +73,7 @@ if (!empty($_POST['action'])) {
                         $filtroUsuario = "id_usuario='$idUsuario'";
                         $datosEmpresas = Empresa::getListaEnObjetos($filtroUsuario, null);
                         // R solo lectura
-                        $modoTabla = "'CRUD'";
+                        $modoTabla = "'R'";
                         break;
 
                     default: //trabajador (modo: Solo lectura): perfiles existentes
@@ -83,18 +84,21 @@ if (!empty($_POST['action'])) {
 
                 $response = array(
                     "data" => $datosEmpresas,
+                    "accion" => $accion,
                     "tipoUsuario" => $tipoUsuario
                 );
                 // $response = $datosProyectos;
                 break;
 
-            case 'cargar_tblTrabajadores':
+            case 'cargar_tblEmpleados':
                 header('Content-type: application/json; charset=utf-8');
                 $idEmpresaSeleccionada = $_POST['datos'];
 
                 if ($idEmpresaSeleccionada != null || $idEmpresaSeleccionada != '') {
                     //// Definiendo la lógica de negocio dentro de la clase
+
                     $datTrabajadores = EmpresaAdm::getTrabajadoresEmpresa($idEmpresaSeleccionada);
+                    //print_r($datTrabajadores);
                 }
 
                 $response = array(
