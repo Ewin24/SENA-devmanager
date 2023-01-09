@@ -74,7 +74,7 @@ CREATE TABLE usuarios_estudios (
   id_usuario VARCHAR(36) NOT NULL, /* UUID v4 */
   id_estudio VARCHAR(36) NOT NULL, /* UUID v4 */
   CONSTRAINT pk_usuarios_estudios PRIMARY KEY (id),
-  CONSTRAINT fk_usuarios_estudios_usuarios FOREIGN KEY (id_usuario) REFERENCES estudios (id),
+  CONSTRAINT fk_usuarios_estudios_usuarios FOREIGN KEY (id_usuario) REFERENCES usuarios (id),
   CONSTRAINT fk_usuarios_estudios_estudios FOREIGN KEY (id_estudio) REFERENCES estudios (id)
 );
 
