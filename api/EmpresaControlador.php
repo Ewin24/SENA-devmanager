@@ -12,6 +12,9 @@ if (!empty($_POST['action'])) {
         $accion = $_POST['action'];
         $response = '';
         switch ($accion) {
+
+                //////////////////////////////////////////////////////////////////////////////////////////////////////
+                //SECCION EMPRESAS
             case 'Insertar_tblEmpresas':
                 header('Content-type: application/json; charset=utf-8');
                 $newEmpresa = json_decode($_POST['datos']);
@@ -69,14 +72,19 @@ if (!empty($_POST['action'])) {
                         $modoTabla = "'CRUD'";
                         break;
 
-                    case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
-                        $filtroUsuario = "id_usuario='$idUsuario'";
-                        $datosEmpresas = Empresa::getListaEnObjetos($filtroUsuario, null);
-                        // R solo lectura
+                    case 'D': //Director solo puede entrar y ver los perfiles 
+                        $filtroUsuario = "id_usuario='$idUsuario'"; //en caso de que se tenga que filtrar
+                        $datosEmpresas = Empresa::getListaEnObjetos(null, null);
                         $modoTabla = "'R'";
                         break;
 
-                    default: //trabajador (modo: Solo lectura): perfiles existentes
+                    case 'T': //Trabajador solo lectura
+                        $filtroUsuario = "id_usuario='$idUsuario'"; //en caso de que se tenga que filtrar
+                        $datosEmpresas = Empresa::getListaEnObjetos(null, null);
+                        $modoTabla = "'R'";
+                        break;
+
+                    default: //por el momento esto seria trabajador, aunque es mejor lanzar un error si es un usuario invalido
                         $datosEmpresas = Usuario::getProyectosUsuario($idUsuario);
                         $modoTabla = "'R'";
                         break;
@@ -90,6 +98,9 @@ if (!empty($_POST['action'])) {
                 // $response = $datosProyectos;
                 break;
 
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////
+            //SECCION EMPLEADOS
             case 'cargar_tblEmpleados':
                 header('Content-type: application/json; charset=utf-8');
                 $idEmpresaSeleccionada = $_POST['datos'];
@@ -128,7 +139,6 @@ if (!empty($_POST['action'])) {
             "error" => $e->getMessage()
         );
     }
-
     // Enviando respuesta hacia el frontEnd
     echo json_encode($response);
 }

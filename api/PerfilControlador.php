@@ -5,19 +5,20 @@ require_once '../logica/clases/PerfilAdm.php';
 require_once '../logica/clases/Perfil.php';
 require_once '../logica/clases/Usuario.php';
 
-if(!empty($_POST['action'])) {
+if (!empty($_POST['action'])) {
 
     try {
 
         $accion = $_POST['action'];
         $response = '';
         switch ($accion) {
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////
+            //SECCION PERFILES
             case 'Insertar_tblPerfiles':
                 header('Content-type: application/json; charset=utf-8');
                 $newPerfil = json_decode($_POST['datos']);
-                // echo $newProyecto->nombre;
-                // echo $newProyecto->estado;
-                if ($newPerfil != null){
+                if ($newPerfil != null) {
                     $newPerfil->id = ConectorBD::get_UUIDv4();
                     PerfilAdm::guardarObj($newPerfil);
                 }
@@ -27,28 +28,28 @@ if(!empty($_POST['action'])) {
                     "accion" => $accion
                 );
                 break;
-        
+
             case 'Modificar_tblPerfiles':
                 header('Content-type: application/json; charset=utf-8');
                 $editarPerfil = json_decode($_POST['datos']);
 
-                    if ($editarPerfil != null || $editarPerfil != ''){
-                        PerfilAdm::modificarObj($editarPerfil);
-                    }
+                if ($editarPerfil != null || $editarPerfil != '') {
+                    PerfilAdm::modificarObj($editarPerfil);
+                }
 
                 $response = array(
                     "data" => $editarPerfil,
                     "accion" => $accion
                 );
                 break;
-        
+
             case 'Eliminar_tblPerfiles':
                 header('Content-type: application/json; charset=utf-8');
                 $eliminarPerfil = json_decode($_POST['datos']);
 
-                    if ($eliminarPerfil != null || $eliminarPerfil != ''){
-                        PerfilAdm::eliminarObj($eliminarPerfil->id);
-                    }
+                if ($eliminarPerfil != null || $eliminarPerfil != '') {
+                    PerfilAdm::eliminarObj($eliminarPerfil->id);
+                }
 
                 $response = array(
                     "data" => $eliminarPerfil,
@@ -56,30 +57,29 @@ if(!empty($_POST['action'])) {
                 );
                 break;
 
-            case 'cargar_tblProyectos':
+            case 'cargar_tblPerfiles':
                 header('Content-type: application/json; charset=utf-8');
                 $idUsuario = $_POST['datos'];
-                $USUARIO = Usuario::getListaEnObjetos("id='$idUsuario'",null)[0];
+                $USUARIO = Usuario::getListaEnObjetos("id='$idUsuario'", null)[0];
                 $tipoUsuario = $USUARIO->getTipo_usuario();
 
-                    switch ($tipoUsuario) {
-                        case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
-                            $datosProyectos = Proyecto::getListaEnObjetos(null, null);
-                            $modoTabla = "'CRUD'";
-                            break;
+                switch ($tipoUsuario) {
+                    case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
+                        $datosProyectos = Perfil::getListaEnObjetos(null, null);
+                        $modoTabla = "'CRUD'";
+                        break;
 
-                        case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
-                            $filtroUsuario = "id_usuario='$idUsuario'";
-                            $datosProyectos = Proyecto::getListaEnObjetos($filtroUsuario, null);
-                            // R solo lectura
-                            $modoTabla = "'CRUD'";
-                            break;
+                    case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
+                        $filtroUsuario = "id_usuario='$idUsuario'";
+                        $datosProyectos = Perfil::getListaEnObjetos($filtroUsuario, null);
+                        $modoTabla = "'CRUD'";
+                        break;
 
-                        default: //trabajador (modo: Solo lectura): perfiles existentes
-                            $datosProyectos = Usuario::getProyectosUsuario($idUsuario);
-                            $modoTabla = "'R'";
-                            break;
-                    }
+                    default: //trabajador (modo: Solo lectura): perfiles existentes
+                        $datosProyectos = Usuario::getProyectosUsuario($idUsuario);
+                        $modoTabla = "'R'";
+                        break;
+                }
 
                 $response = array(
                     "data" => $datosProyectos,
@@ -88,71 +88,40 @@ if(!empty($_POST['action'])) {
                 // $response = $datosProyectos;
                 break;
 
-            case 'cargar_tblHab_Requeridas':
+                //////////////////////////////////////////////////////////////////////////////////////////////////////
+                //SECCION HABILIDADES
+            case 'cargar_tblHabilidades':
                 header('Content-type: application/json; charset=utf-8');
-                $idProySeleccionado = $_POST['datos'];
+                $idPerfilSeleccionado = $_POST['datos'];
 
-                    if ($idProySeleccionado != null || $idProySeleccionado != ''){
-                        //// Definiendo la lógica de negocio dentro de la clase
-                        $datHabAsignados = ProyectoAdm::getHabilidadesRequeridas($idProySeleccionado);
-                    }
-
-                $response = array(
-                    "data" => $datHabAsignados,
-                    "idProySeleccionado" => $idProySeleccionado,
-                    "accion" => $accion
-                );
-
-                break;
-
-            case 'cargar_tblHab_Disponibles':
-                header('Content-type: application/json; charset=utf-8');
-                $idProySeleccionado = $_POST['datos'];
-
-                    if ($idProySeleccionado != null || $idProySeleccionado != ''){
-                        //// Definiendo la lógica de negocio dentro de la clase
-                        $datHabDisponibles = ProyectoAdm::getHabilidadesDisponibles($idProySeleccionado);
-                    }
-                    
-                $response = array(
-                    "data" => $datHabDisponibles,
-                    "idProySeleccionado" => $idProySeleccionado,
-                    "accion" => $accion
-                );
-                break;
-
-            case 'cargar_tblContratados':
-                header('Content-type: application/json; charset=utf-8');
-                $idProySeleccionado = $_POST['datos'];
-
-                    if ($idProySeleccionado != null || $idProySeleccionado != ''){
-                        //// Definiendo la lógica de negocio dentro de la clase
-                        $datTrabAsignados = ProyectoAdm::getTrabajadoresAsignados($idProySeleccionado);
-                    }
-                    
-                $response = array(
-                    "data" => $datTrabAsignados,
-                    "idProySeleccionado" => $idProySeleccionado,
-                    "accion" => $accion
-                );
-                break;
-
-            case 'cargar_tblCandidatos':
-                header('Content-type: application/json; charset=utf-8');
-                $idProySeleccionado = $_POST['datos'];
-                    
-                if ($idProySeleccionado != null || $idProySeleccionado != ''){
-                    //// Definiendo la lógica de negocio dentro de la clase
-                    $datTrabDisponibles = ProyectoAdm::getTrabajadoresDisponibles($idProySeleccionado);
+                if ($idPerfilSeleccionado != null || $idPerfilSeleccionado != '') {
+                    $datosHabilidades = PerfilAdm::getHabTrabajador($idPerfilSeleccionado);
                 }
 
                 $response = array(
-                    "data" => $datTrabDisponibles,
-                    "idProySeleccionado" => $idProySeleccionado,
+                    "data" => $datosHabilidades,
+                    "idPerfilSeleccionado" => $idPerfilSeleccionado,
+                    "accion" => $accion
+                );
+
+                break;
+
+                //////////////////////////////////////////////////////////////////////////////////////////////////////
+                //SECCION ESTUDIOS
+            case 'cargar_tblEstudios':
+                header('Content-type: application/json; charset=utf-8');
+                $idPerfilSeleccionado = $_POST['datos'];
+
+                if ($idPerfilSeleccionado != null || $idPerfilSeleccionado != '') {
+                    $datosEstudios = PerfilAdm::getEstTrabajador($idPerfilSeleccionado);
+                }
+
+                $response = array(
+                    "data" => $datosEstudios,
+                    "ididPerfilSeleccionado" => $idPerfilSeleccionado,
                     "accion" => $accion
                 );
                 break;
-
 
             default:
                 $response = array(
@@ -160,25 +129,20 @@ if(!empty($_POST['action'])) {
                     "accion" => "Acción no definida"
                 );
                 break;
-            
         }
-    }
-    catch (customException $e) {
+    } catch (customException $e) {
         $response = array(
             "data" => array(),
             "accion" => "Error generado en $accion",
             "error" => $e->errorMessage()
         );
-    }
-        
-    catch(Exception $e) {
+    } catch (Exception $e) {
         $response = array(
             "data" => array(),
             "accion" => "Error generado en $accion",
             "error" => $e->getMessage()
         );
     }
-
     // Enviando respuesta hacia el frontEnd
-    echo json_encode($response); 
+    echo json_encode($response);
 }

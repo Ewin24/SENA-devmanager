@@ -35,27 +35,6 @@ switch ($tipoUsuario) {
         // echo "Usuario T";
         break;
 }
-
-
-//$json_usuarios = Usuario::getListaEnObjetos(null, null);
-// $json_empresa = '[';
-// $resultado = Empresa::getListaEnObjetos(null, null);
-// for ($i = 0; $i < count($resultado); $i++) {
-//     $empresa = $resultado[$i];
-//     $json_empresa .= '{ id: "' . $empresa->getId()
-//         . '", nit: "' . $empresa->getNit()
-//         . '", nombre: "' . $empresa->getNombre()
-//         . '", direccion: "' . $empresa->getDireccion()
-//         . '", correo: "' . $empresa->getCorreo()
-//         . '", telefono: "' . $empresa->getTelefono()
-//         . '", nombre_representante: "' . $empresa->getNombreRepresentante()
-//         . '", correo_representante: "' . $empresa->getCorreoRepresentante()
-//         . '"},';
-// }
-// $json_empresa .= ']';
-//print_r($json_empresa);
-//$idEmpresaSeleccionada = '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec';
-//EmpresaAdm::cargarTablasHijas($idEmpresaSeleccionada);
 ?>
 
 <h3 class="text-center">ADMINISTRACION</h3>
@@ -151,15 +130,8 @@ switch ($tipoUsuario) {
         cargarTrabajadores
     } from './presentacion/vistas/js/empresas.js'
 
-    //let lisEmpresas = [];
     <?php echo 'const  idUsuario = "' . $idUsuario . '";';?>
     <?php echo 'const  modoTabla = "' . $modoTabla . '";';?>
-
-
-    // // console.log(dProy);
-    // if (lisEmpresas.length == 0 || lisEmpresas == null) {
-    //     lisEmpresas = [...dEmpr];
-    // }
 
     $(document).ready(function() {
         cargarEmpresas('tblEmpresas', idUsuario);
@@ -167,17 +139,11 @@ switch ($tipoUsuario) {
         var selectorTabla = '#tblEmpresas'
 
         $(selectorTabla + ' tbody').on('click', 'tr', function() {
-            // if($(this).hasClass('selected')) {
-            // var celda = dataTable.cell(this);
             var rowindex = $(this).closest("tr").index();
-            // console.log(selectorTabla, rowindex);
             var data = $(selectorTabla).DataTable().row(rowindex).data();
 
             if (data.id != idEmpresaSeleccionada) {
-
                 idEmpresaSeleccionada = data.id;
-                // console.log(IdProySeleccionado);
-
                 console.clear();
                 cargarTrabajadores('tblEmpleados', idEmpresaSeleccionada, modoTabla);
                 console.log(idEmpresaSeleccionada);

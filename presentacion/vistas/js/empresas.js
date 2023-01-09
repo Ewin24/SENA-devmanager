@@ -61,7 +61,7 @@ function cargarTrabajadores(nombreTabla, idEmpresaSeleccionada, modoTabla ='R') 
     ];
 
     var payloadTrabajadores = {
-        datos : JSON.stringify( idEmpresaSeleccionada ),
+        datos : idEmpresaSeleccionada ,
         action : 'cargar_'+nombreTabla,
         html_table : nombreTabla
     }

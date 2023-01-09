@@ -67,7 +67,7 @@ class EmpresaAdm
 
             default:
         }
-        return $idEmpresa;
+        return $datos;
     }
 
     public static function getTrabajadoresEmpresa($idEmpresa)

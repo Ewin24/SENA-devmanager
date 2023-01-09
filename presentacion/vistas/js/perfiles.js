@@ -1,8 +1,15 @@
 import { cargarTablaGenerica } from "../../../librerias/tablaGenerica.js";
 
-dataUrl = "http://localhost/SENA-devmanager/api/PerfilControlador.php";
+var dataUrl = 'http://localhost/SENA-devmanager/api/PerfilControlador.php';
 
-function cargarPerfiles(nombreTabla, idUsuario, arreglo, modoTabla='CRUD') {
+function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
+    var ddl_estado_ops = [
+        { value : 'X', key : '' },
+        { value : 'P', key : 'Pendiente' },
+        { value : 'E', key : 'Ejecución' },
+        { value : 'T', key : 'Terminado' }
+    ];
+
     var colsPerfiles = [
           { data: null,render: function () {return "<input type='checkbox'/>";},visible: true,},
           { title: "Id", data: "id", name: 'id', visible: false },
@@ -31,8 +38,8 @@ function cargarPerfiles(nombreTabla, idUsuario, arreglo, modoTabla='CRUD') {
         html_table : nombreTabla
     }
 
-    console.log("Perf", arreglo);
-    cargarTablaGenerica(nombreTabla, colsPerfiles, modoTabla, dataUrl, payloadPerfil, ddl_ops, true);
+    //console.log("Perf", arreglo);
+    cargarTablaGenerica(nombreTabla, colsPerfiles, modoTabla, dataUrl, payloadPerfil);
 
     $('#btn-cancel-'+nombreTabla).click(function() {
         $('#fsEstudios').prop("disabled", false);
@@ -52,7 +59,7 @@ function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
     // console.log("hab", arreglo);
 
     var payloadEstudios = {
-        datos : JSON.stringify( IdPerfilSeleccionado ),
+        datos : IdPerfilSeleccionado ,
         action : 'cargar_'+nombreTabla,
         html_table : nombreTabla
     }
@@ -70,7 +77,7 @@ function cargarHabilidades(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
     ];
 
     var payloadHabilidades = {
-        datos : JSON.stringify( IdPerfilSeleccionado),
+        datos : IdPerfilSeleccionado,
         action : 'cargar_'+nombreTabla,
         html_table : nombreTabla
     }
