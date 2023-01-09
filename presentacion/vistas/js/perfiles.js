@@ -50,8 +50,9 @@ function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
 function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
     var colsEstudios = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
-        { title: 'id', data: 'id', visible: true },
+        { title: 'Nombre', data: 'nombre'},
         { title: 'Nombre Certificado', data: 'nombre_certificado'},
+        { title: 'Nombre Archivo', data: 'nombre_archivo'},
         { title: 'Fecha Certificado', data: 'fecha_certificado'},
         { title: 'Id usuario', data: 'id_usuario', visible: false},
         { title: 'Id estudio', data: 'id_estudio', visible: false}
@@ -70,7 +71,8 @@ function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
 function cargarHabilidades(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
     var colsHabilidades = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
-        { title: 'id', data: 'id', visible: true },
+        { title: 'Nombre Habilidad', data: 'nombre'},
+        { title: 'Descripcion', data: 'descripcion'},
         { title: 'Experiencia', data: 'experiencia'},
         { title: 'Id usuario', data: 'id_usuario', visible: false},
         { title: 'Id habilidad', data: 'id_habilidad', visible: false}

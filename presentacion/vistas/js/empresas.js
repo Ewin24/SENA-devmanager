@@ -28,7 +28,6 @@ function cargarEmpresas(nombreTabla, idUsuario, modoTabla = 'R') {
     $('#botonesGuardarCambios').hide();
     $('#botonesGuardarCambios').attr("disabled", "disabled");
 
-    //TODO: preguntar a willi como funciona esta var
     var payloadEmpresas = {
         datos : idUsuario,
         action : 'cargar_'+nombreTabla,
@@ -37,7 +36,6 @@ function cargarEmpresas(nombreTabla, idUsuario, modoTabla = 'R') {
 
     cargarTablaGenerica(nombreTabla, colsEmpresas, modoTabla, dataUrl, payloadEmpresas);
 
-    //TODO: preguntar el funcionamiento de este codigo
     $('#btn-cancel-'+nombreTabla).click(function() {
         $('#fsUsuarios').prop("disabled", false);
     });
