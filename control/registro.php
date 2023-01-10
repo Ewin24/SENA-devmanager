@@ -15,29 +15,29 @@ if (count($identificaciones) > 0) {
 
 if (isset($_POST['registro']) && $_POST['clave1'] == $_POST['clave2']) {
     $identificacion = $_POST['identificacion'];
-    $nombre = $_POST['nombre'];
-    $apellido = $_POST['apellido'];
+    $nombre = $_POST['nombres'];
+    $apellido = $_POST['apellidos'];
     $tipo_usuario = 'T'; //por defecto es trabajador
     $clave = $_POST['clave2'];
-    $nombreUsuario = $_POST['identificacion']; //por defecto el nombre de usuario es la identificacion
+    //$nombreUsuario = $_POST['identificacion']; ya no se necesit
     $correo = $_POST['correo'];
     $telefono = $_POST['telefono'];
     $tipoIdentificacion = $_POST['tipo_identificacion'];
     $direccion = $_POST['direccion'];
-    $nitEmpresa = $_POST['nit_empresa'];
+    $nitEmpresa = $_POST['id_empresa'];
 
     $usuario = new Usuario(null, null);
     $usuario->setIdentificacion($identificacion);
-    $usuario->setNombre($nombre);
-    $usuario->setApellido($apellido);
-    $usuario->setTipoUsuario($tipo_usuario);
-    $usuario->setClave($clave);
-    $usuario->setNombreUsuario($nombreUsuario);
+    $usuario->setNombres($nombre);
+    $usuario->setApellidos($apellido);
+    $usuario->setTipo_usuario($tipo_usuario);
+    $usuario->setClave_hash($clave);
+    //$usuario->setNombreUsuario($nombreUsuario); no se necesita
     $usuario->setCorreo($correo);
     $usuario->setTelefono($telefono);
-    $usuario->setTipoIdentificacion($tipoIdentificacion);
+    $usuario->setTipo_identificacion($tipoIdentificacion);
     $usuario->setDireccion($direccion);
-    $usuario->setNitEmpresa($nitEmpresa);
+    $usuario->setId_empresa($nitEmpresa);
     $usuario->guardar();
 
     echo 'registro exitoso';

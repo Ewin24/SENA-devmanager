@@ -49,8 +49,6 @@ class Proyecto
         return $this->descripcion;
     }
 
-    // obtener el estado haciendo uso de la clase Fecha,  si la fecha de inicio es mayor a la de fin, entonces esta en estado "cerrado"  y si no, esta en estado "abierto" 
-    // y si la fecha de inicio es igual a la de fin, esta en estado "abierto"  y si la fecha de inicio es menor a la de fin, esta en estado "abierto"  
     public function getEstado()
     {
         return $this->estado;
@@ -135,7 +133,7 @@ class Proyecto
         $cadenaSQL = "SELECT nombre, descripcion, estado, fecha_inicio, fecha_fin, id_usuario FROM proyectos BETWEEN '$fechaIni' AND '$fechaFin'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
-  
+
     ////////////////////////////////////////////////////////////////////////////////////
     /* REGION CRUD proyectos */
     //eliminar un proyecto
@@ -211,5 +209,4 @@ class Proyecto
         $datos = Proyecto::getListaEnObjetos($filtro, $orden);
         return json_encode($datos);
     }
-
 }

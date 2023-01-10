@@ -201,5 +201,3 @@ if(!empty($_POST['action'])) {
     // Enviando respuesta hacia el frontEnd
     echo json_encode($response); 
 }
-
-?>
