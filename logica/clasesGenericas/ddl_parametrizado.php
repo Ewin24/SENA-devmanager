@@ -10,13 +10,19 @@ class Ddl_Parametrizado
     protected $cadenaSQL = "SELECT  tabla, campo, valor, texto 
                             FROM    ddl_parametrizado";
     protected $cadenaSQLjson =
-                            "SELECT json_object(tabla, 
-                                    json_object(
-                                        campo, json_array( group_concat(
-                                                            json_object('valor', valor, 'texto', texto)) )
-                                    )
-                            )		
-                            FROM 	ddl_parametrizado";
+                            "SELECT JSON_OBJECT(tabla, arr)
+                            FROM (
+                                SELECT tabla, JSON_ARRAYAGG(JSON_OBJECT(campo, arr)) AS arr
+                                FROM (
+                                    SELECT tabla, campo, JSON_ARRAYAGG(JSON_OBJECT(valor, texto)) AS arr
+                                    FROM ddl_parametrizado p
+                                    where tabla = 'tblProyectos'
+                                    AND campo IN ('correo_director', 'estado')
+                                    AND valor IS NOT NULL
+                                    GROUP BY tabla, campo
+                                ) AS a
+                                GROUP BY tabla
+                            ) AS b";
 
     public function __construct($campo, $valor)
     {
@@ -51,18 +57,24 @@ class Ddl_Parametrizado
     }
 
     public static function getddlOps($filtro, $orden){
-        if ($filtro == null || $filtro == '')
-            $filtro = '';
-        else
-            $filtro = "WHERE $filtro";
-        if ($orden == null || $orden == '')
-            $orden = '';
-        else
-            $orden = "ORDER BY $orden";
+        
+        $query = "SELECT JSON_OBJECT(tabla, arr) as JSON
+                    FROM (
+                        SELECT tabla, JSON_ARRAYAGG(JSON_OBJECT(campo, arr)) AS arr
+                        FROM (
+                            SELECT tabla, campo, JSON_ARRAYAGG(JSON_OBJECT('key',valor, 'value',texto)) AS arr
+                            FROM ddl_parametrizado p
+                            where $filtro
+                            AND valor IS NOT NULL
+                            GROUP BY tabla, campo
+                        ) AS a
+                        GROUP BY tabla
+                    ) AS b";
 
         $ddl = new Ddl_Parametrizado(null,null);
-        $sql = "$ddl->cadenaSQLjson $filtro $orden";
+        // $sql = "$ddl->cadenaSQLjson $filtro $orden";
+        $sql = $query;
         // echo $sql;
-        return json_encode(ConectorBD::ejecutarQuery($sql));
+        return ConectorBD::ejecutarQuery($sql)[0];
     }
 }

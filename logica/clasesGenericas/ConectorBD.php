@@ -62,6 +62,7 @@ class ConectorBD {
                 $consulta = false;
             } else {
                 $consulta = $sentencia->fetchAll(); //si se hace un select... devuelve los datos como una matriz asociativa
+                //print_r($consulta);
                 $sentencia->closeCursor();
             }
         } else {

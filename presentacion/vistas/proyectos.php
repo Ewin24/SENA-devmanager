@@ -9,10 +9,6 @@ else {
     $USUARIO = unserialize($_SESSION['usuario']);
 }
 
-$json_ddl = Ddl_Parametrizado::getddlOps("tabla='tblProyectos' AND campo in ('estado', 'correo_director')", null);
-print_r($json_ddl);
-
-
 $identificacion = $USUARIO->getIdentificacion();
 $idUsuario = $USUARIO->getId();
 $tipoUsuario = $USUARIO->getTipo_usuario();

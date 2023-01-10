@@ -95,11 +95,11 @@ if(!empty($_POST['action'])) {
                     }
                 }";
                 $htmlTabla = $_POST['html_tabla']; //'tblProyectos';
-                $json_ddl = json_encode(Ddl_Parametrizado::getddlOps("tabla='$htmlTabla' AND campo in ('estado', 'correo_director')", null));
-                // print_r($json_ddl);
+                $json_ddl = Ddl_Parametrizado::getddlOps("tabla='$htmlTabla' AND campo in ('estado', 'correo_director')", null);
+                //echo($json_ddl);
                 $response = array(
                     "data" => $datosProyectos,
-                    // "ddl_ops" => "{ $htmlTabla : $json_ddl }",
+                    "ddl_ops" => $json_ddl,
                     "tipoUsuario" => $tipoUsuario
                 );
                 // $response = $datosProyectos;

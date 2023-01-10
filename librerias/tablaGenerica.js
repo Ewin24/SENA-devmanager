@@ -10,6 +10,7 @@ const ultimaColumna = "<td><div><i id='edit_row' class='bi "+claseBotonEditarRow
 var existenCambiosPendientes = false;
 var insertandoNuevoRegistro = false;
 var dataTable = null;
+var ddl_ops = null;
 var dataUrl = null;
 
 function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador='', payloadInicial = {}, ddl_ops = [], campo_desc = false, arreglo={}, )
@@ -39,7 +40,18 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 //Make your callback here.
                 if(json.accion == "Acción no definida") alert(json.accion);
                 console.log(json);
-                ddl_ops = json.ddl_ops;
+
+                if(ddl_ops.length != 0){
+                    var opciones = JSON.parse(json.ddl_ops[0])[nombreTabla];
+                    var obj = {};
+                    for(const op of opciones){
+                        var key = Object.keys(op)[0];
+                        obj[key] = op[key];
+                        console.log(key, op);
+                    }
+                }
+                ddl_ops = obj;
+                // ddl_ops = JSON.parse(json.ddl_ops[0])[nombreTabla];
                 return json.data;
             }, 
             // success:function(response){
@@ -206,34 +218,34 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         
     }
 
-    $(selectorTabla+' tbody').on('click', 'tr', function () {
-        if ($(this).hasClass('selected')) {
-            if ( $( selectorCtrlDescripcion ).length ) {
-                if ( existenCambiosPendientes) {
-                    $( selectorCtrlDescripcion ).show();
-                }
-                else{
-                    $( selectorCtrlDescripcion ).hide();
-                }
-            }
-        }
-        else {
-            // $(this).addClass('selected');
-            // $(this).removeClass('selected');
+    // $(selectorTabla+' tbody').on('click', 'tr', function () {
+    //     if ($(this).hasClass('selected')) {
+    //         if ( $( selectorCtrlDescripcion ).length ) {
+    //             if ( existenCambiosPendientes) {
+    //                 $( selectorCtrlDescripcion ).show();
+    //             }
+    //             else{
+    //                 $( selectorCtrlDescripcion ).hide();
+    //             }
+    //         }
+    //     }
+    //     else {
+    //         // $(this).addClass('selected');
+    //         // $(this).removeClass('selected');
 
-            if ( $( selectorCtrlDescripcion ).length ) {
-                if ( existenCambiosPendientes) {
-                    $( selectorCtrlDescripcion ).removeAttr("disabled");
-                }
-                $( selectorCtrlDescripcion ).show();
+    //         if ( $( selectorCtrlDescripcion ).length ) {
+    //             if ( existenCambiosPendientes) {
+    //                 $( selectorCtrlDescripcion ).removeAttr("disabled");
+    //             }
+    //             $( selectorCtrlDescripcion ).show();
 
-                var tr = $(this).closest("tr");
-                var rowindex = tr.index();
-                var data = $(selectorTabla).DataTable().row( rowindex ).data();
-                $( selectorCtrlDescripcion ).val(data.descripcion);
-            }
-        }
-    });
+    //             var tr = $(this).closest("tr");
+    //             var rowindex = tr.index();
+    //             var data = $(selectorTabla).DataTable().row( rowindex ).data();
+    //             $( selectorCtrlDescripcion ).val(data.descripcion);
+    //         }
+    //     }
+    // });
 
     // // // eventos de selección de fila
     // $(selectorTabla+' tbody').on('click', 'tr', function () {
@@ -505,13 +517,15 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     }
 
     function enableddlEdit($cell) {
+        var campo = $cell.context.id;
+        var options = ddl_ops[campo];
         var txt = $cell.context.childNodes[0].value;
         $cell.empty().append($('<select>', {
             class : 'select-basic'
-        }).append(ddl_ops.map(function(option) {
+        }).append(options.map(function(option) {
         return $('<option>', {
-                value : option.value,
-                text : option.key
+                value : option.key,
+                text : option.value
             })
         })).data('original-value', txt)).val(txt);
     }
