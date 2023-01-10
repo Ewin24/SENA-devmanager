@@ -55,7 +55,7 @@ function cargarProyectos(nombreTabla, idUsuario, arreglo=[], modoTabla='CRUD') {
     var payloadProyecto = {
         datos : idUsuario,
         action : 'cargar_'+nombreTabla,
-        html_table : nombreTabla
+        html_tabla : nombreTabla
     }
 
     cargarTablaGenerica(nombreTabla, colProy, modoTabla, dataUrl, payloadProyecto, ddl_estado_ops, true);
@@ -88,7 +88,7 @@ function cargarHabilidades(nombreTabla, IdProySeleccionado, modoTabla='CRUD'){
     var payloadHabilidades = {
         datos : JSON.stringify( IdProySeleccionado ),
         action : 'cargar_'+nombreTabla,
-        html_table : nombreTabla
+        html_tabla : nombreTabla
     }
     if($('#'+nombreTabla).lenght) $('#'+nombreTabla).DataTable().clear().draw();
     cargarTablaGenerica(nombreTabla, colsHabilidades, modoTabla, dataUrl, payloadHabilidades);
@@ -107,7 +107,7 @@ function cargarTrabajadores(nombreTabla, IdProySeleccionado, modoTabla='CRUD'){
     var payloadTrabajadores = {
         datos : JSON.stringify( IdProySeleccionado ),
         action : 'cargar_'+nombreTabla,
-        html_table : nombreTabla
+        html_tabla : nombreTabla
     }
 
     if($('#'+nombreTabla).lenght) $('#'+nombreTabla).DataTable().clear().draw();

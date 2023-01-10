@@ -34,11 +34,12 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             method:"POST",
             data: payloadInicial,
             dataType:"json",
-            // dataSrc: 'data',
+            // dataSrc: 'datos',
             dataSrc: function ( json ) {
                 //Make your callback here.
                 if(json.accion == "Acción no definida") alert(json.accion);
                 console.log(json);
+                ddl_ops = json.ddl_ops;
                 return json.data;
             }, 
             // success:function(response){
@@ -392,6 +393,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 alert("Error: " + errorThrown); 
             }
         });
+        
         $(selectorTabla).DataTable().ajax.reload();
     });
 

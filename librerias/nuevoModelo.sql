@@ -121,11 +121,48 @@ CREATE TABLE proyectos_habilidades (
   id_proyecto VARCHAR(36) NOT NULL, /* UUID v4 */
   id_habilidad VARCHAR(36) NOT NULL, /* UUID v4 */
   CONSTRAINT pK_proyectos_habilidades PRIMARY KEY (id),
-  CONSTRAINT fk_proyectos_habilidades_proyectos FOREIGN KEY (id_proyecto) REFERENCES proyectos (id),
-  CONSTRAINT fk_proyectos_habilidades_habilidades FOREIGN KEY (id_habilidad) REFERENCES habilidades (id)
+  CONSTRAINT fK_proyectos_habilidades_proyectos FOREIGN KEY (id_proyecto) REFERENCES proyectos (id),
+  CONSTRAINT fK_proyectos_habilidades_habilidades FOREIGN KEY (id_habilidad) REFERENCES habilidades (id)
 );
 
+
+CREATE TABLE ddl_parametrizado (
+	id int auto_increment,
+	tabla varchar(50) NOT NULL,
+	campo varchar(50) NOT NULL,
+	valor varchar(50) null,
+	texto varchar(50) null,
+  	CONSTRAINT pK_ddl_parametrizado PRIMARY KEY (id)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_general_ci
+COMMENT='Tabla que permite obtener opciones para controles ddl';
+
+
 -- Poblar base
+-- Tablas paramétrizadas
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(1, 'usuarios', 'tipo_identificacion', 'T', 'Tarjeta Identidad');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(2, 'usuarios', 'tipo_identificacion', 'C', 'Cédula');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(3, 'usuarios', 'tipo_identificacion', 'R', 'Registro Civil');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(4, 'usuarios', 'tipo_identificacion', 'P', 'Pasaporte');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(5, 'usuarios', 'usuarios', '-', NULL);
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(6, 'usuarios', 'tipo_usuario', 'A', 'Admin');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(7, 'usuarios', 'tipo_usuario', 'D', 'Director');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(8, 'usuarios', 'tipo_usuario', 'T', 'Trabajador');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(9, 'tipo_usuario', 'tipo_usuario', '-', NULL);
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(10, 'tblProyectos', 'estado', 'T', 'Terminado');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(11, 'tblProyectos', 'estado', 'P', 'Espera');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(12, 'tblProyectos', 'estado', 'E', 'Ejecución');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(13, 'tblProyectos', 'estado', '-', NULL);
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(14, 'rh_proyectos', 'estado', 'A', 'Admitido');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(15, 'rh_proyectos', 'estado', 'R', 'Rechazado');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(16, 'rh_proyectos', 'estado', 'E', 'Espera');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(17, 'rh_proyectos', 'estado', '-', NULL);
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(18, 'tblProyectos', 'correo_director', '8fa903bc-0789-43b2-901b-70d6c60334ba', 'fgarcia@gmail.com');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(19, 'tblProyectos', 'correo_director', '499a9d4a-fbf1-4ea7-850b-01bf301a98af', 'wtrigos@gmail.com');
+
+
 
 -- empresa
 -- UUID V4 - https://www.delftstack.com/howto/php/php-uuid/

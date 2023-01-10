@@ -1,12 +1,17 @@
 <?php
 
 require_once 'logica/clases/ProyectoAdm.php';
+require_once 'logica/clasesGenericas/ddl_parametrizado.php';
 
 // session_start();
 if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Ya hay una sesión activa, acceso no autorizado'); //sesiones activas al tiempo
 else {
     $USUARIO = unserialize($_SESSION['usuario']);
 }
+
+$json_ddl = Ddl_Parametrizado::getddlOps("tabla='tblProyectos' AND campo in ('estado', 'correo_director')", null);
+print_r($json_ddl);
+
 
 $identificacion = $USUARIO->getIdentificacion();
 $idUsuario = $USUARIO->getId();
