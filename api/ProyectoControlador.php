@@ -95,7 +95,7 @@ if(!empty($_POST['action'])) {
                     }
                 }";
                 $htmlTabla = $_POST['html_tabla']; //'tblProyectos';
-                $json_ddl = Ddl_Parametrizado::getddlOps("tabla='$htmlTabla' AND campo in ('estado', 'correo_director')", null);
+                $json_ddl = Ddl_Parametrizado::getddlOps("tabla='$htmlTabla' AND campo in ('estado', 'id_director')", null);
                 //echo($json_ddl);
                 $response = array(
                     "data" => $datosProyectos,

@@ -1,3 +1,5 @@
+docker run -dti --name some-mysql -e MYSQL_ROOT_PASSWORD=some12345 -p 3306:3306 mysql
+
 # Actualizar con respecto a repo Edwin primera vez
 
 1. Seleccionar rama master

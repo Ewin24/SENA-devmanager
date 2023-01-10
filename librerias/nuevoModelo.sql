@@ -159,8 +159,8 @@ INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(14, 'rh_pr
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(15, 'rh_proyectos', 'estado', 'R', 'Rechazado');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(16, 'rh_proyectos', 'estado', 'E', 'Espera');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(17, 'rh_proyectos', 'estado', '-', NULL);
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(18, 'tblProyectos', 'correo_director', '8fa903bc-0789-43b2-901b-70d6c60334ba', 'fgarcia@gmail.com');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(19, 'tblProyectos', 'correo_director', '499a9d4a-fbf1-4ea7-850b-01bf301a98af', 'wtrigos@gmail.com');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(18, 'tblProyectos', 'id_director', '8fa903bc-0789-43b2-901b-70d6c60334ba', 'fgarcia@gmail.com');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(19, 'tblProyectos', 'id_director', '499a9d4a-fbf1-4ea7-850b-01bf301a98af', 'wtrigos@gmail.com');
 
 
 

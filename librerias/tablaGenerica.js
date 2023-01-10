@@ -93,7 +93,19 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 targets: '_all',
                 "createdCell": function (td, cellData, rowData, row, col) {
                     if(col != 0 && col != cols.length){
-                        $(td).attr('id', cols[col].name);
+                        var campo = cols[col].name;
+                        $(td).attr('id', campo);
+
+                        if(cols[col].className == 'ddl'){
+                            for(const op of ddl_ops[campo]){
+                                var key = Object.keys(op)[0];
+                                var value = Object.keys(op)[1];
+                                if(op[key] == cellData) { 
+                                    $(td).empty().append(op[value]); }
+                                // objec[key] = op[key];
+                                // console.log(key, op, commit);
+                            }
+                        }
                     }
                 }
             }
@@ -418,7 +430,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             insertandoNuevoRegistro = false;
             $(selectorTabla).DataTable().row(0).remove().draw();
         }
-        $(selectorTabla).DataTable().draw();
+        $(selectorTabla).DataTable().ajax.reload();
     });
     
     // Botón nuevo proyecto
@@ -519,15 +531,43 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     function enableddlEdit($cell) {
         var campo = $cell.context.id;
         var options = ddl_ops[campo];
-        var txt = $cell.context.childNodes[0].value;
-        $cell.empty().append($('<select>', {
-            class : 'select-basic'
-        }).append(options.map(function(option) {
-        return $('<option>', {
-                value : option.key,
-                text : option.value
-            })
-        })).data('original-value', txt)).val(txt);
+        var valor = $cell.context.childNodes[0].value;
+        var commit = false;
+
+        var objec = {};
+        for(const op of options){
+            var key = Object.keys(op)[0];
+            var value = Object.keys(op)[1];
+            if(op[value] == valor) {commit = true; valor = op[key]; break;}
+            // objec[key] = op[key];
+            // console.log(key, op, commit);
+        }
+
+        var select = $('<select>').prop('id', campo);
+        $(options).each(function() {
+            select.append($("<option>")
+                    .prop('value', this.key)
+                    .text(this.value));
+        });
+        select.val(commit ? valor : $cell.data('original-text'));
+        $cell.empty().html(select);
+
+        // $cell.empty().append(
+        // $('<select>', {class : 'select-basic'})
+        // .append(options.map(function(option) {
+        // var r = option[key];
+        // if(option[key] === valor) {commit = true;}
+        // $('<option>', {
+        //         value : option.key,
+        //         text : option.value,
+        //     })
+        // })).val(commit ? valor : $cell.data('original-text')));
+        // /*prop('selectedIndex', 
+        //             commit ? 
+        //             valor : 
+        //             $cell.data('original-text'))
+        //         );
+        // */
     }
 
     function enableDatePicker($cell) {

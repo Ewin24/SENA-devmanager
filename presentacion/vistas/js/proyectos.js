@@ -43,8 +43,8 @@ function cargarProyectos(nombreTabla, idUsuario, arreglo=[], modoTabla='CRUD') {
         },
         {   title: 'Fecha inicio', data: 'fecha_inicio', name: 'fecha_inicio', className: 'datepicker', type: 'date',  format:    'DD-MM-YYYY' },
         {   title: 'Fecha finalización',  data: 'fecha_fin',  name: 'fecha_fin', className: 'datepicker', type: 'date',  format:    'DD-MM-YYYY' },
-        {   title: 'id Director', data: 'id_director', name: 'id_director', visible: false },
-        {   title: 'Correo del Director', data: 'correo_director', name: 'correo_director', type: "select", className: 'ddl', visible: true },
+        {   title: 'id Director', data: 'id_director', name: 'id_director', type: "select", className: 'ddl', visible: true },
+        // {   title: 'Correo del Director', data: 'correo_director', name: 'correo_director', type: "select", className: 'ddl', visible: true },
     ];
 
     // configuración de carga inicial
@@ -70,10 +70,10 @@ function cargarProyectos(nombreTabla, idUsuario, arreglo=[], modoTabla='CRUD') {
     //     $('#fsTrabajadores').prop("disabled", true);
     // });
 
-    $('#btn-cancel-'+nombreTabla).click(function() {
-        $('#fsHabilidades').prop("disabled", false);
-        $('#fsTrabajadores').prop("disabled", false);
-    });
+    // $('#btn-cancel-'+nombreTabla).click(function() {
+    //     $('#fsHabilidades').prop("disabled", false);
+    //     $('#fsTrabajadores').prop("disabled", false);
+    // });
 }
 
 function cargarHabilidades(nombreTabla, IdProySeleccionado, modoTabla='CRUD'){
