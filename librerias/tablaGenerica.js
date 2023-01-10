@@ -60,7 +60,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         },
         destroy: true,
         processing: true,
-        select:{ style:'single', toggleable: false},
+        select:{ style:'single', toggleable: true},
         // fnInitComplete: function(oSettings, json) {
         //         // Seleccionar primera fila automáticamente;
         //         $(selectorTabla+' tbody tr:eq(0)').click();

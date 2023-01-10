@@ -34,6 +34,7 @@ function cargarEmpresas(nombreTabla, idUsuario, modoTabla = 'R') {
         html_table : nombreTabla
     }
 
+    console.log(modoTabla);
     cargarTablaGenerica(nombreTabla, colsEmpresas, modoTabla, dataUrl, payloadEmpresas);
 
     $('#btn-cancel-'+nombreTabla).click(function() {
