@@ -134,7 +134,7 @@ switch ($tipoUsuario) {
     <?php echo 'const  modoTabla = "' . $modoTabla . '";';?>
 
     $(document).ready(function() {
-        cargarEmpresas('tblEmpresas', idUsuario);
+        cargarEmpresas('tblEmpresas', idUsuario, modoTabla);
         var idEmpresaSeleccionada = '';
         var selectorTabla = '#tblEmpresas'
 

@@ -72,12 +72,12 @@ if (!empty($_POST['action'])) {
                     case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
                         $filtroUsuario = "id_usuario='$idUsuario'";
                         $datosProyectos = Perfil::getListaEnObjetos($filtroUsuario, null);
-                        $modoTabla = "'CRUD'";
+                        $modoTabla = 'RU';
                         break;
 
                     default: //trabajador (modo: Solo lectura): perfiles existentes
                         $datosProyectos = Usuario::getProyectosUsuario($idUsuario);
-                        $modoTabla = "'R'";
+                        $modoTabla = 'R';
                         break;
                 }
 
