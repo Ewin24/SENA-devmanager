@@ -40,7 +40,6 @@ if (isset($_POST['registro']) && $_POST['clave1'] == $_POST['clave2']) {
     $usuario->setId_empresa($nitEmpresa);
     $usuario->guardar();
 
-    echo 'registro exitoso';
     header('location: ../index.php?mensaje=Registro de usuario exitoso'); //hace el registro y manda el mensaje de exito
 }
 

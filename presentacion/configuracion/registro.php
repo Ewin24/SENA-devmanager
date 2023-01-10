@@ -86,7 +86,6 @@ for ($i = 0; $i < count($empresas); $i++) {
     </div>
   </div>
 </body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
   function campoUsuario() {

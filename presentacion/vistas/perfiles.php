@@ -45,7 +45,25 @@ switch ($tipoUsuario) {
         <div class="row">
             <legend class="w-auto px-2">Perfiles</legend>
             <table id="tblPerfiles" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-           
+            <table id="new-Perfile" style="display:none" class="col-auto">
+                <tbody>
+                    <tr>
+                        <td>__nit__</td>
+                        <td>__direccion__</td>
+                        <td>__direccion__</td>
+                        <td>__direccion__</td>
+                        <td>__direccion__</td>s
+                        <td>__correo__</td>
+                        <td>__telefono__</td>
+                        <td>__nombre representante__</td>
+                        <td>__correo representante__</td>
+                        <td>
+                            <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
+                            <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </fieldset>
@@ -55,6 +73,21 @@ switch ($tipoUsuario) {
         <div class="row">
             <legend class="w-auto px-2">Estudios</legend>
             <table id="tblEstudios" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            <table id="new-Estudio" style="display:none" class="col-auto">
+                <tbody>
+                    <tr>
+                        <td>__nit__</td>
+                        <td>__correo__</td>
+                        <td>__telefono__</td>
+                        <td>__nombre representante__</td>
+                        <td>__correo representante__</td>
+                        <td>
+                            <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
+                            <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </fieldset>
@@ -64,6 +97,19 @@ switch ($tipoUsuario) {
         <div class="row">
             <legend class="w-auto px-2">Habilidades</legend>
             <table id="tblHabilidades" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            <table id="new-Habilidad" style="display:none" class="col-auto">
+                <tbody>
+                    <tr>
+                        <td>__telefono__</t d>
+                        <td>__nombre representante__</td>
+                        <td>__correo representante__</td>
+                        <td>
+                            <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
+                            <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </fieldset>
