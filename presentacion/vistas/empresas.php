@@ -3,46 +3,41 @@
 if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Ya hay una sesion activa, acceso no autorizado'); //sesiones activas al tiempo
 else {
     $USUARIO = unserialize($_SESSION['usuario']);
-    $identificacion = $USUARIO->getIdentificacion();
+    //codigo en caso de que se generen mensajes desde la adicion, eliminacion o edicion de un usuario
+    $mensaje = '';
+    if (isset($_REQUEST['mensaje'])) {
+        $mensaje = $_REQUEST['mensaje'];
+        $sms = "<div id='alerta' class='alert alert-danger text-center m-2 ' role='alert'>$mensaje</div>";
+    }
 }
 
-//codigo en caso de que se generen mensajes desde la adicion, eliminacion o edicion de un usuario
-$mensaje = '';
-if (isset($_REQUEST['mensaje'])) {
-    $mensaje = $_REQUEST['mensaje'];
-    $sms = "<div id='alerta' class='alert alert-danger text-center m-2 ' role='alert'>$mensaje</div>";
-}
+$idUsuario = $USUARIO->getId();
+$tipoUsuario = $USUARIO->getTipo_usuario();
+switch ($tipoUsuario) {
+    case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
+        // $datosProyectos = Proyecto::getListaEnJson(null, null);
+        $modoTabla = "'CRUD'";
+        echo "Usuario A";
+        break;
 
-//$json_usuarios = Usuario::getListaEnObjetos(null, null);
-$json_empresa = '[';
-$resultado = Empresa::getListaEnObjetos(null, null);
-for ($i = 0; $i < count($resultado); $i++) {
-    $empresa = $resultado[$i];
-    $json_empresa .= '{ id: "' . $empresa->getId()
-        . '", nit: "' . $empresa->getNit()
-        . '", nombre: "' . $empresa->getNombre()
-        . '", direccion: "' . $empresa->getDireccion()
-        . '", correo: "' . $empresa->getCorreo()
-        . '", telefono: "' . $empresa->getTelefono()
-        . '", nombre_representante: "' . $empresa->getNombreRepresentante()
-        . '", correo_representante: "' . $empresa->getCorreoRepresentante()
-        . '"},';
-}
-$json_empresa .= ']';
+    case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
+        // $idUsuario = $USUARIO->getId();
+        // $filtroUsuario = "id_usuario='$idUsuario'";
+        // $datosProyectos = Proyecto::getListaEnJson($filtroUsuario, null);
+        // echo "Usuario D";
+        // R solo lectura
+        $modoTabla = "'CRUD'";
+        break;
 
-//print_r($json_empresa);
-//$idEmpresaSeleccionada = '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec';
-//EmpresaAdm::cargarTablasHijas($idEmpresaSeleccionada);
+    default: //trabajador (modo: Solo lectura): perfiles existentes
+        // $datosProyectos = $USUARIO->getProyectosUsuario($USUARIO->getId());
+        $modoTabla = "'R'";
+        // echo "Usuario T";
+        break;
+}
 ?>
 
 <h3 class="text-center">ADMINISTRACION</h3>
-<?php
-if (Usuario::esAdmin($identificacion)) {
-    // deja manipular usuarios si el user de sesion es ADMIN 
-    // echo  '<span><button type="button" class="btn btn-primary"><a href="principal.php?CONTENIDO=presentacion/configuracion/proyecto/proyectoFormulario.php&accion=Adicionar"></a>Nuevo Proyecto</button></span> ';
-    // echo  '<button type="button" id="addRow" class="btn btn-primary">Nuevo Proyecto</button></span> ';
-}
-?>
 
 <fieldset class="form-group border p-3">
     <div class="container col-auto justify-content-center">
@@ -85,20 +80,20 @@ if (Usuario::esAdmin($identificacion)) {
 
 </fieldset>
 
-<fieldset class="form-group border p-3">
+<fieldset id='fsEmpleados' class="form-group border p-3">
     <div class="container col-auto justify-content-center">
         <div class="row">
             <legend class="w-auto px-2">USUARIOS EMPRESA</legend>
 
-            <table id="tblUsuarios" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            <table id="tblEmpleados" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
             <!-- <div class="col align-self-center">
                 <textarea id="campoDescripcion" type="text" class="form-control" style="min-width: 100%" rows="5" disabled="disabled"></textarea>
             </div> -->
 
-            <table id="new-Usuario" style="display:none" class="col-auto">
+            <table id="new-Empleado" style="display:none" class="col-auto">
                 <tbody>
                     <tr>
-                        <td>__Nit__</td>
+                        <td>__identificacion__</td>
                         <td>__apellido__</td>
                         <td>__tipoUsuario__</td>
                         <td>__nombre Usuario__</td>
@@ -135,84 +130,65 @@ if (Usuario::esAdmin($identificacion)) {
         cargarTrabajadores
     } from './presentacion/vistas/js/empresas.js'
 
-    let lisEmpresas = [];
-    <?php echo 'const dEmpr = ' . $json_empresa . ';'; ?>
-
-    // console.log(dProy);
-    if (lisEmpresas.length == 0 || lisEmpresas == null) {
-        lisEmpresas = [...dEmpr];
-    }
+    <?php echo 'const  idUsuario = "' . $idUsuario . '";';?>
+    <?php echo 'const  modoTabla = "' . $modoTabla . '";';?>
 
     $(document).ready(function() {
-        //  opciones de crud, dependiendo del usuario de sesion
-        let modoTabla = ''
-        <?php
-        echo "const tUsuario = '{$USUARIO->getTipo_Usuario()}' ;"; //traer tipo de usuario de sesion
-        ?>
-        switch (tUsuario) {
-            case 'A':
-                modoTabla = 'CRUD';
-                break;
-            case 'D':
-                modoTabla = 'R';
-                break;
-            case 'T':
-                modoTabla = 'R';
-                break;
-            default:
-                break;
-        }
-        cargarEmpresas('tblEmpresas', lisEmpresas, modoTabla);
-        var $idEmpresaSeleccionada = '';
+        cargarEmpresas('tblEmpresas', idUsuario, modoTabla);
+        var idEmpresaSeleccionada = '';
         var selectorTabla = '#tblEmpresas'
-        //console.log(lisEmpresas);
 
         $(selectorTabla + ' tbody').on('click', 'tr', function() {
-            // if($(this).hasClass('selected')) {
-            // var celda = dataTable.cell(this);
             var rowindex = $(this).closest("tr").index();
-            console.log(selectorTabla, rowindex);
             var data = $(selectorTabla).DataTable().row(rowindex).data();
 
-            if (data.id != $idEmpresaSeleccionada) {
-                $('tblUsuarios').DataTable().clear().draw();
-                $idEmpresaSeleccionada = data.id;
-                // console.log($idEmpresaSeleccionada);
+            if (data.id != idEmpresaSeleccionada) {
+                idEmpresaSeleccionada = data.id;
+                console.clear();
+                cargarTrabajadores('tblEmpleados', idEmpresaSeleccionada, modoTabla);
+                console.log(idEmpresaSeleccionada);
+                // peticion - https://coderszine.com/live-datatables-crud-with-ajax-php-mysql/
+                // var dataReq = {
+                //     datos : IdProySeleccionado, 
+                //     action : 'cargarTablasHijas'
+                // };
+                // $.ajax({
+                //     url:"http://localhost/SENA-devmanager/api/ProyectoControlador.php",
+                //     method:"POST",
+                //     data: dataReq,
+                //     dataType:"json",
+                //     success:function(datos){
+                //         var { dHabReq, dHabDisp, dTrabReq, dTrabDisp } = datos.data;
+                //         console.log(datos);
+                //         cargarHabilidades('tblHab_Requeridas', dHabReq, modoTabla);
+                //         cargarHabilidades('tblHab_Disponibles', dHabDisp, modoTabla);
+                //         cargarTrabajadores('tblContratados', dTrabReq, modoTabla);
+                //         cargarTrabajadores('tblCandidatos', dTrabDisp, modoTabla);
+                //     }
+                // });
 
-                // peticion 
-                fetch('http://localhost/SENA-devmanager/api/EmpresaControlador.php?nit=' + $idEmpresaSeleccionada, {
-                    method: 'GET',
-                }).then((resp) => {
-                    return resp.json();
-                }).then((json) => {
-                    const {
-                        trabajadores
-                    } = json;
-
-                    //  opciones de crud, dependiendo del usuario de sesion
-                    let modoTabla = '';
-                    switch (tUsuario) {
-                        case 'A':
-                            modoTabla = 'CRUD';
-                            break;
-                        case 'D':
-                            modoTabla = 'CRU';
-                            break;
-                        case 'T':
-                            modoTabla = 'R';
-                            break;
-                        default:
-                            break;
-                    }
-                    cargarTrabajadores('tblUsuarios', trabajadores, modoTabla);
-                });
+                // fetch('http://localhost/SENA-devmanager/api/ProyectoControlador.php?id=' + IdProySeleccionado, {
+                //     method: 'GET',
+                // }).then((resp) => {
+                //     return resp.json();
+                // }).then((json) => {
+                //     const {
+                //         dHabReq,
+                //         dHabDisp,
+                //         dTrabReq,
+                //         dTrabDisp
+                //     } = json;
+                //         cargarHabilidades('tblHab_Requeridas', dHabReq, modoTabla);
+                //         cargarHabilidades('tblHab_Disponibles', dHabDisp, modoTabla);
+                //         cargarTrabajadores('tblContratados', dTrabReq, modoTabla);
+                //         cargarTrabajadores('tblCandidatos', dTrabDisp, modoTabla);
+                // });
             }
-            // }
         });
 
-        //limpia tablas hijas cuando se hace addRow
-        $('#addRowtblEmpresa').click(function() {
-            $('#tblUsuarios').DataTable().clear().draw();
+        $('#addRowtblEmpresas').click(function() {
+            $('#tblEmpleados').DataTable().clear().draw();
         });
+
     });
 </script>

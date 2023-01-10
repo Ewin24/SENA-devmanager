@@ -74,7 +74,7 @@ CREATE TABLE usuarios_estudios (
   id_usuario VARCHAR(36) NOT NULL, /* UUID v4 */
   id_estudio VARCHAR(36) NOT NULL, /* UUID v4 */
   CONSTRAINT pk_usuarios_estudios PRIMARY KEY (id),
-  CONSTRAINT fk_usuarios_estudios_usuarios FOREIGN KEY (id_usuario) REFERENCES estudios (id),
+  CONSTRAINT fk_usuarios_estudios_usuarios FOREIGN KEY (id_usuario) REFERENCES usuarios (id),
   CONSTRAINT fk_usuarios_estudios_estudios FOREIGN KEY (id_estudio) REFERENCES estudios (id)
 );
 
@@ -171,3 +171,7 @@ INSERT INTO proyectos_habilidades (id,id_proyecto,id_habilidad)
 VALUES
 ('12c1ec3e-6d4b-4379-9322-195269bc5bd4','f660bbbf-dd1a-4eab-9866-dba8092c94c5','0463add9-313e-49bf-a07e-800612c36263'),
 ('6f384e65-a7b6-4814-b5bd-dfeda652d748','43a9245a-275a-4b23-8ac0-a63fefa13013','65374dc5-692f-483d-9809-3371a7222a79');
+
+INSERT INTO estudios (`id`, `nombre`) VALUES ('50c46fc7-9066-11ed-aeb0-1701c1c49394', 'Basica Primaria');
+INSERT INTO estudios (`id`, `nombre`) VALUES ('788486b4-9066-11ed-aeb0-1701c1c49394', 'Maestria');
+

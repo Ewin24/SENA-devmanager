@@ -12,7 +12,7 @@ var insertandoNuevoRegistro = false;
 var dataTable = null;
 var dataUrl = null;
 
-function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlControlador='', ddl_estado_ops = [], campo_desc = false)
+function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador='', payloadInicial = {}, ddl_ops = [], campo_desc = false, arreglo={}, )
 {
     
     var selectorTabla = '#'+nombreTabla
@@ -29,23 +29,30 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlCo
     //// https://datatables.net/reference/option/rowId
     //// https://editor.datatables.net/examples/advanced/jsonId.html
     dataTable = $(selectorTabla).DataTable({
-        // ajax: {
-        //     url: urlControlador,
-        //     method:"POST",
-        //     data: payload,
-        //     dataType:"json",
-        //     success:function(response){
-        //         // alert("Status: "+response);
-        //         // console.log(rowdata);
-        //         existenCambiosPendientes = false;
-        //         insertandoNuevoRegistro = false;
-        //     }, 
-        //     error: function(XMLHttpRequest, textStatus, errorThrown) { 
-        //         alert("Status: " + textStatus); 
-        //         alert("Error: " + errorThrown); 
-        //     }
-        // },
-        data: arreglo,
+        ajax: {
+            url: urlControlador,
+            method:"POST",
+            data: payloadInicial,
+            dataType:"json",
+            // dataSrc: 'data',
+            dataSrc: function ( json ) {
+                //Make your callback here.
+                if(json.accion == "Acción no definida") alert(json.accion);
+                console.log(json);
+                return json.data;
+            }, 
+            // success:function(response){
+            //     alert("Status: "+response);
+            //     console.log(response);
+            //     existenCambiosPendientes = false;
+            //     insertandoNuevoRegistro = false;
+            // }, 
+            // error: function(XMLHttpRequest, textStatus, errorThrown) { 
+            //     alert("Status: " + textStatus); 
+            //     alert("Error: " + errorThrown); 
+            // }
+        },
+        // data: arreglo,
         columns: cols,
         rowReorder: {
             dataSrc: 'order',
@@ -359,7 +366,7 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlCo
             accionCRUD = 'Modificar';
         }
         // Si existe campo descripción, hay que llenar los datos con la nueva información
-        if(selectorCtrlDescripcion.length) rowdata.descripcion = $(selectorCtrlDescripcion).val();
+        if ( $( selectorCtrlDescripcion ).length ) rowdata.descripcion = $(selectorCtrlDescripcion).val();
 
         //// peticion - https://coderszine.com/live-datatables-crud-with-ajax-php-mysql/
         //// https://pastebin.com/raw/tuwVTa4D
@@ -367,7 +374,7 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlCo
         //// https://gabrieleromanato.name/jquery-sending-json-data-to-php-with-ajax
         var dataReq = {
             datos : JSON.stringify( rowdata ), 
-            action : accionCRUD
+            action : accionCRUD+'_'+nombreTabla,
         };
         $.ajax({
             url: urlControlador,
@@ -397,6 +404,7 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlCo
             insertandoNuevoRegistro = false;
             $(selectorTabla).DataTable().row(0).remove().draw();
         }
+        $(selectorTabla).DataTable().draw();
     });
     
     // Botón nuevo proyecto
@@ -498,7 +506,7 @@ function cargarTablaGenerica(nombreTabla, arreglo, cols, modoTabla='CRUD', urlCo
         var txt = $cell.context.childNodes[0].value;
         $cell.empty().append($('<select>', {
             class : 'select-basic'
-        }).append(ddl_estado_ops.map(function(option) {
+        }).append(ddl_ops.map(function(option) {
         return $('<option>', {
                 value : option.value,
                 text : option.key

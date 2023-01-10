@@ -86,3 +86,21 @@ cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops = [], campo_desc 
 ### Ejemplo de Ajax con datatable y PHP
 * [CRUD con Datatables y PHP](https://www.nicesnippets.com/blog/php-datatables-crud-example)
 * [Ejemplo de DataTable, Ajax, PHP y MySQL](https://evilnapsis.com/2022/09/19/ejemplo-de-datatable-ajax-php-y-mysql/)
+
+
+## Referencias adicionales 
+* insert a test row http://jsfiddle.net/55rfa8zb/1/
+* https://datatables.net/forums/discussion/28186/how-to-add-a-row-in-an-editable-table-and-keep-all-the-html-attributes
+* https://codepen.io/quanghuy1294/pen/OgNELB
+* https://github.com/FilipeMazzon/Datatable-inline-Edit-Free
+* agregar selección de fila https://datatables.net/examples/api/select_single_row.html
+* select everything when editing field in focus https://datatables.net/forums/discussion/1723/editable-with-datepicker-inside-datatables
+* https://stackoverflow.com/questions/14643617/create-table-using-javascript
+* https://linuxhint.com/create-table-from-array-objects-javascript/
+* generic crud draft datatebles http://jsfiddle.net/awbq0p4e/
+* aprendiendo sobre jqeury datatables https://github.com/schoolofnetcom/jquery-datatables
+* datatables con server processing https://phppot.com/demo/datatables-server-side-processing-using-php-with-mysql/
+* crud básico con html y datatables https://github.com/tutsmake/crud-datatables-php-mysql-jquery-ajax-bootstrap-github/blob/main/index.php
+* multiselección en datatables http://live.datatables.net/vamulagu/2/edit
+* DataTables CRUD Operations using PHP Example https://www.nicesnippets.com/blog/php-datatables-crud-example
+*  CRUD de datos usando dataTables, Bootstrap, PHP y MySQL https://obedalvarado.pw/blog/crud-de-datos-usando-datatables-bootstrap-php-y-mysql/
