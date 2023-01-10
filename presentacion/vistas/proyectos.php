@@ -1,6 +1,7 @@
 <?php
 
 require_once 'logica/clases/ProyectoAdm.php';
+require_once 'logica/clasesGenericas/ddl_parametrizado.php';
 
 // session_start();
 if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Ya hay una sesión activa, acceso no autorizado'); //sesiones activas al tiempo
