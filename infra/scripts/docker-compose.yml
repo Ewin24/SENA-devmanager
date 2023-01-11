@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+    mysql:
+        image: mysql:8.0
+        restart: always
+        ports:
+            - 3306:3306
+        environment:
+            - MYSQL_ROOT_PASSWORD=rootPassword
+            - MYSQL_DATABASE=devmanager2
+            - MYSQL_USER=user
+            - MYSQL_PASSWORD=userPassword
+        command: --init-file /data/application/init.sql
+        volumes:
+            - ./scripts/esquema.sql:/data/application/init.sql
+            - ./scripts/inserts_base.sql:/docker-entrypoint-initdb.d/inserts_data.sql
+            - ./db_data_dev:/var/lib/mysql
+
+    phpmyadmin:
+        image: phpmyadmin
+        restart: always
+        ports:
+            - 8080:80
+        environment:
+            - PMA_HOST=mysql
+        depends_on:
+            - mysql
+
+    apache:
+        image: php:8.0-apache
+        volumes:
+            - ../src:/var/www/html/
+        ports:
+            - 80:80
+        depends_on:
+        - mysql
+        
+# volumes:
+#   mysql_data:

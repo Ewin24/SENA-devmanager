@@ -1,0 +1,59 @@
+version: '3.7'
+
+services:
+    # Database
+    mysql-db:
+        image: mysql:8.0
+        restart: always
+        environment:
+            MYSQL_DATABASE: 'devmanager2'
+            # crear un usuario distinto de root
+            MYSQL_USER: 'user'
+            # password para el usuario
+            MYSQL_PASSWORD: 'userPassword'
+            # Password para acceso root
+            MYSQL_ROOT_PASSWORD: 'rootPassword'
+            # Politica de passwords
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'no'
+        ports:
+            - "3306:3306"
+        # networks:
+        #     - devmanager-net
+        command: --init-file /data/application/init.sql
+        volumes:
+            - ./scripts/esquema.sql:/data/application/init.sql
+            - ./scripts/inserts_base.sql:/docker-entrypoint-initdb.d/insert_data.sql
+            - ./db_data_dev:/var/lib/mysql
+
+
+        #     sh -c "
+        #         echo 'CREATE DATABASE IF NOT EXISTS PruebaDB; CREATE DATABASE IF NOT EXISTS DBApp;' > /docker-entrypoint-initdb.d/init.sql;
+        #         /usr/local/bin/docker-entrypoint.sh --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+        #     "
+        
+    # phpmyadmin
+    phpmyadmin:
+        depends_on:
+            - mysql-db
+        image: phpmyadmin/phpmyadmin
+        restart: always
+        ports:
+            - '8080:80'
+        environment:
+            PMA_HOST: mysql-db
+            MYSQL_ROOT_PASSWORD: rootPassword 
+        # networks:
+        #     - devmanager-net
+
+    apache:
+        container_name: php-apache
+        depends_on:
+            - mysql-db
+        image: php:8.0-apache
+        volumes:
+            - ../src:/var/www/html/
+        ports:
+            - 80:80
+
+# networks:
+#     devmanager-net:

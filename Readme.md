@@ -1,3 +1,11 @@
+docker-compose up -d
+
+Luego revisar la extensión docker de VSCODE para verificar que se ejecutan los contenedores
+
+* devmanager App: [localhost](http://localhost:80)
+* PhpMyAdmin: [localhost:8080](http://localhost:8080/)
+* MySql: [localhost:3306](http://localhost:3306/)
+
 docker run -dti --name some-mysql -e MYSQL_ROOT_PASSWORD=some12345 -p 3306:3306 mysql
 
 # Actualizar con respecto a repo Edwin primera vez
