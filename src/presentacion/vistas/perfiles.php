@@ -44,11 +44,11 @@ switch ($tipoUsuario) {
     <div class="container col-auto justify-content-center">
         <div class="row">
             <legend class="w-auto px-2">Perfiles</legend>
-            <table id="tblPerfiles" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-            <table id="new-Perfile" style="display:none" class="col-auto">
+            <table id="tblEmpleados" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            <table id="new-Empleado" style="display:none" class="col-auto">
                 <tbody>
                     <tr>
-                        <td></td>
+                    <td></td>
                         <td>__id__</td>
                         <td>__identificacion__</td>
                         <td>__tipo identificacion__</td>
@@ -134,9 +134,9 @@ switch ($tipoUsuario) {
     <?php echo 'const modoTabla = "' . $modoTabla . '";'; ?>
 
     $(document).ready(function() {
-        cargarPerfiles('tblPerfiles', idUsuario, modoTabla);
+        cargarPerfiles('tblEmpleados', idUsuario, modoTabla);
         var idPerfilSeleccionado = '';
-        var selectorTabla = '#tblPerfiles';
+        var selectorTabla = '#tblEmpleados';
 
         $(selectorTabla + ' tbody').on('click', 'tr', function() {
             var rowindex = $(this).closest("tr").index();

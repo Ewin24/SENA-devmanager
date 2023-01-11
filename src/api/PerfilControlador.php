@@ -1,6 +1,7 @@
 <?php
 
 require_once '../logica/clasesGenericas/ConectorBD.php';
+require_once '../logica/clasesGenericas/ddl_parametrizado.php';
 require_once '../logica/clases/PerfilAdm.php';
 require_once '../logica/clases/Perfil.php';
 require_once '../logica/clases/Usuario.php';
@@ -13,8 +14,8 @@ if (!empty($_POST['action'])) {
         $response = '';
         switch ($accion) {
 
-            //////////////////////////////////////////////////////////////////////////////////////////////////////
-            //SECCION PERFILES
+                //////////////////////////////////////////////////////////////////////////////////////////////////////
+                //SECCION PERFILES
             case 'Insertar_tblPerfiles':
                 header('Content-type: application/json; charset=utf-8');
                 $newPerfil = json_decode($_POST['datos']);
@@ -80,9 +81,12 @@ if (!empty($_POST['action'])) {
                         $modoTabla = 'R';
                         break;
                 }
-
+                $htmlTabla = $_POST['html_tabla'];
+                $json_ddl = Ddl_Parametrizado::getddlOps("tabla= '$htmlTabla' AND campo in('tipo_identificacion', 'tipo_usuario', 'id_empresa')", null);
                 $response = array(
                     "data" => $datosProyectos,
+                    "idPerfilSeleccionado" => $idUsuario,
+                    "ddl_ops" => $json_ddl,
                     "tipoUsuario" => $tipoUsuario
                 );
                 // $response = $datosProyectos;
