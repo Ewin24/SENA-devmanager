@@ -85,7 +85,7 @@ class PerfilAdm //encargada de hacer las consultas y devolver datos en json
                 // INNER JOIN estudios 
                 // WHERE id_usuario = 'eb036f8a-75bd-4811-a477-1444e2521f3b'; 
                 $filtroEst = "id_usuario = '$idUsuario'";
-                $cadenaSQL = "  SELECT      ue.id, es.nombre, ue.fecha_certificado, ue.nombre_archivo, ue.nombre_certificado, ue.id_usuario, ue.id_estudio, es.nombre
+                $cadenaSQL = "  SELECT      ue.id, es.nombre, ue.fecha_certificado, ue.nombre_archivo, ue.nombre_certificado, ue.id_usuario, ue.id_estudio
                                 FROM        usuarios_estudios ue
                                 INNER JOIN  estudios es on ue.id_estudio =  es.id
                                 WHERE $filtroEst $orden;";
@@ -102,10 +102,10 @@ class PerfilAdm //encargada de hacer las consultas y devolver datos en json
                 //INNER JOIN habilidades ON usuarios_habilidades.id_habilidad = habilidades.id 
                 //WHERE id_usuario = 'eb036f8a-75bd-4811-a477-1444e2521f3b';
                 $filtroHab = "id_usuario = '$idUsuario'";
-                $cadenaSQL = "  SELECT      uh.id, uh.id_habilidad, uh.id_usuario, uh.experiencia, h.nombre, h.descripcion  
-                                FROM        usuarios_habilidades uh
+                $cadenaSQL = "  SELECT uh.id, uh.id_habilidad, uh.id_usuario, uh.experiencia, h.descripcion, h.nombre
+                                FROM usuarios_habilidades uh
                                 INNER JOIN  habilidades h ON uh.id_habilidad = h.id 
-                                WHERE       $filtroHab $orden;";
+                                WHERE $filtroHab $orden;";
                 //echo $cadenaSQL;
                 $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
                 for ($i = 0; $i < count($resultado); $i++) {
@@ -120,21 +120,24 @@ class PerfilAdm //encargada de hacer las consultas y devolver datos en json
         return $datos;
     }
 
-    public static function getHabTrabajador($idUsuario){
-        return PerfilAdm::getDatosJson(null,null, 'TrabHabilidades', $idUsuario);
+    public static function getHabTrabajador($idUsuario)
+    {
+        return PerfilAdm::getDatosJson(null, null, 'TrabHabilidades', $idUsuario);
     }
 
-    public static function getEstTrabajador($idUsuario){
-        return PerfilAdm::getDatosJson(null,null, 'TrabEstudio', $idUsuario);
+    public static function getEstTrabajador($idUsuario)
+    {
+        return PerfilAdm::getDatosJson(null, null, 'TrabEstudio', $idUsuario);
     }
 
-    public static function cargarTablasHijas($idUsuario) {
+    public static function cargarTablasHijas($idUsuario)
+    {
         if ($idUsuario != null || $idUsuario != '') {
             // Definiendo la lógica de negocio dentro de la clase
             $datHabTrabajador = PerfilAdm::getHabTrabajador($idUsuario);
             $datEstTrabajador = PerfilAdm::getEstTrabajador($idUsuario);
         }
-        return [$datEstTrabajador , $datHabTrabajador]; //mandar en el orden en que se reciben en el controlador
+        return [$datEstTrabajador, $datHabTrabajador]; //mandar en el orden en que se reciben en el controlador
     }
 
     public static function guardarObj($usuario)
@@ -182,7 +185,4 @@ class PerfilAdm //encargada de hacer las consultas y devolver datos en json
         $cadenaSQL = "DELETE FROM usuarios WHERE identificacion='$id'";
         ConectorBD::ejecutarQuery($cadenaSQL);
     }
-
 }
-
-

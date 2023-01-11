@@ -48,15 +48,19 @@ switch ($tipoUsuario) {
             <table id="new-Perfile" style="display:none" class="col-auto">
                 <tbody>
                     <tr>
-                        <td>__nit__</td>
-                        <td>__direccion__</td>
-                        <td>__direccion__</td>
-                        <td>__direccion__</td>
-                        <td>__direccion__</td>s
+                        <td></td>
+                        <td>__id__</td>
+                        <td>__identificacion__</td>
+                        <td>__tipo identificacion__</td>
+                        <td>__nombre Usuario__</td>
+                        <td>__apellido__</td>
                         <td>__correo__</td>
-                        <td>__telefono__</td>
-                        <td>__nombre representante__</td>
-                        <td>__correo representante__</td>
+                        <td>__direccion__</td>
+                        <td>__direccion__</td>
+                        <td>__foto__</td>
+                        <td>__Telefono__</td>
+                        <td>__tipoUsuario__</td>
+                        <td>__Empresa__</td>
                         <td>
                             <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
                             <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
@@ -76,11 +80,13 @@ switch ($tipoUsuario) {
             <table id="new-Estudio" style="display:none" class="col-auto">
                 <tbody>
                     <tr>
-                        <td>__nit__</td>
-                        <td>__correo__</td>
-                        <td>__telefono__</td>
-                        <td>__nombre representante__</td>
-                        <td>__correo representante__</td>
+                        <td></td>
+                        <td>__Nombre__</td>
+                        <td>__Nombre certificado__</td>
+                        <td>__Nombre Archivo__</td>
+                        <td>__01/01/2020__</td>
+                        <td>__01/01/2020__</td>
+                        <td>__01/01/2020__</td>
                         <td>
                             <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
                             <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
@@ -97,11 +103,14 @@ switch ($tipoUsuario) {
         <div class="row">
             <legend class="w-auto px-2">Habilidades</legend>
             <table id="tblHabilidades" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-            <table id="new-Habilidad" style="display:none" class="col-auto">
+            <table id="new-Habilidade" style="display:none" class="col-auto">
                 <tbody>
                     <tr>
-                        <td>__telefono__</t d>
-                        <td>__nombre representante__</td>
+                        <td></td>
+                        <td>__nombre habilidad__</t d>
+                        <td>__Descripcion__</td>
+                        <td>__Experiencia__</td>
+                        <td>__correo representante__</td>
                         <td>__correo representante__</td>
                         <td>
                             <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
