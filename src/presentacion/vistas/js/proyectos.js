@@ -2,7 +2,7 @@ import {    cargarTablaGenerica, claseBotonEditarRow, claseBotonEliminarRow     
 
 var dataUrl = "http://localhost/SENA-devmanager/src/api/ProyectoControlador.php";
 
-function cargarProyectos(nombreTabla, idUsuario, arreglo=[], modoTabla='CRUD') {
+function cargarProyectos(nombreTabla, idUsuario, modoTabla='CRUD') {
 
     var ddl_estado_ops = [
     { value : 'X', key : '' },
@@ -76,7 +76,7 @@ function cargarProyectos(nombreTabla, idUsuario, arreglo=[], modoTabla='CRUD') {
     // });
 }
 
-function cargarHabilidades(nombreTabla, IdProySeleccionado, modoTabla='CRUD'){
+function cargarHabilidades(nombreTabla, IdProySeleccionado, tipoUsuario, modoTabla='R'){
     var colsHabilidades = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         { title: 'id', data: 'id' , name: 'id', visible: false },
@@ -91,10 +91,22 @@ function cargarHabilidades(nombreTabla, IdProySeleccionado, modoTabla='CRUD'){
         html_tabla : nombreTabla
     }
     if($('#'+nombreTabla).lenght) $('#'+nombreTabla).DataTable().clear().draw();
+   
+    if(nombreTabla == 'tblHab_Requeridas'){
+        switch (tipoUsuario) {
+            case "A":
+            case "D":
+                modoTabla = 'CR';
+                break;
+            default:
+                modoTabla = 'R';
+                break;
+        }                 
+    }
     cargarTablaGenerica(nombreTabla, colsHabilidades, modoTabla, dataUrl, payloadHabilidades);
 }
 
-function cargarTrabajadores(nombreTabla, IdProySeleccionado, modoTabla='CRUD'){
+function cargarTrabajadores(nombreTabla, IdProySeleccionado, tipoUsuario, modoTabla='R'){
     var colsTrabajadores = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         { title: 'id', data: 'id', name: 'id', visible: false },
@@ -111,7 +123,7 @@ function cargarTrabajadores(nombreTabla, IdProySeleccionado, modoTabla='CRUD'){
     }
 
     if($('#'+nombreTabla).lenght) $('#'+nombreTabla).DataTable().clear().draw();
-    cargarTablaGenerica(nombreTabla, colsTrabajadores, modoTabla, dataUrl, payloadTrabajadores);
+    cargarTablaGenerica(nombreTabla, colsTrabajadores, 'R', dataUrl, payloadTrabajadores);
 }
 
 export { cargarProyectos, cargarHabilidades, cargarTrabajadores }

@@ -61,7 +61,6 @@ switch ($tipoUsuario) {
                         <td>01/01/1900</td>
                         <td>01/01/2099</td>
                         <td>__idDirector__</td>
-                        <td>__Correo@Director__</td>
                         <td>
                             <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
                             <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
@@ -170,6 +169,7 @@ switch ($tipoUsuario) {
 
     let lisProyectos = [];
     <?php echo 'const idUsuario = "' . $idUsuario . '";'; ?>
+    <?php echo 'const tipoUsuario = "' . $tipoUsuario . '";'; ?>
     <?php echo 'const modoTabla = "' . $modoTabla . '";'; ?>
     <?php //echo 'const dProy = ' . $datosProyectos . ';'; ?>
 
@@ -199,10 +199,10 @@ switch ($tipoUsuario) {
                 // console.log(IdProySeleccionado);
                 
                 console.clear();
-                cargarHabilidades('tblHab_Requeridas', IdProySeleccionado, modoTabla);
-                cargarHabilidades('tblHab_Disponibles',IdProySeleccionado, modoTabla);
-                cargarTrabajadores('tblContratados', IdProySeleccionado, modoTabla);
-                cargarTrabajadores('tblCandidatos', IdProySeleccionado, modoTabla);
+                cargarHabilidades('tblHab_Requeridas', IdProySeleccionado, tipoUsuario);
+                cargarHabilidades('tblHab_Disponibles',IdProySeleccionado, tipoUsuario);
+                cargarTrabajadores('tblContratados', IdProySeleccionado, tipoUsuario);
+                cargarTrabajadores('tblCandidatos', IdProySeleccionado, tipoUsuario);
                 // //// peticion - https://coderszine.com/live-datatables-crud-with-ajax-php-mysql/
                 // var dataReq = {
                 //     datos : IdProySeleccionado, 
