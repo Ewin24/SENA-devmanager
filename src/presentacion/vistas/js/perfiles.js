@@ -50,12 +50,12 @@ function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
 function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
     var colsEstudios = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
-        { title: 'Nombre', data: 'nombre'},
-        { title: 'Nombre Certificado', data: 'nombre_certificado'},
-        { title: 'Nombre Archivo', data: 'nombre_archivo'},
-        { title: 'Fecha Certificado', data: 'fecha_certificado'},
-        { title: 'Id usuario', data: 'id_usuario', visible: false},
-        { title: 'Id estudio', data: 'id_estudio', visible: false}
+        { title: 'Nombre', data: 'nombre' ,name: 'nombre', visible: true },
+        { title: 'Nombre Certificado', data: 'nombre_certificado', name: 'nombre_certificado', visible: true },
+        { title: 'Nombre Archivo', data: 'nombre_archivo', name:'nombre_archivo', visible: true },
+        { title: 'Fecha Certificado', data: 'fecha_certificado', name: 'fecha_certificado', visible: true },
+        { title: 'Id usuario', data: 'id_usuario', name: 'id_usuario', visible: false},
+        { title: 'Id estudio', data: 'id_estudio', name: 'id_estudio', visible: false}
     ];
     // console.log("hab", arreglo);
 
@@ -71,11 +71,11 @@ function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
 function cargarHabilidades(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
     var colsHabilidades = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
-        { title: 'Nombre Habilidad', data: 'nombre'},
-        { title: 'Descripcion', data: 'descripcion'},
-        { title: 'Experiencia', data: 'experiencia'},
-        { title: 'Id usuario', data: 'id_usuario', visible: false},
-        { title: 'Id habilidad', data: 'id_habilidad', visible: false}
+        { title: 'Nombre Habilidad', data: 'nombre', name: 'nombre', visible: true },
+        { title: 'Descripcion', data: 'descripcion', name: 'descripcion', visible: true },
+        { title: 'Experiencia', data: 'experiencia', name: 'experiencia', visible: true },
+        { title: 'Id usuario', data: 'id_usuario', name: 'id_usuario',visible: false},
+        { title: 'Id habilidad', data: 'id_habilidad', name: 'id_habilidad' ,visible: false}
     ];
 
     var payloadHabilidades = {
