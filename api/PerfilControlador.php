@@ -66,11 +66,11 @@ if (!empty($_POST['action'])) {
                 switch ($tipoUsuario) {
                     case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
                         $datosProyectos = Perfil::getListaEnObjetos(null, null);
-                        $modoTabla = "'CRUD'";
+                        $modoTabla = 'CRUD';
                         break;
 
                     case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
-                        $filtroUsuario = "id_usuario='$idUsuario'";
+                        $filtroUsuario = "id='$idUsuario'";
                         $datosProyectos = Perfil::getListaEnObjetos($filtroUsuario, null);
                         $modoTabla = 'RU';
                         break;

@@ -85,9 +85,9 @@ class PerfilAdm //encargada de hacer las consultas y devolver datos en json
                 // INNER JOIN estudios 
                 // WHERE id_usuario = 'eb036f8a-75bd-4811-a477-1444e2521f3b'; 
                 $filtroEst = "id_usuario = '$idUsuario'";
-                $cadenaSQL = "  SELECT  nombre, fecha_certificado, nombre_archivo, nombre_certificado, id_usuario, id_estudio
-                                FROM usuarios_estudios 
-                                INNER JOIN estudios
+                $cadenaSQL = "  SELECT      ue.id, ue.nombre, ue.fecha_certificado, ue.nombre_archivo, ue.nombre_certificado, ue.id_usuario, ue.id_estudio, es.nombre
+                                FROM        usuarios_estudios ue
+                                INNER JOIN  estudios es on ue.id_estudio =  es.id
                                 WHERE $filtroEst $orden;";
                 $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
                 for ($i = 0; $i < count($resultado); $i++) {
@@ -102,10 +102,10 @@ class PerfilAdm //encargada de hacer las consultas y devolver datos en json
                 //INNER JOIN habilidades ON usuarios_habilidades.id_habilidad = habilidades.id 
                 //WHERE id_usuario = 'eb036f8a-75bd-4811-a477-1444e2521f3b';
                 $filtroHab = "id_usuario = '$idUsuario'";
-                $cadenaSQL = "  SELECT id_habilidad, id_usuario, nombre, descripcion, experiencia 
-                                FROM usuarios_habilidades 
-                                INNER JOIN habilidades ON usuarios_habilidades.id_habilidad = habilidades.id 
-                                WHERE $filtroHab $orden;";
+                $cadenaSQL = "  SELECT      uh.id, uh.id_habilidad, uh.id_usuario, uh.experiencia, h.nombre, h.descripcion,  
+                                FROM        usuarios_habilidades uh
+                                INNER JOIN  habilidades h ON usuarios_habilidades.id_habilidad = habilidades.id 
+                                WHERE       $filtroHab $orden;";
                 $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
                 for ($i = 0; $i < count($resultado); $i++) {
                     $habilidades = new HabilidadesAdm($resultado[$i], null);

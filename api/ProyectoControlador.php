@@ -2,6 +2,7 @@
 
 require_once '../logica/clasesGenericas/Excepciones.php';
 require_once '../logica/clasesGenericas/ConectorBD.php';
+require_once '../logica/clasesGenericas/ddl_parametrizado.php';
 require_once '../logica/clases/ProyectoAdm.php';
 require_once '../logica/clases/Proyecto.php';
 require_once '../logica/clases/Usuario.php';
@@ -9,7 +10,7 @@ require_once '../logica/clases/Usuario.php';
 
 if(!empty($_POST['action'])) {
 
-    try {
+    // try {
 
         $accion = $_POST['action'];
         $response = '';
@@ -82,13 +83,29 @@ if(!empty($_POST['action'])) {
                             $modoTabla = "'R'";
                             break;
                     }
-
+                
+                $json_ddl = "{
+                    'estado': {
+                        'E': 'Ejec',
+                        'P': 'Pend'
+                    },
+                    'correo_director': {
+                        '8fa903bc-0789-43b2-901b-70d6c60334ba': 'fgarcia@gmail.com',
+                        '499a9d4a-fbf1-4ea7-850b-01bf301a98af': 'wtrigos@gmail.com'
+                    }
+                }";
+                $htmlTabla = $_POST['html_tabla']; //'tblProyectos';
+                $json_ddl = Ddl_Parametrizado::getddlOps("tabla='$htmlTabla' AND campo in ('estado', 'id_director')", null);
+                //echo($json_ddl);
                 $response = array(
                     "data" => $datosProyectos,
+                    "ddl_ops" => $json_ddl,
                     "tipoUsuario" => $tipoUsuario
                 );
                 // $response = $datosProyectos;
                 break;
+
+                
 
             case 'cargar_tblHab_Requeridas':
                 header('Content-type: application/json; charset=utf-8');
@@ -99,8 +116,12 @@ if(!empty($_POST['action'])) {
                         $datHabAsignados = ProyectoAdm::getHabilidadesRequeridas($idProySeleccionado);
                     }
 
+                    $htmlTabla = $_POST['html_tabla']; //'tblHab_Requeridas';
+                    $json_ddl = Ddl_Parametrizado::getddlOps("tabla='$htmlTabla' AND campo in ('id_proyecto', 'id_habilidad')", null);
+
                 $response = array(
                     "data" => $datHabAsignados,
+                    "ddl_ops" => $json_ddl,
                     "idProySeleccionado" => $idProySeleccionado,
                     "accion" => $accion
                 );
@@ -116,8 +137,12 @@ if(!empty($_POST['action'])) {
                         $datHabDisponibles = ProyectoAdm::getHabilidadesDisponibles($idProySeleccionado);
                     }
                     
+                    $htmlTabla = $_POST['html_tabla']; //'tblHab_Disponibles';
+                    // echo $htmlTabla;
+                    $json_ddl = Ddl_Parametrizado::getddlOps("tabla='$htmlTabla' AND campo in ('id_proyecto', 'id_habilidad')", null);
                 $response = array(
                     "data" => $datHabDisponibles,
+                    "ddl_ops" => $json_ddl,
                     "idProySeleccionado" => $idProySeleccionado,
                     "accion" => $accion
                 );
@@ -132,8 +157,12 @@ if(!empty($_POST['action'])) {
                         $datTrabAsignados = ProyectoAdm::getTrabajadoresAsignados($idProySeleccionado);
                     }
                     
+                    $htmlTabla = $_POST['html_tabla']; //'tblHab_Disponibles';
+                    $json_ddl = Ddl_Parametrizado::getddlOps("tabla='$htmlTabla' AND campo in ('id_usuario', 'estado')", null);
+
                 $response = array(
                     "data" => $datTrabAsignados,
+                    "ddl_ops" => $json_ddl,
                     "idProySeleccionado" => $idProySeleccionado,
                     "accion" => $accion
                 );
@@ -143,13 +172,17 @@ if(!empty($_POST['action'])) {
                 header('Content-type: application/json; charset=utf-8');
                 $idProySeleccionado = $_POST['datos'];
                     
-                if ($idProySeleccionado != null || $idProySeleccionado != ''){
-                    //// Definiendo la lógica de negocio dentro de la clase
-                    $datTrabDisponibles = ProyectoAdm::getTrabajadoresDisponibles($idProySeleccionado);
-                }
+                    if ($idProySeleccionado != null || $idProySeleccionado != ''){
+                        //// Definiendo la lógica de negocio dentro de la clase
+                        $datTrabDisponibles = ProyectoAdm::getTrabajadoresDisponibles($idProySeleccionado);
+                    }
+
+                    $htmlTabla = $_POST['html_tabla']; //'tblHab_Disponibles';
+                    $json_ddl = Ddl_Parametrizado::getddlOps("tabla='$htmlTabla' AND campo in ('id_usuario', 'estado')", null);
 
                 $response = array(
                     "data" => $datTrabDisponibles,
+                    "ddl_ops" => $json_ddl,
                     "idProySeleccionado" => $idProySeleccionado,
                     "accion" => $accion
                 );
@@ -164,22 +197,22 @@ if(!empty($_POST['action'])) {
                 break;
             
         }
-    }
-    catch (customException $e) {
-        $response = array(
-            "data" => array(),
-            "accion" => "Error generado en $accion",
-            "error" => $e->errorMessage()
-        );
-    }
+    // }
+    // catch (customException $e) {
+    //     $response = array(
+    //         "data" => array(),
+    //         "accion" => "Error generado en $accion",
+    //         "error" => $e->errorMessage()
+    //     );
+    // }
         
-    catch(Exception $e) {
-        $response = array(
-            "data" => array(),
-            "accion" => "Error generado en $accion",
-            "error" => $e->getMessage()
-        );
-    }
+    // catch(Exception $e) {
+    //     $response = array(
+    //         "data" => array(),
+    //         "accion" => "Error generado en $accion",
+    //         "error" => $e->getMessage()
+    //     );
+    // }
 
     // Enviando respuesta hacia el frontEnd
     echo json_encode($response); 

@@ -121,11 +121,72 @@ CREATE TABLE proyectos_habilidades (
   id_proyecto VARCHAR(36) NOT NULL, /* UUID v4 */
   id_habilidad VARCHAR(36) NOT NULL, /* UUID v4 */
   CONSTRAINT pK_proyectos_habilidades PRIMARY KEY (id),
-  CONSTRAINT fk_proyectos_habilidades_proyectos FOREIGN KEY (id_proyecto) REFERENCES proyectos (id),
-  CONSTRAINT fk_proyectos_habilidades_habilidades FOREIGN KEY (id_habilidad) REFERENCES habilidades (id)
+  CONSTRAINT fK_proyectos_habilidades_proyectos FOREIGN KEY (id_proyecto) REFERENCES proyectos (id),
+  CONSTRAINT fK_proyectos_habilidades_habilidades FOREIGN KEY (id_habilidad) REFERENCES habilidades (id)
 );
 
+
+CREATE TABLE ddl_parametrizado (
+	id int auto_increment,
+	tabla varchar(50) NOT NULL,
+	campo varchar(50) NOT NULL,
+	valor varchar(50) null,
+	texto varchar(50) null,
+  	CONSTRAINT pK_ddl_parametrizado PRIMARY KEY (id)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_general_ci
+COMMENT='Tabla que permite obtener opciones para controles ddl';
+
+
 -- Poblar base
+-- Tablas paramétrizadas
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(1, 'usuarios', 'tipo_identificacion', 'T', 'Tarjeta Identidad');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(2, 'usuarios', 'tipo_identificacion', 'C', 'Cédula');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(3, 'usuarios', 'tipo_identificacion', 'R', 'Registro Civil');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(4, 'usuarios', 'tipo_identificacion', 'P', 'Pasaporte');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(5, 'usuarios', 'usuarios', '-', '');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(6, 'usuarios', 'tipo_usuario', 'A', 'Admin');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(7, 'usuarios', 'tipo_usuario', 'D', 'Director');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(8, 'usuarios', 'tipo_usuario', 'T', 'Trabajador');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(9, 'tipo_usuario', 'tipo_usuario', '-', '');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(10, 'tblProyectos', 'estado', 'T', 'Terminado');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(11, 'tblProyectos', 'estado', 'P', 'Espera');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(12, 'tblProyectos', 'estado', 'E', 'Ejecución');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(13, 'tblProyectos', 'estado', '-', '');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(14, 'rh_proyectos', 'estado', 'A', 'Admitido');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(15, 'rh_proyectos', 'estado', 'R', 'Rechazado');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(16, 'rh_proyectos', 'estado', 'E', 'Espera');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(17, 'rh_proyectos', 'estado', '-', '');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(18, 'tblProyectos', 'id_director', '8fa903bc-0789-43b2-901b-70d6c60334ba', 'fgarcia@gmail.com');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(19, 'tblProyectos', 'id_director', '499a9d4a-fbf1-4ea7-850b-01bf301a98af', 'wtrigos@gmail.com');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(20, 'tblHab_Requeridas', 'id_habilidad', '0463add9-313e-49bf-a07e-800612c36263', 'Javascript');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(21, 'tblHab_Requeridas', 'id_habilidad', '65374dc5-692f-483d-9809-3371a7222a79', 'PHP');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(22, 'tblHab_Disponibles', 'id_habilidad', '0463add9-313e-49bf-a07e-800612c36263', 'Javascript');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(23, 'tblHab_Disponibles', 'id_habilidad', '65374dc5-692f-483d-9809-3371a7222a79', 'PHP');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(24, 'tblContratados', 'id_usuario', '8fa903bc-0789-43b2-901b-70d6c60334ba', 'fgarcia@gmail.com');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(25, 'tblContratados', 'id_usuario', 'eb036f8a-75bd-4811-a477-1444e2521f3b', 'etrigos@gmail.com');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(26, 'tblContratados', 'id_usuario', '499a9d4a-fbf1-4ea7-850b-01bf301a98af', 'wtrigos@gmail.com');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(27, 'tblContratados', 'id_usuario', '25c00e25-9042-4f04-b059-c34820b800f8', 'pper@aol.com');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(28, 'tblCandidatos', 'id_usuario', '8fa903bc-0789-43b2-901b-70d6c60334ba', 'fgarcia@gmail.com');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(29, 'tblCandidatos', 'id_usuario', 'eb036f8a-75bd-4811-a477-1444e2521f3b', 'etrigos@gmail.com');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(30, 'tblCandidatos', 'id_usuario', '499a9d4a-fbf1-4ea7-850b-01bf301a98af', 'wtrigos@gmail.com');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(31, 'tblCandidatos', 'id_usuario', '25c00e25-9042-4f04-b059-c34820b800f8', 'pper@aol.com');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(32, 'tblCandidatos', 'estado', 'A', 'Aceptado');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(33, 'tblCandidatos', 'estado', 'R', 'Rechazado');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(34, 'tblCandidatos', 'estado', 'E', 'En espera');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(35, 'tblCandidatos', 'estado', '-', '');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(36, 'tblHab_Requeridas', 'id_proyecto', '43a9245a-275a-4b23-8ac0-a63fefa13013', 'Software para conjunto residencial');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(37, 'tblHab_Requeridas', 'id_proyecto', 'abfd9937-a08b-47b0-8b64-3338455d99f4', 'Proyecto para escuela');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(38, 'tblHab_Requeridas', 'id_proyecto', 'bbfc7b5b-f77f-4a58-a3ce-5163bac61a4c', 'Aerolinea app movil ');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(39, 'tblHab_Requeridas', 'id_proyecto', 'f660bbbf-dd1a-4eab-9866-dba8092c94c5', 'Nequi plata infinita');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(40, 'tblHab_Disponibles', 'id_proyecto', '43a9245a-275a-4b23-8ac0-a63fefa13013', 'Software para conjunto residencial');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(41, 'tblHab_Disponibles', 'id_proyecto', 'abfd9937-a08b-47b0-8b64-3338455d99f4', 'Proyecto para escuela');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(42, 'tblHab_Disponibles', 'id_proyecto', 'bbfc7b5b-f77f-4a58-a3ce-5163bac61a4c', 'Aerolinea app movil ');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(43, 'tblHab_Disponibles', 'id_proyecto', 'f660bbbf-dd1a-4eab-9866-dba8092c94c5', 'Nequi plata infinita');
+
+
 
 -- empresa
 -- UUID V4 - https://www.delftstack.com/howto/php/php-uuid/
@@ -138,10 +199,10 @@ VALUES
 INSERT INTO usuarios
 (id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa)
 VALUES
-('499a9d4a-fbf1-4ea7-850b-01bf301a98af', '1098657073', 'C', 'William', 'Trigos', 'wtrigos@gmail.com', 'c4ca4238a0b923820dcc509a6f75849b', 'Provenza', 'fwilliam.jpg', '334422', 'D', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec'),
-('8fa903bc-0789-43b2-901b-70d6c60334ba', '1095', 'C', 'Felipe', 'Garcia', 'fgarcia@gmail.com', 'MD5(felipe)', 'Concordia', 'ffelipe.jpg', '444222', 'D', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec'),
-('eb036f8a-75bd-4811-a477-1444e2521f3b', '10951', 'R', 'Edwin', 'Trigos', 'etrigos@gmail.com', 'c4ca4238a0b923820dcc509a6f75849b', 'provenza', 'fedwin.jpg', '313316', 'T', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec'),
-('25c00e25-9042-4f04-b059-c34820b800f8', '10985', 'P', 'Pepito', 'Peréz', 'pper@aol.com', 'MD5(pepito)', 'maracay', 'fpepito.jpg', '039', 'T', 'b7f6046a-b834-48f0-856e-8a360b495406');
+('499a9d4a-fbf1-4ea7-850b-01bf301a98af', '1098657073', 'C', 'William', 'Trigos', 'wtrigos@gmail.com', '$2y$15$T5y8d1BDskwCwRzh7xuGIu0ysZvvdkgkoWie2L0Ll9HBxgMbfS4SK', 'Provenza', 'fwilliam.jpg', '334422', 'D', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec'),
+('8fa903bc-0789-43b2-901b-70d6c60334ba', '1095', 'C', 'Felipe', 'Garcia', 'fgarcia@gmail.com', '$2y$15$T5y8d1BDskwCwRzh7xuGIu0ysZvvdkgkoWie2L0Ll9HBxgMbfS4SK', 'Concordia', 'ffelipe.jpg', '444222', 'D', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec'),
+('eb036f8a-75bd-4811-a477-1444e2521f3b', '10951', 'R', 'Edwin', 'Trigos', 'etrigos@gmail.com', '$2y$15$T5y8d1BDskwCwRzh7xuGIu0ysZvvdkgkoWie2L0Ll9HBxgMbfS4SK', 'provenza', 'fedwin.jpg', '313316', 'T', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec'),
+('25c00e25-9042-4f04-b059-c34820b800f8', '10985', 'P', 'Pepito', 'Peréz', 'pper@aol.com', '$2y$15$T5y8d1BDskwCwRzh7xuGIu0ysZvvdkgkoWie2L0Ll9HBxgMbfS4SK', 'maracay', 'fpepito.jpg', '039', 'T', 'b7f6046a-b834-48f0-856e-8a360b495406');
 
 INSERT INTO proyectos
 (id, nombre, descripcion, estado, fecha_inicio, fecha_fin, id_usuario)

@@ -16,7 +16,7 @@ $tipoUsuario = $USUARIO->getTipo_usuario();
 switch ($tipoUsuario) {
     case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
         // $datosProyectos = Proyecto::getListaEnJson(null, null);
-        $modoTabla = "'CRUD'";
+        $modoTabla = 'CRUD';
         echo "Usuario A";
         break;
 
@@ -26,12 +26,12 @@ switch ($tipoUsuario) {
         // $datosProyectos = Proyecto::getListaEnJson($filtroUsuario, null);
         // echo "Usuario D";
         // R solo lectura
-        $modoTabla = "'CRUD'";
+        $modoTabla = 'CRUD';
         break;
 
     default: //trabajador (modo: Solo lectura): perfiles existentes
         // $datosProyectos = $USUARIO->getProyectosUsuario($USUARIO->getId());
-        $modoTabla = "'R'";
+        $modoTabla = 'R';
         // echo "Usuario T";
         break;
 }

@@ -89,7 +89,7 @@ for ($i = 0; $i < count($empresas); $i++) {
 
 <script>
   function campoUsuario() {
-    document.getElementById("identificacion").addEventListener("keyup", function(event) {
+    document.getElementById("identificacion").addEventListener("input", function(event) {
       document.getElementById("usuario").value = document.getElementById("identificacion").value;
     });
   }

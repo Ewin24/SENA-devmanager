@@ -1,3 +1,4 @@
+docker run -dti --name some-mysql -e MYSQL_ROOT_PASSWORD=some12345 -p 3306:3306 mysql
 
 # Actualizar con respecto a repo Edwin primera vez
 
@@ -89,6 +90,10 @@ cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops = [], campo_desc 
 
 
 ## Referencias adicionales 
+* Load an Ajax DataTable on button click : https://write.corbpie.com/load-an-ajax-datatable-on-button-click/ https://codepen.io/corbpie/pen/LYWXgmw
+* Load an Ajax DataTable on dropdown : https://datatables.net/forums/discussion/59648/enviar-data-por-post-en-ajax
+* DataTables example with PHP and PDO MySQL : https://write.corbpie.com/datatables-example-with-php-and-pdo-mysql/
+* DataTables example with Ajax : https://write.corbpie.com/datatables-example-with-ajax/
 * insert a test row http://jsfiddle.net/55rfa8zb/1/
 * https://datatables.net/forums/discussion/28186/how-to-add-a-row-in-an-editable-table-and-keep-all-the-html-attributes
 * https://codepen.io/quanghuy1294/pen/OgNELB
@@ -104,3 +109,9 @@ cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops = [], campo_desc 
 * multiselección en datatables http://live.datatables.net/vamulagu/2/edit
 * DataTables CRUD Operations using PHP Example https://www.nicesnippets.com/blog/php-datatables-crud-example
 *  CRUD de datos usando dataTables, Bootstrap, PHP y MySQL https://obedalvarado.pw/blog/crud-de-datos-usando-datatables-bootstrap-php-y-mysql/
+* asignar id para filas de datatable : http://live.datatables.net/cifayala/1/edit
+* createdCell datatables : https://datatables.net/forums/discussion/34839/createdcell
+* nested ajax datatables : https://editor.datatables.net/examples/simple/join.html
+* ajax tdatatable reload : https://datatables.net/forums/discussion/56636/how-to-refresh-reload-datatable-after-ajax-success-function
+* ajax tdatatable reload : https://datatables.net/forums/discussion/63209/how-to-reload-datatable-after-success-event
+* ajax tdatatable reload : https://stackoverflow.com/questions/12934144/how-to-reload-refresh-jquery-datatable
