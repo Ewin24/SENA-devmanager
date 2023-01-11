@@ -1,6 +1,6 @@
 import {    cargarTablaGenerica, claseBotonEditarRow, claseBotonEliminarRow     } from "../../../librerias/tablaGenerica.js";
 
-var dataUrl = "http://localhost/SENA-devmanager/api/ProyectoControlador.php";
+var dataUrl = "http://localhost/SENA-devmanager/src/api/ProyectoControlador.php";
 
 function cargarProyectos(nombreTabla, idUsuario, arreglo=[], modoTabla='CRUD') {
 
