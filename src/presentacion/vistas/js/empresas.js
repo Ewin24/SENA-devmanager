@@ -56,7 +56,7 @@ function cargarTrabajadores(nombreTabla, idEmpresaSeleccionada, modoTabla ='R') 
       { title: "Foto", data: "nombre_foto", name: "nombre_foto", visible: true },
       { title: "Telefono", data: "telefono", name: "telefono", visible: true },
       { title: "Tipo de Usuario", data: "tipo_usuario", name: "tipo_usuario",  visible: true },
-      { title: "nit de Empresa", data: "id_empresa", name: "id_mpresa", visible: false }
+      { title: "nit de Empresa", data: "id_empresa", name: "id_mpresa", visible: true }
     ];
 
     var payloadTrabajadores = {

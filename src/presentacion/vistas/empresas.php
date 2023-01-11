@@ -53,7 +53,9 @@ switch ($tipoUsuario) {
                 <tbody>
                     <tr>
                         <td></td>
+                        <td>__id__</td>
                         <td>__nit__</td>
+                        <td>__nombre__</td>
                         <td>__direccion__</td>
                         <td>__correo__</td>
                         <td>__telefono__</td>
@@ -93,14 +95,18 @@ switch ($tipoUsuario) {
             <table id="new-Empleado" style="display:none" class="col-auto">
                 <tbody>
                     <tr>
+                        <td></td>
+                        <td>__id__</td>
                         <td>__identificacion__</td>
-                        <td>__apellido__</td>
-                        <td>__tipoUsuario__</td>
-                        <td>__nombre Usuario__</td>
-                        <td>__correo__</td>
                         <td>__tipo identificacion__</td>
-                        <td>__telefono__</td>
+                        <td>__nombre Usuario__</td>
+                        <td>__apellido__</td>
+                        <td>__correo__</td>
                         <td>__direccion__</td>
+                        <td>__direccion__</td>
+                        <td>__foto__</td>
+                        <td>__Telefono__</td>
+                        <td>__tipoUsuario__</td>
                         <td>__Empresa__</td>
                         <td>
                             <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
@@ -130,8 +136,8 @@ switch ($tipoUsuario) {
         cargarTrabajadores
     } from './presentacion/vistas/js/empresas.js'
 
-    <?php echo 'const  idUsuario = "' . $idUsuario . '";';?>
-    <?php echo 'const  modoTabla = "' . $modoTabla . '";';?>
+    <?php echo 'const  idUsuario = "' . $idUsuario . '";'; ?>
+    <?php echo 'const  modoTabla = "' . $modoTabla . '";'; ?>
 
     $(document).ready(function() {
         cargarEmpresas('tblEmpresas', idUsuario, modoTabla);
