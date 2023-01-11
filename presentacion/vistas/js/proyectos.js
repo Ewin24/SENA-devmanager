@@ -79,9 +79,9 @@ function cargarProyectos(nombreTabla, idUsuario, arreglo=[], modoTabla='CRUD') {
 function cargarHabilidades(nombreTabla, IdProySeleccionado, modoTabla='CRUD'){
     var colsHabilidades = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
-        { title: 'id', data: 'id', visible: false },
-        { title: 'id_proyecto', data: 'id_proyecto'},
-        { title: 'id_habilidad', data: 'id_habilidad'}
+        { title: 'id', data: 'id' , name: 'id', visible: false },
+        { title: 'Nombre del proyecto', data: 'id_proyecto', name: 'id_proyecto', className: 'ddl' },
+        { title: 'Nombre de la habilidad', data: 'id_habilidad', name: 'id_habilidad', className: 'ddl' }
     ];
     // console.log("hab", arreglo);
     
@@ -97,10 +97,10 @@ function cargarHabilidades(nombreTabla, IdProySeleccionado, modoTabla='CRUD'){
 function cargarTrabajadores(nombreTabla, IdProySeleccionado, modoTabla='CRUD'){
     var colsTrabajadores = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
-        { title: 'id', data: 'id', visible: false },
-        { title: 'id_usuario', data: 'id_usuario' },
+        { title: 'id', data: 'id', name: 'id', visible: false },
+        { title: 'Correo Candidato', data: 'id_usuario', name: 'id_usuario', className: 'ddl'  },
         { title: 'fecha_solicitud', data: 'fecha_solicitud' },
-        { title: 'estado', data: 'estado' },
+        { title: 'estado', data: 'estado', name: 'estado', type: "select", className: 'ddl' },
     ];
 
     // console.log("Trab:", arreglo);

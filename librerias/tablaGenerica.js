@@ -41,7 +41,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 if(json.accion == "Acción no definida") alert(json.accion);
                 console.log(json);
 
-                if(ddl_ops.length != 0){
+                if( json.ddl_ops!=null && json.ddl_ops[0].length != 0){
                     var opciones = JSON.parse(json.ddl_ops[0])[nombreTabla];
                     var obj = {};
                     for(const op of opciones){
@@ -49,8 +49,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                         obj[key] = op[key];
                         console.log(key, op);
                     }
+                    ddl_ops = obj;
                 }
-                ddl_ops = obj;
                 // ddl_ops = JSON.parse(json.ddl_ops[0])[nombreTabla];
                 return json.data;
             }, 
@@ -92,11 +92,12 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             {
                 targets: '_all',
                 "createdCell": function (td, cellData, rowData, row, col) {
-                    if(col != 0 && col != cols.length){
+                    var t = nombreTabla;
+                    if(col != 0 && col != cols.length ){
                         var campo = cols[col].name;
                         $(td).attr('id', campo);
 
-                        if(cols[col].className == 'ddl'){
+                        if(cols[col].className == 'ddl' && ddl_ops.length != 0){
                             for(const op of ddl_ops[campo]){
                                 var key = Object.keys(op)[0];
                                 var value = Object.keys(op)[1];

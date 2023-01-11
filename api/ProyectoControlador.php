@@ -116,8 +116,12 @@ if(!empty($_POST['action'])) {
                         $datHabAsignados = ProyectoAdm::getHabilidadesRequeridas($idProySeleccionado);
                     }
 
+                    $htmlTabla = $_POST['html_tabla']; //'tblHab_Requeridas';
+                    $json_ddl = Ddl_Parametrizado::getddlOps("tabla='$htmlTabla' AND campo in ('id_proyecto', 'id_habilidad')", null);
+
                 $response = array(
                     "data" => $datHabAsignados,
+                    "ddl_ops" => $json_ddl,
                     "idProySeleccionado" => $idProySeleccionado,
                     "accion" => $accion
                 );
@@ -133,8 +137,12 @@ if(!empty($_POST['action'])) {
                         $datHabDisponibles = ProyectoAdm::getHabilidadesDisponibles($idProySeleccionado);
                     }
                     
+                    $htmlTabla = $_POST['html_tabla']; //'tblHab_Disponibles';
+                    // echo $htmlTabla;
+                    $json_ddl = Ddl_Parametrizado::getddlOps("tabla='$htmlTabla' AND campo in ('id_proyecto', 'id_habilidad')", null);
                 $response = array(
                     "data" => $datHabDisponibles,
+                    "ddl_ops" => $json_ddl,
                     "idProySeleccionado" => $idProySeleccionado,
                     "accion" => $accion
                 );
@@ -149,8 +157,12 @@ if(!empty($_POST['action'])) {
                         $datTrabAsignados = ProyectoAdm::getTrabajadoresAsignados($idProySeleccionado);
                     }
                     
+                    $htmlTabla = $_POST['html_tabla']; //'tblHab_Disponibles';
+                    $json_ddl = Ddl_Parametrizado::getddlOps("tabla='$htmlTabla' AND campo in ('id_usuario', 'estado')", null);
+
                 $response = array(
                     "data" => $datTrabAsignados,
+                    "ddl_ops" => $json_ddl,
                     "idProySeleccionado" => $idProySeleccionado,
                     "accion" => $accion
                 );
@@ -160,13 +172,17 @@ if(!empty($_POST['action'])) {
                 header('Content-type: application/json; charset=utf-8');
                 $idProySeleccionado = $_POST['datos'];
                     
-                if ($idProySeleccionado != null || $idProySeleccionado != ''){
-                    //// Definiendo la lógica de negocio dentro de la clase
-                    $datTrabDisponibles = ProyectoAdm::getTrabajadoresDisponibles($idProySeleccionado);
-                }
+                    if ($idProySeleccionado != null || $idProySeleccionado != ''){
+                        //// Definiendo la lógica de negocio dentro de la clase
+                        $datTrabDisponibles = ProyectoAdm::getTrabajadoresDisponibles($idProySeleccionado);
+                    }
+
+                    $htmlTabla = $_POST['html_tabla']; //'tblHab_Disponibles';
+                    $json_ddl = Ddl_Parametrizado::getddlOps("tabla='$htmlTabla' AND campo in ('id_usuario', 'estado')", null);
 
                 $response = array(
                     "data" => $datTrabDisponibles,
+                    "ddl_ops" => $json_ddl,
                     "idProySeleccionado" => $idProySeleccionado,
                     "accion" => $accion
                 );
