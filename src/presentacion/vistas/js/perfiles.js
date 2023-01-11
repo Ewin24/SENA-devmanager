@@ -1,6 +1,6 @@
 import { cargarTablaGenerica } from "../../../librerias/tablaGenerica.js";
 
-var dataUrl = 'http://localhost/SENA-devmanager/api/PerfilControlador.php';
+var dataUrl = 'http://localhost/SENA-devmanager/src/api/PerfilControlador.php';
 
 function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
     var ddl_estado_ops = [

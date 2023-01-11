@@ -1,6 +1,6 @@
 import { cargarTablaGenerica } from "../../../librerias/tablaGenerica.js";
 
-var dataUrl = 'http://localhost/SENA-devmanager/api/EmpresaControlador.php';//hay que configurar algun tipo de variable para que la url sirva si el proyecto cambia de nombre o de server
+var dataUrl = 'http://localhost/SENA-devmanager/src/api/EmpresaControlador.php';//hay que configurar algun tipo de variable para que la url sirva si el proyecto cambia de nombre o de server
 
 function cargarEmpresas(nombreTabla, idUsuario, modoTabla = 'R') {
 
