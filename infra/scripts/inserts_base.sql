@@ -1,4 +1,5 @@
 -- Poblar base
+use devmanager2;
 -- Tablas paramétrizadas
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(1, 'usuarios', 'tipo_identificacion', 'T', 'Tarjeta Identidad');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(2, 'usuarios', 'tipo_identificacion', 'C', 'Cédula');
@@ -43,6 +44,10 @@ INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(40, 'tblHa
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(41, 'tblHab_Disponibles', 'id_proyecto', 'abfd9937-a08b-47b0-8b64-3338455d99f4', 'Proyecto para escuela');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(42, 'tblHab_Disponibles', 'id_proyecto', 'bbfc7b5b-f77f-4a58-a3ce-5163bac61a4c', 'Aerolinea app movil ');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(43, 'tblHab_Disponibles', 'id_proyecto', 'f660bbbf-dd1a-4eab-9866-dba8092c94c5', 'Nequi plata infinita');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(44, 'tblContratados', 'estado', 'A', 'Aceptado');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(45, 'tblContratados', 'estado', 'E', 'Rechazado');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(46, 'tblContratados', 'estado', 'R', 'En espera');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(47, 'tblContratados', 'estado', '-', ' ');
 
 
 

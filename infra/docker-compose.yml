@@ -1,40 +1,36 @@
-version: '3'
-
+version: '3.8'
 services:
-    mysql:
-        image: mysql:8.0
-        restart: always
-        ports:
-            - 3306:3306
-        environment:
-            - MYSQL_ROOT_PASSWORD=root
-            - MYSQL_DATABASE=database
-            - MYSQL_USER=user
-            - MYSQL_PASSWORD=password
-        command: --init-file /data/application/init.sql
-        volumes:
-            - ./scripts/esquema.sql:/data/application/init.sql
-            - ./scripts/inserts_base.sql:/docker-entrypoint-initdb.d/insert_data.sql
-            - ./db_data_dev:/var/lib/mysql
+  db:
+    image: mysql:8.0
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootPassword
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=userPassword
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./db:/var/lib/mysql
+      - ./scripts:/docker-entrypoint-initdb.d/
 
-    phpmyadmin:
-        image: phpmyadmin
-        restart: always
-        ports:
-            - 8080:80
-        environment:
-            - PMA_HOST=mysql
-        depends_on:
-            - mysql
+  phpmyadmin:
+      image: phpmyadmin
+      restart: always
+      ports:
+          - 8080:80
+      environment:
+          - PMA_HOST=db
+          # - PMA_ARBITRARY=1
+      depends_on:
+          - db
 
-    apache:
-        image: php:8.0-apache
-        volumes:
-            - ../src:/var/www/html/
-        ports:
-            - 80:80
-        depends_on:
-        - mysql
-        
-# volumes:
-#   mysql_data:
+  apache:
+      image: php:8.0-apache
+      volumes:
+          - ../src:/var/www/html/
+      ports:
+          - 80:80
+      depends_on:
+      - db

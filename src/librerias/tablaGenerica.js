@@ -5,7 +5,8 @@ const claseBotonConfirmarRow = 'bi-check-circle';
 const claseBotonCancelarRow = 'bi-x-circle';
 
 // const ultimaColumna = "<td><div><button id='edit_row' class='bi "+claseBotonEditarRow +"' aria-hidden='true'></button><button id='delete_row' class='bi "+claseBotonEliminarRow +"' aria-hidden='true'></button><div></td>";  
-const ultimaColumna = "<td><div><i id='edit_row' class='bi "+claseBotonEditarRow +"' aria-hidden='true'></i><i id='delete_row' class='bi "+claseBotonEliminarRow +"' aria-hidden='true'></i><div></td>";  
+const botonEditar   = "<i class='bi "+claseBotonEditarRow +"' aria-hidden='true'></i>";  
+const botonEliminar = "<i class='bi "+claseBotonEliminarRow +"' aria-hidden='true'></i>";  
 
 var existenCambiosPendientes = false;
 var insertandoNuevoRegistro = false;
@@ -19,7 +20,26 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     var selectorTabla = '#'+nombreTabla
     cols.push({    
                 data: null,
-                render:function(){return ultimaColumna;},
+                render:function(){
+                    var modoelegido = modoTabla.toUpperCase();
+                    var ultimaColumna = '';
+                    switch(modoelegido){
+                        case 'CRUD':
+                        case 'RUD':
+                        case 'UD':
+                            ultimaColumna="<td>"+botonEditar+botonEliminar+"</td>";
+                            break;
+                        case 'U':
+                            ultimaColumna="<td>"+botonEditar+"</td>";
+                            break;
+                        case 'D':
+                            ultimaColumna="<td>"+botonEliminar+"</td>";
+                            break;
+                        default:
+                            break;
+                    }
+                    return ultimaColumna;
+                },
                 // className: 'row-edit dt-center',
                 orderable: false
             });
@@ -626,24 +646,19 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         $cancelButton.removeClass().addClass("bi "+claseBotonEliminarRow);
         $cancelButton.attr("aria-hidden", "true");
         $cancelButton.show();
-    }
-
-    function activarModoCRUD(modoelegido, nombreTabla){
-        var probar = modoelegido.toUpperCase();
-        var selectorBtnCrear =  '#addRow'+nombreTabla;
-        var test = probar.indexOf('C');
-        if( probar.indexOf('C') < 0 ){
-            $( selectorBtnCrear ).hide();
-        }
-        if( probar.indexOf('U') < 0 ){
-            $( '#'+nombreTabla+' #edit_row' ).hide();
-        }
-        if( probar.indexOf('D') < 0 ){
-            $( '#'+nombreTabla+' #delete_row' ).hide();
-        }
-    }
+    }    
 
     activarModoCRUD(modoTabla, nombreTabla);
+}
+
+function activarModoCRUD(modoelegido, nombreTabla){
+    var probar = modoelegido.toUpperCase();
+    var selectorBtnCrear =  '#addRow'+nombreTabla;
+    var selectorTabla =  '#'+nombreTabla;
+    var test = probar.indexOf('C');
+    if( probar.indexOf('C') < 0 ){
+        $( selectorBtnCrear ).hide();
+    }
 }
 
 // https://datatables.net/reference/event/user-select

@@ -2,8 +2,8 @@
 create database devmanager2;
 use devmanager2;
 
-GRANT ALL PRIVILEGES ON *.* TO root@'%' IDENTIFIED BY rootPassword WITH GRANT OPTION;
-GRANT ALL PRIVILEGES ON *.* TO user@'%' IDENTIFIED BY userPassword WITH GRANT OPTION;
+-- GRANT ALL PRIVILEGES ON *.* TO root@% IDENTIFIED BY rootPassword WITH GRANT OPTION;
+-- GRANT ALL PRIVILEGES ON *.* TO user@% IDENTIFIED BY userPassword WITH GRANT OPTION;
 
 CREATE TABLE empresas (
   id VARCHAR(36) NOT NULL, /* UUID v4 */
