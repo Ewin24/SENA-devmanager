@@ -133,7 +133,7 @@ if (!empty($_POST['action'])) {
                 }
                 $htmlTabla = $_POST['html_tabla'];
                 $json_ddl = Ddl_Parametrizado::getddlOps("tabla= '$htmlTabla' AND campo in('id_estudio')", null);
-
+                //print_r($json_ddl);
                 $response = array(
                     "data" => $datosEstudios,
                     "ddl_ops" => $json_ddl,
@@ -177,7 +177,7 @@ if (!empty($_POST['action'])) {
                             echo "tes", in_array($fileType, $allowTypes);
                             // Upload file to the server 
                             $Res = move_uploaded_file($_FILES["pdf"]["tmp_name"], $targetFilePath);
-                            echo "Res", $Res;
+                            echo "Res" . $targetFilePath;
                             if($Res){ 
                                 $uploadedFile = $fileName; 
                             }else{ 
