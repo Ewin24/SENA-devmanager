@@ -7,13 +7,6 @@ require_once '../logica/clases/Usuario.php';
 require_once '../upload.php';
 
 
-// print_r($_FILES);
-// print_r($_POST);
-// echo "hola";
-// $url= upload::subirPdf();
-// echo $url;
-
-
 if (!empty($_POST['action'])) {
 
     try {
@@ -135,27 +128,76 @@ if (!empty($_POST['action'])) {
 
             case 'Insertar_tblEstudios':
 
-                print_r($_FILES);
-                print_r($_POST);
                 echo "hola";
-                $url= upload::subirPdf();
-                echo $url;
+                print_r($_POST);
+                print_r($_FILES);
+                $valid_extensions = array('jpeg', 'jpg', 'png', 'gif', 'bmp' , 'pdf' , 'doc' , 'ppt'); // valid extensions
+                $path = 'pdfs/'; // upload directory
+                if($_FILES['_FILES'])
+                {
+                    $pdf = $_FILES['pdf']['name'];
+                    $tmp = $_FILES['pdf']['tmp_name'];
 
-                /* Get the name of the uploaded file */
-                $filename = $_FILES['file']['name'];
-
-                /* Choose where to save the uploaded file */
-                $location = "pdfs/".$filename;
-
-                /* Save the uploaded file to the local filesystem */
-                if ( move_uploaded_file($_FILES['file']['tmp_name'], $location) ) { 
-                echo 'Success'; 
-                } else { 
-                echo 'Failure'; 
+                    // get uploaded file's extension
+                    $ext = strtolower(pathinfo($pdf, PATHINFO_EXTENSION));
+                    // can upload same image using rand function
+                    $final_image = rand(1000,1000000).$pdf;
+                    // check's valid format
+                    if(in_array($ext, $valid_extensions)) 
+                    { 
+                        $path = $path.strtolower($final_image); 
+                        if(move_uploaded_file($tmp,$path)) 
+                        {
+                            $response = "Exito en la carga de $location"; 
+                            //insert form data in the database
+                            // $insert = $db->query("INSERT uploading (name,email,file_name) VALUES ('".$name."','".$email."','".$path."')");
+                            //echo $insert?'ok':'err';
+                        }
+                        else 
+                        {
+                            $response = "Fallo la carga de $location"; 
+                        }
+                    }
+                    else 
+                    {
+                        $response = "Extensión de archivo no permitida"; 
+                    }
+                    
                 }
 
+
+                // echo "hola";
+                // print_r($_POST);
+                // print_r($_FILES);
+                
+                // if($_FILES['pdf'])
+                // {
+                //     $img = $_FILES['pdf']['name'];
+                //     $tmp = $_FILES['pdf']['tmp_name'];
+                //     echo $img, $tmp;
+                // }
+
+                // // Crea la carpeta para almacenar los archivos PDF si no existe
+                // if (!is_dir('pdfs')) {
+                //     mkdir('pdfs');
+                // }
+
+                // /* Get the name of the uploaded file */
+                // $filename = $_FILES['pdf']['name'];
+
+                // /* Choose where to save the uploaded file */
+                // $location = "pdfs/".$filename;
+
+                // /* Save the uploaded file to the local filesystem */
+                // if ( move_uploaded_file($_FILES['pdf']['tmp_name'], $location) ) { 
+                //     $response = "Exito en la carga de $location"; 
+                // } 
+                // else { 
+                //     $response = "Fallo la carga de $location"; 
+                // }
+
                 $response = array(
-                    "data" => $filename,
+                    "data" => $response,
                     "accion" => $accion
                 );
                 break;

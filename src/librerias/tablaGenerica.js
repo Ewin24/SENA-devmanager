@@ -382,25 +382,25 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         e.stopPropagation();
     });
     
-    // $(selectorTabla).on('mousedown', '.submitBtn', function(e) {
+    // $(selectorTabla).on('click', '.submitBtn', function(e) {
     //     e.preventDefault();
     //     var form = $(this).closest('tr'); //.find('#fupForm');  
-    //     var file_data = form.find('td #form-demo input[name=file]')[0].value;
-    //     var form_data = new FormData();                  
-    //     form_data.append('file', file_data);
-    //     form_data.append('action', 'cargarArchivo_tblEstudios');
+    //     var file_data = form.find('td #form-demo input[name=pdf]')[0].value;
+    //     var form_data = form.find('td #form-demo');                  
+    //     form_data.append('pdf', file_data);
+    //     form_data.append('action', 'cargarArchivo_'+nombreTabla);
     //     // alert(form_data);        
 
-    //     /*
     //     $.ajax({
-    //         type: 'POST',
+    //         method: 'POST',
+    //         type: 'POST', // For jQuery < 1.9
     //         // url: 'http://localhost/SENA-devmanager/src/upload.php',
     //         url: urlControlador,
     //         data: form_data,
     //         // dataType: 'json',
-    //         contentType: false,
     //         cache: false,
-    //         processData:false,
+    //         contentType: false,
+    //         processData: false,
     //         beforeSend: function(){
     //             $('.submitBtn').attr("disabled","disabled");
     //             $('#fupForm').css("opacity",".5");
@@ -417,8 +417,99 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     //             $(".submitBtn").removeAttr("disabled");
     //         }
     //     });
-    //     */
+    //     e.preventDefault();
+    //     return false;
     // });
+
+    
+//     // $(selectorTabla+" tbody tr td #form-demo").on('submit',(function(e) {
+//     function sendForm(form){
+//         // e.preventDefault();
+
+//         var form = $(form).closest('tr'); //.find('#fupForm');  
+//         var file_data = form.find('td #form-demo input[name=pdf]')[0].value;
+//         var form_data = form.find('td #form-demo');
+//         // form_data.submit();
+//         // form_data.append('pdf', file_data);
+//         // form_data.append('action', 'cargarArchivo_'+nombreTabla);
+
+//         $.ajax({
+//             url: form_data.attr('action'),
+//             method: "POST",
+//             dataType: 'json',
+//             data: new FormData(form_data[0]),
+//             processData: false,
+//             contentType: false,
+//             success: function(result){
+//                 console.log(result);
+//             },
+//             error: function(er){}
+//         });
+       
+//         // $.ajax({
+//         //     url: urlControlador,
+//         //     method: 'POST',
+//         //     type: 'POST', // For jQuery < 1.9
+//         //     data:  form_data,
+//         //     cache: false,
+//         //     contentType: false,
+//         //     processData: false,
+//         //     beforeSend : function()
+//         //     {
+//         //     //$("#preview").fadeOut();
+//         //     $("#err").fadeOut();
+//         //     },
+//         //     success: function(data)
+//         //     {
+//         //     if(data=='invalid')
+//         //     {
+//         //     // invalid file format.
+//         //     $("#err").html("Invalid File !").fadeIn();
+//         //     }
+//         //     else
+//         //     {
+//         //     // view uploaded file.
+//         //     $("#preview").html(data).fadeIn();
+//         //     $("#form")[0].reset(); 
+//         //     }
+//         //     },
+//         //     error: function(e) 
+//         //     {
+//         //     $("#err").html(e).fadeIn();
+//         //     }          
+//         //     });
+//             return false; 
+//     }
+// // });
+
+    // $(selectorTabla).on('click', '.submitBtn', function(event) {
+        
+    //     event.preventDefault();
+    //     // retrieve form element
+    //     var form = this.closest('form');
+    //     // prepare data
+    //     var dReq = {
+    //         'pdf': form[0].files,
+    //         'action': 'cargarArchivo_tblEstudios'
+    //     }
+    //     // get url
+    //     var url = form.action;
+    //     url = urlControlador;
+        
+
+    //     // send request
+    //     $.ajax({
+    //         type: 'POST',
+    //         method: 'POST',
+    //         url: url,
+    //         data: dReq,
+    //         cache: false,
+    //         contentType: false,
+    //         processData: false,
+    //     });
+
+    // });
+
 
     // Guardar Cambios
     $('#btn-save-'+nombreTabla).on('click', function() {
@@ -426,6 +517,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         
         var rowdata = null;
         var accionCRUD = '';
+        var archivos = {};
 
         if(insertandoNuevoRegistro){
             var row = $(selectorTabla).DataTable().row(0);
@@ -434,15 +526,41 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             var fila = $(selectorTabla+' tbody tr:first');
             var cells = fila.find("td").not(':first').not(':last');
             cells.each(function(i, elemento) {
-                if(elemento.className.toUpperCase().indexOf('FUPLOAD')>0){
-                    // var form = fila.find('td #form-demo').submit();
-                    var btn = fila.find('td .submitBtn')
-                    btn.click();
+                if(elemento.className.toUpperCase().indexOf('FUPLOAD')<0){
+                    
                     rowdata[elemento.id] = elemento.value;
-                    // sendFormData(form);
                 }
-                else{
-                    rowdata[elemento.id] = elemento.value;
+                else
+                {
+                    var form = fila.find('td #form-demo')[0];
+                    var btn = fila.find('td .submitBtn')
+                    // btn.click();
+                    archivos = {'pdf': form[0].files};
+
+                    var formData = new FormData(document.getElementById("form-demo"));
+                    formData.append("action", "Insertar_tblEstudios");
+
+                    $.ajax({
+                        dataType:"json",
+                        method:"POST",
+                        url: urlControlador,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success:function(response){
+                            // alert("Status: "+response);
+                            console.log(rowdata);
+                            existenCambiosPendientes = false;
+                            insertandoNuevoRegistro = false;
+                        }, 
+                        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                            // alert("Status: " + textStatus); 
+                            // alert("Error: " + errorThrown); 
+                        }
+                    });
+
+                    // console.log(form[0].files);
+                    // sendFormData(form);
                 }
             });
             accionCRUD = 'Insertar';
@@ -468,6 +586,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         //// https://gabrieleromanato.name/jquery-sending-json-data-to-php-with-ajax
         var dataReq = {
             datos : JSON.stringify( rowdata ), 
+            // files: archivos,
             action : accionCRUD+'_'+nombreTabla,
         };
         $.ajax({
@@ -477,7 +596,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             dataType:"json",
             success:function(response){
                 // alert("Status: "+response);
-                // console.log(rowdata);
+                console.log(rowdata);
                 existenCambiosPendientes = false;
                 insertandoNuevoRegistro = false;
             }, 
@@ -545,7 +664,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         // var t = dataTable.row.add(headerNames).draw(true);
 
         // Toggle edit mode upon creation.
-        enableRowEdit($(selectorTabla).find("tbody tr:first-child td i.bi."+claseBotonEditarRow));
+        // enableRowEdit($(selectorTabla).find("tbody tr:first-child td i.bi."+claseBotonEditarRow));
+        enableRowEdit($(selectorTabla).find("tbody tr:first-child td i.bi"));
         bloquearAccionesPantalla();
         // TODO: Posterior a esta acción, en la tabla proyectos se causa una excepción
     });
@@ -606,16 +726,38 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                         </div>
                     </form>
                     `
-        var ctrol2 = `
-                    <form id="form-demo" onsubmit="return false" enctype="multipart/form-data" method="post" action=${urlControlador}>
-                        <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
-                        <input type="submit" name="submit" class="btn btn-primary submitBtn" value="SUBMIT"/>
+        // https://www.cloudways.com/blog/the-basics-of-file-upload-in-php/
+        var ctrol2 = 
+                    `
+                    <form id="form-demo" enctype="multipart/form-data" action=${urlControlador} method="post">
+                        <input name="pdf" type="file">
+                        <button type="submit" name="action" class="btn btn-primary submitBtn">cargarArchivo_tblEstudios</button>
                     </form>
                     `
+
+                    // `
+                    // <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}>
+                    //     <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
+                    //     <input type="submit" name="action" class="btn btn-primary submitBtn" value="cargarArchivo_tblEstudios"/>
+                    // </form>
+                    // `
+                    // `
+                    // <form id="form-demo" enctype="multipart/form-data">
+                    //     <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
+                    //     <input type="submit" name="action" class="btn btn-primary submitBtn" value="cargarArchivo_tblEstudios"/>
+                    // </form>
+                    // `
+
+                    // `
+                    // <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}>
+                    //     <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
+                    // </form>
+                    // `
                     // <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}>
                     //     <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
                     //     <input type="submit" name="submit" class="btn btn-primary submitBtn" value="SUBMIT"/>
                     // </form>
+                    // `
         $cell.empty().append(ctrol2);
     }
 

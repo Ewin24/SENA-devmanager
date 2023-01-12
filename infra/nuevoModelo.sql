@@ -239,3 +239,5 @@ VALUES
 INSERT INTO estudios (`id`, `nombre`) VALUES ('50c46fc7-9066-11ed-aeb0-1701c1c49394', 'Basica Primaria');
 INSERT INTO estudios (`id`, `nombre`) VALUES ('788486b4-9066-11ed-aeb0-1701c1c49394', 'Maestria');
 
+INSERT INTO usuarios_estudios (id, nombre_certificado, nombre_archivo, fecha_certificado, id_usuario, id_estudio) VALUES('a3501f9f-1c5d-4589-92a3-21f2ad42c210', 'Prueba Edw', ' ', '2022-03-24', 'eb036f8a-75bd-4811-a477-1444e2521f3b', '788486b4-9066-11ed-aeb0-1701c1c49394');
+INSERT INTO usuarios_estudios (id, nombre_certificado, nombre_archivo, fecha_certificado, id_usuario, id_estudio) VALUES('2bcf4528-8b81-4e2a-be59-7fa18964d6b9', 'Prueba Willa', ' ', '2022-03-18', '499a9d4a-fbf1-4ea7-850b-01bf301a98af', '50c46fc7-9066-11ed-aeb0-1701c1c49394');
