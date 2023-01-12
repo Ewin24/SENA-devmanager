@@ -182,7 +182,7 @@ class PerfilAdm //encargada de hacer las consultas y devolver datos en json
 
     public static function eliminarObj($id)
     { // hace eliminación de usuario con un id especifico
-        $cadenaSQL = "DELETE FROM usuarios WHERE identificacion='$id'";
+        $cadenaSQL = "DELETE FROM usuarios WHERE id='$id'";
         ConectorBD::ejecutarQuery($cadenaSQL);
     }
 }

@@ -12,11 +12,11 @@ if (isset($_REQUEST['mensaje'])) {
     $sms = "<div id='alerta' class='alert alert-danger text-center m-2 ' role='alert'>$mensaje</div>";
 }
 
-if (!$_REQUEST['mensaje'] == false) {
-    $fileName = $_REQUEST['mensaje'];
-    $pdf = upload::mostrarPdf($fileName);
-    echo $pdf;
-}
+// if (!$_REQUEST['mensaje'] == false) {
+//     $fileName = $_REQUEST['mensaje'];
+//     $pdf = upload::mostrarPdf($fileName);
+//     echo $pdf;
+// }
 ?>
 
 <html>

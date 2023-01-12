@@ -83,8 +83,8 @@ if (!empty($_POST['action'])) {
                         break;
 
                     default: //por el momento esto seria trabajador, aunque es mejor lanzar un error si es un usuario invalido
-                        $datosEmpresas = Usuario::getProyectosUsuario($idUsuario);
-                        $modoTabla = 'R';
+                        // $datosEmpresas = Usuario::getProyectosUsuario($idUsuario);
+                        // $modoTabla = 'R';
                         break;
                 }
 

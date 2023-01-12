@@ -3,13 +3,7 @@ import { cargarTablaGenerica } from "../../../librerias/tablaGenerica.js";
 var dataUrl = 'http://localhost/SENA-devmanager/src/api/PerfilControlador.php';
 
 function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
-    var ddl_estado_ops = [
-        { value : 'X', key : '' },
-        { value : 'P', key : 'Pendiente' },
-        { value : 'E', key : 'Ejecución' },
-        { value : 'T', key : 'Terminado' }
-    ];
-
+   
     var colsPerfiles = [
           { data: null,render: function () {return "<input type='checkbox'/>";},visible: true,},
           { title: "Id", data: "id", name: 'id', visible: false },
@@ -23,7 +17,7 @@ function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
           { title: "Foto", data: "nombre_foto", name: "nombre_foto", visible: true },
           { title: "Telefono", data: "telefono", name: "telefono", visible: true },
           { title: "Tipo de Usuario", data: "tipo_usuario", name: "tipo_usuario", type: 'select', className : 'ddl', visible: true },
-          { title: "Empresa", data: "id_empresa", name: "id_mpresa", type: 'select', className : 'ddl',  visible: true }
+          { title: "Empresa", data: "id_empresa", name: "id_empresa", type: 'select', className : 'ddl',  visible: true }
     ];
 
     
@@ -50,12 +44,12 @@ function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
 function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
     var colsEstudios = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
-        { title: 'Nombre', data: 'nombre' ,name: 'nombre', visible: true, type: 'select', className : 'ddl' },
+        { title: 'Nombre', data: 'nombre' ,name: 'nombre', visible: true },
         { title: 'Nombre Certificado', data: 'nombre_certificado', name: 'nombre_certificado', visible: true },
         { title: 'Nombre Archivo', data: 'nombre_archivo', name:'nombre_archivo', visible: true },
         { title: 'Fecha Certificado', data: 'fecha_certificado', name: 'fecha_certificado', visible: true },
         { title: 'Id usuario', data: 'id_usuario', name: 'id_usuario', visible: false},
-        { title: 'Id estudio', data: 'id_estudio', name: 'id_estudio', visible: false}
+        { title: 'Id estudio', data: 'id_estudio', name: 'id_estudio', type: 'select', className : 'ddl', visible: false}
     ];
 
     var payloadEstudios = {
@@ -70,11 +64,11 @@ function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
 function cargarHabilidades(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
     var colsHabilidades = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
-        { title: 'Nombre Habilidad', data: 'nombre', name: 'nombre' ,type: 'select', className : 'ddl' , visible: true },
+        { title: 'Nombre Habilidad', data: 'nombre', name: 'nombre' , visible: false },
         { title: 'Descripcion', data: 'descripcion', name: 'descripcion', visible: true },
         { title: 'Experiencia', data: 'experiencia', name: 'experiencia', visible: true },
         { title: 'Id usuario', data: 'id_usuario', name: 'id_usuario',visible: false},
-        { title: 'Id habilidad', data: 'id_habilidad', name: 'id_habilidad' ,visible: false}
+        { title: 'Id habilidad', data: 'id_habilidad', name: 'id_habilidad' ,type: 'select', className : 'ddl' ,visible: true}
     ];
 
     var payloadHabilidades = {

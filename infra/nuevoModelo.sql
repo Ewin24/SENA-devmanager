@@ -142,15 +142,15 @@ COMMENT='Tabla que permite obtener opciones para controles ddl';
 
 -- Poblar base
 -- Tablas paramétrizadas
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(1, 'usuarios', 'tipo_identificacion', 'T', 'Tarjeta Identidad');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(2, 'usuarios', 'tipo_identificacion', 'C', 'Cédula');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(3, 'usuarios', 'tipo_identificacion', 'R', 'Registro Civil');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(4, 'usuarios', 'tipo_identificacion', 'P', 'Pasaporte');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(5, 'usuarios', 'usuarios', '-', '');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(6, 'usuarios', 'tipo_usuario', 'A', 'Admin');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(7, 'usuarios', 'tipo_usuario', 'D', 'Director');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(8, 'usuarios', 'tipo_usuario', 'T', 'Trabajador');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(9, 'tipo_usuario', 'tipo_usuario', '-', '');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(1, 'tblEmpleados', 'tipo_identificacion', 'T', 'Tarjeta Identidad');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(2, 'tblEmpleados', 'tipo_identificacion', 'C', 'Cédula');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(3, 'tblEmpleados', 'tipo_identificacion', 'R', 'Registro Civil');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(4, 'tblEmpleados', 'tipo_identificacion', 'P', 'Pasaporte');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(5, 'tblEmpleados', 'tipo_identificacion', '-', ' ');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(6, 'tblEmpleados', 'tipo_usuario', 'A', 'Admin');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(7, 'tblEmpleados', 'tipo_usuario', 'D', 'Director');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(8, 'tblEmpleados', 'tipo_usuario', 'T', 'Trabajador');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(9, 'tblEmpleados', 'tipo_usuario', '-', ' ');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(10, 'tblProyectos', 'estado', 'T', 'Terminado');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(11, 'tblProyectos', 'estado', 'P', 'Espera');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(12, 'tblProyectos', 'estado', 'E', 'Ejecución');
@@ -189,7 +189,8 @@ INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(44, 'tblCo
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(45, 'tblContratados', 'estado', 'E', 'Rechazado');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(46, 'tblContratados', 'estado', 'R', 'En espera');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(47, 'tblContratados', 'estado', '-', ' ');
-
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(48, 'tblEmpleados', 'id_empresa', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec', 'aguas de bogota');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(49, 'tblEmpleados', 'id_empresa', 'b7f6046a-b834-48f0-856e-8a360b495406', 'actses');
 
 -- empresa
 -- UUID V4 - https://www.delftstack.com/howto/php/php-uuid/
@@ -204,7 +205,7 @@ INSERT INTO usuarios
 VALUES
 ('499a9d4a-fbf1-4ea7-850b-01bf301a98af', '1098657073', 'C', 'William', 'Trigos', 'wtrigos@gmail.com', '$2y$15$T5y8d1BDskwCwRzh7xuGIu0ysZvvdkgkoWie2L0Ll9HBxgMbfS4SK', 'Provenza', 'fwilliam.jpg', '334422', 'D', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec'),
 ('8fa903bc-0789-43b2-901b-70d6c60334ba', '1095', 'C', 'Felipe', 'Garcia', 'fgarcia@gmail.com', '$2y$15$T5y8d1BDskwCwRzh7xuGIu0ysZvvdkgkoWie2L0Ll9HBxgMbfS4SK', 'Concordia', 'ffelipe.jpg', '444222', 'D', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec'),
-('eb036f8a-75bd-4811-a477-1444e2521f3b', '10951', 'R', 'Edwin', 'Trigos', 'etrigos@gmail.com', '$2y$15$T5y8d1BDskwCwRzh7xuGIu0ysZvvdkgkoWie2L0Ll9HBxgMbfS4SK', 'provenza', 'fedwin.jpg', '313316', 'T', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec'),
+('eb036f8a-75bd-4811-a477-1444e2521f3b', '1', 'R', 'Edwin', 'Trigos', 'etrigos@gmail.com', '$2y$15$T5y8d1BDskwCwRzh7xuGIu0ysZvvdkgkoWie2L0Ll9HBxgMbfS4SK', 'provenza', 'fedwin.jpg', '313316', 'T', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec'),
 ('25c00e25-9042-4f04-b059-c34820b800f8', '10985', 'P', 'Pepito', 'Peréz', 'pper@aol.com', '$2y$15$T5y8d1BDskwCwRzh7xuGIu0ysZvvdkgkoWie2L0Ll9HBxgMbfS4SK', 'maracay', 'fpepito.jpg', '039', 'T', 'b7f6046a-b834-48f0-856e-8a360b495406');
 
 INSERT INTO proyectos

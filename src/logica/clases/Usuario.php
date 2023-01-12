@@ -1,5 +1,6 @@
 <?php
 
+require_once 'Proyecto.php';
 class Usuario
 {
 
@@ -287,13 +288,13 @@ class Usuario
     {
         $consultaSQL = "SELECT clave_hash 
                         FROM usuarios 
-                        WHERE identificacion = '$usuario'"; //hash que se encuentra en la BD  -  *el parametro usuario es un id*
+                        WHERE identificacion = $usuario"; //hash que se encuentra en la BD  -  *el parametro usuario es un id*
         $hashGuardado = ConectorBD::ejecutarQuery($consultaSQL);
         $bandera = Usuario::verify($clave, $hashGuardado[0]['clave_hash']);
         
         $userObj = array();
         if ($bandera == 1) {
-            $resultado = Usuario::getListaEnObjetos("identificacion = '$usuario'", null);
+            $resultado = Usuario::getListaEnObjetos("identificacion = $usuario", null);
             if (count($resultado) > 0) {
                 $userObj = $resultado[0];
             }
