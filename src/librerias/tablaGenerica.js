@@ -683,8 +683,6 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             $( selectorBotonesGuardar ).show();
         }
 
-        
-
         $editButton.removeClass().addClass("bi "+claseBotonConfirmarRow);
         $editButton.attr("aria-hidden", "true");
         $editButton.hide();
