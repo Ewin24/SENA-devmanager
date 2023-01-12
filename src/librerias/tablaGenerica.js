@@ -91,6 +91,12 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             dataSrc: 'order',
             selector: 'tr'
         },
+        lengthMenu: [
+            [ 5, 10, 20, -1 ],
+            [ '5', '10', '20', 'Todos los' ]
+        ],
+        // scrollY: 400,
+        // scrollX: true,
         destroy: true,
         processing: true,
         select:{ style:'single', toggleable: true},
@@ -772,13 +778,13 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     function enableddlEdit($cell) {
         var campo = $cell.context.id;
         var options = ddl_ops[campo];
-        var valor = $cell.context.childNodes[0].value;
+        var valor = $(selectorTabla).DataTable().row($cell.closest('tr').index()).data()[campo];
         var commit = false;
 
         for(const op of options){
             var key = Object.keys(op)[0];
             var value = Object.keys(op)[1];
-            if(op[value] == valor) {commit = true; valor = op[key]; break;}
+            if(op[key] === valor) {commit = true; valor = op[key]; break;}
             // objec[key] = op[key];
             // console.log(key, op, commit);
         }
