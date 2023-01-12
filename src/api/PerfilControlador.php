@@ -157,7 +157,8 @@ if (!empty($_POST['action'])) {
                 // ); 
                 $datos = '';
                 // If form is submitted 
-                if(isset($_FILES['pdf'])){
+                if(isset($_FILES['pdf']))
+                {
                     // Crea la carpeta para almacenar los archivos PDF si no existe
                     if (!is_dir($uploadDir)) {
                         mkdir($uploadDir);
@@ -165,7 +166,7 @@ if (!empty($_POST['action'])) {
                     // Upload file 
                     $uploadedFile = ''; 
                     if(!empty($_FILES["pdf"]["name"]))
-                    { 
+                    {
                         // File path config
                         $fileName = basename($_FILES["pdf"]["name"]); 
                         $targetFilePath = $uploadDir.$fileName; 
@@ -174,23 +175,22 @@ if (!empty($_POST['action'])) {
                         // Allow certain file formats to upload 
                         if(in_array($fileType, $allowTypes)){ 
 
-                            echo "tes", in_array($fileType, $allowTypes);
                             // Upload file to the server 
-                            $Res = move_uploaded_file($_FILES["pdf"]["tmp_name"], $targetFilePath);
-                            echo "Res" . $targetFilePath;
-                            if($Res){ 
-                                $uploadedFile = $fileName; 
-                            }else{ 
-                                $uploadStatus = 0; 
-                                $datos = 'Ha ocurrido un error en la carga del archivo'; 
-                            } 
+                            move_uploaded_file($_FILES["pdf"]["tmp_name"], $targetFilePath);
+                            $datos = $uploadedFile;
+                            // if($Res){ 
+                            //     $uploadedFile = $fileName; 
+                            // }else{ 
+                            //     $uploadStatus = 0; 
+                            //     $datos = 'Ha ocurrido un error en la carga del archivo'; 
+                            // } 
                         }
                         else
                         {
                             $uploadStatus=0; 
                             $datos ='Solo las extensiones'.implode('/', $allowTypes).' son permitidas para cargar.'; 
-                        } 
-                    } 
+                        }
+                    }
                 }
                     
                 $response = array(
