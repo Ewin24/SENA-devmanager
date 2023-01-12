@@ -144,55 +144,62 @@ if (!empty($_POST['action'])) {
 
             case 'cargarArchivo_tblEstudios':
 
+                //TODO: hacer verificacion de seguridad, con la ruta verificar que el archivo si es PDF
+                $datos = upload::subirPdf();
+
+                /////////
                 // File upload folder 
-                $uploadDir='pdfs/'; 
+                //   $uploadDir='pdfs/'; 
 
-                // Allowed file types 
-                $allowTypes = array('pdf','doc','docx','jpg','png','jpeg'); 
+                //   // Allowed file types 
+                //   $allowTypes = array('pdf','doc','docx','jpg','png','jpeg'); 
 
-                // Default response 
-                // $response = array( 
-                //     'status' => 0, 
-                //     'message' => 'La carga del archivo ha fallado, intente nuevamente.' 
-                // ); 
-                $datos = '';
-                // If form is submitted 
-                if(isset($_FILES['pdf']))
-                {
-                    // Crea la carpeta para almacenar los archivos PDF si no existe
-                    if (!is_dir($uploadDir)) {
-                        mkdir($uploadDir);
-                    }
-                    // Upload file 
-                    $uploadedFile = ''; 
-                    if(!empty($_FILES["pdf"]["name"]))
-                    {
-                        // File path config
-                        $fileName = basename($_FILES["pdf"]["name"]); 
-                        $targetFilePath = $uploadDir.$fileName; 
-                        $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION); 
+                //   // Default response 
+                //   // $response = array( 
+                //   //     'status' => 0, 
+                //   //     'message' => 'La carga del archivo ha fallado, intente nuevamente.' 
+                //   // ); 
+                //   $datos = '';
+                //   // If form is submitted 
+                //   if(isset($_FILES['pdf']))
+                //   {
+                //       // Crea la carpeta para almacenar los archivos PDF si no existe
+                //       if (!is_dir($uploadDir)) {
+                //           mkdir($uploadDir);
+                //       }
+                //       // Upload file 
+                //       $uploadedFile = ''; 
+                //       if(!empty($_FILES["pdf"]["name"]))
+                //       {
+                //           // File path config
+                //           $fileName = basename($_FILES["pdf"]["name"]); 
+                //           $targetFilePath = $uploadDir.$fileName; 
+                //           $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION); 
 
-                        // Allow certain file formats to upload 
-                        if(in_array($fileType, $allowTypes)){ 
+                //           // Allow certain file formats to upload 
+                //           if(in_array($fileType, $allowTypes)){ 
 
-                            // Upload file to the server 
-                            move_uploaded_file($_FILES["pdf"]["tmp_name"], $targetFilePath);
-                            $datos = $uploadedFile;
-                            // if($Res){ 
-                            //     $uploadedFile = $fileName; 
-                            // }else{ 
-                            //     $uploadStatus = 0; 
-                            //     $datos = 'Ha ocurrido un error en la carga del archivo'; 
-                            // } 
-                        }
-                        else
-                        {
-                            $uploadStatus=0; 
-                            $datos ='Solo las extensiones'.implode('/', $allowTypes).' son permitidas para cargar.'; 
-                        }
-                    }
-                }
-                    
+                //               // Upload file to the server 
+                //               move_uploaded_file($_FILES["pdf"]["tmp_name"], $targetFilePath);
+                //               $datos = $uploadedFile;
+                //               // if($Res){ 
+                //               //     $uploadedFile = $fileName; 
+                //               // }else{ 
+                //               //     $uploadStatus = 0; 
+                //               //     $datos = 'Ha ocurrido un error en la carga del archivo'; 
+                //               // } 
+                //           }
+                //           else
+                //           {
+                //               $uploadStatus=0; 
+                //               $datos ='Solo las extensiones'.implode('/', $allowTypes).' son permitidas para cargar.'; 
+                //           }
+                //       }
+                //   }
+                /////////
+
+
+
                 $response = array(
                     "data" => $datos,
                     "accion" => $accion
@@ -206,15 +213,13 @@ if (!empty($_POST['action'])) {
                 );
                 break;
         }
-    }
-    catch (customException $e) {
+    } catch (customException $e) {
         $response = array(
             "data" => array(),
             "accion" => "Error generado en $accion",
             "error" => $e->errorMessage()
         );
-    } 
-    catch (Exception $e) {
+    } catch (Exception $e) {
         $response = array(
             "data" => array(),
             "accion" => "Error generado en $accion",
