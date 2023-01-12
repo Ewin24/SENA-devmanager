@@ -1,6 +1,7 @@
 <?php
 
 require_once '../logica/clasesGenericas/ConectorBD.php';
+require_once '../logica/clasesGenericas/ddl_parametrizado.php';
 require_once '../logica/clases/PerfilAdm.php';
 require_once '../logica/clases/Perfil.php';
 require_once '../logica/clases/Usuario.php';
@@ -16,13 +17,12 @@ if (!empty($_POST['action'])) {
         // echo $accion;
         switch ($accion) {
 
-            //////////////////////////////////////////////////////////////////////////////////////////////////////
-            //SECCION PERFILES
-            case 'Insertar_tblPerfiles':
+                //////////////////////////////////////////////////////////////////////////////////////////////////////
+                //SECCION PERFILES
+            case 'Insertar_tblEmpleados':
                 header('Content-type: application/json; charset=utf-8');
                 $newPerfil = json_decode($_POST['datos']);
                 if ($newPerfil != null) {
-                    $newPerfil->id = ConectorBD::get_UUIDv4();
                     PerfilAdm::guardarObj($newPerfil);
                 }
 
@@ -32,7 +32,7 @@ if (!empty($_POST['action'])) {
                 );
                 break;
 
-            case 'Modificar_tblPerfiles':
+            case 'Modificar_tblEmpleados':
                 header('Content-type: application/json; charset=utf-8');
                 $editarPerfil = json_decode($_POST['datos']);
 
@@ -46,7 +46,7 @@ if (!empty($_POST['action'])) {
                 );
                 break;
 
-            case 'Eliminar_tblPerfiles':
+            case 'Eliminar_tblEmpleados':
                 header('Content-type: application/json; charset=utf-8');
                 $eliminarPerfil = json_decode($_POST['datos']);
 
@@ -60,7 +60,7 @@ if (!empty($_POST['action'])) {
                 );
                 break;
 
-            case 'cargar_tblPerfiles':
+            case 'cargar_tblEmpleados':
                 header('Content-type: application/json; charset=utf-8');
                 $idUsuario = $_POST['datos'];
                 $USUARIO = Usuario::getListaEnObjetos("id='$idUsuario'", null)[0];
@@ -68,27 +68,37 @@ if (!empty($_POST['action'])) {
 
                 switch ($tipoUsuario) {
                     case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
-                        $datosProyectos = Perfil::getListaEnObjetos(null, null);
+                        $datosPerfil = Perfil::getListaEnObjetos(null, null);
                         $modoTabla = 'CRUD';
                         break;
 
                     case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
                         $filtroUsuario = "id='$idUsuario'";
-                        $datosProyectos = Perfil::getListaEnObjetos($filtroUsuario, null);
+                        $datosPerfil = Perfil::getListaEnObjetos(null, null);
                         $modoTabla = 'RU';
                         break;
 
-                    default: //trabajador (modo: Solo lectura): perfiles existentes
-                        $datosProyectos = Usuario::getProyectosUsuario($idUsuario);
+                    case 'T': //Director (modo CRUD filtrado): solo su información de perfil activo
+                        $filtroUsuario = "id='$idUsuario'";
+                        $datosPerfil = Perfil::getListaEnObjetos($filtroUsuario, null);
                         $modoTabla = 'R';
                         break;
+
+                    default: //trabajador (modo: Solo lectura): perfiles existentes
+                        // $datosProyectos = Usuario::getProyectosUsuario($idUsuario);
+                        // $modoTabla = 'R';
+                        break;
                 }
+                $htmlTabla = $_POST['html_tabla'];
+                $json_ddl = Ddl_Parametrizado::getddlOps("tabla= '$htmlTabla' AND campo in('tipo_identificacion', 'tipo_usuario', 'id_empresa')", null);
 
                 $response = array(
-                    "data" => $datosProyectos,
+                    "data" => $datosPerfil,
+                    "idPerfilSeleccionado" => $idUsuario,
+                    "ddl_ops" => $json_ddl,
                     "tipoUsuario" => $tipoUsuario
                 );
-                // $response = $datosProyectos;
+
                 break;
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,10 +110,13 @@ if (!empty($_POST['action'])) {
                 if ($idPerfilSeleccionado != null || $idPerfilSeleccionado != '') {
                     $datosHabilidades = PerfilAdm::getHabTrabajador($idPerfilSeleccionado);
                 }
+                $htmlTabla = $_POST['html_tabla'];
+                $json_ddl = Ddl_Parametrizado::getddlOps("tabla= '$htmlTabla' AND campo in('id_habilidad')", null);
 
                 $response = array(
                     "data" => $datosHabilidades,
                     "idPerfilSeleccionado" => $idPerfilSeleccionado,
+                    "ddl_ops" => $json_ddl,
                     "accion" => $accion
                 );
 
@@ -118,9 +131,12 @@ if (!empty($_POST['action'])) {
                 if ($idPerfilSeleccionado != null || $idPerfilSeleccionado != '') {
                     $datosEstudios = PerfilAdm::getEstTrabajador($idPerfilSeleccionado);
                 }
+                $htmlTabla = $_POST['html_tabla'];
+                $json_ddl = Ddl_Parametrizado::getddlOps("tabla= '$htmlTabla' AND campo in('id_estudio')", null);
 
                 $response = array(
                     "data" => $datosEstudios,
+                    "ddl_ops" => $json_ddl,
                     "ididPerfilSeleccionado" => $idPerfilSeleccionado,
                     "accion" => $accion
                 );

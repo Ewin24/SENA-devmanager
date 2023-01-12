@@ -4,13 +4,6 @@ var dataUrl = 'http://localhost/SENA-devmanager/src/api/EmpresaControlador.php';
 
 function cargarEmpresas(nombreTabla, idUsuario, modoTabla = 'R') {
 
-    var ddl_estado_ops = [
-    { value : 'X', key : '' },
-    { value : 'P', key : 'Pendiente' },
-    { value : 'E', key : 'Ejecución' },
-    { value : 'T', key : 'Terminado' }
-    ];
-
     var colsEmpresas = [
         {   data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         {   title: 'id', data: 'id', name: 'id',  visible: false },
@@ -31,7 +24,7 @@ function cargarEmpresas(nombreTabla, idUsuario, modoTabla = 'R') {
     var payloadEmpresas = {
         datos : idUsuario,
         action : 'cargar_'+nombreTabla,
-        html_table : nombreTabla
+        html_tabla : nombreTabla
     }
 
     console.log(modoTabla);
@@ -43,11 +36,19 @@ function cargarEmpresas(nombreTabla, idUsuario, modoTabla = 'R') {
 }
 
 function cargarTrabajadores(nombreTabla, idEmpresaSeleccionada, modoTabla ='R') {
+
+    var ddl_t_identificacion = [
+        { value : 'X', key : '' },
+        { value : 'P', key : 'Pendiente' },
+        { value : 'E', key : 'Ejecución' },
+        { value : 'T', key : 'Terminado' }
+        ];
+
     var colsTrabajadores = [
       {data: null,render: function () {return "<input type='checkbox'/>";},visible: true,},
       { title: "Id", data: "id", name: 'id', visible: false },
       { title: "Identificacion", data: "identificacion", name: 'identificacion', visible: true },
-      { title: "Tipo Ident.",data: "tipo_identificacion", name:'tipo_identificacion', className: "ddl" },
+      { title: "Tipo Ident.",data: "tipo_identificacion", name:'tipo_identificacion', type: 'select', className: "ddl" },
       { title: "Nombres", data: "nombres",name: "nombres", visible: true },
       { title: "Apellidos", data: "apellidos",name: "apellidos", visible: true },
       { title: "Correo", data: "correo", name: "correo", visible: true },
@@ -55,18 +56,18 @@ function cargarTrabajadores(nombreTabla, idEmpresaSeleccionada, modoTabla ='R') 
       { title: "Dirección", data: "direccion",name: "direccion", visible: true },
       { title: "Foto", data: "nombre_foto", name: "nombre_foto", visible: true },
       { title: "Telefono", data: "telefono", name: "telefono", visible: true },
-      { title: "Tipo de Usuario", data: "tipo_usuario", name: "tipo_usuario",  visible: true },
-      { title: "nit de Empresa", data: "id_empresa", name: "id_mpresa", visible: true }
+      { title: "Tipo de Usuario", data: "tipo_usuario", name: "tipo_usuario", type: 'select', className: 'ddl',  visible: true },
+      { title: "Empresa", data: "id_empresa", name: "id_empresa", type: 'select', className: 'ddl' , visible: true }
     ];
 
     var payloadTrabajadores = {
         datos : idEmpresaSeleccionada ,
         action : 'cargar_'+nombreTabla,
-        html_table : nombreTabla
+        html_tabla : nombreTabla
     }
 
     if($('#'+nombreTabla).lenght) $('#'+nombreTabla).DataTable().clear().draw();
-    cargarTablaGenerica(nombreTabla, colsTrabajadores, modoTabla, dataUrl, payloadTrabajadores);
+    cargarTablaGenerica(nombreTabla, colsTrabajadores, modoTabla, dataUrl, payloadTrabajadores, ddl_t_identificacion);
 }
 
 export { cargarEmpresas, cargarTrabajadores }

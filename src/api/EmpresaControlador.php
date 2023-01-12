@@ -1,6 +1,7 @@
 <?php
 
 require_once '../logica/clasesGenericas/ConectorBD.php';
+require_once '../logica/clasesGenericas/ddl_parametrizado.php';
 require_once '../logica/clases/EmpresaAdm.php';
 require_once '../logica/clases/Usuario.php';
 require_once '../logica/clases/Empresa.php';
@@ -66,7 +67,6 @@ if (!empty($_POST['action'])) {
                 switch ($tipoUsuario) {
                     case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
                         $datosEmpresas = Empresa::getListaEnObjetos(null, null);
-
                         $modoTabla = 'CRUD';
                         break;
 
@@ -83,8 +83,8 @@ if (!empty($_POST['action'])) {
                         break;
 
                     default: //por el momento esto seria trabajador, aunque es mejor lanzar un error si es un usuario invalido
-                        $datosEmpresas = Usuario::getProyectosUsuario($idUsuario);
-                        $modoTabla = 'R';
+                        // $datosEmpresas = Usuario::getProyectosUsuario($idUsuario);
+                        // $modoTabla = 'R';
                         break;
                 }
 
@@ -96,7 +96,6 @@ if (!empty($_POST['action'])) {
                 // $response = $datosProyectos;
                 break;
 
-
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
                 //SECCION EMPLEADOS
             case 'cargar_tblEmpleados':
@@ -105,14 +104,15 @@ if (!empty($_POST['action'])) {
 
                 if ($idEmpresaSeleccionada != null || $idEmpresaSeleccionada != '') {
                     //// Definiendo la lógica de negocio dentro de la clase
-
                     $datTrabajadores = EmpresaAdm::getTrabajadoresEmpresa($idEmpresaSeleccionada);
-                    //print_r($datTrabajadores);
                 }
 
+                $htmlTabla = $_POST['html_tabla'];
+                $json_ddl = Ddl_Parametrizado::getddlOps("tabla= '$htmlTabla' AND campo in('tipo_identificacion', 'tipo_usuario', 'id_empresa')", null);
                 $response = array(
                     "data" => $datTrabajadores,
                     "idEmpresaSeleccionada" => $idEmpresaSeleccionada,
+                    "ddl_ops" => $json_ddl,
                     "accion" => $accion
                 );
                 break;
