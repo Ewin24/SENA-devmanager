@@ -5,6 +5,15 @@ require_once '../logica/clasesGenericas/ddl_parametrizado.php';
 require_once '../logica/clases/PerfilAdm.php';
 require_once '../logica/clases/Perfil.php';
 require_once '../logica/clases/Usuario.php';
+require_once '../upload.php';
+
+
+// print_r($_FILES);
+// print_r($_POST);
+// echo "hola";
+// $url= upload::subirPdf();
+// echo $url;
+
 
 if (!empty($_POST['action'])) {
 
@@ -12,6 +21,7 @@ if (!empty($_POST['action'])) {
 
         $accion = $_POST['action'];
         $response = '';
+        // echo $accion;
         switch ($accion) {
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,6 +149,33 @@ if (!empty($_POST['action'])) {
                 );
                 break;
 
+            case 'Insertar_tblEstudios':
+
+                print_r($_FILES);
+                print_r($_POST);
+                echo "hola";
+                $url= upload::subirPdf();
+                echo $url;
+
+                /* Get the name of the uploaded file */
+                $filename = $_FILES['file']['name'];
+
+                /* Choose where to save the uploaded file */
+                $location = "pdfs/".$filename;
+
+                /* Save the uploaded file to the local filesystem */
+                if ( move_uploaded_file($_FILES['file']['tmp_name'], $location) ) { 
+                echo 'Success'; 
+                } else { 
+                echo 'Failure'; 
+                }
+
+                $response = array(
+                    "data" => $filename,
+                    "accion" => $accion
+                );
+                break;
+
             default:
                 $response = array(
                     "data" => array(),
@@ -146,13 +183,15 @@ if (!empty($_POST['action'])) {
                 );
                 break;
         }
-    } catch (customException $e) {
+    }
+    catch (customException $e) {
         $response = array(
             "data" => array(),
             "accion" => "Error generado en $accion",
             "error" => $e->errorMessage()
         );
-    } catch (Exception $e) {
+    } 
+    catch (Exception $e) {
         $response = array(
             "data" => array(),
             "accion" => "Error generado en $accion",
