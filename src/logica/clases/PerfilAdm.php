@@ -7,7 +7,7 @@ class HabilidadesAdm
     //INNER JOIN habilidades ON usuarios_habilidades.id_habilidad = habilidades.id 
     //WHERE id_usuario = 'eb036f8a-75bd-4811-a477-1444e2521f3b';
 
-    //public $id; //id de usuario_habilidades
+    public $id; //id de usuario_habilidades
     public $id_habilidad;
     public $experiencia;
     public $id_usuario;
@@ -19,7 +19,7 @@ class HabilidadesAdm
     {
         if ($campo != null) {
             if (!is_array($campo)) {
-                $cadenaSQL = "  SELECT id_habilidad, id_usuario, nombre, descripcion, experiencia 
+                $cadenaSQL = "  SELECT id, id_habilidad, id_usuario, nombre, descripcion, experiencia 
                                 FROM usuarios_habilidades 
                                 INNER JOIN habilidades ON usuarios_habilidades.id_habilidad = habilidades.id 
                                 WHERE $campo = $valor;";
@@ -27,6 +27,7 @@ class HabilidadesAdm
                 print_r($campo);
             }
             //$this->id = $campo['id'];
+            $this->id = $campo['id'];
             $this->id_habilidad = $campo['id_habilidad'];
             $this->id_usuario = $campo['id_usuario'];
             $this->nombre = $campo['nombre'];
@@ -42,7 +43,7 @@ class EstudiosAdm
     // INNER JOIN estudios 
     // WHERE 1 =1; 
 
-    //public $id; //id de usuario_estudios
+    public $id; //id de usuario_estudios
     public $nombre; //nombre del estudio
     public $nombre_certificado;
     public $nombre_archivo;
@@ -55,7 +56,7 @@ class EstudiosAdm
     {
         if ($campo != null) {
             if (!is_array($campo)) {
-                $cadenaSQL = "  SELECT  nombre, fecha_certificado, nombre_archivo, nombre_certificado, id_usuario, id_estudio
+                $cadenaSQL = "  SELECT  id, nombre, fecha_certificado, nombre_archivo, nombre_certificado, id_usuario, id_estudio
                                 FROM usuarios_estudios 
                                 INNER JOIN estudios
                                 WHERE $campo = $valor;";
@@ -63,6 +64,7 @@ class EstudiosAdm
                 print_r($campo);
             }
             //$this->id = $campo['id'];
+            $this->id = $campo['id'];
             $this->nombre = $campo['nombre'];
             $this->fecha_certificado = $campo['fecha_certificado'];
             $this->nombre_archivo = $campo['nombre_archivo'];

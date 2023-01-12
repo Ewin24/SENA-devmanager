@@ -76,24 +76,31 @@ switch ($tipoUsuario) {
     <div class="container col-auto justify-content-center">
         <div class="row">
             <legend class="w-auto px-2">Estudios</legend>
-            <table id="tblEstudios" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-            <table id="new-Estudio" style="display:none" class="col-auto">
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td>__Nombre__</td>
-                        <td>__Nombre certificado__</td>
-                        <td>__Nombre Archivo__</td>
-                        <td>__01/01/2020__</td>
-                        <td>__01/01/2020__</td>
-                        <td>__01/01/2020__</td>
-                        <td>
-                            <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
-                            <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                <table id="tblEstudios" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+                <table id="new-Estudio" style="display:none" class="col-auto">
+                    <tbody>
+                        <tr>
+                            <!-- <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}> -->
+                                <td></td>
+                                <td>__id__</td>
+                                <td>__Nombre__</td>
+                                <td>__Nombre certificado__</td>
+                                <td>__Nombre archivo__</td>
+                                <!-- <td>
+                                    <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
+                                    <input type="submit" name="submit" class="btn btn-primary submitBtn" value="SUBMIT"/>
+                                </td> -->
+                                <td>__01/01/2020__</td>
+                                <td>__01/01/2020__</td>
+                                <td>__01/01/2020__</td>
+                                <td>
+                                    <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
+                                    <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                                </td>
+                            <!-- </form> -->
+                        </tr>
+                    </tbody>
+                </table>
         </div>
     </div>
 </fieldset>

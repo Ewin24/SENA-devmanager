@@ -127,6 +127,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                                 // console.log(key, op, commit);
                             }
                         }
+                        // if(cols[col].className == 'fUpload')
                     }
                 }
             }
@@ -381,6 +382,44 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         e.stopPropagation();
     });
     
+    // $(selectorTabla).on('mousedown', '.submitBtn', function(e) {
+    //     e.preventDefault();
+    //     var form = $(this).closest('tr'); //.find('#fupForm');  
+    //     var file_data = form.find('td #form-demo input[name=file]')[0].value;
+    //     var form_data = new FormData();                  
+    //     form_data.append('file', file_data);
+    //     form_data.append('action', 'cargarArchivo_tblEstudios');
+    //     // alert(form_data);        
+
+    //     /*
+    //     $.ajax({
+    //         type: 'POST',
+    //         // url: 'http://localhost/SENA-devmanager/src/upload.php',
+    //         url: urlControlador,
+    //         data: form_data,
+    //         // dataType: 'json',
+    //         contentType: false,
+    //         cache: false,
+    //         processData:false,
+    //         beforeSend: function(){
+    //             $('.submitBtn').attr("disabled","disabled");
+    //             $('#fupForm').css("opacity",".5");
+    //         },
+    //         success: function(response){
+    //             $('.statusMsg').html('');
+    //             if(response.status == 1){
+    //                 $('#fupForm')[0].reset();
+    //                 $('.statusMsg').html('<p class="alert alert-success">'+response.message+'</p>');
+    //             }else{
+    //                 $('.statusMsg').html('<p class="alert alert-danger">'+response.message+'</p>');
+    //             }
+    //             $('#fupForm').css("opacity","");
+    //             $(".submitBtn").removeAttr("disabled");
+    //         }
+    //     });
+    //     */
+    // });
+
     // Guardar Cambios
     $('#btn-save-'+nombreTabla).on('click', function() {
         updateRows(true); // Update all edited rows
@@ -395,7 +434,16 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             var fila = $(selectorTabla+' tbody tr:first');
             var cells = fila.find("td").not(':first').not(':last');
             cells.each(function(i, elemento) {
-                rowdata[elemento.id] = elemento.value;
+                if(elemento.className.toUpperCase().indexOf('FUPLOAD')>0){
+                    // var form = fila.find('td #form-demo').submit();
+                    var btn = fila.find('td .submitBtn')
+                    btn.click();
+                    rowdata[elemento.id] = elemento.value;
+                    // sendFormData(form);
+                }
+                else{
+                    rowdata[elemento.id] = elemento.value;
+                }
             });
             accionCRUD = 'Insertar';
         }
@@ -457,7 +505,9 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     // Botón nuevo proyecto
     $(selectorTabla).css('border-top', 'none')
         .before($('<div>').addClass('addRow')
-        .append($('<button>').attr('id', 'addRow'+nombreTabla).text('Nuevo '+nombreTabla.substring(3,nombreTabla.length-1))));
+        .append($('<button>')
+        .attr('id', 'addRow'+nombreTabla)
+        .text('Nuevo '+nombreTabla.substring(3,nombreTabla.length-1))));
 
     // Add row
     $('#addRow'+nombreTabla).click(function() {
@@ -529,6 +579,10 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             enableddlEdit($(this))
         });
 
+        $row.find('td.fUpload').each(function(i, el) {
+            enablefileUploadEdit($(this))
+        });
+
         $row.find('td.datepicker').each(function(i, el) {
             enableDatePicker($(this))
         });
@@ -537,6 +591,32 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         $cancelButton.removeClass().addClass("bi "+claseBotonCancelarRow);
         $cancelButton.attr("aria-hidden", "true");
         $cancelButton.hide();
+    }
+
+    function enablefileUploadEdit($cell) {
+        var row_index = $cell.closest('tr').index();
+        var rowdata = $(selectorTabla).DataTable().row(row_index).data();
+        var idDat = "cert_" + rowdata.id;
+        var ctrol = `
+                    <form id="form-demo" onsubmit="return false">
+                        <div class="input-group">
+                        <span class="input-group-btn">
+                            <input id=${idDat} class="btn btn-primary file-upload" type="file" name="file"/>
+                        </span> 
+                        </div>
+                    </form>
+                    `
+        var ctrol2 = `
+                    <form id="form-demo" onsubmit="return false" enctype="multipart/form-data" method="post" action=${urlControlador}>
+                        <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
+                        <input type="submit" name="submit" class="btn btn-primary submitBtn" value="SUBMIT"/>
+                    </form>
+                    `
+                    // <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}>
+                    //     <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
+                    //     <input type="submit" name="submit" class="btn btn-primary submitBtn" value="SUBMIT"/>
+                    // </form>
+        $cell.empty().append(ctrol2);
     }
 
     function enableEditText($cell) {

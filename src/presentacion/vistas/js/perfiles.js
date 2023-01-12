@@ -50,9 +50,22 @@ function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
 function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
     var colsEstudios = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
+        { title: "Id", data: "id", name: 'id', visible: false },
         { title: 'Nombre', data: 'nombre' ,name: 'nombre', visible: true },
         { title: 'Nombre Certificado', data: 'nombre_certificado', name: 'nombre_certificado', visible: true },
-        { title: 'Nombre Archivo', data: 'nombre_archivo', name:'nombre_archivo', visible: true },
+        { title: 'Nombre Archivo', data: 'nombre_archivo', name:'nombre_archivo', className: 'fUpload',
+                    // render: function ( data, type, row, meta ) {
+                    // var idDat = "cert_" + data.id; //meta.row;
+                    // var idDatFN = "datFileName" + meta.row;
+                    // var ctrol = `
+                    //             <div class="input-group">
+                    //             <span class="input-group-btn">
+                    //                 <input id=${idDat} class="btn btn-primary file-upload" type="file" name="file" disabled="disabled"/>
+                    //             </span> 
+                    //             </div>
+                    //             `
+                    // return ctrol;},
+                    visible: true },
         { title: 'Fecha Certificado', data: 'fecha_certificado', name: 'fecha_certificado', visible: true },
         { title: 'Id usuario', data: 'id_usuario', name: 'id_usuario', visible: false},
         { title: 'Id estudio', data: 'id_estudio', name: 'id_estudio', visible: false}

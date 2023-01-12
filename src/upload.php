@@ -1,9 +1,9 @@
 <?php
 
 $bandera = upload::subirPdf();
-if (!$bandera == false) {
-    header("location: index.php?mensaje=$bandera");
-}
+// if (!$bandera == false) {
+//     header("location: index.php?mensaje=$bandera");
+// }
 class upload
 {
     public static function subirPdf()
