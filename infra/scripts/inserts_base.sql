@@ -48,6 +48,8 @@ INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(44, 'tblCo
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(45, 'tblContratados', 'estado', 'E', 'Rechazado');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(46, 'tblContratados', 'estado', 'R', 'En espera');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(47, 'tblContratados', 'estado', '-', ' ');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(48, 'tblEmpleados', 'id_empresa', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec', 'aguas de bogota');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(49, 'tblEmpleados', 'id_empresa', 'b7f6046a-b834-48f0-856e-8a360b495406', 'actses');
 
 
 -- empresa
