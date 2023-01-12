@@ -191,6 +191,11 @@ INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(46, 'tblCo
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(47, 'tblContratados', 'estado', '-', ' ');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(48, 'tblEmpleados', 'id_empresa', '20a9d4e8-63a8-48f0-910f-c7339d8fd7ec', 'aguas de bogota');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(49, 'tblEmpleados', 'id_empresa', 'b7f6046a-b834-48f0-856e-8a360b495406', 'actses');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(50, 'tblHabilidades', 'id_habilidad', '65374dc5-692f-483d-9809-3371a7222a79', 'PHP');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(51, 'tblHabilidades', 'id_habilidad', '0463add9-313e-49bf-a07e-800612c36263', 'JavaScript');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(52, 'tblEstudios', 'id_estudio', '50c46fc7-9066-11ed-aeb0-1701c1c49394', 'Basica Primaria');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(53, 'tblEstudios', 'id_estudio', '788486b4-9066-11ed-aeb0-1701c1c49394', 'Maestria');
+
 
 -- empresa
 -- UUID V4 - https://www.delftstack.com/howto/php/php-uuid/
