@@ -126,78 +126,59 @@ if (!empty($_POST['action'])) {
                 );
                 break;
 
-            case 'Insertar_tblEstudios':
+            case 'cargarArchivo_tblEstudios':
 
-                echo "hola";
-                print_r($_POST);
-                print_r($_FILES);
-                $valid_extensions = array('jpeg', 'jpg', 'png', 'gif', 'bmp' , 'pdf' , 'doc' , 'ppt'); // valid extensions
-                $path = 'pdfs/'; // upload directory
-                if($_FILES['_FILES'])
-                {
-                    $pdf = $_FILES['pdf']['name'];
-                    $tmp = $_FILES['pdf']['tmp_name'];
+                // File upload folder 
+                $uploadDir='pdfs/'; 
 
-                    // get uploaded file's extension
-                    $ext = strtolower(pathinfo($pdf, PATHINFO_EXTENSION));
-                    // can upload same image using rand function
-                    $final_image = rand(1000,1000000).$pdf;
-                    // check's valid format
-                    if(in_array($ext, $valid_extensions)) 
+                // Allowed file types 
+                $allowTypes = array('pdf','doc','docx','jpg','png','jpeg'); 
+
+                // Default response 
+                // $response = array( 
+                //     'status' => 0, 
+                //     'message' => 'La carga del archivo ha fallado, intente nuevamente.' 
+                // ); 
+                $datos = '';
+                // If form is submitted 
+                if(isset($_FILES['pdf'])){
+                    // Crea la carpeta para almacenar los archivos PDF si no existe
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir);
+                    }
+                    // Upload file 
+                    $uploadedFile = ''; 
+                    if(!empty($_FILES["pdf"]["name"]))
                     { 
-                        $path = $path.strtolower($final_image); 
-                        if(move_uploaded_file($tmp,$path)) 
-                        {
-                            $response = "Exito en la carga de $location"; 
-                            //insert form data in the database
-                            // $insert = $db->query("INSERT uploading (name,email,file_name) VALUES ('".$name."','".$email."','".$path."')");
-                            //echo $insert?'ok':'err';
+                        // File path config
+                        $fileName = basename($_FILES["pdf"]["name"]); 
+                        $targetFilePath = $uploadDir.$fileName; 
+                        $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION); 
+
+                        // Allow certain file formats to upload 
+                        if(in_array($fileType, $allowTypes)){ 
+
+                            echo "tes", in_array($fileType, $allowTypes);
+                            // Upload file to the server 
+                            $Res = move_uploaded_file($_FILES["pdf"]["tmp_name"], $targetFilePath);
+                            echo "Res", $Res;
+                            if($Res){ 
+                                $uploadedFile = $fileName; 
+                            }else{ 
+                                $uploadStatus = 0; 
+                                $datos = 'Ha ocurrido un error en la carga del archivo'; 
+                            } 
                         }
-                        else 
+                        else
                         {
-                            $response = "Fallo la carga de $location"; 
-                        }
-                    }
-                    else 
-                    {
-                        $response = "Extensión de archivo no permitida"; 
-                    }
-                    
+                            $uploadStatus=0; 
+                            $datos ='Solo las extensiones'.implode('/', $allowTypes).' son permitidas para cargar.'; 
+                        } 
+                    } 
                 }
-
-
-                // echo "hola";
-                // print_r($_POST);
-                // print_r($_FILES);
-                
-                // if($_FILES['pdf'])
-                // {
-                //     $img = $_FILES['pdf']['name'];
-                //     $tmp = $_FILES['pdf']['tmp_name'];
-                //     echo $img, $tmp;
-                // }
-
-                // // Crea la carpeta para almacenar los archivos PDF si no existe
-                // if (!is_dir('pdfs')) {
-                //     mkdir('pdfs');
-                // }
-
-                // /* Get the name of the uploaded file */
-                // $filename = $_FILES['pdf']['name'];
-
-                // /* Choose where to save the uploaded file */
-                // $location = "pdfs/".$filename;
-
-                // /* Save the uploaded file to the local filesystem */
-                // if ( move_uploaded_file($_FILES['pdf']['tmp_name'], $location) ) { 
-                //     $response = "Exito en la carga de $location"; 
-                // } 
-                // else { 
-                //     $response = "Fallo la carga de $location"; 
-                // }
-
+                    
                 $response = array(
-                    "data" => $response,
+                    "data" => $datos,
                     "accion" => $accion
                 );
                 break;

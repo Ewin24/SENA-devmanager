@@ -538,7 +538,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     archivos = {'pdf': form[0].files};
 
                     var formData = new FormData(document.getElementById("form-demo"));
-                    formData.append("action", "Insertar_tblEstudios");
+                    formData.append("action", "cargarArchivo_"+nombreTabla);
 
                     $.ajax({
                         dataType:"json",
@@ -549,7 +549,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                         contentType: false,
                         success:function(response){
                             // alert("Status: "+response);
-                            console.log(rowdata);
+                            // console.log(rowdata);
                             existenCambiosPendientes = false;
                             insertandoNuevoRegistro = false;
                         }, 
