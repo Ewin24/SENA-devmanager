@@ -8,7 +8,7 @@ function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
           { data: null,render: function () {return "<input type='checkbox'/>";},visible: true,},
           { title: "Id", data: "id", name: 'id', visible: false },
           { title: "Identificacion", data: "identificacion", name: 'identificacion', visible: true },
-          { title: "Tipo Ident.",data: "tipo_identificacion", name:'tipo_identificacion', type: 'select', className : 'ddl' },
+          { title: "Tipo Ident.",data: "tipo_identificacion", name:'tipo_identificacion', className : 'ddl' },
           { title: "Nombres", data: "nombres",name: "nombres", visible: true },
           { title: "Apellidos", data: "apellidos",name: "apellidos", visible: true },
           { title: "Correo", data: "correo", name: "correo", visible: true },
@@ -16,11 +16,10 @@ function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
           { title: "Dirección", data: "direccion",name: "direccion", visible: true },
           { title: "Foto", data: "nombre_foto", name: "nombre_foto", visible: true },
           { title: "Telefono", data: "telefono", name: "telefono", visible: true },
-          { title: "Tipo de Usuario", data: "tipo_usuario", name: "tipo_usuario", type: 'select', className : 'ddl', visible: true },
-          { title: "Empresa", data: "id_empresa", name: "id_empresa", type: 'select', className : 'ddl',  visible: true }
+          { title: "Tipo de Usuario", data: "tipo_usuario", name: "tipo_usuario", className : 'ddl', visible: true },
+          { title: "Empresa", data: "id_empresa", name: "id_empresa", className : 'ddl',  visible: true }
     ];
 
-    
     // configuración de carga inicial
     // $('#campoDescripcion').hide();
     $('#botonesGuardarCambios').hide();
