@@ -99,6 +99,7 @@ cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops = [], campo_desc 
 
 
 ## Referencias adicionales 
+* https://www.codexworld.com/ajax-file-upload-with-form-data-jquery-php-mysql/
 * Load an Ajax DataTable on button click : https://write.corbpie.com/load-an-ajax-datatable-on-button-click/ https://codepen.io/corbpie/pen/LYWXgmw
 * Load an Ajax DataTable on dropdown : https://datatables.net/forums/discussion/59648/enviar-data-por-post-en-ajax
 * DataTables example with PHP and PDO MySQL : https://write.corbpie.com/datatables-example-with-php-and-pdo-mysql/

@@ -8,13 +8,6 @@ require_once '../logica/clases/Usuario.php';
 require_once '../upload.php';
 
 
-// print_r($_FILES);
-// print_r($_POST);
-// echo "hola";
-// $url= upload::subirPdf();
-// echo $url;
-
-
 if (!empty($_POST['action'])) {
 
     try {
@@ -149,29 +142,59 @@ if (!empty($_POST['action'])) {
                 );
                 break;
 
-            case 'Insertar_tblEstudios':
+            case 'cargarArchivo_tblEstudios':
 
-                print_r($_FILES);
-                print_r($_POST);
-                echo "hola";
-                $url= upload::subirPdf();
-                echo $url;
+                // File upload folder 
+                $uploadDir='pdfs/'; 
 
-                /* Get the name of the uploaded file */
-                $filename = $_FILES['file']['name'];
+                // Allowed file types 
+                $allowTypes = array('pdf','doc','docx','jpg','png','jpeg'); 
 
-                /* Choose where to save the uploaded file */
-                $location = "pdfs/".$filename;
+                // Default response 
+                // $response = array( 
+                //     'status' => 0, 
+                //     'message' => 'La carga del archivo ha fallado, intente nuevamente.' 
+                // ); 
+                $datos = '';
+                // If form is submitted 
+                if(isset($_FILES['pdf'])){
+                    // Crea la carpeta para almacenar los archivos PDF si no existe
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir);
+                    }
+                    // Upload file 
+                    $uploadedFile = ''; 
+                    if(!empty($_FILES["pdf"]["name"]))
+                    { 
+                        // File path config
+                        $fileName = basename($_FILES["pdf"]["name"]); 
+                        $targetFilePath = $uploadDir.$fileName; 
+                        $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION); 
 
-                /* Save the uploaded file to the local filesystem */
-                if ( move_uploaded_file($_FILES['file']['tmp_name'], $location) ) { 
-                echo 'Success'; 
-                } else { 
-                echo 'Failure'; 
+                        // Allow certain file formats to upload 
+                        if(in_array($fileType, $allowTypes)){ 
+
+                            echo "tes", in_array($fileType, $allowTypes);
+                            // Upload file to the server 
+                            $Res = move_uploaded_file($_FILES["pdf"]["tmp_name"], $targetFilePath);
+                            echo "Res", $Res;
+                            if($Res){ 
+                                $uploadedFile = $fileName; 
+                            }else{ 
+                                $uploadStatus = 0; 
+                                $datos = 'Ha ocurrido un error en la carga del archivo'; 
+                            } 
+                        }
+                        else
+                        {
+                            $uploadStatus=0; 
+                            $datos ='Solo las extensiones'.implode('/', $allowTypes).' son permitidas para cargar.'; 
+                        } 
+                    } 
                 }
-
+                    
                 $response = array(
-                    "data" => $filename,
+                    "data" => $datos,
                     "accion" => $accion
                 );
                 break;
