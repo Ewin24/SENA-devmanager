@@ -689,10 +689,6 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
 
         var $row = $editButton.closest("tr").off("mousedown");
 
-        $row.find("td").not(':first').not(':last').each(function(i, el) {
-            enableEditText($(this))
-        });
-
         $row.find('td.ddl').each(function(i, el) {
             enableddlEdit($(this))
         });
@@ -703,6 +699,12 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
 
         $row.find('td.datepicker').each(function(i, el) {
             enableDatePicker($(this))
+        });
+
+        $row.find("td").not('.ddl').not('.fUpload').not('.datepicker')
+                       .not(':first').not(':last')
+                       .each(function(i, el) {
+            enableEditText($(this))
         });
 
         var $cancelButton = $editButton.closest('tr').find("td:last-child i.bi."+claseBotonEliminarRow);
@@ -729,7 +731,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     `
                     <form id="form-demo" enctype="multipart/form-data" action=${urlControlador} method="post">
                         <input name="pdf" type="file">
-                        <button type="submit" name="action" class="btn btn-primary submitBtn">cargarArchivo_tblEstudios</button>
+                        <button type="submit" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
                     </form>
                     `
 
@@ -761,8 +763,6 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
 
     function enableEditText($cell) {
         var txt = $cell.text();
-        var defa = $cell.context.lastChild.data;
-        var check = $cell.context.textContent;
         $cell.empty().append($('<input>', {
             type : 'text',
             value : txt
@@ -775,7 +775,6 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         var valor = $cell.context.childNodes[0].value;
         var commit = false;
 
-        var objec = {};
         for(const op of options){
             var key = Object.keys(op)[0];
             var value = Object.keys(op)[1];

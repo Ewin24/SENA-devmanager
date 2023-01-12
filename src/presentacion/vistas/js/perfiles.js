@@ -59,7 +59,7 @@ function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
                     //             `
                     // return ctrol;},
                     visible: true },
-        { title: 'Fecha Certificado', data: 'fecha_certificado', name: 'fecha_certificado', visible: true },
+        { title: 'Fecha Certificado', data: 'fecha_certificado', name: 'fecha_certificado', className: 'datepicker', visible: true },
         { title: 'Id usuario', data: 'id_usuario', name: 'id_usuario', visible: false},
         { title: 'Id estudio', data: 'id_estudio', name: 'id_estudio', type: 'select', className : 'ddl', visible: false}
     ];
