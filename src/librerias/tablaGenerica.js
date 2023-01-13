@@ -638,6 +638,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             success:function(response){
                 // alert("Status: "+response);
                 console.log(rowdata);
+                $(selectorTabla).DataTable().ajax.reload();
                 existenCambiosPendientes = false;
                 insertandoNuevoRegistro = false;
             }, 
