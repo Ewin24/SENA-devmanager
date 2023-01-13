@@ -186,8 +186,7 @@ if (!empty($_POST['action'])) {
 
             case 'cargarArchivo_tblEstudios':
 
-                //TODO: hacer verificacion de seguridad, con la ruta verificar que el archivo si es PDF
-                $datos = upload::subirPdf();
+                
 
                 /////////
                 // File upload folder 
@@ -240,7 +239,8 @@ if (!empty($_POST['action'])) {
                 //   }
                 /////////
 
-
+                //TODO: hacer verificacion de seguridad, con la ruta verificar que el archivo si es PDF
+                $datos = upload::subirPdf();
 
                 $response = array(
                     "data" => $datos,
