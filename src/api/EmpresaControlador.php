@@ -98,6 +98,48 @@ if (!empty($_POST['action'])) {
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
                 //SECCION EMPLEADOS
+            case 'Insertar_tblEmpleados':
+                header('Content-type: application/json; charset=utf-8');
+                $newEmpleado = json_decode($_POST['datos']);
+                if ($newEmpleado != null) {
+                    $newEmpleado->id = ConectorBD::get_UUIDv4();
+                    EmpresaAdm::guardarObjEmpleado($newEmpleado);
+                }
+
+                $response = array(
+                    "data" => $newEmpresa->id,
+                    "accion" => $accion
+                );
+                break;
+
+            case 'Modificar_tblEmpleados':
+                header('Content-type: application/json; charset=utf-8');
+                $editarEmpleado = json_decode($_POST['datos']);
+
+                if ($editarEmpleado != null || $editarEmpleado != '') {
+                    EmpresaAdm::modificarObjEmpleado($editarEmpleado);
+                }
+
+                $response = array(
+                    "data" => $editarEmpleado,
+                    "accion" => $accion
+                );
+                break;
+
+            case 'Eliminar_tblEmpleados':
+                header('Content-type: application/json; charset=utf-8');
+                $eliminarEmpleado = json_decode($_POST['datos']);
+
+                if ($eliminarEmpleado != null || $eliminarEmpleado != '') {
+                    EmpresaAdm::eliminarObj($eliminarEmpleado->id);
+                }
+
+                $response = array(
+                    "data" => $eliminarEmpleado,
+                    "accion" => $accion
+                );
+                break;
+
             case 'cargar_tblEmpleados':
                 header('Content-type: application/json; charset=utf-8');
                 $idEmpresaSeleccionada = $_POST['datos'];
