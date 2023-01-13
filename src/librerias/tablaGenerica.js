@@ -287,8 +287,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         //     but.hide();//.attr('disabled', 'disabled');
         // }); 
         
-        e.stopPropagation();
-        e.preventDefault();
+        // e.stopPropagation();
+        // e.preventDefault();
     });
 
     // TODO: metodo para bloquear botones cuando edición esté activa
@@ -600,13 +600,19 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             accionCRUD = 'Insertar';
         }
         else{   
-            var idx = $(selectorTabla).DataTable().rows({selected: true}).indexes()[0];
-            rowdata = $(selectorTabla).DataTable().row(idx).data();
+            // var idx = $(selectorTabla).DataTable().rows({selected: true}).indexes()[0];
+            rowdata = $(selectorTabla).DataTable().row(filaEnEdicion).data();
 
-            var fila = $(selectorTabla+' tbody tr:eq('+idx+')');
+            var fila = $(selectorTabla+' tbody tr:eq('+filaEnEdicion+')');
             var cells = fila.find("td").not(':first').not(':last');
             cells.each(function(i, elemento) {
-                rowdata[elemento.id] = elemento.value;
+                if(elemento.className.toUpperCase().indexOf('FUPLOAD')<0){
+                    rowdata[elemento.id] = elemento.value;
+                }
+                else
+                {
+                    rowdata[elemento.id] = elemento.value;
+                }
             });
 
             accionCRUD = 'Modificar';
