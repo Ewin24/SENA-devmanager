@@ -1,80 +1,4 @@
 <?php
-
-class HabilidadesAdm
-{
-    //SELECT nombre, descripcion, experiencia 
-    //FROM usuarios_habilidades 
-    //INNER JOIN habilidades ON usuarios_habilidades.id_habilidad = habilidades.id 
-    //WHERE id_usuario = 'eb036f8a-75bd-4811-a477-1444e2521f3b';
-
-    public $id; //id de usuario_habilidades
-    public $id_habilidad;
-    public $experiencia;
-    public $id_usuario;
-    public $nombre; //nombre de la habilidad
-    public $descripcion; //descripcion de la habilidad
-
-    //constructor con array
-    public function __construct($campo, $valor)
-    {
-        if ($campo != null) {
-            if (!is_array($campo)) {
-                $cadenaSQL = "  SELECT id, id_habilidad, id_usuario, nombre, descripcion, experiencia 
-                                FROM usuarios_habilidades 
-                                INNER JOIN habilidades ON usuarios_habilidades.id_habilidad = habilidades.id 
-                                WHERE $campo = $valor;";
-                $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
-                print_r($campo);
-            }
-            //$this->id = $campo['id'];
-            $this->id = $campo['id'];
-            $this->id_habilidad = $campo['id_habilidad'];
-            $this->id_usuario = $campo['id_usuario'];
-            $this->nombre = $campo['nombre'];
-            $this->descripcion = $campo['descripcion'];
-            $this->experiencia = $campo['experiencia'];
-        }
-    }
-}
-class EstudiosAdm
-{
-    //SELECT id_usuario,id_estudio, fecha_certificado, nombre_archivo, nombre_certificado, nombre 
-    // FROM usuarios_estudios 
-    // INNER JOIN estudios 
-    // WHERE 1 =1; 
-
-    public $id; //id de usuario_estudios
-    public $nombre; //nombre del estudio
-    public $nombre_certificado;
-    public $nombre_archivo;
-    public $fecha_certificado;
-    public $id_usuario;
-    public $id_estudio;
-
-    //constructor con array
-    public function __construct($campo, $valor)
-    {
-        if ($campo != null) {
-            if (!is_array($campo)) {
-                $cadenaSQL = "  SELECT  id, nombre, fecha_certificado, nombre_archivo, nombre_certificado, id_usuario, id_estudio
-                                FROM usuarios_estudios 
-                                INNER JOIN estudios
-                                WHERE $campo = $valor;";
-                $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
-                print_r($campo);
-            }
-            //$this->id = $campo['id'];
-            $this->id = $campo['id'];
-            $this->nombre = $campo['nombre'];
-            $this->fecha_certificado = $campo['fecha_certificado'];
-            $this->nombre_archivo = $campo['nombre_archivo'];
-            $this->nombre_certificado = $campo['nombre_certificado'];
-            $this->id_usuario = $campo['id_usuario'];
-            $this->id_estudio = $campo['id_estudio'];
-        }
-    }
-}
-
 class PerfilAdm //encargada de hacer las consultas y devolver datos en json
 {
     public static function getDatosJson($filtro, $orden, $Opcion = "", $idUsuario = "")
@@ -115,6 +39,7 @@ class PerfilAdm //encargada de hacer las consultas y devolver datos en json
                     $datos[$i] = $habilidades;
                 }
                 break;
+
             default:
                 # code...
                 break;
@@ -186,5 +111,125 @@ class PerfilAdm //encargada de hacer las consultas y devolver datos en json
     { // hace eliminación de usuario con un id especifico
         $cadenaSQL = "DELETE FROM usuarios WHERE id='$id'";
         ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+}
+
+// ################################################################################################
+//  
+// ################################################################################################
+class EstudiosAdm
+{
+    //SELECT id_usuario,id_estudio, fecha_certificado, nombre_archivo, nombre_certificado, nombre 
+    // FROM usuarios_estudios 
+    // INNER JOIN estudios 
+    // WHERE 1 =1; 
+
+    public $id; //id de usuario_estudios
+    public $nombre; //nombre del estudio
+    public $nombre_certificado;
+    public $nombre_archivo;
+    public $fecha_certificado;
+    public $id_usuario;
+    public $id_estudio;
+
+    //constructor con array
+    public function __construct($campo, $valor)
+    {
+        if ($campo != null) {
+            if (!is_array($campo)) {
+                $cadenaSQL = "  SELECT  id, nombre, fecha_certificado, nombre_archivo, nombre_certificado, id_usuario, id_estudio
+                                FROM usuarios_estudios 
+                                INNER JOIN estudios
+                                WHERE $campo = $valor;";
+                $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
+                print_r($campo);
+            }
+            //$this->id = $campo['id'];
+            $this->id = $campo['id'];
+            $this->nombre = $campo['nombre'];
+            $this->fecha_certificado = $campo['fecha_certificado'];
+            $this->nombre_archivo = $campo['nombre_archivo'];
+            $this->nombre_certificado = $campo['nombre_certificado'];
+            $this->id_usuario = $campo['id_usuario'];
+            $this->id_estudio = $campo['id_estudio'];
+        }
+    }
+
+    public static function guardarObj($estudio)
+    {
+        $UUID = ConectorBD::get_UUIDv4(); //genera el UUID
+        $cadenaSQL = "INSERT INTO usuarios
+                            (id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa)
+                            VALUES ('$UUID',
+                             '$usuario->identificacion', 
+                             '$usuario->tipo_identificacion', 
+                             '$usuario->nombres', 
+                             '$usuario->apellidos', 
+                             '$usuario->correo', 
+                             '$clave', 
+                             '$usuario->direccion', 
+                             '$usuario->nombre_foto', 
+                             '$usuario->telefono', 
+                             '$usuario->tipo_usuario', 
+                             '$usuario->id_empresa')";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+    //modificar usuario
+    public static function modificarObj($estudio)
+    {
+        $cadenaSQL = "UPDATE  usuarios_estudios
+                      SET   nombre_certificado = '$estudio->',
+                            nombre_archivo = '$estudio->',
+                            fecha_certificado = '$estudio->',
+                            id_usuario = '$estudio->',
+                            id_estudio = '$estudio->'
+                       WHERE id='$estudio->id'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    public static function eliminarObj($id)
+    { // hace eliminación de usuario con un id especifico
+        $cadenaSQL = "DELETE FROM usuarios_estudios WHERE id='$id'";
+        ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+}
+
+// ################################################################################################
+//  
+// ################################################################################################
+class HabilidadesAdm
+{
+    //SELECT nombre, descripcion, experiencia 
+    //FROM usuarios_habilidades 
+    //INNER JOIN habilidades ON usuarios_habilidades.id_habilidad = habilidades.id 
+    //WHERE id_usuario = 'eb036f8a-75bd-4811-a477-1444e2521f3b';
+
+    public $id; //id de usuario_habilidades
+    public $id_habilidad;
+    public $experiencia;
+    public $id_usuario;
+    public $nombre; //nombre de la habilidad
+    public $descripcion; //descripcion de la habilidad
+
+    //constructor con array
+    public function __construct($campo, $valor)
+    {
+        if ($campo != null) {
+            if (!is_array($campo)) {
+                $cadenaSQL = "  SELECT id, id_habilidad, id_usuario, nombre, descripcion, experiencia 
+                                FROM usuarios_habilidades 
+                                INNER JOIN habilidades ON usuarios_habilidades.id_habilidad = habilidades.id 
+                                WHERE $campo = $valor;";
+                $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
+                print_r($campo);
+            }
+            //$this->id = $campo['id'];
+            $this->id = $campo['id'];
+            $this->id_habilidad = $campo['id_habilidad'];
+            $this->id_usuario = $campo['id_usuario'];
+            $this->nombre = $campo['nombre'];
+            $this->descripcion = $campo['descripcion'];
+            $this->experiencia = $campo['experiencia'];
+        }
     }
 }
