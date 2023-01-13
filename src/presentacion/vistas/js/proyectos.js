@@ -99,7 +99,7 @@ function cargarHabilidades(nombreTabla, IdProySeleccionado, tipoUsuario, modoTab
     }
     if($('#'+nombreTabla).lenght) $('#'+nombreTabla).DataTable().clear().draw();
    
-    if(nombreTabla == 'tblHab_Disponibles'){
+    if(nombreTabla == 'tblHab_Requeridas'){
         switch (tipoUsuario) {
             case "A":
 
@@ -126,7 +126,6 @@ function cargarHabilidades(nombreTabla, IdProySeleccionado, tipoUsuario, modoTab
             } 
             cargarTablaGenerica(nombreTabla, colsHabilidades, modoTabla, dataUrl, payloadHabilidades);
     }
-
 }
 
 function cargarTrabajadores(nombreTabla, IdProySeleccionado, tipoUsuario, modoTabla='R'){
