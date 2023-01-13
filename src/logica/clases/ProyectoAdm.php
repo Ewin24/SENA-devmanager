@@ -57,7 +57,7 @@ class Habilidad_Proyectos
 class ProyectoAdm
 {    ////////////////////////////////////////////////////////////////////////////////////
     /* REGION lógica negocio para administrar proyectos */
-    public static function getDatosCrudos($filtro, $orden, $Opcion="", $idProyecto="")
+    public static function getDatosCrudos($filtro, $orden, $Opcion = "", $idProyecto = "")
     {
         $datos = array();
 
@@ -65,7 +65,7 @@ class ProyectoAdm
 
             case "HabRequerida":
                 $filtroHabRequerida = "id_proyecto = $idProyecto";
-                $cadenaSQL ="   SELECT 	id, id_proyecto, id_habilidad
+                $cadenaSQL = "   SELECT 	id, id_proyecto, id_habilidad
                                 FROM 	proyectos_habilidades
                                 WHERE 	$filtroHabRequerida $orden";
                 $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
@@ -78,7 +78,7 @@ class ProyectoAdm
             case "HabDisponible":
                 $filtroHabDisponible = "h.id not in (select id_habilidad from proyectos_habilidades where id_proyecto = $idProyecto)";
                 $ordenHabDisponible   = "";
-                $cadenaSQL ="   SELECT 	h.id, nombre, descripcion
+                $cadenaSQL = "   SELECT 	h.id, nombre, descripcion
                                 FROM 	habilidades h
                                 INNER JOIN proyectos_habilidades ph on h.id = ph.id_habilidad 
                                 WHERE 	$filtroHabDisponible $ordenHabDisponible";
@@ -91,7 +91,7 @@ class ProyectoAdm
 
             case "TrabAsignados":
                 $filtroTrabRequeridas = "id_proyecto = $idProyecto AND estado = 'A'";
-                $cadenaSQL ="   SELECT 	id, fecha_solicitud, estado, id_proyecto, id_usuario
+                $cadenaSQL = "   SELECT 	id, fecha_solicitud, estado, id_proyecto, id_usuario
                                 FROM 	rh_proyectos
                                 WHERE 	$filtroTrabRequeridas $orden";
                 $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
@@ -102,10 +102,12 @@ class ProyectoAdm
                 break;
 
             case "TrabDisponible":
-                $filtroTrabDisponible = "id_proyecto = $idProyecto AND estado = 'E'";
-                $cadenaSQL ="   SELECT 	id, fecha_solicitud, estado, id_proyecto, id_usuario
-                                FROM 	rh_proyectos
-                                WHERE 	$filtroTrabDisponible $orden";
+                $filtroTrabDisponible = "rh.id_proyecto = $idProyecto AND estado = 'E' AND u.id not in (select id_usuario from rh_proyectos where id_proyecto = $idProyecto )";
+                $cadenaSQL = "   SELECT 	rh.id, fecha_solicitud, estado, id_proyecto, id_usuario
+                                FROM 	usuarios u
+                                INNER JOIN rh_proyectos rh ON rh.id_usuario =  u.id
+                                WHERE 	$filtroTrabDisponible $orden
+                                ORDER BY estado";
                 $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
                 for ($i = 0; $i < count($resultado); $i++) {
                     $HabRequerida = new Rh_proyecto($resultado[$i], null);
@@ -113,34 +115,38 @@ class ProyectoAdm
                 }
                 break;
 
-            default: 
+            default:
                 break;
         }
         return $datos;
     }
 
-    public static function getHabilidadesRequeridas($idProyectoSeleccionado){
+    public static function getHabilidadesRequeridas($idProyectoSeleccionado)
+    {
         return ProyectoAdm::getDatosCrudos(null, null, "HabRequerida", $idProyectoSeleccionado);
     }
 
-    public static function getHabilidadesDisponibles($idProyectoSeleccionado){
+    public static function getHabilidadesDisponibles($idProyectoSeleccionado)
+    {
         return ProyectoAdm::getDatosCrudos(null, null, "HabDisponible", $idProyectoSeleccionado);
     }
 
-    public static function getTrabajadoresAsignados($idProyectoSeleccionado){
+    public static function getTrabajadoresAsignados($idProyectoSeleccionado)
+    {
         // tabla rh_proyectos donde estado A=(Asignado) para el proyecto pasado por parametro
         return ProyectoAdm::getDatosCrudos(null, null, "TrabAsignados", $idProyectoSeleccionado);
     }
 
-    public static function getTrabajadoresDisponibles($idProyectoSeleccionado){
+    public static function getTrabajadoresDisponibles($idProyectoSeleccionado)
+    {
         // tabla habilidades donde estado diferente A=Asignado para el proyecto pasado por parametro
         return ProyectoAdm::getDatosCrudos(null, null, "TrabDisponible", $idProyectoSeleccionado);
     }
 
-    public static function cargarTablasHijas($idProySeleccionado){
+    public static function cargarTablasHijas($idProySeleccionado)
+    {
 
-        if ($idProySeleccionado != null || $idProySeleccionado != '')
-        {
+        if ($idProySeleccionado != null || $idProySeleccionado != '') {
             //// Definiendo la lógica de negocio dentro de la clase
             $datHabAsignados = ProyectoAdm::getHabilidadesRequeridas($idProySeleccionado);
             $datHabDisponibles = ProyectoAdm::getHabilidadesDisponibles($idProySeleccionado);
@@ -150,6 +156,8 @@ class ProyectoAdm
         return [$datHabAsignados, $datHabDisponibles, $datTrabAsignados, $datTrabDisponibles];
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////
+    //SECCION CRUD DE PROYECTOS
     public static function guardarObj($proyecto)
     {
         $cadenaSQL = "INSERT INTO proyectos (id, nombre, descripcion, estado, fecha_inicio, fecha_fin, id_usuario)
@@ -180,6 +188,62 @@ class ProyectoAdm
     public static function eliminarObj($idProyecto)
     {
         $cadenaSQL = "DELETE FROM proyectos WHERE id = '$idProyecto'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////
+    //SECCION CRUD DE HABILIDADES REQUERIDAS
+    public static function guardarObjRequerido($habilidad)
+    {
+        $UUID = Usuario::guidv4();
+        $cadenaSQL = "INSERT INTO habilidades (id, nombre, descripcion)
+                      VALUES (  '$UUID', 
+                                '$habilidad->nombre', 
+                                '$habilidad->descripcion')";
+        // echo $cadenaSQL;
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    public static function modificarObjRequerido($habilidad)
+    {
+        $cadenaSQL = "UPDATE habilidades 
+                      SET   nombre = '$habilidad->nombre', 
+                            descripcion = '$habilidad->descripcion', 
+                      WHERE id = '$habilidad->id'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    public static function eliminarObjRequerido($idHabilidad)
+    {
+        $cadenaSQL = "DELETE FROM habilidades{ WHERE id = '$idHabilidad'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////
+    //SECCION CRUD DE HABILIDADES DISPONIBLES
+    public static function guardarObjDisponible($habilidad)
+    {
+        $UUID = Usuario::guidv4();
+        $cadenaSQL = "INSERT INTO habilidades (id, nombre, descripcion)
+                      VALUES (  '$UUID', 
+                                '$habilidad->nombre', 
+                                '$habilidad->descripcion')";
+        // echo $cadenaSQL;
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    public static function modificarObjDisponible($habilidad)
+    {
+        $cadenaSQL = "UPDATE habilidades 
+                      SET   nombre = '$habilidad->nombre', 
+                            descripcion = '$habilidad->descripcion', 
+                      WHERE id = '$habilidad->id'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    public static function eliminarObjDisponible($idHabilidad)
+    {
+        $cadenaSQL = "DELETE FROM proyectos WHERE id = '$idHabilidad'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 }

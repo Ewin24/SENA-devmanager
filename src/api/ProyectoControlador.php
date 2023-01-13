@@ -12,79 +12,82 @@ if (!empty($_POST['action'])) {
 
     // try {
 
-        $accion = $_POST['action'];
-        $response = '';
-        switch ($accion) {
-            case 'Insertar_tblProyectos':
-                header('Content-type: application/json; charset=utf-8');
-                $newProyecto = json_decode($_POST['datos']);
-                // echo $newProyecto->nombre;
-                // echo $newProyecto->estado;
-                if ($newProyecto != null){
-                    $newProyecto->id = ConectorBD::get_UUIDv4();
-                    ProyectoAdm::guardarObj($newProyecto);
-                }
+    $accion = $_POST['action'];
+    $response = '';
+    switch ($accion) {
 
-                $response = array(
-                    "data" => $newProyecto->id,
-                    "accion" => $accion
-                );
-                break;
-        
-            case 'Modificar_tblProyectos':
-                header('Content-type: application/json; charset=utf-8');
-                $editarProyecto = json_decode($_POST['datos']);
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            //SECCION DE PROYECTOS
+        case 'Insertar_tblProyectos':
+            header('Content-type: application/json; charset=utf-8');
+            $newProyecto = json_decode($_POST['datos']);
+            // echo $newProyecto->nombre;
+            // echo $newProyecto->estado;
+            if ($newProyecto != null) {
+                $newProyecto->id = ConectorBD::get_UUIDv4();
+                ProyectoAdm::guardarObj($newProyecto);
+            }
 
-                    if ($editarProyecto != null || $editarProyecto != ''){
-                        ProyectoAdm::modificarObj($editarProyecto);
-                    }
+            $response = array(
+                "data" => $newProyecto->id,
+                "accion" => $accion
+            );
+            break;
 
-                $response = array(
-                    "data" => $editarProyecto,
-                    "accion" => $accion
-                );
-                break;
-        
-            case 'Eliminar_tblProyectos':
-                header('Content-type: application/json; charset=utf-8');
-                $eliminarIdProyecto = $_POST['datos'];
+        case 'Modificar_tblProyectos':
+            header('Content-type: application/json; charset=utf-8');
+            $editarProyecto = json_decode($_POST['datos']);
 
-                    if ($eliminarIdProyecto != null || $eliminarIdProyecto != ''){
-                        ProyectoAdm::eliminarObj($eliminarIdProyecto);
-                    }
+            if ($editarProyecto != null || $editarProyecto != '') {
+                ProyectoAdm::modificarObj($editarProyecto);
+            }
 
-                $response = array(
-                    "data" => $eliminarIdProyecto,
-                    "accion" => $accion
-                );
-                break;
+            $response = array(
+                "data" => $editarProyecto,
+                "accion" => $accion
+            );
+            break;
 
-            case 'cargar_tblProyectos':
-                header('Content-type: application/json; charset=utf-8');
-                $idUsuario = $_POST['datos'];
-                $USUARIO = Usuario::getListaEnObjetos("id='$idUsuario'",null)[0];
-                $tipoUsuario = $USUARIO->getTipo_usuario();
+        case 'Eliminar_tblProyectos':
+            header('Content-type: application/json; charset=utf-8');
+            $eliminarIdProyecto = $_POST['datos'];
 
-                    switch ($tipoUsuario) {
-                        case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
-                            $datosProyectos = Proyecto::getListaEnObjetos(null, null);
-                            $modoTabla = "'CRUD'";
-                            break;
+            if ($eliminarIdProyecto != null || $eliminarIdProyecto != '') {
+                ProyectoAdm::eliminarObj($eliminarIdProyecto);
+            }
 
-                        case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
-                            $filtroUsuario = "id_usuario='$idUsuario'";
-                            $datosProyectos = Proyecto::getListaEnObjetos($filtroUsuario, null);
-                            // R solo lectura
-                            $modoTabla = "'CRUD'";
-                            break;
+            $response = array(
+                "data" => $eliminarIdProyecto,
+                "accion" => $accion
+            );
+            break;
 
-                        default: //trabajador (modo: Solo lectura): perfiles existentes
-                            $datosProyectos = Usuario::getProyectosUsuario($idUsuario);
-                            $modoTabla = "'R'";
-                            break;
-                    }
-                
-                $json_ddl = "{
+        case 'cargar_tblProyectos':
+            header('Content-type: application/json; charset=utf-8');
+            $idUsuario = $_POST['datos'];
+            $USUARIO = Usuario::getListaEnObjetos("id='$idUsuario'", null)[0];
+            $tipoUsuario = $USUARIO->getTipo_usuario();
+
+            switch ($tipoUsuario) {
+                case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
+                    $datosProyectos = Proyecto::getListaEnObjetos(null, null);
+                    $modoTabla = "'CRUD'";
+                    break;
+
+                case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
+                    $filtroUsuario = "id_usuario='$idUsuario'";
+                    $datosProyectos = Proyecto::getListaEnObjetos($filtroUsuario, null);
+                    // R solo lectura
+                    $modoTabla = "'CRUD'";
+                    break;
+
+                default: //trabajador (modo: Solo lectura): perfiles existentes
+                    $datosProyectos = Usuario::getProyectosUsuario($idUsuario);
+                    $modoTabla = "'R'";
+                    break;
+            }
+
+            $json_ddl = "{
                     'estado': {
                         'E': 'Ejec',
                         'P': 'Pend'
@@ -105,7 +108,35 @@ if (!empty($_POST['action'])) {
             // $response = $datosProyectos;
             break;
 
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            //SECCION DE HABILIDADES REQUERIDAS
+        case 'Insertar_tblHab_Requeridas':
+            header('Content-type: application/json; charset=utf-8');
+            $newHabRequerida = json_decode($_POST['datos']);
+            if ($newHabRequerida != null) {
+                $newHabRequerida->id = ConectorBD::get_UUIDv4();
+                ProyectoAdm::guardarObj($newHabRequerida);
+            }
 
+            $response = array(
+                "data" => $newHabRequerida->id,
+                "accion" => $accion
+            );
+            break;
+
+        case 'Eliminar_tblHab_Requeridas':
+            header('Content-type: application/json; charset=utf-8');
+            $eliminarHabRequerida = $_POST['datos'];
+
+            if ($eliminarHabRequerida != null || $eliminarHabRequerida != '') {
+                ProyectoAdm::eliminarObj($eliminarHabRequerida);
+            }
+
+            $response = array(
+                "data" => $eliminarHabRequerida,
+                "accion" => $accion
+            );
+            break;
 
         case 'cargar_tblHab_Requeridas':
             header('Content-type: application/json; charset=utf-8');
@@ -128,6 +159,49 @@ if (!empty($_POST['action'])) {
 
             break;
 
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            //SECCION DE HABILIDADES DISPONIBLES
+        case 'Insertar_tblHab_Disponibles':
+            header('Content-type: application/json; charset=utf-8');
+            $newHabDisponible = json_decode($_POST['datos']);
+            if ($newHabDisponible != null) {
+                $newHabDisponible->id = ConectorBD::get_UUIDv4();
+                ProyectoAdm::guardarObjDisponible($newHabDisponible);
+            }
+
+            $response = array(
+                "data" => $newHabDisponible->id,
+                "accion" => $accion
+            );
+            break;
+
+        case 'Modificar_tblHab_Requeridas':
+            header('Content-type: application/json; charset=utf-8');
+            $editarHabDisponible = json_decode($_POST['datos']);
+
+            if ($editarHabDisponible != null || $editarHabDisponible != '') {
+                ProyectoAdm::modificarObjDisponible($editarHabDisponible);
+            }
+
+            $response = array(
+                "data" => $editarHabDisponible,
+                "accion" => $accion
+            );
+            break;
+
+        case 'Eliminar_tblHab_Disponible':
+            header('Content-type: application/json; charset=utf-8');
+            $eliminarHabDisponible = $_POST['datos'];
+
+            if ($eliminarHabDisponible != null || $eliminarHabDisponible != '') {
+                ProyectoAdm::eliminarObjDisponible($eliminarHabDisponible);
+            }
+
+            $response = array(
+                "data" => $eliminarHabDisponible,
+                "accion" => $accion
+            );
+            break;
         case 'cargar_tblHab_Disponibles':
             header('Content-type: application/json; charset=utf-8');
             $idProySeleccionado = $_POST['datos'];
@@ -143,6 +217,8 @@ if (!empty($_POST['action'])) {
             );
             break;
 
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            //SECCION DE CONTRATADOS
         case 'cargar_tblContratados':
             header('Content-type: application/json; charset=utf-8');
             $idProySeleccionado = $_POST['datos'];
@@ -163,6 +239,8 @@ if (!empty($_POST['action'])) {
             );
             break;
 
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            //SECCION DE CANDIDATOS
         case 'cargar_tblCandidatos':
             header('Content-type: application/json; charset=utf-8');
             $idProySeleccionado = $_POST['datos'];
