@@ -92,8 +92,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             selector: 'tr'
         },
         lengthMenu: [
-            [ 3, 10, 20, -1 ],
-            [ '3', '10', '20', 'Todos los' ]
+            [ 5, 10, 20, -1 ],
+            ['5', '10', '20', 'Todos los' ]
         ],
         // scrollY: 400,
         // scrollX: true,
