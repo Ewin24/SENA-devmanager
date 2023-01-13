@@ -17,8 +17,8 @@ if (!empty($_POST['action'])) {
         // echo $accion;
         switch ($accion) {
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-    //SECCION PERFILES
+                //////////////////////////////////////////////////////////////////////////////////////////////////////
+                //SECCION PERFILES
             case 'Insertar_tblEmpleados':
                 header('Content-type: application/json; charset=utf-8');
                 $newPerfil = json_decode($_POST['datos']);
@@ -101,8 +101,8 @@ if (!empty($_POST['action'])) {
 
                 break;
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-    //SECCION HABILIDADES
+                //////////////////////////////////////////////////////////////////////////////////////////////////////
+                //SECCION HABILIDADES
             case 'cargar_tblHabilidades':
                 header('Content-type: application/json; charset=utf-8');
                 $idPerfilSeleccionado = $_POST['datos'];
@@ -122,8 +122,8 @@ if (!empty($_POST['action'])) {
 
                 break;
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-    //SECCION ESTUDIOS
+                //////////////////////////////////////////////////////////////////////////////////////////////////////
+                //SECCION ESTUDIOS
             case 'cargar_tblEstudios':
                 header('Content-type: application/json; charset=utf-8');
                 $idPerfilSeleccionado = $_POST['datos'];
@@ -141,7 +141,7 @@ if (!empty($_POST['action'])) {
                     "accion" => $accion
                 );
                 break;
-                
+
             case 'Insertar_tblEstudios':
                 header('Content-type: application/json; charset=utf-8');
                 $newEstudio = json_decode($_POST['datos']);
@@ -154,7 +154,7 @@ if (!empty($_POST['action'])) {
                 );
                 break;
 
-            // TODO: Falta Implementar Modificar_tblEstudios
+                // TODO: Falta Implementar Modificar_tblEstudios
             case 'Modificar_tblEstudios':
                 header('Content-type: application/json; charset=utf-8');
                 $editarEstudio = json_decode($_POST['datos']);
@@ -169,7 +169,7 @@ if (!empty($_POST['action'])) {
                 );
                 break;
 
-            // TODO: Falta Implementar Eliminar_tblEstudios
+                // TODO: Falta Implementar Eliminar_tblEstudios
             case 'Eliminar_tblEstudios':
                 header('Content-type: application/json; charset=utf-8');
                 $eliminarIdEstudio = $_POST['datos'];
@@ -186,7 +186,7 @@ if (!empty($_POST['action'])) {
 
             case 'cargarArchivo_tblEstudios':
 
-                
+
 
                 /////////
                 // File upload folder 

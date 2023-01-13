@@ -97,7 +97,7 @@ switch ($tipoUsuario) {
                     <tr>
                         <td></td>
                         <td>__id__</td>
-                        <td>__identificacion__</td>
+                        <td>identificacion</td>
                         <td>__tipo identificacion__</td>
                         <td>__nombre Usuario__</td>
                         <td>__apellido__</td>
@@ -105,7 +105,7 @@ switch ($tipoUsuario) {
                         <td>__direccion__</td>
                         <td>__direccion__</td>
                         <td>__foto__</td>
-                        <td>__Telefono__</td>
+                        <td>Telefono</td>
                         <td>__tipoUsuario__</td>
                         <td>__Empresa__</td>
                         <td>

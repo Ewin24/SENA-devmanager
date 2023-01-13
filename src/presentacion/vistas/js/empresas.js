@@ -61,6 +61,7 @@ function cargarTrabajadores(nombreTabla, idEmpresaSeleccionada, modoTabla ='R') 
     ];
 
     var payloadTrabajadores = {
+        id_empresa : idEmpresaSeleccionada,
         datos : idEmpresaSeleccionada ,
         action : 'cargar_'+nombreTabla,
         html_tabla : nombreTabla

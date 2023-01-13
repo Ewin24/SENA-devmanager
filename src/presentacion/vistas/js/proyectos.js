@@ -77,33 +77,55 @@ function cargarProyectos(nombreTabla, idUsuario, modoTabla='CRUD') {
 }
 
 function cargarHabilidades(nombreTabla, IdProySeleccionado, tipoUsuario, modoTabla='R'){
-    var colsHabilidades = [
+    var colsHabilidadesRequeridas = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         { title: 'id', data: 'id' , name: 'id', visible: false },
         { title: 'Nombre del proyecto', data: 'id_proyecto', name: 'id_proyecto', className: 'ddl' },
         { title: 'Nombre de la habilidad', data: 'id_habilidad', name: 'id_habilidad', className: 'ddl' }
     ];
+    var colsHabilidades = [
+        { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
+        { title: 'id', data: 'id' , name: 'id', visible: false },
+        { title: 'Nombre de la habilidad', data: 'nombre', name: 'nombre', visible: true },
+        { title: 'Descripcion Habilidad', data: 'descripcion', name: 'descripcion', visible: true },
+    ];
     // console.log("hab", arreglo);
     
     var payloadHabilidades = {
+        id_proyecto : IdProySeleccionado,
         datos : JSON.stringify( IdProySeleccionado ),
         action : 'cargar_'+nombreTabla,
         html_tabla : nombreTabla
     }
     if($('#'+nombreTabla).lenght) $('#'+nombreTabla).DataTable().clear().draw();
    
-    if(nombreTabla == 'tblHab_Disponibles'){
+    if(nombreTabla == 'tblHab_Requeridas'){
         switch (tipoUsuario) {
             case "A":
+
             case "D":
                 modoTabla = 'CR';
                 break;
             default:
                 modoTabla = 'R';
                 break;
-        }                 
+            }                 
+            cargarTablaGenerica(nombreTabla, colsHabilidadesRequeridas, modoTabla, dataUrl, payloadHabilidades);
     }
-    cargarTablaGenerica(nombreTabla, colsHabilidades, modoTabla, dataUrl, payloadHabilidades);
+   
+    if(nombreTabla == 'tblHab_Disponibles'){
+        switch (tipoUsuario) {
+            case "A":
+
+            case "D":
+                modoTabla = 'CR';
+                break;
+            default:
+                modoTabla = 'R';
+                break;
+            } 
+            cargarTablaGenerica(nombreTabla, colsHabilidades, modoTabla, dataUrl, payloadHabilidades);
+    }
 }
 
 function cargarTrabajadores(nombreTabla, IdProySeleccionado, tipoUsuario, modoTabla='R'){

@@ -1,21 +1,21 @@
 <?php
 class Habilidad
 {
-    private $idHabilidad;
-    private $nombre;
-    private $descripcion;
+    public $id;
+    public $nombre;
+    public $descripcion;
 
     //constructor con array
     public function __construct($campo, $valor)
     {
         if ($campo != null) {
             if (!is_array($campo)) {
-                $cadenaSQL = "SELECT idHabilidad,nombre,descripcion FROM habilidad WHERE $campo = $valor;";
+                $cadenaSQL = "SELECT id,nombre,descripcion FROM habilidad WHERE $campo = $valor;";
                 $campo = ConectorBD::ejecutarQuery($cadenaSQL)[0];
                 print_r($campo);
             }
             //asignacion de los datos
-            $this->idHabilidad_FK = $campo['idHabilidad'];
+            $this->id = $campo['id'];
             $this->nombre = $campo['nombre'];
             $this->descripcion = $campo['descripcion'];
         }
@@ -26,13 +26,13 @@ class Habilidad
     {
         $cadenaSQL = "SELECT idHabilidad FROM habilidad WHERE $campo = '$valor';";
         $id = ConectorBD::ejecutarQuery($cadenaSQL);
-        $this->idHabilidad = $id;
-        return $this->idHabilidad;
+        $this->id = $id;
+        return $this->id;
     }
 
     public function getIdHabilidad2()
     {
-        return $this->idHabilidad;
+        return $this->id;
     }
     
 
@@ -49,7 +49,7 @@ class Habilidad
     //set
     public function setIdHabilidad($idHabilidad)
     {
-        $this->idHabilidad = $idHabilidad;
+        $this->id = $idHabilidad;
     }
 
     public function setNombre($nombre)
@@ -71,13 +71,13 @@ class Habilidad
 
     public function modificar()
     {
-        $cadenaSQL = "update habilidad set nombre='{$this->nombre}', descripcion='{$this->descripcion}' where idHabilidad= {$this->idHabilidad}";
+        $cadenaSQL = "update habilidad set nombre='{$this->nombre}', descripcion='{$this->descripcion}' where idHabilidad= {$this->id}";
         ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
     public function eliminar()
     {
-        $cadenaSQL = "DELETE FROM habilidad WHERE idHabilidad = $this->idHabilidad;";
+        $cadenaSQL = "DELETE FROM habilidad WHERE idHabilidad = $this->id;";
         ConectorBD::ejecutarQuery($cadenaSQL);
     }
 

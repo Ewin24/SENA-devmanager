@@ -85,7 +85,8 @@ class EmpresaAdm
         }
         return [$datTrabEmpresa];
     }
-
+    ///////////////////////////////////////////////////////////////////////
+    //SECCION EMPRESAS
     public static function guardarObj($empresa)
     {
         $cadenaSQL = "INSERT INTO empresas(id, nit, nombre, direccion, correo, telefono, nombre_representante, correo_representante) 
@@ -117,6 +118,53 @@ class EmpresaAdm
     public static function eliminarObj($idEmpresa)
     {
         $cadenaSQL = "DELETE FROM empresas WHERE id = '$idEmpresa'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    //SECCION USUARIOS/ TRABAJADORES / EMPLEADOS
+    public static function guardarObjEmpleado($empleado)
+    {
+        $clave = Usuario::hash($empleado->identificacion); //genera una clave hash con la clave enviada por el usuario
+        $UUID = Usuario::guidv4(); //genera el UUID
+        $cadenaSQL = "
+        INSERT INTO usuarios
+        (id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa)
+        VALUES ('$UUID', 
+        '$empleado->identificacion', 
+        '$empleado->tipo_identificacion', 
+        '$empleado->nombres',
+        '$empleado->apellidos',
+        '$empleado->correo', 
+        '$clave', 
+        '$empleado->direccion', 
+        '$empleado->nombre_foto', 
+        '$empleado->telefono', 
+        '$empleado->tipo_usuario', 
+        '$empleado->id_empresa')";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    public static function modificarObjEmpleado($empleado)
+    {
+        $cadenaSQL = "UPDATE  usuarios
+        SET     identificacion = '$empleado->identificacion', 
+                tipo_identificacion = '$empleado->tipo_identificacion', 
+                nombres = '$empleado->nombres', 
+                apellidos = '$empleado->apellidos', 
+                correo = '$empleado->correo', 
+                direccion = '$empleado->direccion', 
+                nombre_foto = '$empleado->nombre_foto', 
+                telefono = '$empleado->telefono', 
+                tipo_usuario = '$empleado->tipo_usuario', 
+                id_empresa = '$empleado->id_empresa'
+        WHERE id = '$empleado->id'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+        //clave_hash='$this->clave_hash',  *por el momento no esta implementado cambiar la clave* 
+    }
+
+    public static function eliminarObjEmpleado($id)
+    { // hace eliminación de usuario con un id especifico
+        $cadenaSQL = "DELETE FROM usuarios WHERE id='$id'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 }
