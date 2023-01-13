@@ -16,7 +16,7 @@ var dataUrl = null;
 
 function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador='', payloadInicial = {}, ddl_ops = [], campo_desc = false, arreglo={}, )
 {
-    
+    var idPadre = '';
     var selectorTabla = '#'+nombreTabla
     cols.push({    
                 data: null,
@@ -123,6 +123,13 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                         var campo = cols[col].name;
                         $(td).attr('id', campo);
 
+
+                        // encontrando id de referencia a la tabla Padre 
+                        // TODO: verificar
+                        if(payloadInicial.hasOwnProperty(campo)){
+                            idPadre = payloadInicial[campo];
+                        }
+
                         if(cols[col].className == 'ddl' && ddl_ops.length != 0){
                             for(const op of ddl_ops[campo]){
                                 var key = Object.keys(op)[0];
@@ -133,7 +140,11 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                                 // console.log(key, op, commit);
                             }
                         }
-                        // if(cols[col].className == 'fUpload')
+                        // TODO: revisar esto del hipervinculo para abrir
+                        if(cols[col].className == 'fUpload'){
+                            var hiperlink = jQuery('<a>').attr('href', rowData[campo]).text(cellData.split('/', -1));
+                            $(td).empty().append(hiperlink);
+                        }
                     }
                 }
             }
@@ -532,8 +543,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             var fila = $(selectorTabla+' tbody tr:first');
             var cells = fila.find("td").not(':first').not(':last');
             cells.each(function(i, elemento) {
+
                 if(elemento.className.toUpperCase().indexOf('FUPLOAD')<0){
-                    
                     rowdata[elemento.id] = elemento.value;
                 }
                 else
@@ -554,8 +565,9 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                         processData: false,
                         contentType: false,
                         success:function(response){
-                            alert("Status: "+response);
-                            // console.log(rowdata);
+                            // alert("Status: "+response);
+                            // console.log(response.data);
+                            rowdata[elemento.id] = response.data;
                             existenCambiosPendientes = false;
                             insertandoNuevoRegistro = false;
                         }, 
@@ -563,13 +575,16 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                             alert("Status: " + textStatus); 
                             alert("Error: " + errorThrown); 
                         }
-                        // TODO: Verificar
                     });
-
-                    // console.log(form[0].files);
-                    // sendFormData(form);
                 }
             });
+            // encontrando id de referencia a la tabla Padre 
+            // TODO: verificar
+            for(const key of Object.keys(rowdata)){
+                if(payloadInicial.hasOwnProperty(key)) {
+                    rowdata[key] = payloadInicial[key];
+                }
+            }
             accionCRUD = 'Insertar';
         }
         else{   
