@@ -92,8 +92,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             selector: 'tr'
         },
         lengthMenu: [
-            [ 5, 10, 20, -1 ],
-            [ '5', '10', '20', 'Todos los' ]
+            [ 3, 10, 20, -1 ],
+            [ '3', '10', '20', 'Todos los' ]
         ],
         // scrollY: 400,
         // scrollX: true,
@@ -113,6 +113,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         createdRow:function(row, data, dataIndex){
             $(".datepicker", row).datepicker();
             $(row).attr('id', data.id);
+            if(insertandoNuevoRegistro){row.hasClass('sorting_1')}
         },
         "columnDefs": [ 
             {
@@ -127,7 +128,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                             for(const op of ddl_ops[campo]){
                                 var key = Object.keys(op)[0];
                                 var value = Object.keys(op)[1];
-                                if(op[key] == cellData) { 
+                                if(op[key] === rowData[campo]) { 
                                     $(td).empty().append(op[value]); }
                                 // objec[key] = op[key];
                                 // console.log(key, op, commit);
@@ -554,15 +555,16 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                         processData: false,
                         contentType: false,
                         success:function(response){
-                            // alert("Status: "+response);
+                            alert("Status: "+response);
                             // console.log(rowdata);
                             existenCambiosPendientes = false;
                             insertandoNuevoRegistro = false;
                         }, 
                         error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                            // alert("Status: " + textStatus); 
-                            // alert("Error: " + errorThrown); 
+                            alert("Status: " + textStatus); 
+                            alert("Error: " + errorThrown); 
                         }
+                        // TODO: Verificar
                     });
 
                     // console.log(form[0].files);
@@ -657,7 +659,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             tempRow = $(selectorTabla).DataTable().row(i-1).data();
             $(selectorTabla).DataTable().row(i).data(tempRow);
             $(selectorTabla).DataTable().row(i-1).data(insertedRow);
-        }     
+        }
+        
         //refresh the page
         $(selectorTabla).DataTable().row(0).select();
         $(selectorTabla).DataTable().page(currentPage).draw(false);
