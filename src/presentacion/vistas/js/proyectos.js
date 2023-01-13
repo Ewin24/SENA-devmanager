@@ -99,7 +99,7 @@ function cargarHabilidades(nombreTabla, IdProySeleccionado, tipoUsuario, modoTab
     }
     if($('#'+nombreTabla).lenght) $('#'+nombreTabla).DataTable().clear().draw();
    
-    if(nombreTabla == 'tblHab_Requeridas'){
+    if(nombreTabla == 'tblHab_Disponibles'){
         switch (tipoUsuario) {
             case "A":
 
