@@ -12,79 +12,79 @@ if (!empty($_POST['action'])) {
 
     // try {
 
-    $accion = $_POST['action'];
-    $response = '';
-    switch ($accion) {
-        case 'Insertar_tblProyectos':
-            header('Content-type: application/json; charset=utf-8');
-            $newProyecto = json_decode($_POST['datos']);
-            // echo $newProyecto->nombre;
-            // echo $newProyecto->estado;
-            if ($newProyecto != null) {
-                $newProyecto->id = ConectorBD::get_UUIDv4();
-                ProyectoAdm::guardarObj($newProyecto);
-            }
+        $accion = $_POST['action'];
+        $response = '';
+        switch ($accion) {
+            case 'Insertar_tblProyectos':
+                header('Content-type: application/json; charset=utf-8');
+                $newProyecto = json_decode($_POST['datos']);
+                // echo $newProyecto->nombre;
+                // echo $newProyecto->estado;
+                if ($newProyecto != null){
+                    $newProyecto->id = ConectorBD::get_UUIDv4();
+                    ProyectoAdm::guardarObj($newProyecto);
+                }
 
-            $response = array(
-                "data" => $newProyecto->id,
-                "accion" => $accion
-            );
-            break;
+                $response = array(
+                    "data" => $newProyecto->id,
+                    "accion" => $accion
+                );
+                break;
+        
+            case 'Modificar_tblProyectos':
+                header('Content-type: application/json; charset=utf-8');
+                $editarProyecto = json_decode($_POST['datos']);
 
-        case 'Modificar_tblProyectos':
-            header('Content-type: application/json; charset=utf-8');
-            $editarProyecto = json_decode($_POST['datos']);
+                    if ($editarProyecto != null || $editarProyecto != ''){
+                        ProyectoAdm::modificarObj($editarProyecto);
+                    }
 
-            if ($editarProyecto != null || $editarProyecto != '') {
-                ProyectoAdm::modificarObj($editarProyecto);
-            }
+                $response = array(
+                    "data" => $editarProyecto,
+                    "accion" => $accion
+                );
+                break;
+        
+            case 'Eliminar_tblProyectos':
+                header('Content-type: application/json; charset=utf-8');
+                $eliminarIdProyecto = $_POST['datos'];
 
-            $response = array(
-                "data" => $editarProyecto,
-                "accion" => $accion
-            );
-            break;
+                    if ($eliminarIdProyecto != null || $eliminarIdProyecto != ''){
+                        ProyectoAdm::eliminarObj($eliminarIdProyecto);
+                    }
 
-        case 'Eliminar_tblProyectos':
-            header('Content-type: application/json; charset=utf-8');
-            $eliminarProyecto = json_decode($_POST['datos']);
+                $response = array(
+                    "data" => $eliminarIdProyecto,
+                    "accion" => $accion
+                );
+                break;
 
-            if ($eliminarProyecto != null || $eliminarProyecto != '') {
-                ProyectoAdm::eliminarObj($eliminarProyecto->id);
-            }
+            case 'cargar_tblProyectos':
+                header('Content-type: application/json; charset=utf-8');
+                $idUsuario = $_POST['datos'];
+                $USUARIO = Usuario::getListaEnObjetos("id='$idUsuario'",null)[0];
+                $tipoUsuario = $USUARIO->getTipo_usuario();
 
-            $response = array(
-                "data" => $eliminarProyecto,
-                "accion" => $accion
-            );
-            break;
+                    switch ($tipoUsuario) {
+                        case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
+                            $datosProyectos = Proyecto::getListaEnObjetos(null, null);
+                            $modoTabla = "'CRUD'";
+                            break;
 
-        case 'cargar_tblProyectos':
-            header('Content-type: application/json; charset=utf-8');
-            $idUsuario = $_POST['datos'];
-            $USUARIO = Usuario::getListaEnObjetos("id='$idUsuario'", null)[0];
-            $tipoUsuario = $USUARIO->getTipo_usuario();
+                        case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
+                            $filtroUsuario = "id_usuario='$idUsuario'";
+                            $datosProyectos = Proyecto::getListaEnObjetos($filtroUsuario, null);
+                            // R solo lectura
+                            $modoTabla = "'CRUD'";
+                            break;
 
-            switch ($tipoUsuario) {
-                case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
-                    $datosProyectos = Proyecto::getListaEnObjetos(null, null);
-                    $modoTabla = "'CRUD'";
-                    break;
-
-                case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
-                    $filtroUsuario = "id_usuario='$idUsuario'";
-                    $datosProyectos = Proyecto::getListaEnObjetos($filtroUsuario, null);
-                    // R solo lectura
-                    $modoTabla = "'CRUD'";
-                    break;
-
-                default: //trabajador (modo: Solo lectura): perfiles existentes
-                    $datosProyectos = Usuario::getProyectosUsuario($idUsuario);
-                    $modoTabla = "'R'";
-                    break;
-            }
-
-            $json_ddl = "{
+                        default: //trabajador (modo: Solo lectura): perfiles existentes
+                            $datosProyectos = Usuario::getProyectosUsuario($idUsuario);
+                            $modoTabla = "'R'";
+                            break;
+                    }
+                
+                $json_ddl = "{
                     'estado': {
                         'E': 'Ejec',
                         'P': 'Pend'
