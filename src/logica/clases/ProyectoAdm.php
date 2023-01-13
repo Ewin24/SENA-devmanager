@@ -1,5 +1,7 @@
 <?php
 
+require_once 'Habilidad.php';
+
 class Rh_proyecto
 {
     public $id;
@@ -74,15 +76,16 @@ class ProyectoAdm
                 break;
 
             case "HabDisponible":
-                $filtroHabDisponible = "id_proyecto <> $idProyecto";
+                $filtroHabDisponible = "h.id not in (select id_habilidad from proyectos_habilidades where id_proyecto = $idProyecto)";
                 $ordenHabDisponible   = "";
-                $cadenaSQL ="   SELECT 	id, id_proyecto, id_habilidad
-                                FROM 	proyectos_habilidades
+                $cadenaSQL ="   SELECT 	h.id, nombre, descripcion
+                                FROM 	habilidades h
+                                INNER JOIN proyectos_habilidades ph on h.id = ph.id_habilidad 
                                 WHERE 	$filtroHabDisponible $ordenHabDisponible";
                 $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
                 for ($i = 0; $i < count($resultado); $i++) {
-                    $HabRequerida = new Habilidad_Proyectos($resultado[$i], null);
-                    $datos[$i] = $HabRequerida;
+                    $HabDisponible = new Habilidad($resultado[$i], null);
+                    $datos[$i] = $HabDisponible;
                 }
                 break;
 
@@ -113,7 +116,6 @@ class ProyectoAdm
             default: 
                 break;
         }
-
         return $datos;
     }
 
