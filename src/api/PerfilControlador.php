@@ -111,7 +111,7 @@ if (!empty($_POST['action'])) {
                     $datosHabilidades = PerfilAdm::getHabTrabajador($idPerfilSeleccionado);
                 }
                 $htmlTabla = $_POST['html_tabla'];
-                $json_ddl = Ddl_Parametrizado::getddlOps("tabla= '$htmlTabla' AND campo in('id_habilidad')", null);
+                $json_ddl = Ddl_Parametrizado::getddlOps("tabla = '$htmlTabla' AND campo in('id_habilidad')", null);
 
                 $response = array(
                     "data" => $datosHabilidades,
