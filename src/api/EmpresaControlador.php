@@ -107,7 +107,7 @@ if (!empty($_POST['action'])) {
                 }
 
                 $response = array(
-                    "data" => $newEmpresa->id,
+                    "data" => $newEmpleado->id,
                     "accion" => $accion
                 );
                 break;
@@ -126,10 +126,10 @@ if (!empty($_POST['action'])) {
                 );
                 break;
 
+                //TODO: hace falta revisarlo en tabla generica
             case 'Eliminar_tblEmpleados':
                 header('Content-type: application/json; charset=utf-8');
                 $eliminarEmpleado = json_decode($_POST['datos']);
-
                 if ($eliminarEmpleado != null || $eliminarEmpleado != '') {
                     EmpresaAdm::eliminarObj($eliminarEmpleado->id);
                 }

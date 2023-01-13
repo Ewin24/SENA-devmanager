@@ -141,31 +141,30 @@ class EmpresaAdm
         '$empleado->telefono', 
         '$empleado->tipo_usuario', 
         '$empleado->id_empresa')";
-        ConectorBD::ejecutarQuery($cadenaSQL);
+        return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
     public static function modificarObjEmpleado($empleado)
     {
-        $cadenaSQL = "
-        UPDATE  usuarios
-        SET     identificacion='$empleado->identificacion', 
-                tipo_identificacion='$empleado->tipo_identificacion', 
-                nombres='$empleado->nombres', 
-                apellidos='$empleado->apellidos', 
-                correo='$empleado->correo', 
-                direccion='$empleado->direccion', 
-                nombre_foto='$empleado->nombre_foto', 
-                telefono='$empleado->telefono', 
-                tipo_usuario='$empleado->tipo_usuario', 
-                id_empresa='$empleado->id_empresa'
-        WHERE id='$empleado->id'";
-        ConectorBD::ejecutarQuery($cadenaSQL);
+        $cadenaSQL = "UPDATE  usuarios
+        SET     identificacion = '$empleado->identificacion', 
+                tipo_identificacion = '$empleado->tipo_identificacion', 
+                nombres = '$empleado->nombres', 
+                apellidos = '$empleado->apellidos', 
+                correo = '$empleado->correo', 
+                direccion = '$empleado->direccion', 
+                nombre_foto = '$empleado->nombre_foto', 
+                telefono = '$empleado->telefono', 
+                tipo_usuario = '$empleado->tipo_usuario', 
+                id_empresa = '$empleado->id_empresa'
+        WHERE id = '$empleado->id'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
         //clave_hash='$this->clave_hash',  *por el momento no esta implementado cambiar la clave* 
     }
 
     public static function eliminarObjEmpleado($id)
     { // hace eliminación de usuario con un id especifico
         $cadenaSQL = "DELETE FROM usuarios WHERE id='$id'";
-        ConectorBD::ejecutarQuery($cadenaSQL);
+        return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 }
