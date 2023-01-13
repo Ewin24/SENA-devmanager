@@ -65,6 +65,7 @@ function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
     ];
 
     var payloadEstudios = {
+        id_usuario : IdPerfilSeleccionado,
         datos : IdPerfilSeleccionado ,
         action : 'cargar_'+nombreTabla,
         html_tabla : nombreTabla
@@ -84,6 +85,7 @@ function cargarHabilidades(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
     ];
 
     var payloadHabilidades = {
+        id_usuario : IdPerfilSeleccionado,
         datos : IdPerfilSeleccionado,
         action : 'cargar_'+nombreTabla,
         html_tabla : nombreTabla

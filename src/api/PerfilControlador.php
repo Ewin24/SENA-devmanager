@@ -141,6 +141,39 @@ if (!empty($_POST['action'])) {
                     "accion" => $accion
                 );
                 break;
+                
+            case 'Insertar_tblEstudios':
+                header('Content-type: application/json; charset=utf-8');
+                $newPerfil = json_decode($_POST['datos']);
+                if ($newPerfil != null) {
+                    PerfilAdm::guardarObj($newPerfil);
+                }
+
+                $response = array(
+                    "data" => $newPerfil->id,
+                    "accion" => $accion
+                );
+                break;
+
+            // TODO: Falta Implementar Modificar_tblEstudios
+            case 'Modificar_tblEstudios':
+                header('Content-type: application/json; charset=utf-8');
+
+                $response = array(
+                    "data" => $newPerfil->id,
+                    "accion" => $accion
+                );
+                break;
+
+            // TODO: Falta Implementar Eliminar_tblEstudios
+            case 'Eliminar_tblEstudios':
+                header('Content-type: application/json; charset=utf-8');
+
+                $response = array(
+                    "data" => $newPerfil->id,
+                    "accion" => $accion
+                );
+                break;
 
             case 'cargarArchivo_tblEstudios':
 
