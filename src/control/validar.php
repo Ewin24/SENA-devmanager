@@ -10,5 +10,5 @@ if ($usuario == null) header('location: ../index.php?mensaje=Usuario o contrase√
 else {
     session_start();
     $_SESSION['usuario'] = serialize($usuario);
-    header('location: ../principal.php?CONTENIDO=presentacion/inicio.php');
+    header('location: ../principal.php?CONTENIDO=presentacion/vistas/proyectos.php');
 }
