@@ -47,14 +47,14 @@ if(!empty($_POST['action'])) {
         
             case 'Eliminar_tblProyectos':
                 header('Content-type: application/json; charset=utf-8');
-                $eliminarProyecto = json_decode($_POST['datos']);
+                $eliminarIdProyecto = $_POST['datos'];
 
-                    if ($eliminarProyecto != null || $eliminarProyecto != ''){
-                        ProyectoAdm::eliminarObj($eliminarProyecto->id);
+                    if ($eliminarIdProyecto != null || $eliminarIdProyecto != ''){
+                        ProyectoAdm::eliminarObj($eliminarIdProyecto);
                     }
 
                 $response = array(
-                    "data" => $eliminarProyecto,
+                    "data" => $eliminarIdProyecto,
                     "accion" => $accion
                 );
                 break;

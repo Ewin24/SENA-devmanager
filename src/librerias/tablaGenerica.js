@@ -339,6 +339,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     $(selectorTabla).on('mousedown.save', "i.bi."+claseBotonConfirmarRow, function(e) {
         updateRow($(this), true); // Pass save button to function.
     });
+    
     $(selectorTabla).on('mousedown', 'td .bi.'+`${claseBotonEliminarRow}`, function(e) {
         
         var rowdata = $(selectorTabla).DataTable().row($(this).closest("tr")).data();
