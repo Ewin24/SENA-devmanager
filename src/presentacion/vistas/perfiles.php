@@ -27,7 +27,7 @@ switch ($tipoUsuario) {
         // $datosProyectos = Proyecto::getListaEnJson($filtroUsuario, null);
         // echo "Usuario D";
         // R solo lectura
-        $modoTabla = 'CRU';
+        $modoTabla = 'R';
         break;
 
     default: //trabajador (modo: Solo lectura): perfiles existentes
