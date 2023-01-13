@@ -123,13 +123,6 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                         var campo = cols[col].name;
                         $(td).attr('id', campo);
 
-
-                        // encontrando id de referencia a la tabla Padre 
-                        // TODO: verificar
-                        if(payloadInicial.hasOwnProperty(campo)){
-                            idPadre = payloadInicial[campo];
-                        }
-
                         if(cols[col].className == 'ddl' && ddl_ops.length != 0){
                             for(const op of ddl_ops[campo]){
                                 var key = Object.keys(op)[0];
