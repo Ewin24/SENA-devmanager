@@ -594,6 +594,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                             // alert("Status: "+response);
                             // console.log(response.data);
                             archivo = response.data;
+                            rowdata[elemento.id] = archivo;
                             existenCambiosPendientes = false;
                             insertandoNuevoRegistro = false;
                         }, 
@@ -602,7 +603,6 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                             alert("Error: " + errorThrown); 
                         }
                     });
-
                     rowdata[elemento.id] = archivo;
                 }
             });
