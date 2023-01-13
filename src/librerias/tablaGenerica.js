@@ -113,7 +113,6 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         createdRow:function(row, data, dataIndex){
             $(".datepicker", row).datepicker();
             $(row).attr('id', data.id);
-            if(insertandoNuevoRegistro){row.hasClass('sorting_1')}
         },
         "columnDefs": [ 
             {
