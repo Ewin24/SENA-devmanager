@@ -389,7 +389,33 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         updateRow($(this), true); // Pass save button to function.
     });
     $(selectorTabla).on('mousedown', 'td .bi.'+`${claseBotonEliminarRow}`, function(e) {
-        $(selectorTabla).DataTable().row($(this).closest("tr")).remove().draw();
+        
+        var rowdata = $(selectorTabla).DataTable().row($(this).closest("tr")).data();
+
+        var accionCRUD = 'Eliminar';
+
+        var dataReq = {
+            datos : rowdata.id, 
+            action : accionCRUD+'_'+nombreTabla,
+        };
+        $.ajax({
+            url: urlControlador,
+            method:"POST",
+            data: dataReq,
+            dataType:"json",
+            success:function(response){
+                // alert("Status: "+response);
+                console.log(rowdata);
+                existenCambiosPendientes = false;
+                insertandoNuevoRegistro = false;
+                $(selectorTabla).DataTable().row($(this).closest("tr")).remove().draw();
+            }, 
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                alert("Status: " + textStatus); 
+                alert("Error: " + errorThrown); 
+            }
+        });
+        $(selectorTabla).DataTable().ajax.reload();
     });
 
     $(selectorTabla).on('mousedown', 'input', function(e) {
@@ -552,11 +578,11 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     var form = fila.find('td #form-demo')[0];
                     var btn = fila.find('td .submitBtn')
                     // btn.click();
-                    archivos = {'pdf': form[0].files};
+                    var archivo = '';//{'pdf': form[0].files};
 
                     var formData = new FormData(document.getElementById("form-demo"));
                     formData.append("action", "cargarArchivo_"+nombreTabla);
-
+                    
                     $.ajax({
                         dataType:"json",
                         method:"POST",
@@ -567,7 +593,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                         success:function(response){
                             // alert("Status: "+response);
                             // console.log(response.data);
-                            rowdata[elemento.id] = response.data;
+                            archivo = response.data;
                             existenCambiosPendientes = false;
                             insertandoNuevoRegistro = false;
                         }, 
@@ -576,6 +602,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                             alert("Error: " + errorThrown); 
                         }
                     });
+
+                    rowdata[elemento.id] = archivo;
                 }
             });
             // encontrando id de referencia a la tabla Padre 
@@ -720,14 +748,14 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             enablefileUploadEdit($(this))
         });
 
-        $row.find('td.datepicker').each(function(i, el) {
-            enableDatePicker($(this))
-        });
-
-        $row.find("td").not('.ddl').not('.fUpload').not('.datepicker')
+        $row.find("td").not('.ddl').not('.fUpload')//.not('.datepicker')
                        .not(':first').not(':last')
                        .each(function(i, el) {
             enableEditText($(this))
+        });
+
+        $row.find('td.datepicker').each(function(i, el) {
+            enableDatePicker($(this))
         });
 
         var $cancelButton = $editButton.closest('tr').find("td:last-child i.bi."+claseBotonEliminarRow);

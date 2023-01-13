@@ -158,38 +158,33 @@ class EstudiosAdm
     public static function guardarObj($estudio)
     {
         $UUID = ConectorBD::get_UUIDv4(); //genera el UUID
-        $cadenaSQL = "INSERT INTO usuarios
-                            (id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa)
-                            VALUES ('$UUID',
-                             '$usuario->identificacion', 
-                             '$usuario->tipo_identificacion', 
-                             '$usuario->nombres', 
-                             '$usuario->apellidos', 
-                             '$usuario->correo', 
-                             '$clave', 
-                             '$usuario->direccion', 
-                             '$usuario->nombre_foto', 
-                             '$usuario->telefono', 
-                             '$usuario->tipo_usuario', 
-                             '$usuario->id_empresa')";
+        $cadenaSQL = "INSERT INTO usuarios_estudios
+                    (id, nombre_certificado, nombre_archivo, fecha_certificado, id_usuario, id_estudio)
+                    VALUES ('$UUID',
+                        '$estudio->nombre_certificado', 
+                        '$estudio->nombre_archivo', 
+                        '$estudio->fecha_certificado', 
+                        '$estudio->id_usuario', 
+                        '$estudio->id_estudio')";
+        // echo $cadenaSQL;
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
     //modificar usuario
     public static function modificarObj($estudio)
     {
         $cadenaSQL = "UPDATE  usuarios_estudios
-                      SET   nombre_certificado = '$estudio->',
-                            nombre_archivo = '$estudio->',
-                            fecha_certificado = '$estudio->',
-                            id_usuario = '$estudio->',
-                            id_estudio = '$estudio->'
+                      SET   nombre_certificado = '$estudio->nombre_certificado',
+                            nombre_archivo = '$estudio->nombre_archivo',
+                            fecha_certificado = '$estudio->fecha_certificado',
+                            id_usuario = '$estudio->id_usuario',
+                            id_estudio = '$estudio->id_estudio'
                        WHERE id='$estudio->id'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
-    public static function eliminarObj($id)
+    public static function eliminarObj($idEliminar)
     { // hace eliminación de usuario con un id especifico
-        $cadenaSQL = "DELETE FROM usuarios_estudios WHERE id='$id'";
+        $cadenaSQL = "DELETE FROM usuarios_estudios WHERE id='$idEliminar'";
         ConectorBD::ejecutarQuery($cadenaSQL);
     }
 }

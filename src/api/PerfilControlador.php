@@ -17,8 +17,8 @@ if (!empty($_POST['action'])) {
         // echo $accion;
         switch ($accion) {
 
-                //////////////////////////////////////////////////////////////////////////////////////////////////////
-                //SECCION PERFILES
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //SECCION PERFILES
             case 'Insertar_tblEmpleados':
                 header('Content-type: application/json; charset=utf-8');
                 $newPerfil = json_decode($_POST['datos']);
@@ -101,8 +101,8 @@ if (!empty($_POST['action'])) {
 
                 break;
 
-                //////////////////////////////////////////////////////////////////////////////////////////////////////
-                //SECCION HABILIDADES
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //SECCION HABILIDADES
             case 'cargar_tblHabilidades':
                 header('Content-type: application/json; charset=utf-8');
                 $idPerfilSeleccionado = $_POST['datos'];
@@ -122,8 +122,8 @@ if (!empty($_POST['action'])) {
 
                 break;
 
-                //////////////////////////////////////////////////////////////////////////////////////////////////////
-                //SECCION ESTUDIOS
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //SECCION ESTUDIOS
             case 'cargar_tblEstudios':
                 header('Content-type: application/json; charset=utf-8');
                 $idPerfilSeleccionado = $_POST['datos'];
@@ -144,13 +144,12 @@ if (!empty($_POST['action'])) {
                 
             case 'Insertar_tblEstudios':
                 header('Content-type: application/json; charset=utf-8');
-                $newPerfil = json_decode($_POST['datos']);
-                if ($newPerfil != null) {
-                    PerfilAdm::guardarObj($newPerfil);
+                $newEstudio = json_decode($_POST['datos']);
+                if ($newEstudio != null) {
+                    EstudiosAdm::guardarObj($newEstudio);
                 }
-
                 $response = array(
-                    "data" => $newPerfil->id,
+                    "data" => $newEstudio->id,
                     "accion" => $accion
                 );
                 break;
@@ -158,9 +157,14 @@ if (!empty($_POST['action'])) {
             // TODO: Falta Implementar Modificar_tblEstudios
             case 'Modificar_tblEstudios':
                 header('Content-type: application/json; charset=utf-8');
+                $editarEstudio = json_decode($_POST['datos']);
+
+                if ($editarEstudio != null || $editarEstudio != '') {
+                    EstudiosAdm::modificarObj($editarEstudio);
+                }
 
                 $response = array(
-                    "data" => $newPerfil->id,
+                    "data" => $editarEstudio->id,
                     "accion" => $accion
                 );
                 break;
@@ -168,9 +172,14 @@ if (!empty($_POST['action'])) {
             // TODO: Falta Implementar Eliminar_tblEstudios
             case 'Eliminar_tblEstudios':
                 header('Content-type: application/json; charset=utf-8');
+                $eliminarIdEstudio = $_POST['datos'];
+
+                if ($eliminarIdEstudio != null || $eliminarIdEstudio != '') {
+                    EstudiosAdm::eliminarObj($eliminarIdEstudio);
+                }
 
                 $response = array(
-                    "data" => $newPerfil->id,
+                    "data" => $eliminarIdEstudio,
                     "accion" => $accion
                 );
                 break;
