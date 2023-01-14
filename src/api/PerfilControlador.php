@@ -48,10 +48,9 @@ if (!empty($_POST['action'])) {
 
             case 'Eliminar_tblEmpleados':
                 header('Content-type: application/json; charset=utf-8');
-                $eliminarPerfil = json_decode($_POST['datos']);
-
+                $eliminarPerfil = $_POST['datos'];
                 if ($eliminarPerfil != null || $eliminarPerfil != '') {
-                    PerfilAdm::eliminarObj($eliminarPerfil->id);
+                    PerfilAdm::eliminarObj($eliminarPerfil);
                 }
 
                 $response = array(

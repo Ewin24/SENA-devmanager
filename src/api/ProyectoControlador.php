@@ -175,7 +175,7 @@ if (!empty($_POST['action'])) {
             );
             break;
 
-        case 'Modificar_tblHab_Requeridas':
+        case 'Modificar_tblHab_Disponibles':
             header('Content-type: application/json; charset=utf-8');
             $editarHabDisponible = json_decode($_POST['datos']);
 
@@ -189,7 +189,7 @@ if (!empty($_POST['action'])) {
             );
             break;
 
-        case 'Eliminar_tblHab_Disponible':
+        case 'Eliminar_tblHab_Disponibles':
             header('Content-type: application/json; charset=utf-8');
             $eliminarHabDisponible = $_POST['datos'];
 
@@ -219,6 +219,23 @@ if (!empty($_POST['action'])) {
 
             ///////////////////////////////////////////////////////////////////////////////////////////
             //SECCION DE CONTRATADOS
+        case 'Insertar_tblContratados':
+            header('Content-type: application/json; charset=utf-8');
+            $trabajadores = $_POST['datos'];
+            $idProySeleccionado = $_POST['id_proyecto'];
+
+            if ($idProySeleccionado != null || $idProySeleccionado != '') {
+                //// Definiendo la lógica de negocio dentro de la clase
+                ProyectoAdm::asignarTrabajadorProyecto($trabajadores, $idProySeleccionado);
+            }
+
+            $response = array(
+                "data" => $trabajadores,
+                "idProySeleccionado" => $idProySeleccionado,
+                "accion" => $accion
+            );
+            break;
+
         case 'cargar_tblContratados':
             header('Content-type: application/json; charset=utf-8');
             $idProySeleccionado = $_POST['datos'];

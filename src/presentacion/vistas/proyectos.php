@@ -111,11 +111,11 @@ switch ($tipoUsuario) {
                         </tr>
                     </tbody>
                 </table>
-            <div class="col-lg-3">
-                <input type="button" name="action" value="Asignar" class="btn btn-primary" onclick="asignarSeleccionados()">
-            </div>
+                <div class="col-lg-3">
+                    <input type="button" name="action" value="Asignar" class="btn btn-primary" onclick="asignarSeleccionados()">
+                </div>
         </div>
-        
+
 
     </div>
 </fieldset>
@@ -159,6 +159,9 @@ switch ($tipoUsuario) {
                         </td>
                     </tr>
                 </tbody>
+                <div class="col-lg-3">
+                    <input type="button" name="action" value="Asignar Como Trabajadores" class="btn btn-primary" onclick="asignarTrabajadores()">
+                </div>
             </table>
         </div>
     </div>
@@ -166,58 +169,101 @@ switch ($tipoUsuario) {
 </fieldset>
 
 <script type="text/javascript">
+    import {
+        proyecto
+    } from './presentacion/vistas/js/proyectos.js'
 
-function asignarSeleccionados(){
+    function asignarSeleccionados() {
 
-    $('#tblHab_Disponibles tbody tr').each(function(fila, elemento){
-        var checkb = $(elemento).find('input[type=checkbox]');
-        if(checkb.is(':checked')){
-            var datosFila = $('#tblHab_Disponibles').DataTable().rows(fila).data()[0];
+        $('#tblHab_Disponibles tbody tr').each(function(fila, elemento) {
+            var checkb = $(elemento).find('input[type=checkbox]');
+            if (checkb.is(':checked')) {
+                var datosFila = $('#tblHab_Disponibles').DataTable().rows(fila).data()[0];
 
-            var dataReq = {
-                datos : datosFila.id,
-                action: 'asignar_HabilidadesProyecto'
-            }
-
-            $.ajax({
-            url: urlControlador,
-            method:"POST",
-            data: dataReq,
-            dataType:"json",
-                success:function(response){
-                    // alert("Status: "+response);
-                    console.log(response);
-                    $(selectorTabla).DataTable().row($(this).closest("tr")).remove().draw();
-                }, 
-                error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                    alert("Status: " + textStatus); 
-                    alert("Error: " + errorThrown); 
+                var dataReq = {
+                    datos: datosFila.id,
+                    action: 'asignar_HabilidadesProyecto'
                 }
-            });
-        }
-    });
 
-    $('#tblHab_Disponibles').DataTable().ajax.reload();
-    $('#tblHab_Requeridas').DataTable().ajax.reload();
-}
-</script>	
+                $.ajax({
+                    url: urlControlador,
+                    method: "POST",
+                    data: dataReq,
+                    dataType: "json",
+                    success: function(response) {
+                        // alert("Status: "+response);
+                        console.log(response);
+                        $(selectorTabla).DataTable().row($(this).closest("tr")).remove().draw();
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Status: " + textStatus);
+                        alert("Error: " + errorThrown);
+                    }
+                });
+            }
+        });
+
+        $('#tblHab_Disponibles').DataTable().ajax.reload();
+        $('#tblHab_Requeridas').DataTable().ajax.reload();
+
+    }
+
+
+    //pasar datos de postulados a contratados
+    function asignarTrabajadores() {
+
+        $('#tblCandidatos tbody tr').each(function(fila, elemento) {
+            var checkb = $(elemento).find('input[type=checkbox]');
+            if (checkb.is(':checked')) {
+                var datosFila = $('#tblCandidatos').DataTable().rows(fila).data()[0];
+
+                var dataReq = {
+                    datos: datosFila.id,
+                    id_proyecto: proyecto,
+                    action: 'Insertar_tblContratados'
+                }
+
+
+                $.ajax({
+                    url: 'http://localhost/SENA-devmanager/src/api/ProyectoControlador.php',
+                    method: "POST",
+                    data: dataReq,
+                    dataType: "json",
+                    success: function(response) {
+                        // alert("Status: "+response);
+                        console.log(response);
+                        $(selectorTabla).DataTable().row($(this).closest("tr")).remove().draw();
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Status: " + textStatus);
+                        alert("Error: " + errorThrown);
+                    }
+                });
+            }
+        });
+
+        $('#tblHab_Disponibles').DataTable().ajax.reload();
+        $('#tblHab_Requeridas').DataTable().ajax.reload();
+
+    }
+</script>
+
 
 
 <script type="module">
     import {
         cargarProyectos,
+        proyecto,
         cargarHabilidades,
         cargarTrabajadores
     } from './presentacion/vistas/js/proyectos.js'
-
-    
-
 
     let lisProyectos = [];
     <?php echo 'const idUsuario = "' . $idUsuario . '";'; ?>
     <?php echo 'const tipoUsuario = "' . $tipoUsuario . '";'; ?>
     <?php echo 'const modoTabla = "' . $modoTabla . '";'; ?>
-    <?php //echo 'const dProy = ' . $datosProyectos . ';'; ?>
+    <?php //echo 'const dProy = ' . $datosProyectos . ';'; 
+    ?>
 
     // if (lisProyectos.length == 0 || lisProyectos == null) {
     //     lisProyectos = [...dProy];
@@ -243,10 +289,10 @@ function asignarSeleccionados(){
 
                 IdProySeleccionado = data.id;
                 // console.log(IdProySeleccionado);
-                
+
                 console.clear();
                 cargarHabilidades('tblHab_Requeridas', IdProySeleccionado, tipoUsuario);
-                cargarHabilidades('tblHab_Disponibles',IdProySeleccionado, tipoUsuario);
+                cargarHabilidades('tblHab_Disponibles', IdProySeleccionado, tipoUsuario);
                 cargarTrabajadores('tblContratados', IdProySeleccionado, tipoUsuario);
                 cargarTrabajadores('tblCandidatos', IdProySeleccionado, tipoUsuario);
                 // //// peticion - https://coderszine.com/live-datatables-crud-with-ajax-php-mysql/
@@ -268,7 +314,7 @@ function asignarSeleccionados(){
                 //         cargarTrabajadores('tblCandidatos', dTrabDisp, modoTabla);
                 //     }
                 // });
-                
+
                 // fetch('http://localhost/SENA-devmanager/api/ProyectoControlador.php?id=' + IdProySeleccionado, {
                 //     method: 'GET',
                 // }).then((resp) => {
