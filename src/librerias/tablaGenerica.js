@@ -494,46 +494,54 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
 //     }
 // // });
 
-    // $(selectorTabla).on('click', '.submitBtn', function(event) {
-        
-    //     event.preventDefault();
-    //     // retrieve form element
-    //     var form = this.closest('form');
-    //     // prepare data
-    //     var dReq = {
-    //         'pdf': form[0].files,
-    //         'action': 'cargarArchivo_tblEstudios'
-    //     }
-    //     // get url
-    //     var url = form.action;
-    //     url = urlControlador;
-        
+    $(selectorTabla).on('submit', '#', function(event) {
 
-    //     // send request
-    //     $.ajax({
-    //         type: 'POST',
-    //         method: 'POST',
-    //         url: url,
-    //         data: dReq,
-    //         cache: false,
-    //         contentType: false,
-    //         processData: false,
-    //     });
+        event.preventDefault();
 
+        // retrieve form element
+        var form = this.closest('form');
+        // prepare data
+        var dReq = {
+            'pdf': form[0].files,
+            'action': 'cargarArchivo_tblEstudios'
+        }
+        // get url
+        var url = form.action;
+        url = urlControlador;
+        
+        // send request
+        $.ajax({
+            type: 'POST',
+            method: 'POST',
+            url: url,
+            data: dReq,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success:function(response){
+                // alert("Status: "+response);
+                console.log(rowdata);
+            }, 
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                alert("Status: " + textStatus); 
+                alert("Error: " + errorThrown); 
+            }
+
+        });
+    });
+
+    // // File input field trigger when the HTML element is clicked
+    // $(selectorTabla+ "tbody tr td #dropBox").click(function(){
+    //     $(selectorTabla+ "tbody tr td form input[type=file]").click();
     // });
 
-    // File input field trigger when the HTML element is clicked
-    $(selectorTabla+ "tbody tr td #dropBox").click(function(){
-        $(selectorTabla+ "tbody tr td form input[type=file]").click();
-    });
+    // // Prevent browsers from opening the file when its dragged and dropped
+    // $(document).on('drop dragover', function (e) {
+    //     e.preventDefault();
+    // });
 
-    // Prevent browsers from opening the file when its dragged and dropped
-    $(document).on('drop dragover', function (e) {
-        e.preventDefault();
-    });
-
-    // Call a function to handle file upload on select file
-    $(selectorTabla+ 'tbody tr td form').on('change', '.submitBtn', fileUpload);
+    // // Call a function to handle file upload on select file
+    // $(selectorTabla+ 'tbody tr td form').on('change', '.submitBtn', fileUpload);
 
     // Guardar Cambios
     $('#btn-save-'+nombreTabla).on('click', async function() {
@@ -559,7 +567,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     var form = fila.find('td #form-demo')[0];
                     var btn = fila.find('td .submitBtn')
                     var archivo = '';//{'pdf': form[0].files};
-                    
+                                        
                     // rowdata[elemento.id] = sendArchivo(nombreTabla, urlControlador);
 
                     // var formData = new FormData(document.getElementById("form-demo"));
@@ -778,18 +786,18 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         // https://www.cloudways.com/blog/the-basics-of-file-upload-in-php/
         //https://github.com/SiddharthaChowdhury/Async-File-Upload-using-PHP-Javascript-AJAX/blob/master/upload_form.html
         var ctrol2 = 
-                    `
-                    <form>
-                        <input type="file" name="fileInput" id="fileInput" class="btn btn-primary submitBtn" onchange="fileUpload()" />
-                    </form>
-                    `
-
                     // `
-                    // <form id="form-demo" enctype="multipart/form-data" action=${urlControlador} method="post">
-                    //     <input name="pdf" type="file">
-                    //     <button type="submit" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
+                    // <form>
+                    //     <input type="file" name="fileInput" id="fileInput" class="btn btn-primary submitBtn" onchange="fileUpload()" />
                     // </form>
                     // `
+
+                    `
+                    <form id="form-demo" enctype="multipart/form-data" action=${urlControlador} method="post">
+                        <input name="pdf" type="file">
+                        <button type="button" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
+                    </form>
+                    `
 
 
                     // `

@@ -14,7 +14,45 @@ function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
           { title: "Correo", data: "correo", name: "correo", visible: true },
           { title: "Clave", data: "clave_hash", name: "clave_hash", visible: false },
           { title: "Dirección", data: "direccion",name: "direccion", visible: true },
-          { title: "Foto", data: "nombre_foto", name: "nombre_foto", visible: true },
+          { title: "Foto", data: "nombre_foto", name: "nombre_foto", type:'display',
+                //     render: function ( file_id ) {
+                //         return file_id ? '<img src="'+editor.file( 'files', file_id ).web_path+'"/>' : null;
+                //     },
+                //     defaultContent: "No image",
+                // clearText: "Clear",
+                // noImageText: 'No image',
+                
+                className: 'f32',
+                render: function (data, type) {
+                        if (type === 'display') {
+                            let country = '';
+                            
+                            switch (data) {
+                                case 'Argentina':
+                                    country = 'ar';
+                                    break;
+                                case 'Edinburgh':
+                                    country = '_Scotland';
+                                    break;
+                                case 'London':
+                                    country = '_England';
+                                    break;
+                                case 'New York':
+                                case 'San Francisco':
+                                    country = 'us';
+                                    break;
+                                case 'Sydney':
+                                    country = 'au';
+                                    break;
+                                case 'Tokyo':
+                                    country = 'jp';
+                                    break;
+                            }
+                            return '<span class="flag ' + country + '"></span> ' + data;
+                        }
+                        return data;
+                    },
+             visible: true },
           { title: "Telefono", data: "telefono", name: "telefono", visible: true },
           { title: "Tipo de Usuario", data: "tipo_usuario", name: "tipo_usuario", className : 'ddl', visible: true },
           { title: "Empresa", data: "id_empresa", name: "id_empresa", className : 'ddl',  visible: true }

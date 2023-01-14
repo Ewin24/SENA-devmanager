@@ -149,5 +149,5 @@ function cargarTrabajadores(nombreTabla, IdProySeleccionado, tipoUsuario, modoTa
     cargarTablaGenerica(nombreTabla, colsTrabajadores, modoTabla, dataUrl, payloadTrabajadores);
 }
 
-export { cargarProyectos, cargarHabilidades, cargarTrabajadores, proyecto }
+export { cargarProyectos, cargarHabilidades, cargarTrabajadores }
 
