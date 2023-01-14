@@ -123,7 +123,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                         var campo = cols[col].name;
 
                         if(idPadre != ''){
-                            $(selectorTabla).attr('id_padre', payloadInicial[key]);
+                            $(selectorTabla).attr('id_padre', idPadre);
                         }
                         // asociar el id del padre
                         if(campo == 'id'){

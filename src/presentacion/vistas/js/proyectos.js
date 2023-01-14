@@ -151,4 +151,3 @@ function cargarTrabajadores(nombreTabla, IdProySeleccionado, tipoUsuario, modoTa
 }
 
 export { cargarProyectos, cargarHabilidades, cargarTrabajadores, proyecto }
-
