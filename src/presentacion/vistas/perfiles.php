@@ -85,7 +85,7 @@ switch ($tipoUsuario) {
                                 <td>__id__</td>
                                 <td>__Nombre estudio__</td>
                                 <td>__Nombre Certificado__</td>
-                                <td>__nombre Archivo__</td>
+                                <td>archivo</td>
                                 <td>__01/01/2020__</td>
                                 <td>__ident del usuario__</td>
                                 <td>
@@ -129,8 +129,14 @@ switch ($tipoUsuario) {
     import {
         cargarPerfiles,
         cargarEstudios,
-        cargarHabilidades,
+        cargarHabilidades
     } from './presentacion/vistas/js/perfiles.js';
+
+    // import { fileUpload as cargarArchivo } from './../../librerias/tablaGenerica.js';
+
+    // function fileUpload(event){
+    //     cargarArchivo(event);
+    // }
 
     <?php echo 'const idUsuario = "' . $idUsuario . '";'; ?>
     <?php echo 'const modoTabla = "' . $modoTabla . '";'; ?>

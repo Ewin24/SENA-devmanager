@@ -223,6 +223,7 @@ switch ($tipoUsuario) {
                     action: 'Insertar_tblContratados'
                 }
 
+
                 $.ajax({
                     url: 'http://localhost/SENA-devmanager/src/api/ProyectoControlador.php',
                     method: "POST",
@@ -248,6 +249,7 @@ switch ($tipoUsuario) {
 </script>
 
 
+
 <script type="module">
     import {
         cargarProyectos,
@@ -255,7 +257,6 @@ switch ($tipoUsuario) {
         cargarHabilidades,
         cargarTrabajadores
     } from './presentacion/vistas/js/proyectos.js'
-
 
     let lisProyectos = [];
     <?php echo 'const idUsuario = "' . $idUsuario . '";'; ?>

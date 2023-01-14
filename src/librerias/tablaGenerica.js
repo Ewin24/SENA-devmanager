@@ -14,7 +14,7 @@ var dataTable = null;
 var ddl_ops = null;
 var dataUrl = null;
 
-function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador='', payloadInicial = {}, ddl_ops = [], campo_desc = false, arreglo={}, )
+function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador='', payloadInicial = {}, ddl_ops = [], campo_desc = false, arreglo={}, idPadre = '')
 {
     var filaEnEdicion = '';
     var selectorTabla = '#'+nombreTabla
@@ -99,7 +99,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         // scrollX: true,
         destroy: true,
         processing: true,
-        select:{ style:'single', toggleable: true},
+        // select:{ style:'single', toggleable: true },
         // fnInitComplete: function(oSettings, json) {
         //         // Seleccionar primera fila automáticamente;
         //         $(selectorTabla+' tbody tr:eq(0)').click();
@@ -121,6 +121,19 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     var t = nombreTabla;
                     if(col != 0 && col != cols.length ){
                         var campo = cols[col].name;
+
+                        if(idPadre != ''){
+                            $(selectorTabla).attr('id_padre', payloadInicial[key]);
+                        }
+                        // asociar el id del padre
+                        if(campo == 'id'){
+                            for(const key of Object.keys(rowData)){
+                                if(payloadInicial.hasOwnProperty(key)) {
+                                    $(selectorTabla).attr('id_padre', payloadInicial[key]);
+                                }
+                            }
+                        }
+
                         $(td).attr('id', campo);
 
                         if(cols[col].className == 'ddl' && ddl_ops.length != 0){
@@ -509,21 +522,18 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
 
     // });
 
-    async function sendArchivo(form){
-        var newForm = document.getElementById("form-demo");
-        var formData = new FormData(newForm);
-        formData.append("action", "cargarArchivo_"+nombreTabla);
-        
-        var filename = '';
-        
-        await fetch(urlControlador, {
-            method: "POST", 
-            body: formData
-        }).then((resp) => {
-            filename = resp.data;
-        });
-        return filename;
-    }
+    // File input field trigger when the HTML element is clicked
+    $(selectorTabla+ "tbody tr td #dropBox").click(function(){
+        $(selectorTabla+ "tbody tr td form input[type=file]").click();
+    });
+
+    // Prevent browsers from opening the file when its dragged and dropped
+    $(document).on('drop dragover', function (e) {
+        e.preventDefault();
+    });
+
+    // Call a function to handle file upload on select file
+    $(selectorTabla+ 'tbody tr td form').on('change', '.submitBtn', fileUpload);
 
     // Guardar Cambios
     $('#btn-save-'+nombreTabla).on('click', async function() {
@@ -548,10 +558,9 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 {
                     var form = fila.find('td #form-demo')[0];
                     var btn = fila.find('td .submitBtn')
-                    btn.click();
                     var archivo = '';//{'pdf': form[0].files};
                     
-                    // rowdata[elemento.id] = sendArchivo(form);
+                    // rowdata[elemento.id] = sendArchivo(nombreTabla, urlControlador);
 
                     // var formData = new FormData(document.getElementById("form-demo"));
                     // formData.append("action", "cargarArchivo_"+nombreTabla);
@@ -769,23 +778,18 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         // https://www.cloudways.com/blog/the-basics-of-file-upload-in-php/
         //https://github.com/SiddharthaChowdhury/Async-File-Upload-using-PHP-Javascript-AJAX/blob/master/upload_form.html
         var ctrol2 = 
-                    // `
-                    // <form id="upload_form" enctype="multipart/form-data" method="post">
-                    // <input type="file" name="pdf" id="pdf"><br>
-                    // <input type="button" name="action" value="cargarArchivo_tblEstudios" 
-                    // class="btn btn-primary submitBtn" onclick="uploadFile(${urlControlador})">
-                    // <progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
-                    // <h3 id="status"></h3>
-                    // <p id="loaded_n_total"></p>
-                    // </form>
-                    // `
-
                     `
-                    <form id="form-demo" enctype="multipart/form-data" action=${urlControlador} method="post">
-                        <input name="pdf" type="file">
-                        <button type="submit" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
+                    <form>
+                        <input type="file" name="fileInput" id="fileInput" class="btn btn-primary submitBtn" onchange="fileUpload()" />
                     </form>
                     `
+
+                    // `
+                    // <form id="form-demo" enctype="multipart/form-data" action=${urlControlador} method="post">
+                    //     <input name="pdf" type="file">
+                    //     <button type="submit" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
+                    // </form>
+                    // `
 
 
                     // `
@@ -933,6 +937,75 @@ function activarModoCRUD(modoelegido, nombreTabla){
     }
 }
 
+function fileUpload(event){
+    // Allowed file types
+    var allowedFileTypes = 'image.*|application/pdf'; //text.*|image.*|application.*
+
+    // Allowed file size
+    var allowedFileSize = 1024; //in KB
+
+    // Notify user about the file upload status
+    $("#dropBox").html(event.target.value+" uploading...");
+    
+    // Get selected file
+    files = event.target.files;
+    
+    // Form data check the above bullet for what it is  
+    var data = new FormData();                                   
+
+    // File data is presented as an array
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        if(!file.type.match(allowedFileTypes)) {              
+            // Check file type
+            $("#dropBox").html('<p class="error">File extension error! Please select the allowed file type only.</p>');
+        }else if(file.size > (allowedFileSize*1024)){
+            // Check file size (in bytes)
+            $("#dropBox").html('<p class="error">File size error! Sorry, the selected file size is larger than the allowed size (>'+allowedFileSize+'KB).</p>');
+        }else{
+            // Append the uploadable file to FormData object
+            data.append('file', file, file.name);
+            
+            // Create a new XMLHttpRequest
+            var xhr = new XMLHttpRequest();     
+            
+            // Post file data for upload
+            xhr.open('POST', 'upload.php', true);  
+            xhr.send(data);
+            xhr.onload = function () {
+                // Get response and show the uploading status
+                var response = JSON.parse(xhr.responseText);
+                if(xhr.status === 200 && response.status == 'ok'){
+                    $("#dropBox").html('<p class="success">File has been uploaded successfully. Click to upload another file.</p>');
+                }else if(response.status == 'type_err'){
+                    $("#dropBox").html('<p class="error">File extension error! Click to upload another file.</p>');
+                }else{
+                    $("#dropBox").html('<p class="error">Something went wrong, please try again.</p>');
+                }
+            };
+        }
+    }
+    return response;
+}
+
+
+async function sendArchivo(nombreTabla, urlEnviar){
+    var newForm = document.getElementById("form-demo");
+    var formData = new FormData(newForm);
+    formData.append("action", "cargarArchivo_"+nombreTabla);
+    
+    var filename = '';
+    
+    await fetch(urlEnviar, {
+        method: "POST", 
+        body: formData
+    }).then((resp) => {
+        filename = resp.data;
+    });
+    return filename;
+}
+
+
 function desbloquearAccionesPantalla(nombreTabla='', filaEnEdicion=0){
        
     if(nombreTabla != ''){
@@ -991,6 +1064,7 @@ function bloquearAccionesPantalla(nombreTabla='', filaEnEdicion=0){
 export {    cargarTablaGenerica,
             bloquearAccionesPantalla,
             desbloquearAccionesPantalla,
+            fileUpload,
             claseBotonEditarRow,
             claseBotonEliminarRow,
             claseBotonConfirmarRow,
