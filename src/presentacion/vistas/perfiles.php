@@ -49,18 +49,18 @@ switch ($tipoUsuario) {
                 <tbody>
                     <tr>
                     <td></td>
-                        <td>__id__</td>
-                        <td>__identificacion__</td>
-                        <td>__tipo identificacion__</td>
-                        <td>__nombre Usuario__</td>
-                        <td>__apellido__</td>
-                        <td>__correo__</td>
-                        <td>__direccion__</td>
-                        <td>__direccion__</td>
-                        <td>__foto__</td>
-                        <td>__Telefono__</td>
-                        <td>__tipoUsuario__</td>
-                        <td>__Empresa__</td>
+                        <td>_id_</td>
+                        <td>_identificacion_</td>
+                        <td>_tipo identificacion_</td>
+                        <td>_nombre Usuario_</td>
+                        <td>_apellido_</td>
+                        <td>_correo_</td>
+                        <td>_direccion_</td>
+                        <td>_direccion_</td>
+                        <td>_foto_</td>
+                        <td>_Telefono_</td>
+                        <td>_tipoUsuario_</td>
+                        <td>_Empresa__</td>
                         <td>
                             <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
                             <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
@@ -83,16 +83,11 @@ switch ($tipoUsuario) {
                             <!-- <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}> -->
                                 <td></td>
                                 <td>__id__</td>
-                                <td>__Nombre__</td>
-                                <td>__Nombre certificado__</td>
-                                <td>__Nombre archivo__</td>
-                                <!-- <td>
-                                    <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
-                                    <input type="submit" name="submit" class="btn btn-primary submitBtn" value="SUBMIT"/>
-                                </td> -->
+                                <td>__Nombre estudio__</td>
+                                <td>__Nombre Certificado__</td>
+                                <td>__nombre Archivo__</td>
                                 <td>__01/01/2020__</td>
-                                <td>__01/01/2020__</td>
-                                <td>__01/01/2020__</td>
+                                <td>__ident del usuario__</td>
                                 <td>
                                     <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
                                     <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>

@@ -202,34 +202,36 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         $( selectorCtrlDescripcion ).hide();
     }
 
-    // $(selectorTabla+' tbody').on('click', 'tr', function () {
-    //     if ($(this).hasClass('selected')) {
-    //         if ( $( selectorCtrlDescripcion ).length ) {
-    //             if ( existenCambiosPendientes) {
-    //                 $( selectorCtrlDescripcion ).show();
-    //             }
-    //             else{
-    //                 $( selectorCtrlDescripcion ).hide();
-    //             }
-    //         }
-    //     }
-    //     else {
-    //         // $(this).addClass('selected');
-    //         // $(this).removeClass('selected');
+    $(selectorTabla+' tbody').on('click', 'tr', function () {
+        if(!existenCambiosPendientes){
+            if ($(this).hasClass('selected')) {
+                if ( $( selectorCtrlDescripcion ).length ) {
+                    if ( existenCambiosPendientes) {
+                        $( selectorCtrlDescripcion ).show();
+                    }
+                    else{
+                        $( selectorCtrlDescripcion ).hide();
+                    }
+                }
+            }
+            else {
+                // $(this).addClass('selected');
+                // $(this).removeClass('selected');
 
-    //         if ( $( selectorCtrlDescripcion ).length ) {
-    //             if ( existenCambiosPendientes) {
-    //                 $( selectorCtrlDescripcion ).removeAttr("disabled");
-    //             }
-    //             $( selectorCtrlDescripcion ).show();
+                if ( $( selectorCtrlDescripcion ).length ) {
+                    if ( existenCambiosPendientes) {
+                        $( selectorCtrlDescripcion ).removeAttr("disabled");
+                    }
+                    $( selectorCtrlDescripcion ).show();
 
-    //             var tr = $(this).closest("tr");
-    //             var rowindex = tr.index();
-    //             var data = $(selectorTabla).DataTable().row( rowindex ).data();
-    //             $( selectorCtrlDescripcion ).val(data.descripcion);
-    //         }
-    //     }
-    // });
+                    var tr = $(this).closest("tr");
+                    var rowindex = tr.index();
+                    var data = $(selectorTabla).DataTable().row( rowindex ).data();
+                    $( selectorCtrlDescripcion ).val(data.descripcion);
+                }
+            }
+        }
+    });
 
     // // // eventos de selección de fila
     // $(selectorTabla+' tbody').on('click', 'tr', function () {
@@ -281,6 +283,15 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 $(divBotones).attr('style', 'display:none');
             }
         });
+
+        if ( $( selectorCtrlDescripcion ).length ) {
+            if ( existenCambiosPendientes) {
+                $( selectorCtrlDescripcion ).removeAttr("disabled");
+            }
+            $( selectorCtrlDescripcion ).show();
+            var data = $(selectorTabla).DataTable().row( filaEnEdicion ).data();
+            $( selectorCtrlDescripcion ).val(data.descripcion);
+        }
 
         // var nonSelected = $(selectorTabla).DataTable().rows( { selected: false } ).nodes().each(function(row){
         //     var but = $(selectorTabla).DataTable().row(row).node().attr('disabled', 'disabled'); //find("td:last-child i.bi."+claseBotonEliminarRow);
@@ -498,48 +509,24 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
 
     // });
 
-    
-    $(selectorTabla+" tbody tr td #form-demo").on('submit',(function(e) {
-
-        var idx = $(selectorTabla).DataTable().rows({selected: true}).indexes()[0];
-        rowdata = $(selectorTabla).DataTable().row(idx).data();
-
-        var fila = $(selectorTabla+' tbody tr:first');
-
-        var form = fila.find('td #form-demo')[0];
-        var btn = fila.find('td .submitBtn')
-        // btn.click();
-        var archivo = '';//{'pdf': form[0].files};
-
-        var formData = new FormData(document.getElementById("form-demo"));
+    async function sendArchivo(form){
+        var newForm = document.getElementById("form-demo");
+        var formData = new FormData(newForm);
         formData.append("action", "cargarArchivo_"+nombreTabla);
-
-        $.ajax({
-                dataType:"json",
-                method:"POST",
-                url: urlControlador,
-                data: formData,
-                processData: false,
-                contentType: false,
-                success:function(response){
-                    // alert("Status: "+response);
-                    // console.log(response.data);
-                    archivo = response.data;
-                    rowdata[elemento.id] = archivo;
-                    existenCambiosPendientes = false;
-                    insertandoNuevoRegistro = false;
-                }, 
-                error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                    alert("Status: " + textStatus); 
-                    alert("Error: " + errorThrown); 
-                }
-            });
-            rowdata[elemento.id] = archivo;
-        })
-    );
+        
+        var filename = '';
+        
+        await fetch(urlControlador, {
+            method: "POST", 
+            body: formData
+        }).then((resp) => {
+            filename = resp.data;
+        });
+        return filename;
+    }
 
     // Guardar Cambios
-    $('#btn-save-'+nombreTabla).on('click', function() {
+    $('#btn-save-'+nombreTabla).on('click', async function() {
         updateRows(true); // Update all edited rows
         
         var rowdata = null;
@@ -561,12 +548,20 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 {
                     var form = fila.find('td #form-demo')[0];
                     var btn = fila.find('td .submitBtn')
-                    // btn.click();
+                    btn.click();
                     var archivo = '';//{'pdf': form[0].files};
-
-                    var formData = new FormData(document.getElementById("form-demo"));
-                    formData.append("action", "cargarArchivo_"+nombreTabla);
                     
+                    // rowdata[elemento.id] = sendArchivo(form);
+
+                    // var formData = new FormData(document.getElementById("form-demo"));
+                    // formData.append("action", "cargarArchivo_"+nombreTabla);
+                    
+                    
+                    // await fetch('/upload.php', {
+                    //     method: "POST", 
+                    //     body: formData
+                    //   }); 
+
                     // $.ajax({
                     //     dataType:"json",
                     //     method:"POST",
@@ -646,7 +641,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 alert("Error: " + errorThrown); 
             }
         });
-        
+
+        filaEnEdicion = ''
         $(selectorTabla).DataTable().ajax.reload();
     });
 
@@ -659,6 +655,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             insertandoNuevoRegistro = false;
             $(selectorTabla).DataTable().row(0).remove().draw();
         }
+        filaEnEdicion = '';
         $(selectorTabla).DataTable().ajax.reload();
     });
     
@@ -770,13 +767,26 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     </form>
                     `
         // https://www.cloudways.com/blog/the-basics-of-file-upload-in-php/
+        //https://github.com/SiddharthaChowdhury/Async-File-Upload-using-PHP-Javascript-AJAX/blob/master/upload_form.html
         var ctrol2 = 
+                    // `
+                    // <form id="upload_form" enctype="multipart/form-data" method="post">
+                    // <input type="file" name="pdf" id="pdf"><br>
+                    // <input type="button" name="action" value="cargarArchivo_tblEstudios" 
+                    // class="btn btn-primary submitBtn" onclick="uploadFile(${urlControlador})">
+                    // <progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
+                    // <h3 id="status"></h3>
+                    // <p id="loaded_n_total"></p>
+                    // </form>
+                    // `
+
                     `
                     <form id="form-demo" enctype="multipart/form-data" action=${urlControlador} method="post">
                         <input name="pdf" type="file">
                         <button type="submit" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
                     </form>
                     `
+
 
                     // `
                     // <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}>

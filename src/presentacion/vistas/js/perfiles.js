@@ -45,7 +45,6 @@ function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         { title: "Id", data: "id", name: 'id', visible: false },
         { title: 'Nombre Estudio', data: 'id_estudio', name: 'id_estudio', type: 'select', className : 'ddl', visible: true},
-        { title: 'Nombre', data: 'nombre' ,name: 'nombre', visible: false },
         { title: 'Nombre Certificado', data: 'nombre_certificado', name: 'nombre_certificado', visible: true },
         { title: 'Nombre Archivo', data: 'nombre_archivo', name:'nombre_archivo', className: 'fUpload',
                     // render: function ( data, type, row, meta ) {
