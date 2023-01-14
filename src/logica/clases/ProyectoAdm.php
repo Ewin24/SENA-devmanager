@@ -78,10 +78,9 @@ class ProyectoAdm
             case "HabDisponible":
                 $filtroHabDisponible = "h.id not in (select id_habilidad from proyectos_habilidades where id_proyecto = $idProyecto)";
                 $ordenHabDisponible   = "";
-                $cadenaSQL = "   SELECT 	h.id, nombre, descripcion
-                                FROM 	habilidades h
-                                INNER JOIN proyectos_habilidades ph on h.id = ph.id_habilidad 
-                                WHERE 	$filtroHabDisponible $ordenHabDisponible";
+                $cadenaSQL = "  SELECT h.id, nombre, descripcion
+                                FROM habilidades h
+                                WHERE $filtroHabDisponible $ordenHabDisponible";
                 $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
                 for ($i = 0; $i < count($resultado); $i++) {
                     $HabDisponible = new Habilidad($resultado[$i], null);
@@ -102,7 +101,7 @@ class ProyectoAdm
                 break;
 
             case "TrabDisponible":
-                $filtroTrabDisponible = "rh.id_proyecto = $idProyecto AND estado = 'E' AND u.id not in (select id_usuario from rh_proyectos where id_proyecto = $idProyecto )";
+                $filtroTrabDisponible = "rh.id_proyecto = $idProyecto AND estado = 'E'";
                 $cadenaSQL = "   SELECT 	rh.id, fecha_solicitud, estado, id_proyecto, id_usuario
                                 FROM 	usuarios u
                                 INNER JOIN rh_proyectos rh ON rh.id_usuario =  u.id
@@ -215,7 +214,7 @@ class ProyectoAdm
 
     public static function eliminarObjRequerido($idHabilidad)
     {
-        $cadenaSQL = "DELETE FROM habilidades{ WHERE id = '$idHabilidad'";
+        $cadenaSQL = "DELETE FROM habilidades WHERE id = '$idHabilidad'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
@@ -236,14 +235,34 @@ class ProyectoAdm
     {
         $cadenaSQL = "UPDATE habilidades 
                       SET   nombre = '$habilidad->nombre', 
-                            descripcion = '$habilidad->descripcion', 
+                            descripcion = '$habilidad->descripcion' 
                       WHERE id = '$habilidad->id'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
     public static function eliminarObjDisponible($idHabilidad)
     {
-        $cadenaSQL = "DELETE FROM proyectos WHERE id = '$idHabilidad'";
+        $cadenaSQL = "DELETE FROM habilidades WHERE id = '$idHabilidad'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////
+    //SECCION CRUD DE TRABAJADORES ASIGNADOS
+    public static function asignarTrabajadorProyecto($id_usuario, $id_proyecto)
+    {
+        $cadenaSQL = "UPDATE rh_proyecto 
+                    SET estado = 'A' 
+                    WHERE id_usuario = '$id_usuario'
+                    AND id_proyecto = '$id_proyecto'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    public static function eliminarTrabajadorProyecto($id_usuario, $id_proyecto)
+    {
+        $cadenaSQL = "UPDATE rh_proyecto 
+                    SET estado = 'R' 
+                    WHERE id_usuario = '$id_usuario'
+                    AND id_proyecto = '$id_proyecto'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 }

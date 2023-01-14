@@ -175,7 +175,7 @@ if (!empty($_POST['action'])) {
             );
             break;
 
-        case 'Modificar_tblHab_Requeridas':
+        case 'Modificar_tblHab_Disponibles':
             header('Content-type: application/json; charset=utf-8');
             $editarHabDisponible = json_decode($_POST['datos']);
 
@@ -189,7 +189,7 @@ if (!empty($_POST['action'])) {
             );
             break;
 
-        case 'Eliminar_tblHab_Disponible':
+        case 'Eliminar_tblHab_Disponibles':
             header('Content-type: application/json; charset=utf-8');
             $eliminarHabDisponible = $_POST['datos'];
 

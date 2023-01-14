@@ -102,7 +102,8 @@ function cargarHabilidades(nombreTabla, IdProySeleccionado, tipoUsuario, modoTab
     if(nombreTabla == 'tblHab_Requeridas'){
         switch (tipoUsuario) {
             case "A":
-
+                modoTabla = 'CRUD';
+                break;
             case "D":
                 modoTabla = 'CR';
                 break;
@@ -116,7 +117,8 @@ function cargarHabilidades(nombreTabla, IdProySeleccionado, tipoUsuario, modoTab
     if(nombreTabla == 'tblHab_Disponibles'){
         switch (tipoUsuario) {
             case "A":
-
+                modoTabla = 'CRUD';
+                break;
             case "D":
                 modoTabla = 'CR';
                 break;
@@ -145,7 +147,7 @@ function cargarTrabajadores(nombreTabla, IdProySeleccionado, tipoUsuario, modoTa
     }
 
     if($('#'+nombreTabla).lenght) $('#'+nombreTabla).DataTable().clear().draw();
-    cargarTablaGenerica(nombreTabla, colsTrabajadores, 'R', dataUrl, payloadTrabajadores);
+    cargarTablaGenerica(nombreTabla, colsTrabajadores, modoTabla, dataUrl, payloadTrabajadores);
 }
 
 export { cargarProyectos, cargarHabilidades, cargarTrabajadores }
