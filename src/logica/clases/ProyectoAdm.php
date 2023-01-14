@@ -195,7 +195,7 @@ class ProyectoAdm
     //SECCION CRUD DE HABILIDADES REQUERIDAS
     public static function guardarObjRequerido($habilidad)
     {
-        $UUID = Usuario::guidv4();
+        $UUID = ConectorBD::get_UUIDv4();
         $cadenaSQL = "INSERT INTO habilidades (id, nombre, descripcion)
                       VALUES (  '$UUID', 
                                 '$habilidad->nombre', 
@@ -223,7 +223,7 @@ class ProyectoAdm
     //SECCION CRUD DE HABILIDADES DISPONIBLES
     public static function guardarObjDisponible($habilidad)
     {
-        $UUID = Usuario::guidv4();
+        $UUID = ConectorBD::get_UUIDv4();
         $cadenaSQL = "INSERT INTO habilidades (id, nombre, descripcion)
                       VALUES (  '$UUID', 
                                 '$habilidad->nombre', 
