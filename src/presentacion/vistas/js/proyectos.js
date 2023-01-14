@@ -89,6 +89,7 @@ function cargarHabilidades(nombreTabla, IdProySeleccionado, tipoUsuario, modoTab
         { title: 'Descripcion Habilidad', data: 'descripcion', name: 'descripcion', visible: true },
     ];
     // console.log("hab", arreglo);
+    var id_proyecto = IdProySeleccionado;
     var payloadHabilidades = {
         id_proyecto : IdProySeleccionado,
         datos : JSON.stringify( IdProySeleccionado ),
@@ -109,7 +110,7 @@ function cargarHabilidades(nombreTabla, IdProySeleccionado, tipoUsuario, modoTab
                 modoTabla = 'R';
                 break;
             }                 
-            cargarTablaGenerica(nombreTabla, colsHabilidadesRequeridas, modoTabla, dataUrl, payloadHabilidades, null, null, null, id_proyecto);
+            cargarTablaGenerica(nombreTabla, colsHabilidadesRequeridas, modoTabla, dataUrl, payloadHabilidades,null,null,null, id_proyecto);
     }
    
     if(nombreTabla == 'tblHab_Disponibles'){
@@ -124,7 +125,7 @@ function cargarHabilidades(nombreTabla, IdProySeleccionado, tipoUsuario, modoTab
                 modoTabla = 'R';
                 break;
             } 
-            cargarTablaGenerica(nombreTabla, colsHabilidades, modoTabla, dataUrl, payloadHabilidades, null, null, null, id_proyecto);
+            cargarTablaGenerica(nombreTabla, colsHabilidades, modoTabla, dataUrl, payloadHabilidades ,null,null,null, id_proyecto);
     }
 }
 
@@ -145,7 +146,7 @@ function cargarTrabajadores(nombreTabla, IdProySeleccionado, tipoUsuario, modoTa
     }
 
     if($('#'+nombreTabla).lenght) $('#'+nombreTabla).DataTable().clear().draw();
-    cargarTablaGenerica(nombreTabla, colsTrabajadores, modoTabla, dataUrl, payloadTrabajadores , null, null, null, datos);
+    cargarTablaGenerica(nombreTabla, colsTrabajadores, modoTabla, dataUrl, payloadTrabajadores);
 }
 
 export { cargarProyectos, cargarHabilidades, cargarTrabajadores}
