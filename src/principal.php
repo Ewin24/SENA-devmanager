@@ -55,8 +55,7 @@ else {
     <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
 
-    <script src="librerias/upload.js"></script>	
-    
+    <script type="module" src="./librerias/tablaGenerica.js"></script>
 
     <!-- 
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>

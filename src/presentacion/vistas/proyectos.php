@@ -199,7 +199,6 @@ function asignarSeleccionados(){
 
     $('#tblHab_Disponibles').DataTable().ajax.reload();
     $('#tblHab_Requeridas').DataTable().ajax.reload();
-
 }
 </script>	
 
@@ -210,6 +209,9 @@ function asignarSeleccionados(){
         cargarHabilidades,
         cargarTrabajadores
     } from './presentacion/vistas/js/proyectos.js'
+
+    
+
 
     let lisProyectos = [];
     <?php echo 'const idUsuario = "' . $idUsuario . '";'; ?>
