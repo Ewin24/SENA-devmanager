@@ -169,9 +169,7 @@ switch ($tipoUsuario) {
 </fieldset>
 
 <script type="text/javascript">
-    import {
-        proyecto
-    } from './presentacion/vistas/js/proyectos.js'
+   // const id_proyecto = document.getElementById('idPadre');
 
     function asignarSeleccionados() {
 
@@ -253,7 +251,6 @@ switch ($tipoUsuario) {
 <script type="module">
     import {
         cargarProyectos,
-        proyecto,
         cargarHabilidades,
         cargarTrabajadores
     } from './presentacion/vistas/js/proyectos.js'
