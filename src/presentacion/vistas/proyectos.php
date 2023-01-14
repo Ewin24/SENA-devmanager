@@ -111,7 +111,12 @@ switch ($tipoUsuario) {
                         </tr>
                     </tbody>
                 </table>
+            <div class="col-lg-3">
+                <input type="button" name="action" value="Asignar" class="btn btn-primary" onclick="asignarSeleccionados()">
+            </div>
         </div>
+        
+
     </div>
 </fieldset>
 
@@ -159,6 +164,45 @@ switch ($tipoUsuario) {
     </div>
 
 </fieldset>
+
+<script type="text/javascript">
+
+function asignarSeleccionados(){
+
+    $('#tblHab_Disponibles tbody tr').each(function(fila, elemento){
+        var checkb = $(elemento).find('input[type=checkbox]');
+        if(checkb.is(':checked')){
+            var datosFila = $('#tblHab_Disponibles').DataTable().rows(fila).data()[0];
+
+            var dataReq = {
+                datos : datosFila.id,
+                action: 'asignar_HabilidadesProyecto'
+            }
+
+            $.ajax({
+            url: urlControlador,
+            method:"POST",
+            data: dataReq,
+            dataType:"json",
+                success:function(response){
+                    // alert("Status: "+response);
+                    console.log(response);
+                    $(selectorTabla).DataTable().row($(this).closest("tr")).remove().draw();
+                }, 
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    alert("Status: " + textStatus); 
+                    alert("Error: " + errorThrown); 
+                }
+            });
+        }
+    });
+
+    $('#tblHab_Disponibles').DataTable().ajax.reload();
+    $('#tblHab_Requeridas').DataTable().ajax.reload();
+
+}
+</script>	
+
 
 <script type="module">
     import {
