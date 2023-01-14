@@ -1,7 +1,7 @@
 import {    cargarTablaGenerica, claseBotonEditarRow, claseBotonEliminarRow     } from "../../../librerias/tablaGenerica.js";
 
 var dataUrl = "http://localhost/SENA-devmanager/src/api/ProyectoControlador.php";
-
+var proyecto = '';
 function cargarProyectos(nombreTabla, idUsuario, modoTabla='CRUD') {
 
     var ddl_estado_ops = [
@@ -90,7 +90,7 @@ function cargarHabilidades(nombreTabla, IdProySeleccionado, tipoUsuario, modoTab
         { title: 'Descripcion Habilidad', data: 'descripcion', name: 'descripcion', visible: true },
     ];
     // console.log("hab", arreglo);
-    
+    proyecto = IdProySeleccionado;
     var payloadHabilidades = {
         id_proyecto : IdProySeleccionado,
         datos : JSON.stringify( IdProySeleccionado ),
@@ -150,5 +150,5 @@ function cargarTrabajadores(nombreTabla, IdProySeleccionado, tipoUsuario, modoTa
     cargarTablaGenerica(nombreTabla, colsTrabajadores, modoTabla, dataUrl, payloadTrabajadores);
 }
 
-export { cargarProyectos, cargarHabilidades, cargarTrabajadores }
+export { cargarProyectos, cargarHabilidades, cargarTrabajadores, proyecto }
 

@@ -248,11 +248,11 @@ class ProyectoAdm
 
     //////////////////////////////////////////////////////////////////////////////////////
     //SECCION CRUD DE TRABAJADORES ASIGNADOS
-    public static function asignarTrabajadorProyecto($id_usuario, $id_proyecto)
+    public static function asignarTrabajadorProyecto($usuario, $id_proyecto)
     {
         $cadenaSQL = "UPDATE rh_proyecto 
                     SET estado = 'A' 
-                    WHERE id_usuario = '$id_usuario'
+                    WHERE id_usuario = '$usuario->id'
                     AND id_proyecto = '$id_proyecto'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
