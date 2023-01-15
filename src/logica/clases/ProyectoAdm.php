@@ -192,29 +192,21 @@ class ProyectoAdm
 
     //////////////////////////////////////////////////////////////////////////////////////
     //SECCION CRUD DE HABILIDADES REQUERIDAS
-    public static function guardarObjRequerido($habilidad)
+    public static function insertarHabilidadProyecto($id_habilidad, $id_proyecto)
     {
         $UUID = ConectorBD::get_UUIDv4();
-        $cadenaSQL = "INSERT INTO habilidades (id, nombre, descripcion)
+        $cadenaSQL = "INSERT INTO proyectos_habilidades (id, id_habilidad, id_proyecto)
                       VALUES (  '$UUID', 
-                                '$habilidad->nombre', 
-                                '$habilidad->descripcion')";
-        // echo $cadenaSQL;
+                                '$id_habilidad', 
+                                '$id_proyecto')";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
-    public static function modificarObjRequerido($habilidad)
+    public static function eliminarHabilidadProyecto($id, $id_proyecto)
     {
-        $cadenaSQL = "UPDATE habilidades 
-                      SET   nombre = '$habilidad->nombre', 
-                            descripcion = '$habilidad->descripcion', 
-                      WHERE id = '$habilidad->id'";
-        return ConectorBD::ejecutarQuery($cadenaSQL);
-    }
-
-    public static function eliminarObjRequerido($idHabilidad)
-    {
-        $cadenaSQL = "DELETE FROM habilidades WHERE id = '$idHabilidad'";
+        $cadenaSQL = "DELETE FROM proyectos_habilidades 
+                        WHERE id = '$id'
+                        AND id_proyecto = '$id_proyecto'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
@@ -227,7 +219,6 @@ class ProyectoAdm
                       VALUES (  '$UUID', 
                                 '$habilidad->nombre', 
                                 '$habilidad->descripcion')";
-        // echo $cadenaSQL;
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
@@ -248,19 +239,18 @@ class ProyectoAdm
 
     //////////////////////////////////////////////////////////////////////////////////////
     //SECCION CRUD DE TRABAJADORES ASIGNADOS
-    public static function asignarTrabajadorProyecto($usuario, $id_proyecto)
+    public static function insertarTrabajadorProyecto($id_usuario, $id_proyecto)
     {
-        $cadenaSQL = "UPDATE rh_proyecto 
-                    SET estado = 'A' 
-                    WHERE id_usuario = '$usuario->id'
-                    AND id_proyecto = '$id_proyecto'";
+        $cadenaSQL = "UPDATE rh_proyectos 
+                    SET estado = 'A', id_proyecto = '$id_proyecto'
+                    WHERE id_usuario = '$id_usuario'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
     public static function eliminarTrabajadorProyecto($id_usuario, $id_proyecto)
     {
-        $cadenaSQL = "UPDATE rh_proyecto 
-                    SET estado = 'R' 
+        $cadenaSQL = "UPDATE rh_proyectos
+                    SET estado = 'R'
                     WHERE id_usuario = '$id_usuario'
                     AND id_proyecto = '$id_proyecto'";
         return ConectorBD::ejecutarQuery($cadenaSQL);

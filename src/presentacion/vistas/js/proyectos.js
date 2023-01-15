@@ -1,7 +1,9 @@
 import {    cargarTablaGenerica, claseBotonEditarRow, claseBotonEliminarRow     } from "../../../librerias/tablaGenerica.js";
 
 var dataUrl = "http://localhost/SENA-devmanager/src/api/ProyectoControlador.php";
-function cargarProyectos(nombreTabla, idUsuario, modoTabla='CRUD') {
+var id_proyecto;
+
+function cargarProyectos(nombreTabla, idUsuario, modoTabla='R') {
 
     var ddl_estado_ops = [
     { value : 'X', key : '' },
@@ -101,10 +103,10 @@ function cargarHabilidades(nombreTabla, IdProySeleccionado, tipoUsuario, modoTab
     if(nombreTabla == 'tblHab_Requeridas'){
         switch (tipoUsuario) {
             case "A":
-                modoTabla = 'CRUD';
+                modoTabla = 'R';
                 break;
             case "D":
-                modoTabla = 'CR';
+                modoTabla = 'R';
                 break;
             default:
                 modoTabla = 'R';
@@ -119,7 +121,7 @@ function cargarHabilidades(nombreTabla, IdProySeleccionado, tipoUsuario, modoTab
                 modoTabla = 'CRUD';
                 break;
             case "D":
-                modoTabla = 'CR';
+                modoTabla = 'CRUD';
                 break;
             default:
                 modoTabla = 'R';
@@ -146,8 +148,8 @@ function cargarTrabajadores(nombreTabla, IdProySeleccionado, tipoUsuario, modoTa
     }
 
     if($('#'+nombreTabla).lenght) $('#'+nombreTabla).DataTable().clear().draw();
-    cargarTablaGenerica(nombreTabla, colsTrabajadores, modoTabla, dataUrl, payloadTrabajadores);
+    cargarTablaGenerica(nombreTabla, colsTrabajadores, modoTabla, dataUrl, payloadTrabajadores ,null,null,null, IdProySeleccionado);
 }
 
-export { cargarProyectos, cargarHabilidades, cargarTrabajadores, proyecto }
+export { cargarProyectos, cargarHabilidades, cargarTrabajadores}
 
