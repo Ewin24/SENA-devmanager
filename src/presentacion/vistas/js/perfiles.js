@@ -14,41 +14,7 @@ function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
           { title: "Correo", data: "correo", name: "correo", visible: true },
           { title: "Clave", data: "clave_hash", name: "clave_hash", visible: false },
           { title: "Dirección", data: "direccion",name: "direccion", visible: true },
-          { title: "Foto", data: "nombre_foto", name: "nombre_foto", type:'display', className: 'file',
-                // className: 'f32',
-                render: function (data, type) {
-                    return '<img src="'+data+'" style="{border-radius: 70px;}"/> ';
-
-                        // if (type === 'display') {
-                        //     let country = '';
-                            
-                        //     switch (data) {
-                        //         case 'Argentina':
-                        //             country = 'ar';
-                        //             break;
-                        //         case 'Edinburgh':
-                        //             country = '_Scotland';
-                        //             break;
-                        //         case 'London':
-                        //             country = '_England';
-                        //             break;
-                        //         case 'New York':
-                        //         case 'San Francisco':
-                        //             country = 'us';
-                        //             break;
-                        //         case 'Sydney':
-                        //             country = 'au';
-                        //             break;
-                        //         case 'Tokyo':
-                        //             country = 'jp';
-                        //             break;
-                        //     }
-                            
-                        //     return '<span class="flag ' + country + '"></span> ' + data;
-                        // }
-                        // return data;
-                    },
-             visible: true },
+          { title: "Foto", data: "nombre_foto", name: "nombre_foto", className: 'up_img', visible: true },
           { title: "Telefono", data: "telefono", name: "telefono", visible: true },
           { title: "Tipo de Usuario", data: "tipo_usuario", name: "tipo_usuario", className : 'ddl', visible: true },
           { title: "Empresa", data: "id_empresa", name: "id_empresa", className : 'ddl',  visible: true }
@@ -80,19 +46,7 @@ function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
         { title: "Id", data: "id", name: 'id', visible: false },
         { title: 'Nombre Estudio', data: 'id_estudio', name: 'id_estudio', type: 'select', className : 'ddl', visible: true},
         { title: 'Nombre Certificado', data: 'nombre_certificado', name: 'nombre_certificado', visible: true },
-        { title: 'Nombre Archivo', data: 'nombre_archivo', name:'nombre_archivo', className: 'fUpload',
-                    // render: function ( data, type, row, meta ) {
-                    // var idDat = "cert_" + data.id; //meta.row;
-                    // var idDatFN = "datFileName" + meta.row;
-                    // var ctrol = `
-                    //             <div class="input-group">
-                    //             <span class="input-group-btn">
-                    //                 <input id=${idDat} class="btn btn-primary file-upload" type="file" name="file" disabled="disabled"/>
-                    //             </span> 
-                    //             </div>
-                    //             `
-                    // return ctrol;},
-                    visible: true },
+        { title: 'Nombre Archivo', data: 'nombre_archivo', name:'nombre_archivo', className: 'up_doc', visible: true },
         { title: 'Fecha Certificado', data: 'fecha_certificado', name: 'fecha_certificado', className: 'datepicker', visible: true },
         { title: 'Id usuario', data: 'id_usuario', name: 'id_usuario', visible: false},
     ];

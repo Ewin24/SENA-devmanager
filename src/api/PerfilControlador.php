@@ -90,7 +90,6 @@ if (!empty($_POST['action'])) {
                 }
                 $htmlTabla = $_POST['html_tabla'];
                 $json_ddl = Ddl_Parametrizado::getddlOps("tabla= '$htmlTabla' AND campo in('tipo_identificacion', 'tipo_usuario', 'id_empresa')", null);
-
                 $response = array(
                     "data" => $datosPerfil,
                     "idPerfilSeleccionado" => $idUsuario,
@@ -220,7 +219,6 @@ if (!empty($_POST['action'])) {
                     "accion" => "Acción no definida"
                 );
                 break;
-
         }
 
     } catch (customException $e) {
