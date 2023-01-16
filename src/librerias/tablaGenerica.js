@@ -14,8 +14,11 @@ var dataTable = null;
 var ddl_ops = null;
 var dataUrl = null;
 
+var urlControlador = '';
+
 function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador='', payloadInicial = {}, ddl_ops = [], campo_desc = false, arreglo={}, idPadre = '')
 {
+    urlControlador = urlControlador;
     var filaEnEdicion = '';
     var selectorTabla = '#'+nombreTabla
     cols.push({    
@@ -393,45 +396,6 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     $(selectorTabla).on('mousedown', '.select-basic', function(e) {
         e.stopPropagation();
     });
-    
-    // $(selectorTabla).on('click', '.submitBtn', function(e) {
-    //     e.preventDefault();
-    //     var form = $(this).closest('tr'); //.find('#fupForm');  
-    //     var file_data = form.find('td #form-demo input[name=pdf]')[0].value;
-    //     var form_data = form.find('td #form-demo');                  
-    //     form_data.append('pdf', file_data);
-    //     form_data.append('action', 'cargarArchivo_'+nombreTabla);
-    //     // alert(form_data);        
-
-    //     $.ajax({
-    //         method: 'POST',
-    //         type: 'POST', // For jQuery < 1.9
-    //         // url: 'http://localhost/SENA-devmanager/src/upload.php',
-    //         url: urlControlador,
-    //         data: form_data,
-    //         // dataType: 'json',
-    //         cache: false,
-    //         contentType: false,
-    //         processData: false,
-    //         beforeSend: function(){
-    //             $('.submitBtn').attr("disabled","disabled");
-    //             $('#fupForm').css("opacity",".5");
-    //         },
-    //         success: function(response){
-    //             $('.statusMsg').html('');
-    //             if(response.status == 1){
-    //                 $('#fupForm')[0].reset();
-    //                 $('.statusMsg').html('<p class="alert alert-success">'+response.message+'</p>');
-    //             }else{
-    //                 $('.statusMsg').html('<p class="alert alert-danger">'+response.message+'</p>');
-    //             }
-    //             $('#fupForm').css("opacity","");
-    //             $(".submitBtn").removeAttr("disabled");
-    //         }
-    //     });
-    //     e.preventDefault();
-    //     return false;
-    // });
 
 
 //     // $(selectorTabla+" tbody tr td #form-demo").on('submit',(function(e) {
@@ -494,46 +458,54 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
 //     }
 // // });
 
-    // $(selectorTabla).on('click', '.submitBtn', function(event) {
-        
-    //     event.preventDefault();
-    //     // retrieve form element
-    //     var form = this.closest('form');
-    //     // prepare data
-    //     var dReq = {
-    //         'pdf': form[0].files,
-    //         'action': 'cargarArchivo_tblEstudios'
-    //     }
-    //     // get url
-    //     var url = form.action;
-    //     url = urlControlador;
-        
+    $(selectorTabla).on('submit', '#', function(event) {
 
-    //     // send request
-    //     $.ajax({
-    //         type: 'POST',
-    //         method: 'POST',
-    //         url: url,
-    //         data: dReq,
-    //         cache: false,
-    //         contentType: false,
-    //         processData: false,
-    //     });
+        event.preventDefault();
 
+        // retrieve form element
+        var form = this.closest('form');
+        // prepare data
+        var dReq = {
+            'pdf': form[0].files,
+            'action': 'cargarArchivo_tblEstudios'
+        }
+        // get url
+        var url = form.action;
+        url = urlControlador;
+        
+        // send request
+        $.ajax({
+            type: 'POST',
+            method: 'POST',
+            url: url,
+            data: dReq,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success:function(response){
+                // alert("Status: "+response);
+                console.log(rowdata);
+            }, 
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                alert("Status: " + textStatus); 
+                alert("Error: " + errorThrown); 
+            }
+
+        });
+    });
+
+    // // File input field trigger when the HTML element is clicked
+    // $(selectorTabla+ "tbody tr td #dropBox").click(function(){
+    //     $(selectorTabla+ "tbody tr td form input[type=file]").click();
     // });
 
-    // File input field trigger when the HTML element is clicked
-    $(selectorTabla+ "tbody tr td #dropBox").click(function(){
-        $(selectorTabla+ "tbody tr td form input[type=file]").click();
-    });
+    // // Prevent browsers from opening the file when its dragged and dropped
+    // $(document).on('drop dragover', function (e) {
+    //     e.preventDefault();
+    // });
 
-    // Prevent browsers from opening the file when its dragged and dropped
-    $(document).on('drop dragover', function (e) {
-        e.preventDefault();
-    });
-
-    // Call a function to handle file upload on select file
-    $(selectorTabla+ 'tbody tr td form').on('change', '.submitBtn', fileUpload);
+    // // Call a function to handle file upload on select file
+    // $(selectorTabla+ 'tbody tr td form').on('change', '.submitBtn', fileUpload);
 
     // Guardar Cambios
     $('#btn-save-'+nombreTabla).on('click', async function() {
@@ -551,47 +523,16 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             var cells = fila.find("td").not(':first').not(':last');
             cells.each(function(i, elemento) {
 
-                if(elemento.className.toUpperCase().indexOf('FUPLOAD')<0){
+                if(elemento.className.toUpperCase().indexOf('FILE')<0){
                     rowdata[elemento.id] = elemento.value;
                 }
                 else
                 {
-                    var form = fila.find('td #form-demo')[0];
-                    var btn = fila.find('td .submitBtn')
-                    var archivo = '';//{'pdf': form[0].files};
-                    
-                    // rowdata[elemento.id] = sendArchivo(nombreTabla, urlControlador);
-
-                    // var formData = new FormData(document.getElementById("form-demo"));
-                    // formData.append("action", "cargarArchivo_"+nombreTabla);
-                    
-                    
-                    // await fetch('/upload.php', {
-                    //     method: "POST", 
-                    //     body: formData
-                    //   }); 
-
-                    // $.ajax({
-                    //     dataType:"json",
-                    //     method:"POST",
-                    //     url: urlControlador,
-                    //     data: formData,
-                    //     processData: false,
-                    //     contentType: false,
-                    //     success:function(response){
-                    //         // alert("Status: "+response);
-                    //         // console.log(response.data);
-                    //         archivo = response.data;
-                    //         rowdata[elemento.id] = archivo;
-                    //         existenCambiosPendientes = false;
-                    //         insertandoNuevoRegistro = false;
-                    //     }, 
-                    //     error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                    //         alert("Status: " + textStatus); 
-                    //         alert("Error: " + errorThrown); 
-                    //     }
-                    // });
-                    // rowdata[elemento.id] = archivo;
+                    var img = fila.find('td #myUploadedImg')[0];
+                    var ruta = fila.find('td #myUploadedImg').attr('src');
+                    // btn.click();
+                    var ruta_imagen = fila.find('td #myUploadedImg').attr('src');
+                    rowdata[elemento.id] = 'api/'+ruta_imagen;
                 }
             });
             // encontrando id de referencia a la tabla Padre 
@@ -610,12 +551,13 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             var fila = $(selectorTabla+' tbody tr:eq('+filaEnEdicion+')');
             var cells = fila.find("td").not(':first').not(':last');
             cells.each(function(i, elemento) {
-                if(elemento.className.toUpperCase().indexOf('FUPLOAD')<0){
+                if(elemento.className.toUpperCase().indexOf('FILE')<0){
                     rowdata[elemento.id] = elemento.value;
                 }
                 else
                 {
-                    rowdata[elemento.id] = elemento.value;
+                    var ruta_imagen = fila.find('td #myUploadedImg').attr('src');
+                    rowdata[elemento.id] = 'api/'+ruta_imagen;
                 }
             });
 
@@ -742,11 +684,11 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             enableddlEdit($(this))
         });
 
-        $row.find('td.fUpload').each(function(i, el) {
-            enablefileUploadEdit($(this))
+        $row.find('td.file').each(function(i, el) {
+            enableFileUploadEdit($(this))
         });
 
-        $row.find("td").not('.ddl').not('.fUpload')//.not('.datepicker')
+        $row.find("td").not('.ddl').not('.file')//.not('.datepicker')
                        .not(':first').not(':last')
                        .each(function(i, el) {
             enableEditText($(this))
@@ -755,6 +697,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         $row.find('td.datepicker').each(function(i, el) {
             enableDatePicker($(this))
         });
+        
 
         var $cancelButton = $editButton.closest('tr').find("td:last-child i.bi."+claseBotonEliminarRow);
         $cancelButton.removeClass().addClass("bi "+claseBotonCancelarRow);
@@ -762,7 +705,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         $cancelButton.hide();
     }
 
-    function enablefileUploadEdit($cell) {
+    function enableFileUploadEdit($cell) {
         var row_index = $cell.closest('tr').index();
         var rowdata = $(selectorTabla).DataTable().row(row_index).data();
         var idDat = "cert_" + rowdata.id;
@@ -777,17 +720,20 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     `
         // https://www.cloudways.com/blog/the-basics-of-file-upload-in-php/
         //https://github.com/SiddharthaChowdhury/Async-File-Upload-using-PHP-Javascript-AJAX/blob/master/upload_form.html
-        var ctrol2 = 
+        var ctrol2 = `
+                    <input type="file" id="f_UploadFile" class="btn btn-primary file" />
+                    <img id="myUploadedImg" alt="Fotografía" style="width:180px;" />
                     `
-                    <form>
-                        <input type="file" name="fileInput" id="fileInput" class="btn btn-primary submitBtn" onchange="fileUpload()" />
-                    </form>
-                    `
+                    // `
+                    // <form>
+                    //     <input type="file" name="fileInput" id="fileInput" class="btn btn-primary submitBtn" onchange="fileUpload()" />
+                    // </form>
+                    // `
 
                     // `
                     // <form id="form-demo" enctype="multipart/form-data" action=${urlControlador} method="post">
                     //     <input name="pdf" type="file">
-                    //     <button type="submit" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
+                    //     <button type="button" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
                     // </form>
                     // `
 
@@ -816,6 +762,92 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     // </form>
                     // `
         $cell.empty().append(ctrol2);
+    }
+
+    var _URL = window.URL || window.webkitURL;
+    $(".file").change(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    // function fileUpload(e){
+        var archivo, tipo_archivo, ruta_archivo;
+        nombreTabla = e.target.parentElement.parentElement.parentElement.parentElement.id;
+        var campo = e.target.parentElement.id;
+        filaEnEdicion = $(e.target.parentElement).closest('tr') .index();
+        var rowdata = $("#"+nombreTabla).DataTable().row(filaEnEdicion).data();
+        var input = $("#f_UploadFile")[0];
+
+        if (input.id == 'f_UploadFile') {
+
+            var img, file;
+            archivo = input.files[0];
+            tipo_archivo = input.files[0].type;
+            var encode_permitidos = ['application/pdf', 'application/msword', 'application/vnd.ms-office', 'image/jpeg', 'image/png', 'image/jpg'];
+            
+            if((tipo_archivo == encode_permitidos[0]) || (tipo_archivo == encode_permitidos[1]) || (tipo_archivo == encode_permitidos[2])){
+                file = new FileReader();
+                file.onload = function () {
+                    sendFile(urlControlador);
+                };
+                file.onerror = function () {
+                    alert("Este tipo de archivo no es válido o permitido en el sistema:" + tipo_archivo);
+                };
+                file.src = _URL.createObjectURL(archivo);
+            }
+
+            if((tipo_archivo == encode_permitidos[3]) || (tipo_archivo == encode_permitidos[4]) || (tipo_archivo == encode_permitidos[5])){
+                img = new Image();
+                img.onload = function () {
+                    sendFile(urlControlador);
+                };
+                img.onerror = function () {
+                    alert("Este tipo de archivo no es válido o permitido en el sistema:" + archivo.type);
+                };
+                img.src = _URL.createObjectURL(archivo);
+            }else{
+                alert('Solo se permite la carga de archivos, PDF, DOC, JPG, JPEG, & PNG en el sistema.');
+                return false;
+            }
+            
+        }
+    });
+
+    function sendFile(urlSend) {
+        // var filename = '';
+        var formData = new FormData();
+        formData.append('file', $('#f_UploadFile')[0].files[0]);
+        formData.append('action', "cargarArchivo_"+nombreTabla)
+        $.ajax({
+            type: 'post',
+            url: urlSend,
+            data: formData,
+            success: function (response) {
+                var res = JSON.parse(response);
+                var ctrol = $("#myUploadedImg")[0];
+                if (res.status === 1) {
+                    // var my_path = "pdfs/" + status;
+                    $("#myUploadedImg").attr("src", res.data);
+                    // filename = res.data;
+                }
+            },
+            processData: false,
+            contentType: false,
+            error: function () {
+                alert("Se presento un error inesperado. Vuelta a intentar.");
+            }
+        });
+    }
+
+    function enableImgPicker($cell) {
+        var html = 
+        `
+            <input type="file" name="pdf" id="f_UploadImage" class="btn btn-primary img" />
+            <img id="myUploadedImg" alt="Photo" style="width:180px;" />
+        `
+        // `
+        //     <input id="ImageMedias" name="ImageMedias" type="file" accept=".jfif,.jpg,.jpeg,.png,.gif" value=""></input>
+        //     <div id="divImageMediaPreview"></div>
+        // `
+        $cell.empty().append(html);
     }
 
     function enableEditText($cell) {
@@ -848,25 +880,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         });
         select.val(commit ? valor : $cell.data('original-text'));
         $cell.empty().html(select);
-
-        // $cell.empty().append(
-        // $('<select>', {class : 'select-basic'})
-        // .append(options.map(function(option) {
-        // var r = option[key];
-        // if(option[key] === valor) {commit = true;}
-        // $('<option>', {
-        //         value : option.key,
-        //         text : option.value,
-        //     })
-        // })).val(commit ? valor : $cell.data('original-text')));
-        // /*prop('selectedIndex', 
-        //             commit ? 
-        //             valor : 
-        //             $cell.data('original-text'))
-        //         );
-        // */
     }
-
+    
     function enableDatePicker($cell) {
         var txt = $cell.context.childNodes[0].value;
         $cell.empty().append($('<input>', {
@@ -918,12 +933,123 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             $(this).prop('value', commit ? $input.val() : antiguoValor);
         });
 
+        $row.find('td.img').each(function(i, el) {
+            var $input = $(this).find('input');
+            var nuevoValor = $input[0].files; // context.textContent; //context.firstChild.data;
+            var antiguoValor = $input.context.value; //var antiguoValor = $input.data('original-text');
+            // $input.val(commit ? ddl_estado_ops[nuevoValor] : $input.data('original-value')).change();
+            // $input.val(commit ? ddl_estado_ops[nuevoValor] : $input.data('original-value')).trigger('change');
+            // $(this).text(commit ? $input.val() : antiguoValor).trigger( "change" );
+            $(this).prop('value', commit ? $input.val() : antiguoValor);
+        });
+        
+
         var $cancelButton = $saveButton.closest('tr').find("td:last-child i.bi."+claseBotonCancelarRow);
         $cancelButton.removeClass().addClass("bi "+claseBotonEliminarRow);
         $cancelButton.attr("aria-hidden", "true");
         $cancelButton.show();
-    }    
+    } 
+    
+    // $(".img").change(function (e) {
+    //     e.preventDefault();
+    //     if (typeof (FileReader) != "undefined") {
+    //         var dvPreview = $("#divImageMediaPreview");
+    //         dvPreview.html("");
+    //         var imgCtrl = $("#ImageMedias")[0];            
+    //         $(imgCtrl.files).each(function () {
+    //             var file = $(this);                
+    //                 var reader = new FileReader();
+    //                 reader.onload = function (e) {
+    //                     var img = $("<img />");
+    //                     img.attr("style", "width: 150px; height:100px; padding: 10px");
+    //                     img.attr("src", e.target.result);
+    //                     dvPreview.append(img);
+    //                 }
+    //                 reader.readAsDataURL(file[0]);                
+    //         });
 
+    //         var filename = ''
+    //         var formData =  {
+    //                 action: "cargarArchivo_"+nombreTabla,
+    //                 file : imgCtrl.files
+    //         }
+
+    //         // $.ajax({
+    //         //     type:'POST',
+    //         //     url: urlControlador,
+    //         //     data:formData,
+    //         //     // cache:false,
+    //         //     // contentType: false,
+    //         //     // processData: false,
+    //         //     success:function(data){
+    //         //         console.log("success");
+    //         //         console.log(data);
+    //         //         filename = data;
+    //         //     },
+    //         //     error: function(data){
+    //         //         console.log("error");
+    //         //         console.log(data);
+    //         //     }
+    //         // });
+
+    //         formData = new FormData();
+    //         formData.append("action", "cargarArchivo_"+nombreTabla);
+    //         formData.append("img", imgCtrl.files);
+            
+    //         var filename = '';
+            
+    //         fetch(urlControlador, {
+    //             method: "POST", 
+    //             body: formData
+    //         }).then((resp) => {
+    //             console.log(resp.json());
+    //         });
+    //         return filename;
+
+    //     } else {
+    //         alert("Este navegador no soporta Lector de archivos con HTML5");
+    //     }
+    // });
+
+    $(selectorTabla).on('click', '.submitBtn', function(e) {
+        e.preventDefault();
+        var form = $(this).closest('tr'); //.find('#fupForm');  
+        var file_data = form.find('td #form-demo input[name=pdf]')[0].value;
+        var form_data = form.find('td #form-demo');                  
+        form_data.append('pdf', file_data);
+        form_data.append('action', 'cargarArchivo_'+nombreTabla);
+        // alert(form_data);        
+
+        $.ajax({
+            method: 'POST',
+            type: 'POST', // For jQuery < 1.9
+            // url: 'http://localhost/SENA-devmanager/src/upload.php',
+            url: urlControlador,
+            data: form_data,
+            // dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function(){
+                $('.submitBtn').attr("disabled","disabled");
+                $('#fupForm').css("opacity",".5");
+            },
+            success: function(response){
+                $('.statusMsg').html('');
+                if(response.status == 1){
+                    $('#fupForm')[0].reset();
+                    $('.statusMsg').html('<p class="alert alert-success">'+response.message+'</p>');
+                }else{
+                    $('.statusMsg').html('<p class="alert alert-danger">'+response.message+'</p>');
+                }
+                $('#fupForm').css("opacity","");
+                $(".submitBtn").removeAttr("disabled");
+            }
+        });
+        e.preventDefault();
+        return false;
+    });
+    
     activarModoCRUD(modoTabla, nombreTabla);
 }
 
@@ -937,56 +1063,57 @@ function activarModoCRUD(modoelegido, nombreTabla){
     }
 }
 
-function fileUpload(event){
-    // Allowed file types
-    var allowedFileTypes = 'image.*|application/pdf'; //text.*|image.*|application.*
 
-    // Allowed file size
-    var allowedFileSize = 1024; //in KB
+// function fileUpload(event){
+//     // Allowed file types
+//     var allowedFileTypes = 'image.*|application/pdf'; //text.*|image.*|application.*
 
-    // Notify user about the file upload status
-    $("#dropBox").html(event.target.value+" uploading...");
+//     // Allowed file size
+//     var allowedFileSize = 1024; //in KB
+
+//     // Notify user about the file upload status
+//     $("#dropBox").html(event.target.value+" uploading...");
     
-    // Get selected file
-    files = event.target.files;
+//     // Get selected file
+//     files = event.target.files;
     
-    // Form data check the above bullet for what it is  
-    var data = new FormData();                                   
+//     // Form data check the above bullet for what it is  
+//     var data = new FormData();                                   
 
-    // File data is presented as an array
-    for (var i = 0; i < files.length; i++) {
-        var file = files[i];
-        if(!file.type.match(allowedFileTypes)) {              
-            // Check file type
-            $("#dropBox").html('<p class="error">File extension error! Please select the allowed file type only.</p>');
-        }else if(file.size > (allowedFileSize*1024)){
-            // Check file size (in bytes)
-            $("#dropBox").html('<p class="error">File size error! Sorry, the selected file size is larger than the allowed size (>'+allowedFileSize+'KB).</p>');
-        }else{
-            // Append the uploadable file to FormData object
-            data.append('file', file, file.name);
+//     // File data is presented as an array
+//     for (var i = 0; i < files.length; i++) {
+//         var file = files[i];
+//         if(!file.type.match(allowedFileTypes)) {              
+//             // Check file type
+//             $("#dropBox").html('<p class="error">File extension error! Please select the allowed file type only.</p>');
+//         }else if(file.size > (allowedFileSize*1024)){
+//             // Check file size (in bytes)
+//             $("#dropBox").html('<p class="error">File size error! Sorry, the selected file size is larger than the allowed size (>'+allowedFileSize+'KB).</p>');
+//         }else{
+//             // Append the uploadable file to FormData object
+//             data.append('file', file, file.name);
             
-            // Create a new XMLHttpRequest
-            var xhr = new XMLHttpRequest();     
+//             // Create a new XMLHttpRequest
+//             var xhr = new XMLHttpRequest();     
             
-            // Post file data for upload
-            xhr.open('POST', 'upload.php', true);  
-            xhr.send(data);
-            xhr.onload = function () {
-                // Get response and show the uploading status
-                var response = JSON.parse(xhr.responseText);
-                if(xhr.status === 200 && response.status == 'ok'){
-                    $("#dropBox").html('<p class="success">File has been uploaded successfully. Click to upload another file.</p>');
-                }else if(response.status == 'type_err'){
-                    $("#dropBox").html('<p class="error">File extension error! Click to upload another file.</p>');
-                }else{
-                    $("#dropBox").html('<p class="error">Something went wrong, please try again.</p>');
-                }
-            };
-        }
-    }
-    return response;
-}
+//             // Post file data for upload
+//             xhr.open('POST', 'upload.php', true);  
+//             xhr.send(data);
+//             xhr.onload = function () {
+//                 // Get response and show the uploading status
+//                 var response = JSON.parse(xhr.responseText);
+//                 if(xhr.status === 200 && response.status == 'ok'){
+//                     $("#dropBox").html('<p class="success">File has been uploaded successfully. Click to upload another file.</p>');
+//                 }else if(response.status == 'type_err'){
+//                     $("#dropBox").html('<p class="error">File extension error! Click to upload another file.</p>');
+//                 }else{
+//                     $("#dropBox").html('<p class="error">Something went wrong, please try again.</p>');
+//                 }
+//             };
+//         }
+//     }
+//     return response;
+// }
 
 
 async function sendArchivo(nombreTabla, urlEnviar){
@@ -1064,7 +1191,7 @@ function bloquearAccionesPantalla(nombreTabla='', filaEnEdicion=0){
 export {    cargarTablaGenerica,
             bloquearAccionesPantalla,
             desbloquearAccionesPantalla,
-            fileUpload,
+            // fileUpload,
             claseBotonEditarRow,
             claseBotonEliminarRow,
             claseBotonConfirmarRow,

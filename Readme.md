@@ -126,3 +126,5 @@ cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops = [], campo_desc 
 * ajax tdatatable reload : https://datatables.net/forums/discussion/63209/how-to-reload-datatable-after-success-event
 * ajax tdatatable reload : https://stackoverflow.com/questions/12934144/how-to-reload-refresh-jquery-datatable
 * obtener todas las filas de un datatable jquery: https://www.aspsnippets.com/questions/143587/Get-all-rows-data-wile-paging-in-jQuery-DataTables-in-ASPNet/
+* https://codepedia.info/upload-image-using-jquery-ajax-asp-net-c-sharp
+* https://www.codexworld.com/ajax-file-upload-with-form-data-jquery-php-mysql/

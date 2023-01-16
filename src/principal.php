@@ -30,7 +30,7 @@ else {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="assets/sitio.css" type="text/css">
+    <link rel="stylesheet" href="./assets/sitio.css" type="text/css">
     <link rel="stylesheet" href="librerias/bootstrap5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
@@ -41,6 +41,11 @@ else {
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.5.0/css/select.dataTables.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="https://github.com/downloads/lafeber/world-flags-sprite/flags32.css" />
+
+    <script type="module" src="./librerias/dataTables.editor.min.js"></script>
+
 
     <script src="//code.jquery.com/jquery-1.12.4.js"></script>
 
