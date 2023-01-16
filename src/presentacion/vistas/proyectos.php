@@ -83,6 +83,7 @@ switch ($tipoUsuario) {
                 <table id="tblHab_Requeridas" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
                 <table id="new-Hab_Requerida" style="display:none" class="col-auto">
                     <tbody>
+                        
                         <tr>
                             <td></td>
                             <td>__id__</td>
