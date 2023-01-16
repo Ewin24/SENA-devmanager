@@ -182,18 +182,17 @@ if (!empty($_POST['action'])) {
                 );
                 break;
 
-                
+
             case 'cargarArchivo_tblEmpleados':
-                
+
                 // respuesta json por defecto 
-                $response = array( 
+                $response = array(
                     'data' => null,
-                    'status' => 0, 
-                    'message' => 'La carga del archivo ha fallado, intente nuevamente.' 
-                ); 
+                    'status' => 0,
+                    'message' => 'La carga del archivo ha fallado, intente nuevamente.'
+                );
                 $archivo = $_FILES['file']['name'];
-                if(isset($archivo))
-                {
+                if (isset($archivo)) {
                     // obtener extensión del archivo
                     $ext = strtolower(pathinfo($archivo, PATHINFO_EXTENSION));
                     $response = upload::subirArchivo();
@@ -220,7 +219,6 @@ if (!empty($_POST['action'])) {
                 );
                 break;
         }
-
     } catch (customException $e) {
         $response = array(
             "data" => array(),
