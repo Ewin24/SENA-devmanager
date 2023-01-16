@@ -514,8 +514,12 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             contentType: false,
             processData: false,
             success:function(response){
-                // alert("Status: "+response);
-                console.log(rowdata);
+                if(response['error']){
+                    var mensaje = response['error'].split(']:').pop().split(' (')[0];
+                    mostrarAdvertencia(response['accion'].replace('_tbl', ' ') , mensaje);
+                    return;
+                }
+                // console.log(rowdata);
             }, 
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
                 alert("Status: " + textStatus); 
@@ -640,8 +644,12 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             data: dataReq,
             dataType:"json",
             success:function(response){
-                // alert("Status: "+response);
-                console.log(rowdata);
+                if(response['error']){
+                    var mensaje = response['error'].split(']:').pop().split(' (')[0];
+                    mostrarAdvertencia(response['accion'].replace('_tbl', ' ') , mensaje);
+                    return;
+                }
+                // console.log(rowdata);
                 $(selectorTabla).DataTable().ajax.reload();
                 existenCambiosPendientes = false;
                 insertandoNuevoRegistro = false;
