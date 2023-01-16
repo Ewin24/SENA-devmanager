@@ -432,13 +432,13 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 existenCambiosPendientes = false;
                 insertandoNuevoRegistro = false;
                 $(selectorTabla).DataTable().row($(this).closest("tr")).remove().draw();
+                $(selectorTabla).DataTable().ajax.reload();
             }, 
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
                 mostrarAdvertencia('ajax Status', textStatus);
                 mostrarAdvertencia('Error', errorThrown);
             }
         });
-        $(selectorTabla).DataTable().ajax.reload();
     });
 
     $(selectorTabla).on('mousedown', 'input', function(e) {
@@ -566,18 +566,15 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     $('#btn-save-'+nombreTabla).on('click', async function() {
         updateRows(true); // Update all edited rows
         
+        var fila = $(selectorTabla+' tbody tr:eq('+filaEnEdicion+')');
+        var cells = fila.find("td").not(':first').not(':last');
+        var rowdata = $(selectorTabla).DataTable().row(filaEnEdicion).data();
+
         var clase;
-        var rowdata = null;
         var accionCRUD = '';
-        var archivos = {};
-        var fila, cells;
         var img, doc, ruta_doc, ruta_imagen;
 
         if(insertandoNuevoRegistro){
-
-            fila = $(selectorTabla+' tbody tr:first');
-            cells = fila.find("td").not(':first').not(':last');
-            rowdata = $(selectorTabla).DataTable().row(0).data();
 
             cells.each(function(i, elemento) {
 
@@ -608,10 +605,6 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             accionCRUD = 'Insertar';
         }
         else {   
-
-            fila = $(selectorTabla+' tbody tr:eq('+filaEnEdicion+')');
-            cells = fila.find("td").not(':first').not(':last');
-            rowdata = $(selectorTabla).DataTable().row(filaEnEdicion).data();
 
             cells.each(function(i, elemento) {
                                 
@@ -706,7 +699,6 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     $('#addRow'+nombreTabla).click(function() {
         existenCambiosPendientes = true;
         insertandoNuevoRegistro = true;
-        filaEnEdicion = 0;
 
         var PlantillaNuevoRegistro = nombreTabla.substring(3,nombreTabla.length-1);
 
@@ -721,6 +713,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             insertedRow = $(selectorTabla).DataTable().row(rowCount).data(),
             tempRow;
         // console.log(index-1, rowCount, insertedRow );
+        filaEnEdicion = rowCount;
+
 
         // for (var i=rowCount; i>0; i--) {
         //     tempRow = $(selectorTabla).DataTable().row(i-1).data();
@@ -742,15 +736,23 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
 
         // Toggle edit mode upon creation.
         // enableRowEdit($(selectorTabla).find("tbody tr:first-child td i.bi."+claseBotonEditarRow));
-        enableRowEdit($(selectorTabla).find("tbody tr:first-child td i.bi"));
+        // enableRowEdit($(selectorTabla).find("tbody tr:first-child td i.bi"));
+        var selector = `tbody tr:eq(${filaEnEdicion}) td i.bi`;
+        console.log(selector);
+        enableRowEdit($(selectorTabla).find(selector));
         bloquearAccionesPantalla(nombreTabla, filaEnEdicion);
         activar_upload(urlControlador);
         // TODO: Posterior a esta acción, en la tabla proyectos se causa una excepción
     });
 
     function moveToPageWithSelectedItem() {
+       
         var numberOfRows = $(selectorTabla).DataTable().data().length;
         var rowsOnOnePage = $(selectorTabla).DataTable().page.len();
+        if(numberOfRows/rowsOnOnePage > 1){
+            filaEnEdicion = (numberOfRows % rowsOnOnePage) - 1;
+        }
+
         if (rowsOnOnePage < numberOfRows) {
             var selectedNode = $(selectorTabla).DataTable().row(".selected").node();
             var nodePosition = $(selectorTabla).DataTable().rows({order: 'current'}).nodes().indexOf(selectedNode);

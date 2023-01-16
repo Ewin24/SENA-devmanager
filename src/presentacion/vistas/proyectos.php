@@ -407,7 +407,7 @@ switch ($tipoUsuario) {
                 IdProySeleccionado = data.id;
                 // console.log(IdProySeleccionado);
 
-                console.clear();
+                // console.clear();
                 cargarHabilidades('tblHab_Requeridas', IdProySeleccionado, tipoUsuario);
                 cargarHabilidades('tblHab_Disponibles', IdProySeleccionado, tipoUsuario);
                 cargarTrabajadores('tblContratados', IdProySeleccionado, tipoUsuario);
@@ -477,11 +477,22 @@ switch ($tipoUsuario) {
 
         });
 
-        $('#addRowtblProyectos').click(function() {
-            if($('#tblHab_Requeridas').length) $('#tblHab_Requeridas').DataTable().clear().draw();
-            if($('#tblHab_Disponibles').length) $('#tblHab_Disponibles').DataTable().clear().draw();
-            if($('#tblContratados').length) $('#tblContratados').DataTable().clear().draw();
-            if($('#tblCandidatos').length) $('#tblCandidatos').DataTable().clear().draw();
+        // $('#addRowtblProyectos').click(function() {
+        //     $('#tblHab_Requeridas').DataTable().clear().draw();
+        //     $('#tblHab_Disponibles').DataTable().clear().draw();
+        //     $('#tblContratados').DataTable().clear().draw();
+        //     $('#tblCandidatos').DataTable().clear().draw();
+        // });
+
+        $('#addRowtblHab_Disponibles').click(function() {
+            // if($('#tblHab_Requeridas').length) $('#tblHab_Requeridas').DataTable().clear().draw();
+            // if($('#tblHab_Disponibles').length) $('#tblHab_Disponibles').DataTable().clear().draw();
+            // if($('#tblContratados').length) $('#tblContratados').DataTable().clear().draw();
+            // if($('#tblCandidatos').length) $('#tblCandidatos').DataTable().clear().draw();
+            if($("#tblHab_Requeridas").length) $('input[value="Quitar"]').hide();
+            if($("#tblHab_Disponibles").length) $('input[value="Asignar"]').hide();
+            if($("#tblContratados").length) $('input[value="Anular Contrato"]').hide();
+            if($("#tblCandidatos").length) $('input[value="Contratar"]').hide();
         });
 
     });

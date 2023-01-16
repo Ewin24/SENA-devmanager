@@ -32,7 +32,7 @@ function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
     }
 
     //console.log("Perf", arreglo);
-    cargarTablaGenerica(nombreTabla, colsPerfiles, 'R', dataUrl, payloadPerfil); //para que no se puedan borrar, solo admin desde Administracion
+    cargarTablaGenerica(nombreTabla, colsPerfiles, modoTabla, dataUrl, payloadPerfil); //para que no se puedan borrar, solo admin desde Administracion
 
     $('#btn-cancel-'+nombreTabla).click(function() {
         $('#fsEstudios').prop("disabled", false);
