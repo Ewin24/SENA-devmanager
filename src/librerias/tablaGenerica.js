@@ -152,7 +152,9 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                         }
                         // TODO: revisar esto del hipervinculo para abrir
                         if(cols[col].className == 'up_doc'){
-                            var hiperlink = '<a href='+rowData[campo]+' target="_blank">'+cellData.split('/').pop()+'</a>'; 
+                            // var hiperlink = '<a href='+rowData[campo]+' target="_blank">'+cellData.split('/').pop()+'</a>'; 
+                            var valor = cellData != "" ? 'Archivo.pdf':'';
+                            var hiperlink = '<a href='+rowData[campo]+' target="_blank">'+ valor +'</a>'; 
                             $(td).empty().append(hiperlink);
                         }
                         if (cols[col].className == 'up_img') {
@@ -313,6 +315,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             $( selectorCtrlDescripcion ).val(data.descripcion);
         }
 
+        activar_upload(urlControlador);
         // var nonSelected = $(selectorTabla).DataTable().rows( { selected: false } ).nodes().each(function(row){
         //     var but = $(selectorTabla).DataTable().row(row).node().attr('disabled', 'disabled'); //find("td:last-child i.bi."+claseBotonEliminarRow);
         //     but.hide();//.attr('disabled', 'disabled');
@@ -546,6 +549,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     $('#btn-save-'+nombreTabla).on('click', async function() {
         updateRows(true); // Update all edited rows
         
+        var clase;
         var rowdata = null;
         var accionCRUD = '';
         var archivos = {};
@@ -559,25 +563,23 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             rowdata = $(selectorTabla).DataTable().row(0).data();
 
             cells.each(function(i, elemento) {
-                var clase = elemento.className.toUpperCase().trim();
 
-                if(clase.indexOf('UP_IMG') == 0) {
-                    img = fila.find('td #myUploadedImg')[0];
-                    ruta_imagen = fila.find('td #myUploadedImg').attr('src');
-                    rowdata[elemento.id] = base_url+ruta_imagen;
-                }
+                clase = elemento.className.toUpperCase().trim();
+                rowdata[elemento.id] = elemento.value;
 
                 if(clase.indexOf('UP_DOC') == 0) {
                     // es una carga de documento
-                    fila.find("td .submitBtn").click();
                     doc = fila.find('td #uploadDoc')[0];
-                    ruta_doc = fila.find('td #uploadDoc').attr('src');
+                    ruta_doc = fila.find('td #uploadDoc').attr('value');
                     rowdata[elemento.id] = base_url + ruta_doc;
                 }
                 else {
-                    rowdata[elemento.id] = elemento.value;
+                    if(clase.indexOf('UP_IMG') == 0) {
+                        img = fila.find('td #myUploadedImg')[0];
+                        ruta_imagen = fila.find('td #myUploadedImg').attr('src');
+                        rowdata[elemento.id] = base_url+ruta_imagen;
+                    } 
                 }
-
             });
             // encontrando id de referencia a la tabla Padre 
             // TODO: verificar
@@ -595,23 +597,22 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             rowdata = $(selectorTabla).DataTable().row(filaEnEdicion).data();
 
             cells.each(function(i, elemento) {
-                
-                if(elemento.className.toUpperCase().indexOf('UP_IMG') < 0){
-                    rowdata[elemento.id] = elemento.value;
-                } else {
+                                
+                clase = elemento.className.toUpperCase().trim();
+                rowdata[elemento.id] = elemento.value;
 
-                    if(elemento.className.toUpperCase().indexOf('UP_IMG') > 0) {
+                if(clase.indexOf('UP_DOC') == 0) {
+                    // es una carga de documento
+                    doc = fila.find('td #uploadDoc')[0];
+                    ruta_doc = fila.find('td #uploadDoc').attr('value');
+                    rowdata[elemento.id] = base_url + ruta_doc;
+                }
+                else {
+                    if(clase.indexOf('UP_IMG') == 0) {
                         img = fila.find('td #myUploadedImg')[0];
                         ruta_imagen = fila.find('td #myUploadedImg').attr('src');
                         rowdata[elemento.id] = base_url+ruta_imagen;
-                    }
-                    
-                    if(elemento.className.toUpperCase().indexOf('UP_DOC') > 0) {
-                        // es una carga de documento
-                        doc = fila.find('td #uploadDoc')[0];
-                        ruta_doc = fila.find('td #uploadDoc').attr('src');
-                        rowdata[elemento.id] = base_url + ruta_doc;
-                    }
+                    } 
                 }
                 
                 // if(elemento.className.toUpperCase().indexOf('FILE')<0){
@@ -680,7 +681,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     // Botón nuevo proyecto
     $(selectorTabla).css('border-top', 'none')
         .before($('<div>').addClass('addRow')
-        .append($('<button class="btn btn-primary">')
+        .append($('<button class="btn btn-primary" type="button">')
         .attr('id', 'addRow'+nombreTabla)
         .text('Nuevo '+nombreTabla.substring(3,nombreTabla.length-1))));
 
@@ -725,6 +726,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         // enableRowEdit($(selectorTabla).find("tbody tr:first-child td i.bi."+claseBotonEditarRow));
         enableRowEdit($(selectorTabla).find("tbody tr:first-child td i.bi"));
         bloquearAccionesPantalla(nombreTabla, filaEnEdicion);
+        activar_upload(urlControlador);
         // TODO: Posterior a esta acción, en la tabla proyectos se causa una excepción
     });
 
@@ -917,16 +919,16 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     `
         // https://www.cloudways.com/blog/the-basics-of-file-upload-in-php/
         //https://github.com/SiddharthaChowdhury/Async-File-Upload-using-PHP-Javascript-AJAX/blob/master/upload_form.html
-        var ctrol2 =  
-                    // '<input id="uploadDoc" type="file" name="file" class="up_doc" />'
+        var ctrol2 = '<input id="uploadDoc" name="pdf" type="file">'
+                    // <button type="button" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
                     
 
-                    `
-                    <form  enctype="multipart/form-data" action=${urlControlador} method="post">
-                        <input id="uploadDoc" name="pdf" type="file" class='up_doc'>
-                        <button type="button" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
-                    </form>
-                    `
+                    // `
+                    // <form  enctype="multipart/form-data" action=${urlControlador} method="post">
+                    //     <input id="uploadDoc" name="pdf" type="file" class='up_doc'>
+                    //     <button type="button" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
+                    // </form>
+                    // `
 
                     // `
                     // <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}>
@@ -954,62 +956,133 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         $cell.empty().append(ctrol2);
     }
 
-    // $('td.up_doc').change(function (e) {
-    $(selectorTabla).on('click', '.submitBtn', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var archivo, tipo_archivo;
-        nombreTabla = e.target.parentElement.parentElement.parentElement.parentElement.id;
-        filaEnEdicion = $(e.target.parentElement).closest('tr') .index();
-        var input = $("#uploadDoc")[0];
+    // $("input[type='file'].up_doc").change(function (e) {
+    // // $('tbody tr td' ).on('change','#uploadDoc.up_doc' , function (e) {
+    // // $(selectorTabla).on('click', '.submitBtn', function(e) {
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    //     var archivo, tipo_archivo;
+    //     nombreTabla = e.target.parentElement.parentElement.parentElement.parentElement.id;
+    //     filaEnEdicion = $(e.target.parentElement).closest('tr') .index();
+    //     var input = $("#uploadDoc")[0];
 
-        if (input.id == 'uploadDoc') {
+    //     if (input.id == 'uploadDoc') {
 
-            var img, file;
-            archivo = input.files[0];
-            tipo_archivo = input.files[0].type;
-            var encode_permitidos = ['application/pdf', 'application/msword', 'application/vnd.ms-office', 'image/jpeg', 'image/png', 'image/jpg'];
+    //         var img, file;
+    //         archivo = input.files[0];
+    //         tipo_archivo = input.files[0].type;
+    //         var encode_permitidos = ['application/pdf', 'application/msword', 'application/vnd.ms-office', 'image/jpeg', 'image/png', 'image/jpg'];
             
-            if((tipo_archivo == encode_permitidos[0]) || (tipo_archivo == encode_permitidos[1]) || (tipo_archivo == encode_permitidos[2])){
-                file = new FileReader();
-                file.onload = function () {
-                    sendDoc(urlControlador);
-                };
-                file.onerror = function () {
-                    alert("Este tipo de archivo no es válido o permitido en el sistema:" + tipo_archivo);
-                };
-                file.src = _URL.createObjectURL(archivo);
-            }
-            else {
-                alert('Solo se permite la carga de archivos, PDF, DOC, DOCX en el sistema.');
-                return false;
-            }
+    //         if((tipo_archivo == encode_permitidos[0]) || (tipo_archivo == encode_permitidos[1]) || (tipo_archivo == encode_permitidos[2])){
+    //             file = new FileReader();
+    //             file.onload = function () {
+    //                 sendDoc(urlControlador);
+    //             };
+    //             file.onerror = function () {
+    //                 alert("Este tipo de archivo no es válido o permitido en el sistema:" + tipo_archivo);
+    //             };
+    //             file.src = _URL.createObjectURL(archivo);
+    //         }
+    //         else {
+    //             alert('Solo se permite la carga de archivos, PDF, DOC, DOCX en el sistema.');
+    //             return false;
+    //         }
             
-        }
-    });
+    //     }
+    // });
+
+    
+        
+    function activar_upload(urlSend){
+        const inputFile = document.getElementById("uploadDoc");
+        const formData = new FormData();
+
+        const handleSubmit = (e) => {
+            e.preventDefault();
+
+            var archivo, tipo_archivo;
+            nombreTabla = e.target.parentElement.parentElement.parentElement.parentElement.id;
+            filaEnEdicion = $(e.target.parentElement).closest('tr') .index();
+            var input = $("#uploadDoc")[0];
+
+            if (input.id == 'uploadDoc') {
+
+                var img, file;
+                archivo = input.files[0];
+                tipo_archivo = input.files[0].type;
+                var encode_permitidos = ['application/pdf', 'application/msword', 'application/vnd.ms-office', 'image/jpeg', 'image/png', 'image/jpg'];
+                
+                if((tipo_archivo == encode_permitidos[0]) || (tipo_archivo == encode_permitidos[1]) || (tipo_archivo == encode_permitidos[2])){
+                    formData.append('file', $('#uploadDoc')[0].files[0]);
+                    formData.append('action', "cargarArchivo_"+nombreTabla)
+                    fetch(urlSend, {
+                        method: 'POST',
+                        body: formData,
+                    }).then((resp) => {
+                        if(resp['error']){
+                            mostrarAdvertencia('Error inesperado', 'Se presento un error inesperado. Intente la acción nuevamente.');
+                            return;
+                        }
+                        return resp.json();
+                    }).then((json) => {
+                        $("#uploadDoc").attr("value", json.data.data);
+                    });
+                    
+                    // file = new FileReader();
+                    // file.onload = function () {
+                    //     sendDoc(urlSend);
+                    // };
+                    // file.onerror = function () {
+                    //     alert("Este tipo de archivo no es válido o permitido en el sistema:" + tipo_archivo);
+                    // };
+                    // file.src = _URL.createObjectURL(archivo);
+                }
+                else {
+                    alert('Solo se permite la carga de archivos, PDF, DOC, DOCX en el sistema.');
+                    return false;
+                }
+                
+            }
+        };
+
+        inputFile.addEventListener("change", handleSubmit);
+    }
+
 
     function sendDoc(urlSend) {
         var formData = new FormData();
         formData.append('file', $('#uploadDoc')[0].files[0]);
         formData.append('action', "cargarArchivo_"+nombreTabla)
-        $.ajax({
-            type: 'post',
-            url: urlSend,
-            data: formData,
-            success: function (response) {
-                var res = JSON.parse(response);
-                if (res.status === 1) {
-                    // var my_path = "pdfs/" + status;
-                    $("#uploadDoc").attr("value", res.data);
-                    // filename = res.data;
-                }
-            },
-            processData: false,
-            contentType: false,
-            error: function () {
+        fetch(urlSend, {
+            method: 'POST',
+            body: formData,
+        }).then((resp) => {
+            if(resp['error']){
                 mostrarAdvertencia('Error inesperado', 'Se presento un error inesperado. Intente la acción nuevamente.');
+                return;
             }
+            return resp.json();
+        }).then((json) => {
+            $("#uploadDoc").attr("value", res.data);
         });
+        // $.ajax({
+        //     type: 'post',
+        //     url: urlSend,
+        //     data: formData,
+        //     success: function (response) {
+        //         var res = JSON.parse(response);
+        //         if (res.status === 1) {
+        //             // var my_path = "pdfs/" + status;
+        //             $("#uploadDoc").attr("value", res.data);
+        //             // filename = res.data;
+        //         }
+        //     },
+        //     processData: false,
+        //     contentType: false,
+        //     error: function () {
+        //         mostrarAdvertencia('Error inesperado', 'Se presento un error inesperado. Intente la acción nuevamente.');
+        //     }
+        // });
     }
 
     function updateRows(commit) {

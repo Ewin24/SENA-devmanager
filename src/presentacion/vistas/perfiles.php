@@ -77,26 +77,28 @@ switch ($tipoUsuario) {
     <div class="container col-auto justify-content-center">
         <div class="row">
             <legend class="w-auto px-2">Estudios</legend>
-            <table id="tblEstudios" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-            <table id="new-Estudio" style="display:none" class="col-auto">
-                <tbody>
-                    <tr>
-                        <!-- <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}> -->
-                        <td></td>
-                        <td>__id__</td>
-                        <td>__Nombre estudio__</td>
-                        <td>__Nombre Certificado__</td>
-                        <td>archivo</td>
-                        <td>__01/01/2020__</td>
-                        <td>__ident del usuario__</td>
-                        <td>
-                            <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
-                            <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
-                        </td>
-                        <!-- </form> -->
-                    </tr>
-                </tbody>
-            </table>
+            <form enctype="multipart/form-data" action='./../../api/PerfilControlador.php'>
+                <table id="tblEstudios" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+                <table id="new-Estudio" style="display:none" class="col-auto">
+                    <tbody>
+                        <tr>
+                            <!-- <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}> -->
+                            <td></td>
+                            <td>__id__</td>
+                            <td>__Nombre estudio__</td>
+                            <td>__Nombre Certificado__</td>
+                            <td>archivo</td>
+                            <td>__01/01/2020__</td>
+                            <td>__ident del usuario__</td>
+                            <td>
+                                <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
+                                <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                            </td>
+                            <!-- </form> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
         </div>
     </div>
 </fieldset>
@@ -105,23 +107,23 @@ switch ($tipoUsuario) {
     <div class="container col-auto justify-content-center">
         <div class="row">
             <legend class="w-auto px-2">Habilidades</legend>
-            <table id="tblHabilidades" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-            <table id="new-Habilidade" style="display:none" class="col-auto">
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td>__nombre habilidad__</t d>
-                        <td>__Descripcion__</td>
-                        <td>__Experiencia__</td>
-                        <td>__correo representante__</td>
-                        <td>__correo representante__</td>
-                        <td>
-                            <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
-                            <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                <table id="tblHabilidades" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+                <table id="new-Habilidade" style="display:none" class="col-auto">
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td>__nombre habilidad__</t d>
+                            <td>__Descripcion__</td>
+                            <td>__Experiencia__</td>
+                            <td>__correo representante__</td>
+                            <td>__correo representante__</td>
+                            <td>
+                                <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
+                                <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
         </div>
     </div>
 </fieldset>
