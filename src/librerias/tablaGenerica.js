@@ -559,23 +559,23 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             rowdata = $(selectorTabla).DataTable().row(0).data();
 
             cells.each(function(i, elemento) {
+                var clase = elemento.className.toUpperCase().trim();
 
-                if(elemento.className.toUpperCase().indexOf('UP_IMG') < 0){
+                if(clase.indexOf('UP_IMG') == 0) {
+                    img = fila.find('td #myUploadedImg')[0];
+                    ruta_imagen = fila.find('td #myUploadedImg').attr('src');
+                    rowdata[elemento.id] = base_url+ruta_imagen;
+                }
+
+                if(clase.indexOf('UP_DOC') == 0) {
+                    // es una carga de documento
+                    fila.find("td .submitBtn").click();
+                    doc = fila.find('td #uploadDoc')[0];
+                    ruta_doc = fila.find('td #uploadDoc').attr('src');
+                    rowdata[elemento.id] = base_url + ruta_doc;
+                }
+                else {
                     rowdata[elemento.id] = elemento.value;
-                } else {
-
-                    if(elemento.className.toUpperCase().indexOf('UP_IMG') > 0) {
-                        img = fila.find('td #myUploadedImg')[0];
-                        ruta_imagen = fila.find('td #myUploadedImg').attr('src');
-                        rowdata[elemento.id] = base_url+ruta_imagen;
-                    }
-
-                    if(elemento.className.toUpperCase().indexOf('UP_DOC') > 0) {
-                        // es una carga de documento
-                        doc = fila.find('td #uploadDoc')[0];
-                        ruta_doc = fila.find('td #uploadDoc').attr('src');
-                        rowdata[elemento.id] = base_url + ruta_doc;
-                    }
                 }
 
             });
@@ -917,16 +917,16 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     `
         // https://www.cloudways.com/blog/the-basics-of-file-upload-in-php/
         //https://github.com/SiddharthaChowdhury/Async-File-Upload-using-PHP-Javascript-AJAX/blob/master/upload_form.html
-        var ctrol2 =  '<input id="uploadDoc" type="file" name="file" class="up_doc" />'
+        var ctrol2 =  
+                    // '<input id="uploadDoc" type="file" name="file" class="up_doc" />'
                     
 
-                    // `
-                    // <form  enctype="multipart/form-data" action=${urlControlador} method="post">
-                    //     <input id="uploadDoc" name="pdf" type="file" class='up_doc'>
-                    //     <button type="button" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
-                    // </form>
-                    // `
-
+                    `
+                    <form  enctype="multipart/form-data" action=${urlControlador} method="post">
+                        <input id="uploadDoc" name="pdf" type="file" class='up_doc'>
+                        <button type="button" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
+                    </form>
+                    `
 
                     // `
                     // <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}>
@@ -954,7 +954,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         $cell.empty().append(ctrol2);
     }
 
-    $('td.up_doc').change(function (e) {
+    // $('td.up_doc').change(function (e) {
+    $(selectorTabla).on('click', '.submitBtn', function(e) {
         e.preventDefault();
         e.stopPropagation();
         var archivo, tipo_archivo;
@@ -1131,44 +1132,44 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     //     }
     // });
 
-    $(selectorTabla).on('click', '.submitBtn', function(e) {
-        e.preventDefault();
-        var form = $(this).closest('tr'); //.find('#fupForm');  
-        var file_data = form.find('td #form-demo input[name=pdf]')[0].value;
-        var form_data = form.find('td #form-demo');                  
-        form_data.append('pdf', file_data);
-        form_data.append('action', 'cargarArchivo_'+nombreTabla);
-        // alert(form_data);        
+    // $(selectorTabla).on('click', '.submitBtn', function(e) {
+    //     e.preventDefault();
+    //     var form = $(this).closest('tr'); //.find('#fupForm');  
+    //     var file_data = form.find('td #form-demo input[name=pdf]')[0].value;
+    //     var form_data = form.find('td #form-demo');                  
+    //     form_data.append('pdf', file_data);
+    //     form_data.append('action', 'cargarArchivo_'+nombreTabla);
+    //     // alert(form_data);        
 
-        $.ajax({
-            method: 'POST',
-            type: 'POST', // For jQuery < 1.9
-            // url: 'http://localhost/SENA-devmanager/src/upload.php',
-            url: urlControlador,
-            data: form_data,
-            // dataType: 'json',
-            cache: false,
-            contentType: false,
-            processData: false,
-            beforeSend: function(){
-                $('.submitBtn').attr("disabled","disabled");
-                $('#fupForm').css("opacity",".5");
-            },
-            success: function(response){
-                $('.statusMsg').html('');
-                if(response.status == 1){
-                    $('#fupForm')[0].reset();
-                    $('.statusMsg').html('<p class="alert alert-success">'+response.message+'</p>');
-                }else{
-                    $('.statusMsg').html('<p class="alert alert-danger">'+response.message+'</p>');
-                }
-                $('#fupForm').css("opacity","");
-                $(".submitBtn").removeAttr("disabled");
-            }
-        });
-        e.preventDefault();
-        return false;
-    });
+    //     $.ajax({
+    //         method: 'POST',
+    //         type: 'POST', // For jQuery < 1.9
+    //         // url: 'http://localhost/SENA-devmanager/src/upload.php',
+    //         url: urlControlador,
+    //         data: form_data,
+    //         // dataType: 'json',
+    //         cache: false,
+    //         contentType: false,
+    //         processData: false,
+    //         beforeSend: function(){
+    //             $('.submitBtn').attr("disabled","disabled");
+    //             $('#fupForm').css("opacity",".5");
+    //         },
+    //         success: function(response){
+    //             $('.statusMsg').html('');
+    //             if(response.status == 1){
+    //                 $('#fupForm')[0].reset();
+    //                 $('.statusMsg').html('<p class="alert alert-success">'+response.message+'</p>');
+    //             }else{
+    //                 $('.statusMsg').html('<p class="alert alert-danger">'+response.message+'</p>');
+    //             }
+    //             $('#fupForm').css("opacity","");
+    //             $(".submitBtn").removeAttr("disabled");
+    //         }
+    //     });
+    //     e.preventDefault();
+    //     return false;
+    // });
     
     activarModoCRUD(modoTabla, nombreTabla);
 }
