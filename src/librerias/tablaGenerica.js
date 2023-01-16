@@ -414,8 +414,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 $(selectorTabla).DataTable().row($(this).closest("tr")).remove().draw();
             }, 
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                alert("Status: " + textStatus); 
-                alert("Error: " + errorThrown); 
+                mostrarAdvertencia('ajax Status', textStatus);
+                mostrarAdvertencia('Error', errorThrown);
             }
         });
         $(selectorTabla).DataTable().ajax.reload();
@@ -522,8 +522,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 // console.log(rowdata);
             }, 
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                alert("Status: " + textStatus); 
-                alert("Error: " + errorThrown); 
+                mostrarAdvertencia('ajax Status', textStatus);
+                mostrarAdvertencia('Error', errorThrown);
             }
 
         });
@@ -655,8 +655,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 insertandoNuevoRegistro = false;
             }, 
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                alert("Status: " + textStatus); 
-                alert("Error: " + errorThrown); 
+                mostrarAdvertencia('ajax Status', textStatus);
+                mostrarAdvertencia('Error', errorThrown);
             }
         });
 
@@ -848,7 +848,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     sendImg(urlControlador);
                 };
                 file.onerror = function () {
-                    alert("Este tipo de archivo no es válido o permitido en el sistema:" + tipo_archivo);
+                    mostrarAdvertencia('Archivo no permitido', "Este tipo de archivo no es válido o permitido en el sistema:" + tipo_archivo);
                 };
                 file.src = _URL.createObjectURL(archivo);
             }
@@ -859,11 +859,13 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     sendImg(urlControlador);
                 };
                 img.onerror = function () {
-                    alert("Este tipo de archivo no es válido o permitido en el sistema:" + archivo.type);
+                    // alert("Este tipo de archivo no es válido o permitido en el sistema:" + archivo.type);
+                    mostrarAdvertencia('Archivo no permitido', "Este tipo de archivo no es válido o permitido en el sistema:" + tipo_archivo);
                 };
                 img.src = _URL.createObjectURL(archivo);
             }else{
-                alert('Solo se permite la carga de archivos, PDF, DOC, JPG, JPEG, & PNG en el sistema.');
+                // alert('Solo se permite la carga de archivos, PDF, DOC, JPG, JPEG, & PNG en el sistema.');
+                mostrarAdvertencia('Archivo no permitido', 'Solo se permite la carga de archivos, PDF, DOC, JPG, JPEG, & PNG en el sistema.');
                 return false;
             }
             
@@ -890,7 +892,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             processData: false,
             contentType: false,
             error: function () {
-                alert("Se presento un error inesperado. Vuelta a intentar.");
+                mostrarAdvertencia('Error inesperado', 'Se presento un error inesperado. Intente la acción nuevamente.');
             }
         });
     }
@@ -1000,7 +1002,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             processData: false,
             contentType: false,
             error: function () {
-                alert("Se presento un error inesperado. Vuelta a intentar.");
+                mostrarAdvertencia('Error inesperado', 'Se presento un error inesperado. Intente la acción nuevamente.');
             }
         });
     }
