@@ -14,43 +14,39 @@ function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
           { title: "Correo", data: "correo", name: "correo", visible: true },
           { title: "Clave", data: "clave_hash", name: "clave_hash", visible: false },
           { title: "Dirección", data: "direccion",name: "direccion", visible: true },
-          { title: "Foto", data: "nombre_foto", name: "nombre_foto", type:'display',
-                //     render: function ( file_id ) {
-                //         return file_id ? '<img src="'+editor.file( 'files', file_id ).web_path+'"/>' : null;
-                //     },
-                //     defaultContent: "No image",
-                // clearText: "Clear",
-                // noImageText: 'No image',
-                
-                className: 'f32',
+          { title: "Foto", data: "nombre_foto", name: "nombre_foto", type:'display', className: 'file',
+                // className: 'f32',
                 render: function (data, type) {
-                        if (type === 'display') {
-                            let country = '';
+                    return '<img src="'+data+'" style="{border-radius: 70px;}"/> ';
+
+                        // if (type === 'display') {
+                        //     let country = '';
                             
-                            switch (data) {
-                                case 'Argentina':
-                                    country = 'ar';
-                                    break;
-                                case 'Edinburgh':
-                                    country = '_Scotland';
-                                    break;
-                                case 'London':
-                                    country = '_England';
-                                    break;
-                                case 'New York':
-                                case 'San Francisco':
-                                    country = 'us';
-                                    break;
-                                case 'Sydney':
-                                    country = 'au';
-                                    break;
-                                case 'Tokyo':
-                                    country = 'jp';
-                                    break;
-                            }
-                            return '<span class="flag ' + country + '"></span> ' + data;
-                        }
-                        return data;
+                        //     switch (data) {
+                        //         case 'Argentina':
+                        //             country = 'ar';
+                        //             break;
+                        //         case 'Edinburgh':
+                        //             country = '_Scotland';
+                        //             break;
+                        //         case 'London':
+                        //             country = '_England';
+                        //             break;
+                        //         case 'New York':
+                        //         case 'San Francisco':
+                        //             country = 'us';
+                        //             break;
+                        //         case 'Sydney':
+                        //             country = 'au';
+                        //             break;
+                        //         case 'Tokyo':
+                        //             country = 'jp';
+                        //             break;
+                        //     }
+                            
+                        //     return '<span class="flag ' + country + '"></span> ' + data;
+                        // }
+                        // return data;
                     },
              visible: true },
           { title: "Telefono", data: "telefono", name: "telefono", visible: true },

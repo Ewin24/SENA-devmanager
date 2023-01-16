@@ -183,67 +183,34 @@ if (!empty($_POST['action'])) {
                 );
                 break;
 
+                
+            case 'cargarArchivo_tblEmpleados':
+                
+                // respuesta json por defecto 
+                $response = array( 
+                    'data' => null,
+                    'status' => 0, 
+                    'message' => 'La carga del archivo ha fallado, intente nuevamente.' 
+                ); 
+                $archivo = $_FILES['file']['name'];
+                if(isset($archivo))
+                {
+                    // obtener extensión del archivo
+                    $ext = strtolower(pathinfo($archivo, PATHINFO_EXTENSION));
+                    $response = upload::subirArchivo();
+                }
+                $response["accion"] = $accion;
+
+                break;
+
             case 'cargarArchivo_tblEstudios':
 
-
-
-                /////////
-                // File upload folder 
-                //   $uploadDir='pdfs/'; 
-
-                //   // Allowed file types 
-                //   $allowTypes = array('pdf','doc','docx','jpg','png','jpeg'); 
-
-                //   // Default response 
-                //   // $response = array( 
-                //   //     'status' => 0, 
-                //   //     'message' => 'La carga del archivo ha fallado, intente nuevamente.' 
-                //   // ); 
-                //   $datos = '';
-                //   // If form is submitted 
-                //   if(isset($_FILES['pdf']))
-                //   {
-                //       // Crea la carpeta para almacenar los archivos PDF si no existe
-                //       if (!is_dir($uploadDir)) {
-                //           mkdir($uploadDir);
-                //       }
-                //       // Upload file 
-                //       $uploadedFile = ''; 
-                //       if(!empty($_FILES["pdf"]["name"]))
-                //       {
-                //           // File path config
-                //           $fileName = basename($_FILES["pdf"]["name"]); 
-                //           $targetFilePath = $uploadDir.$fileName; 
-                //           $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION); 
-
-                //           // Allow certain file formats to upload 
-                //           if(in_array($fileType, $allowTypes)){ 
-
-                //               // Upload file to the server 
-                //               move_uploaded_file($_FILES["pdf"]["tmp_name"], $targetFilePath);
-                //               $datos = $uploadedFile;
-                //               // if($Res){ 
-                //               //     $uploadedFile = $fileName; 
-                //               // }else{ 
-                //               //     $uploadStatus = 0; 
-                //               //     $datos = 'Ha ocurrido un error en la carga del archivo'; 
-                //               // } 
-                //           }
-                //           else
-                //           {
-                //               $uploadStatus=0; 
-                //               $datos ='Solo las extensiones'.implode('/', $allowTypes).' son permitidas para cargar.'; 
-                //           }
-                //       }
-                //   }
-                /////////
-
                 //TODO: hacer verificacion de seguridad, con la ruta verificar que el archivo si es PDF
-                $datos = upload::subirPdf();
-
+                $resultado = upload::subirPdf();
+                
                 $response = array(
-                    "data" => $datos,
-                    "accion" => $accion
+                    "data" => $resultado,
+                    "accion" => "Acción no definida"
                 );
                 break;
 
@@ -253,7 +220,9 @@ if (!empty($_POST['action'])) {
                     "accion" => "Acción no definida"
                 );
                 break;
+
         }
+
     } catch (customException $e) {
         $response = array(
             "data" => array(),
