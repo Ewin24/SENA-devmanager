@@ -87,76 +87,23 @@ if (!empty($_POST['action'])) {
                     break;
             }
 
-            $json_ddl = "{
-                    'estado': {
-                        'E': 'Ejec',
-                        'P': 'Pend'
-                    },
-                    'correo_director': {
-                        '8fa903bc-0789-43b2-901b-70d6c60334ba': 'fgarcia@gmail.com',
-                        '499a9d4a-fbf1-4ea7-850b-01bf301a98af': 'wtrigos@gmail.com'
-                    }
-                }";
+            // $json_ddl = "{
+            //         'estado': {
+            //             'E': 'Ejec',
+            //             'P': 'Pend'
+            //         },
+            //         'correo_director': {
+            //             '8fa903bc-0789-43b2-901b-70d6c60334ba': 'fgarcia@gmail.com',
+            //             '499a9d4a-fbf1-4ea7-850b-01bf301a98af': 'wtrigos@gmail.com'
+            //         }
+            //     }";
             $htmlTabla = $_POST['html_tabla']; //'tblProyectos';
             $json_ddl = Ddl_Parametrizado::getddlOps("tabla='$htmlTabla' AND campo in ('estado', 'id_director')", null);
-            //echo($json_ddl);
             $response = array(
                 "data" => $datosProyectos,
                 "ddl_ops" => $json_ddl,
                 "tipoUsuario" => $tipoUsuario
             );
-            // $response = $datosProyectos;
-            break;
-
-            ///////////////////////////////////////////////////////////////////////////////////////////
-            //SECCION DE HABILIDADES REQUERIDAS
-        case 'Insertar_tblHab_Requeridas':
-            header('Content-type: application/json; charset=utf-8');
-            $newHabRequerida = json_decode($_POST['datos']);
-            if ($newHabRequerida != null) {
-                $newHabRequerida->id = ConectorBD::get_UUIDv4();
-                ProyectoAdm::guardarObj($newHabRequerida);
-            }
-
-            $response = array(
-                "data" => $newHabRequerida->id,
-                "accion" => $accion
-            );
-            break;
-
-        case 'Eliminar_tblHab_Requeridas':
-            header('Content-type: application/json; charset=utf-8');
-            $eliminarHabRequerida = $_POST['datos'];
-
-            if ($eliminarHabRequerida != null || $eliminarHabRequerida != '') {
-                ProyectoAdm::eliminarObj($eliminarHabRequerida);
-            }
-
-            $response = array(
-                "data" => $eliminarHabRequerida,
-                "accion" => $accion
-            );
-            break;
-
-        case 'cargar_tblHab_Requeridas':
-            header('Content-type: application/json; charset=utf-8');
-            $idProySeleccionado = $_POST['datos'];
-
-            if ($idProySeleccionado != null || $idProySeleccionado != '') {
-                //// Definiendo la lógica de negocio dentro de la clase
-                $datHabAsignados = ProyectoAdm::getHabilidadesRequeridas($idProySeleccionado);
-            }
-
-            $htmlTabla = $_POST['html_tabla']; //'tblHab_Requeridas';
-            $json_ddl = Ddl_Parametrizado::getddlOps("tabla='$htmlTabla' AND campo in ('id_proyecto', 'id_habilidad')", null);
-
-            $response = array(
-                "data" => $datHabAsignados,
-                "ddl_ops" => $json_ddl,
-                "idProySeleccionado" => $idProySeleccionado,
-                "accion" => $accion
-            );
-
             break;
 
             ///////////////////////////////////////////////////////////////////////////////////////////
@@ -179,7 +126,7 @@ if (!empty($_POST['action'])) {
             header('Content-type: application/json; charset=utf-8');
             $editarHabDisponible = json_decode($_POST['datos']);
 
-            if ($editarHabDisponible != null || $editarHabDisponible != '') {
+            if ($editarHabDisponible != null && $editarHabDisponible != '') {
                 ProyectoAdm::modificarObjDisponible($editarHabDisponible);
             }
 
@@ -193,7 +140,7 @@ if (!empty($_POST['action'])) {
             header('Content-type: application/json; charset=utf-8');
             $eliminarHabDisponible = $_POST['datos'];
 
-            if ($eliminarHabDisponible != null || $eliminarHabDisponible != '') {
+            if ($eliminarHabDisponible != null && $eliminarHabDisponible != '') {
                 ProyectoAdm::eliminarObjDisponible($eliminarHabDisponible);
             }
 
@@ -206,7 +153,7 @@ if (!empty($_POST['action'])) {
             header('Content-type: application/json; charset=utf-8');
             $idProySeleccionado = $_POST['datos'];
 
-            if ($idProySeleccionado != null || $idProySeleccionado != '') {
+            if ($idProySeleccionado != null && $idProySeleccionado != '') {
                 //// Definiendo la lógica de negocio dentro de la clase
                 $datHabDisponibles = ProyectoAdm::getHabilidadesDisponibles($idProySeleccionado);
             }
@@ -218,20 +165,90 @@ if (!empty($_POST['action'])) {
             break;
 
             ///////////////////////////////////////////////////////////////////////////////////////////
-            //SECCION DE CONTRATADOS
-        case 'Insertar_tblContratados':
+            //SECCION DE HABILIDADES REQUERIDAS
+        case 'Insertar_tblHab_Requeridas':
             header('Content-type: application/json; charset=utf-8');
-            $trabajadores = $_POST['datos'];
-            $idProySeleccionado = $_POST['id_proyecto'];
-
-            if ($idProySeleccionado != null || $idProySeleccionado != '') {
-                //// Definiendo la lógica de negocio dentro de la clase
-                ProyectoAdm::asignarTrabajadorProyecto($trabajadores, $idProySeleccionado);
+            $id_habilidad = $_POST['datos'];
+            $id_proyecto = $_POST['id_proyecto'];
+            if ($id_habilidad != null && $id_habilidad != '') {
+                ProyectoAdm::insertarHabilidadProyecto($id_habilidad, $id_proyecto);
             }
 
             $response = array(
-                "data" => $trabajadores,
+                "data" => $id_habilidad,
+                "id_proyecto" => $id_proyecto,
+                "accion" => $accion
+            );
+            break;
+
+        case 'Eliminar_tblHab_Requeridas':
+            header('Content-type: application/json; charset=utf-8');
+            $id = $_POST['datos'];
+            $id_proyecto = $_POST['id_proyecto'];
+            if ($id != null && $id != '') {
+                ProyectoAdm::eliminarHabilidadProyecto($id, $id_proyecto);
+            }
+
+            $response = array(
+                "data" => $id,
+                "id_proyecto" => $id_proyecto,
+                "accion" => $accion
+            );
+            break;
+
+        case 'cargar_tblHab_Requeridas':
+            header('Content-type: application/json; charset=utf-8');
+            $idProySeleccionado = $_POST['datos'];
+
+            if ($idProySeleccionado != null && $idProySeleccionado != '') {
+                //// Definiendo la lógica de negocio dentro de la clase
+                $datHabAsignados = ProyectoAdm::getHabilidadesRequeridas($idProySeleccionado);
+            }
+
+            $htmlTabla = $_POST['html_tabla']; //'tblHab_Requeridas';
+            $json_ddl = Ddl_Parametrizado::getddlOps("tabla='$htmlTabla' AND campo in ('id_proyecto', 'id_habilidad')", null);
+
+            $response = array(
+                "data" => $datHabAsignados,
+                "ddl_ops" => $json_ddl,
                 "idProySeleccionado" => $idProySeleccionado,
+                "accion" => $accion
+            );
+
+            break;
+
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            //SECCION DE CONTRATADOS
+        case 'Insertar_tblContratados':
+            header('Content-type: application/json; charset=utf-8');
+            $id_usuario = $_POST['datos'];
+            $id_proySeleccionado = $_POST['id_proyecto'];
+
+            if ($id_proySeleccionado != null && $id_proySeleccionado != '') {
+                //// Definiendo la lógica de negocio dentro de la clase
+                ProyectoAdm::insertarTrabajadorProyecto($id_usuario, $id_proySeleccionado);
+            }
+
+            $response = array(
+                "data" => $id_usuario,
+                "idProySeleccionado" => $id_proySeleccionado,
+                "accion" => $accion
+            );
+            break;
+
+        case 'Eliminar_tblContratados':
+            header('Content-type: application/json; charset=utf-8');
+            $id_usuario = $_POST['datos'];
+            $id_proySeleccionado = $_POST['id_proyecto'];
+
+            if ($id_proySeleccionado != null && $id_proySeleccionado != '') {
+                //// Definiendo la lógica de negocio dentro de la clase
+                ProyectoAdm::eliminarTrabajadorProyecto($id_usuario, $id_proySeleccionado);
+            }
+
+            $response = array(
+                "data" => $id_usuario,
+                "idProySeleccionado" => $id_proySeleccionado,
                 "accion" => $accion
             );
             break;
@@ -240,7 +257,7 @@ if (!empty($_POST['action'])) {
             header('Content-type: application/json; charset=utf-8');
             $idProySeleccionado = $_POST['datos'];
 
-            if ($idProySeleccionado != null || $idProySeleccionado != '') {
+            if ($idProySeleccionado != null && $idProySeleccionado != '') {
                 //// Definiendo la lógica de negocio dentro de la clase
                 $datTrabAsignados = ProyectoAdm::getTrabajadoresAsignados($idProySeleccionado);
             }
@@ -262,7 +279,7 @@ if (!empty($_POST['action'])) {
             header('Content-type: application/json; charset=utf-8');
             $idProySeleccionado = $_POST['datos'];
 
-            if ($idProySeleccionado != null || $idProySeleccionado != '') {
+            if ($idProySeleccionado != null && $idProySeleccionado != '') {
                 //// Definiendo la lógica de negocio dentro de la clase
                 $datTrabDisponibles = ProyectoAdm::getTrabajadoresDisponibles($idProySeleccionado);
             }
@@ -278,7 +295,6 @@ if (!empty($_POST['action'])) {
             );
             break;
 
-
         default:
             $response = array(
                 "data" => array(),
@@ -286,23 +302,13 @@ if (!empty($_POST['action'])) {
             );
             break;
     }
-    // }
-    // catch (customException $e) {
-    //     $response = array(
-    //         "data" => array(),
-    //         "accion" => "Error generado en $accion",
-    //         "error" => $e->errorMessage()
-    //     );
-    // }
-
-    // catch(Exception $e) {
-    //     $response = array(
-    //         "data" => array(),
-    //         "accion" => "Error generado en $accion",
-    //         "error" => $e->getMessage()
-    //     );
-    // }
-
-    // Enviando respuesta hacia el frontEnd
-    echo json_encode($response);
 }
+// catch (Exception $e) {
+//     $response = array(
+//         "data" => array(),
+//         "accion" => "Error generado en $accion",
+//         "error" => $e->getMessage()
+//     );
+// }
+// Enviando respuesta hacia el frontEnd
+echo json_encode($response);

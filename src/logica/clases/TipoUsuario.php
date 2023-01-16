@@ -27,29 +27,28 @@ class TipoUsuario
     }
     public static function getMenu($codigo)
     {
-        $menu = "<nav class='border border-1'>";
-        $menu .= "<ul class='nav justify-content-center'>";
-        // $menu .= "<li class='border nav-item me-4'><a class='nav-link active' aria-current='page' href='#'>Inicio</a></li>";
-        $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/proyectos.php&accion=''&id='''>Proyectos</a></li>";
-        $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/perfiles.php&accion=''&id='''>Perfil</a></li>";
-        // $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/habilidad.php&accion=''&id='''>Habilidades</a></li>";
+        // $menu = "<nav class='border border-1'>";
+        // $menu .= "<ul class='nav justify-content-center'>";
+        // $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/proyectos.php&accion=''&id='''>Proyectos</a></li>";
+        // $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/perfiles.php&accion=''&id='''>Perfil</a></li>";
+
+        $menu = "<div class='col-sm-3'><div class='card'><div class='card-body'><h5 class='card-title'>Proyectos</h5><a href='principal.php?CONTENIDO=presentacion/vistas/proyectos.php&accion=''&id=''' class='btn btn-primary'>Acceder</a></div></div></div>";
+        $menu .= "<div class='col-sm-3'><div class='card'><div class='card-body'><h5 class='card-title'>Perfil</h5><a href='principal.php?CONTENIDO=presentacion/vistas/perfiles.php&accion=''&id=''' class='btn btn-primary'>Acceder</a></div></div></div>";
 
         switch ($codigo) {
             case 'A':
-                $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/empresas.php&accion=''&id='''>Administración</a></li>";
+                $menu .= "<div class='col-sm-3'><div class='card'><div class='card-body'><h5 class='card-title'>Administracion</h5><a href='principal.php?CONTENIDO=presentacion/vistas/empresas.php&accion=''&id=''' class='btn btn-primary'>Acceder</a></div></div></div>";
+                // $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/empresas.php&accion=''&id='''>Administración</a></li>";
                 break;
             case 'T':
-                //$menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/empresas.php&accion=''&id='''>Usuarios</a></li>"; //director tambien accede a pantalla usuarios
-
                 break;
             case 'D':
-                //$menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/empresas.php&accion=''&id='''>Usuarios</a></li>"; //director tambien accede a pantalla usuarios
                 break;
             default:
-
                 break;
         }
-        $menu .= "<li class='border nav-item '><a class='nav-link' href='index.php'>Salir</a></li>";
+        $menu .= "<div class='col-sm-3'><div class='card'><div class='card-body'><h5 class='card-title'>----------></h5><a href='index.php' class='btn btn-primary'>Salir</a> </div></div></div>";
+        // $menu .= "<li class='border nav-item '><a class='nav-link' href='index.php'>Salir</a></li>";
         return $menu;
     }
 }

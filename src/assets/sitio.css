@@ -1,3 +1,43 @@
+/* codigo de estilos de la pagina */
+body{
+  background: #ECE9E6;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #FFFFFF, #ECE9E6);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #FFFFFF, #ECE9E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */  
+}
+
+.card {
+  border-radius: 10px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: #4caf50;
+  border-color: #4caf50;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background-color: #3e8e41;
+  border-color: #3e8e41;
+}
+
+.container-fluid {
+  padding: 50px 0;
+}
+/* codigo de estilos de la pagina */
+
+
+
+
+
+
 /*https://stackoverflow.com/questions/38487394/how-to-set-the-color-and-font-style-of-placeholder-text*/
 ::-webkit-input-placeholder {
   text-align: center;

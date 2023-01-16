@@ -34,7 +34,6 @@ else {
     <link rel="stylesheet" href="librerias/bootstrap5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    
 
     <!-- http://jsbin.com/hojexud/edit?html,js,output -->
     <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" />
@@ -61,6 +60,12 @@ else {
 
     <script type="module" src="./librerias/tablaGenerica.js"></script>
 
+    <!-- inicio de estilos -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>  -->
+
     <!-- 
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
@@ -81,14 +86,17 @@ else {
 </head>
 
 <body>
-    <div id="encabezado" class="m-4 text-center">
-        <a href="./principal.php" target="">
-            <h1 class="display-1">DevManager</h1s>
-        </a>
+    <div class="container-fluid bg-primary text-white text-center">
+        <h1>DevManager</h1>
     </div>
-    <div id="menu" class="mt-5">
-        <?= $menu ?>
+
+    <!-- <div id="menu" class="mt-5"> -->
+    <div class="container mt-3">
+        <div class="row">
+            <?= $menu ?>
+        </div>
     </div>
+    <!-- </div> -->
     <div id="contenido">
         <?= include $_REQUEST['CONTENIDO'] ?>
     </div>
