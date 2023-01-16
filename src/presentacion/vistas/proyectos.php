@@ -58,7 +58,7 @@ switch ($tipoUsuario) {
                 <tbody>
                     <tr>
                         <td></td>
-                        <td>__id__</td>
+                        <td>1</td>
                         <td>__nombre__</td>
                         <td>__descripcion__</td>
                         <td>__P__</td>
@@ -91,7 +91,7 @@ switch ($tipoUsuario) {
 
                         <tr>
                             <td></td>
-                            <td>__id__</td>
+                            <td>1</td>
                             <td>__Proyecto__</td>
                             <td>__Habilidad__</td>
                             <td>
@@ -451,12 +451,12 @@ switch ($tipoUsuario) {
             }
         });
 
-        $('#addRowtblProyectos').click(function() {
-            $('#tblHab_Requeridas').DataTable().clear().draw();
-            $('#tblHab_Disponibles').DataTable().clear().draw();
-            $('#tblContratados').DataTable().clear().draw();
-            $('#tblCandidatos').DataTable().clear().draw();
-        });
+        // $('#addRowtblProyectos').click(function() {
+        //     if($('#tblHab_Requeridas').length) $('#tblHab_Requeridas').DataTable().clear().draw();
+        //     if($('#tblHab_Disponibles').length) $('#tblHab_Disponibles').DataTable().clear().draw();
+        //     if($('#tblContratados').length) $('#tblContratados').DataTable().clear().draw();
+        //     if($('#tblCandidatos').length) $('#tblCandidatos').DataTable().clear().draw();
+        // });
 
     });
 </script>

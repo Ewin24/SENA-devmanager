@@ -49,6 +49,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             });
 
     dataTable = null;
+    var primerRegistro = $.fn.dataTable.absoluteOrder( '1' );
 
     //// definir id para cada fila: 
     //// https://datatables.net/reference/option/rowId
@@ -119,6 +120,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             $(row).attr('id', data.id);
         },
         "columnDefs": [ 
+            { targets: 1, type: primerRegistro },
             {
                 targets: '_all',
                 "createdCell": function (td, cellData, rowData, row, col) {
@@ -703,17 +705,18 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             rowCount = $(selectorTabla).DataTable().data().length-1,
             insertedRow = $(selectorTabla).DataTable().row(rowCount).data(),
             tempRow;
-        console.log(index-1, rowCount, insertedRow);
+        console.log(index-1, rowCount, insertedRow, );
 
-        for (var i=rowCount; i>0; i--) {
-            tempRow = $(selectorTabla).DataTable().row(i-1).data();
-            $(selectorTabla).DataTable().row(i).data(tempRow);
-            $(selectorTabla).DataTable().row(i-1).data(insertedRow);
-        }
+        // for (var i=rowCount; i>0; i--) {
+        //     tempRow = $(selectorTabla).DataTable().row(i-1).data();
+        //     $(selectorTabla).DataTable().row(i).data(tempRow);
+        //     $(selectorTabla).DataTable().row(i-1).data(insertedRow);
+        // }
         
         //refresh the page
-        $(selectorTabla).DataTable().row(0).select();
+        $(selectorTabla).DataTable().row(rowCount).select();
         $(selectorTabla).DataTable().page(currentPage).draw(false);
+        moveToPageWithSelectedItem();
         	
         // https://datatables.net/beta/1.8/examples/api/add_row.html
         // https://stackoverflow.com/questions/52792749/how-to-get-datatables-header-name
@@ -729,6 +732,17 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         activar_upload(urlControlador);
         // TODO: Posterior a esta acción, en la tabla proyectos se causa una excepción
     });
+
+    function moveToPageWithSelectedItem() {
+        var numberOfRows = $(selectorTabla).DataTable().data().length;
+        var rowsOnOnePage = $(selectorTabla).DataTable().page.len();
+        if (rowsOnOnePage < numberOfRows) {
+            var selectedNode = $(selectorTabla).DataTable().row(".selected").node();
+            var nodePosition = $(selectorTabla).DataTable().rows({order: 'current'}).nodes().indexOf(selectedNode);
+            var pageNumber = Math.floor(nodePosition / rowsOnOnePage);
+            $(selectorTabla).DataTable().page(pageNumber).draw(false); //move to page with the element
+        }
+    }
 
     // habilitar edición
     function enableRowEdit($editButton) {
@@ -1045,7 +1059,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             }
         };
 
-        inputFile.addEventListener("change", handleSubmit);
+        if(inputFile){inputFile.addEventListener("change", handleSubmit);}
     }
 
 
