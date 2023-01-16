@@ -28,6 +28,11 @@ else {
 <html lang="es">
 
 <head>
+    <!-- fuentes de google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap" rel="stylesheet">
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./assets/sitio.css" type="text/css">
@@ -45,7 +50,6 @@ else {
     <link rel="stylesheet" type="text/css" href="https://github.com/downloads/lafeber/world-flags-sprite/flags32.css" />
 
     <script type="module" src="./librerias/dataTables.editor.min.js"></script>
-
 
     <script src="//code.jquery.com/jquery-1.12.4.js"></script>
 
@@ -86,17 +90,25 @@ else {
 </head>
 
 <body>
-    <div class="container-fluid bg-primary text-white text-center">
-        <h1 class="display-2">DevManager</h1>
+    <div id="title" class="container-fluid text-white text-center p-2">
+        <h1 class="display-1">DevManager</h1>
     </div>
 
-    <!-- <div id="menu" class="mt-5"> -->
-    <div class="container mt-3">
-        <div class="row">
-            <?= $menu ?>
+    <nav id="nav" class="navbar navbar-expand-lg mt-1">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="mx-auto">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <?= $menu ?>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-    <!-- </div> -->
+    </nav>
+
     <div id="contenido">
         <?= include $_REQUEST['CONTENIDO'] ?>
     </div>
