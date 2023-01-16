@@ -36,6 +36,7 @@ class Perfil
             $this->correo = $campo['correo'];
             $this->clave_hash = $campo['clave_hash'];
             $this->direccion = $campo['direccion'];
+            $this->nombre_foto = $campo['nombre_foto'];
             $this->telefono = $campo['telefono'];
             $this->tipo_usuario = $campo['tipo_usuario'];
             $this->id_empresa = $campo['id_empresa'];
@@ -264,12 +265,12 @@ class Perfil
 
     public static function getListaEnObjetos($filtro, $orden)
     {
-        $resultado = Usuario::getLista($filtro, $orden);
+        $resultado = Perfil::getLista($filtro, $orden);
 
         $lista = array();
 
         for ($i = 0; $i < count($resultado); $i++) {
-            $usuario = new Usuario($resultado[$i], null);
+            $usuario = new Perfil($resultado[$i], null);
             $lista[$i] = $usuario;
         }
         //print_r($lista);
@@ -278,7 +279,7 @@ class Perfil
 
     public static function getListaEnJson($filtro, $orden)
     {
-        $datos = Usuario::getListaEnObjetos($filtro, $orden);
+        $datos = Perfil::getListaEnObjetos($filtro, $orden);
         return json_encode($datos);
     }
 }

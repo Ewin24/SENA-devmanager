@@ -37,6 +37,7 @@ class Usuario
             $this->correo = $campo['correo'];
             $this->clave_hash = $campo['clave_hash'];
             $this->direccion = $campo['direccion'];
+            $this->nombre_foto = $campo['nombre_foto'];
             $this->telefono = $campo['telefono'];
             $this->tipo_usuario = $campo['tipo_usuario'];
             $this->id_empresa = $campo['id_empresa'];
