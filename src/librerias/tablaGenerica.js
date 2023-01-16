@@ -680,7 +680,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     // Botón nuevo proyecto
     $(selectorTabla).css('border-top', 'none')
         .before($('<div>').addClass('addRow')
-        .append($('<button>')
+        .append($('<button class="btn btn-primary">')
         .attr('id', 'addRow'+nombreTabla)
         .text('Nuevo '+nombreTabla.substring(3,nombreTabla.length-1))));
 
@@ -819,11 +819,15 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     }
     
     function enableImgPicker($cell) {
+        var campo = $cell.context.id;
+        var valor = $(selectorTabla).DataTable().row($cell.closest('tr').index()).data()[campo];
+
         var html = `
-                    <input type="file" id="uploadImage" class="up_img" />
+                    <input type="file" id="uploadImage" class="up_img"/>
                     <img id="myUploadedImg" alt="Fotografía" style="width:180px;display: none;" />
                     `
         $cell.empty().append(html);
+        $cell.find('#uploadImage').attr('value', valor);
     }
 
     var _URL = window.URL || window.webkitURL;
