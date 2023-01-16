@@ -31,7 +31,7 @@ switch ($tipoUsuario) {
 
     default: //trabajador (modo: Solo lectura): perfiles existentes
         // $datosProyectos = $USUARIO->getProyectosUsuario($USUARIO->getId());
-        $modoTabla = 'R';
+        $modoTabla = 'CRUD';
         // echo "Usuario T";
         break;
 }

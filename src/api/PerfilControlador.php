@@ -183,18 +183,17 @@ if (!empty($_POST['action'])) {
                 );
                 break;
 
-                
+
             case 'cargarArchivo_tblEmpleados':
-                
+
                 // respuesta json por defecto 
-                $response = array( 
+                $response = array(
                     'data' => null,
-                    'status' => 0, 
-                    'message' => 'La carga del archivo ha fallado, intente nuevamente.' 
-                ); 
+                    'status' => 0,
+                    'message' => 'La carga del archivo ha fallado, intente nuevamente.'
+                );
                 $archivo = $_FILES['file']['name'];
-                if(isset($archivo))
-                {
+                if (isset($archivo)) {
                     // obtener extensión del archivo
                     $ext = strtolower(pathinfo($archivo, PATHINFO_EXTENSION));
                     $response = upload::subirArchivo();
@@ -207,7 +206,7 @@ if (!empty($_POST['action'])) {
 
                 //TODO: hacer verificacion de seguridad, con la ruta verificar que el archivo si es PDF
                 $resultado = upload::subirPdf();
-                
+
                 $response = array(
                     "data" => $resultado,
                     "accion" => "Acción no definida"
@@ -220,9 +219,7 @@ if (!empty($_POST['action'])) {
                     "accion" => "Acción no definida"
                 );
                 break;
-
         }
-
     } catch (customException $e) {
         $response = array(
             "data" => array(),

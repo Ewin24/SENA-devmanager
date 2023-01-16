@@ -66,7 +66,7 @@ function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
     }
 
     //console.log("Perf", arreglo);
-    cargarTablaGenerica(nombreTabla, colsPerfiles, modoTabla, dataUrl, payloadPerfil);
+    cargarTablaGenerica(nombreTabla, colsPerfiles, 'R', dataUrl, payloadPerfil); //para que no se puedan borrar, solo admin desde Administracion
 
     $('#btn-cancel-'+nombreTabla).click(function() {
         $('#fsEstudios').prop("disabled", false);
@@ -74,7 +74,7 @@ function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
     });
 }
 
-function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
+function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='R'){
     var colsEstudios = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         { title: "Id", data: "id", name: 'id', visible: false },
@@ -107,7 +107,7 @@ function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
     cargarTablaGenerica(nombreTabla, colsEstudios, modoTabla, dataUrl, payloadEstudios);
 }
 
-function cargarHabilidades(nombreTabla, IdPerfilSeleccionado, modoTabla='CRUD'){
+function cargarHabilidades(nombreTabla, IdPerfilSeleccionado, modoTabla='R'){
     var colsHabilidades = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         { title: 'Nombre Habilidad', data: 'id_habilidad', name: 'id_habilidad', className : 'ddl' ,visible: true},
