@@ -108,7 +108,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         // scrollX: true,
         destroy: true,
         processing: true,
-        select:{ style:'single', toggleable: true },
+        select:{ style:'single' }, //toggleable: true },
         // fnInitComplete: function(oSettings, json) {
         //         // Seleccionar primera fila automáticamente;
         //         $(selectorTabla+' tbody tr:eq(0)').click();
@@ -261,6 +261,16 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         }
     });
 
+    //     // // eventos de selección de fila
+    // $(selectorTabla+' tbody').on('click', 'tr', function () {
+    //     if ($(this).hasClass('selected')) {
+    //         $(this).removeClass('selected');
+    //     }
+    //     else {
+    //         $(this).addClass('selected');
+    //     }
+    // });
+
     // // // eventos de selección de fila
     // $(selectorTabla+' tbody').on('click', 'tr', function () {
         
@@ -302,7 +312,6 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     $(selectorTabla).on('mousedown.edit', 'i.bi.'+`${claseBotonEditarRow}`, function(e) {
         enableRowEdit($(this));
         existenCambiosPendientes = true;
-        $(selectorTabla).DataTable().row($(this)).select().draw();
 
         filaEnEdicion = $(this).closest('tr').index();
 
@@ -322,6 +331,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         }
 
         activar_upload(urlControlador);
+        $(this).closest('tr').click();
+        $(selectorTabla).DataTable().row($(this)).select().draw();
         // var nonSelected = $(selectorTabla).DataTable().rows( { selected: false } ).nodes().each(function(row){
         //     var but = $(selectorTabla).DataTable().row(row).node().attr('disabled', 'disabled'); //find("td:last-child i.bi."+claseBotonEliminarRow);
         //     but.hide();//.attr('disabled', 'disabled');

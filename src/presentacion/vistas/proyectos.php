@@ -211,6 +211,7 @@ switch ($tipoUsuario) {
                     success: function(response) {
                         // alert("Status: "+response);
                         console.log(response);
+                        $('#tbl_Proyectos').DataTable().ajax.reload();
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         alert("Status: " + textStatus);
@@ -220,7 +221,6 @@ switch ($tipoUsuario) {
             }
         });
 
-        $('#tbl_Proyectos').DataTable().ajax.reload();
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -246,7 +246,9 @@ switch ($tipoUsuario) {
                     dataType: "json",
                     success: function(response) {
                         // alert("Status: "+response);
-                        console.log(response);
+                        // console.log('///////////' + response.json);
+                        $('#tblHab_Disponibles').DataTable().ajax.reload();
+                        $('#tblHab_Requeridas').DataTable().ajax.reload();
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         alert("Status: " + textStatus);
@@ -255,9 +257,6 @@ switch ($tipoUsuario) {
                 });
             }
         });
-
-        $('#tblHab_Disponibles').DataTable().ajax.reload();
-        $('#tblHab_Requeridas').DataTable().ajax.reload();
     }
 
     function quitarHabilidades() {
@@ -281,7 +280,9 @@ switch ($tipoUsuario) {
                     dataType: "json",
                     success: function(response) {
                         // alert("Status: "+response);
-                        console.log(response);
+                        // console.log('///////////' + response.json);
+                        $('#tblHab_Disponibles').DataTable().ajax.reload();
+                        $('#tblHab_Requeridas').DataTable().ajax.reload();
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         alert("Status: " + textStatus);
@@ -290,9 +291,6 @@ switch ($tipoUsuario) {
                 });
             }
         });
-
-        $('#tblHab_Disponibles').DataTable().ajax.reload();
-        $('#tblHab_Requeridas').DataTable().ajax.reload();
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -318,7 +316,9 @@ switch ($tipoUsuario) {
                     dataType: "json",
                     success: function(response) {
                         // alert("Status: "+response);
-                        console.log('///////////' + response.json);
+                        // console.log('///////////' + response.json);
+                        $('#tblCandidatos').DataTable().ajax.reload();
+                        $('#tblContratados').DataTable().ajax.reload();
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         alert("Status: " + textStatus);
@@ -327,9 +327,6 @@ switch ($tipoUsuario) {
                 });
             }
         });
-
-        $('#tblCandidatos').DataTable().ajax.reload();
-        $('#tblContratados').DataTable().ajax.reload();
     }
     //quitar de trabajadores contratados y pasarlo a rechazado
     function quitarTrabajadores() {
@@ -353,7 +350,9 @@ switch ($tipoUsuario) {
                     dataType: "json",
                     success: function(response) {
                         // alert("Status: "+response);
-                        console.log('///////////' + response.json);
+                        // console.log('///////////' + response.json);
+                        $('#tblCandidatos').DataTable().ajax.reload();
+                        $('#tblContratados').DataTable().ajax.reload();
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         alert("Status: " + textStatus);
@@ -362,9 +361,6 @@ switch ($tipoUsuario) {
                 });
             }
         });
-
-        $('#tblCandidatos').DataTable().ajax.reload();
-        $('#tblContratados').DataTable().ajax.reload();
     }
 </script>
 
@@ -391,12 +387,16 @@ switch ($tipoUsuario) {
 
 
     $(document).ready(function() {
+        $('input[value="Quitar"]').hide();
+        $('input[value="Asignar"]').hide();
+        $('input[value="Anular Contrato"]').hide();
+        $('input[value="Contratar"]').hide();
+
         cargarProyectos('tblProyectos', idUsuario, modoTabla);
         var IdProySeleccionado = '';
         var selectorTabla = '#tblProyectos'
 
         $(selectorTabla + ' tbody').on('click', 'tr', function() {
-            // if($(this).hasClass('selected')) {
             // var celda = dataTable.cell(this);
             var rowindex = $(this).closest("tr").index();
             // console.log(selectorTabla, rowindex);
@@ -412,6 +412,12 @@ switch ($tipoUsuario) {
                 cargarHabilidades('tblHab_Disponibles', IdProySeleccionado, tipoUsuario);
                 cargarTrabajadores('tblContratados', IdProySeleccionado, tipoUsuario);
                 cargarTrabajadores('tblCandidatos', IdProySeleccionado, tipoUsuario);
+
+                if($("#tblHab_Requeridas").length) $('input[value="Quitar"]').show();
+                if($("#tblHab_Disponibles").length) $('input[value="Asignar"]').show();
+                if($("#tblContratados").length) $('input[value="Anular Contrato"]').show();
+                if($("#tblCandidatos").length) $('input[value="Contratar"]').show();
+
                 // //// peticion - https://coderszine.com/live-datatables-crud-with-ajax-php-mysql/
                 // var dataReq = {
                 //     datos : IdProySeleccionado, 
@@ -449,14 +455,34 @@ switch ($tipoUsuario) {
                 //         cargarTrabajadores('tblCandidatos', dTrabDisp, modoTabla);
                 // });
             }
+
+            if ( $("#guardarCambiostblProyectos").css("display") === 'none'){
+                if($('#desctblProyectos').css("display") === 'block') {
+                    // console.log("hijas");
+                    $('#fsHabilidades').css("display", "block");
+                    $('#fsTrabajadores').css("display", "block");
+                }
+                else{
+                    // console.log("ocultar");
+                    $('#fsHabilidades').css("display", "none");
+                    $('#fsTrabajadores').css("display", "none");
+                }
+            }      
+            else{
+                // console.log("todo oculto");
+                $('#fsHabilidades').css("display", "none");
+                $('#fsTrabajadores').css("display", "none");
+            }      
+            
+
         });
 
-        // $('#addRowtblProyectos').click(function() {
-        //     if($('#tblHab_Requeridas').length) $('#tblHab_Requeridas').DataTable().clear().draw();
-        //     if($('#tblHab_Disponibles').length) $('#tblHab_Disponibles').DataTable().clear().draw();
-        //     if($('#tblContratados').length) $('#tblContratados').DataTable().clear().draw();
-        //     if($('#tblCandidatos').length) $('#tblCandidatos').DataTable().clear().draw();
-        // });
+        $('#addRowtblProyectos').click(function() {
+            if($('#tblHab_Requeridas').length) $('#tblHab_Requeridas').DataTable().clear().draw();
+            if($('#tblHab_Disponibles').length) $('#tblHab_Disponibles').DataTable().clear().draw();
+            if($('#tblContratados').length) $('#tblContratados').DataTable().clear().draw();
+            if($('#tblCandidatos').length) $('#tblCandidatos').DataTable().clear().draw();
+        });
 
     });
 </script>
