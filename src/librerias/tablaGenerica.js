@@ -80,15 +80,19 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 return json.data;
             }, 
             // success:function(response){
-            //     alert("Status: "+response);
+            //     // alert("Status: "+response);
             //     console.log(response);
             //     existenCambiosPendientes = false;
             //     insertandoNuevoRegistro = false;
+            //     return response.data;
             // }, 
-            // error: function(XMLHttpRequest, textStatus, errorThrown) { 
-            //     alert("Status: " + textStatus); 
-            //     alert("Error: " + errorThrown); 
-            // }
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                // alert("Status: " + textStatus); 
+                // alert("Error: " + errorThrown); 
+                var titulo = "<b>Error al cargar : </b>"+ nombreTabla.substring(3,nombreTabla.length-1);
+                var mensaje = "<b>Error en la invocación de : </b> "+payloadInicial['action'] + "<br><b>Detalle del Error : </b>"+ errorThrown['message'];
+                mostrarAdvertencia(titulo, mensaje);
+            }
         },
         // data: arreglo,
         columns: cols,
