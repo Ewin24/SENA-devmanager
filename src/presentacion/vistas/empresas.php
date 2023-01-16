@@ -194,7 +194,7 @@ switch ($tipoUsuario) {
         });
 
         $('#addRowtblEmpresas').click(function() {
-            $('#tblEmpleados').DataTable().clear().draw();
+            if($('#tblEmpleados').length) {$('#tblEmpleados').DataTable().clear().draw();}
         });
 
     });

@@ -13,6 +13,7 @@ var insertandoNuevoRegistro = false;
 var dataTable = null;
 var ddl_ops = null;
 var dataUrl = null;
+var base_url = 'http://localhost/SENA-devmanager/src/api/';
 
 var urlControlador = '';
 
@@ -150,9 +151,12 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                             }
                         }
                         // TODO: revisar esto del hipervinculo para abrir
-                        if(cols[col].className == 'fUpload'){
-                            var hiperlink = jQuery('<a>').attr('href', rowData[campo]).text(cellData.split('/', -1));
+                        if(cols[col].className == 'up_doc'){
+                            var hiperlink = '<a href='+rowData[campo]+' target="_blank">'+cellData.split('/').pop()+'</a>'; 
                             $(td).empty().append(hiperlink);
+                        }
+                        if (cols[col].className == 'up_img') {
+                            $(td).empty().append('<img src="'+ cellData +'" style="{border-radius: 70px;}"/> ');
                         }
                     }
                 }
@@ -355,6 +359,28 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     //     });
     // });
 
+    function mostrarAdvertencia(titulo, mensaje) {
+        var html = `
+        <div id="myModal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header modal-">
+                        <h3 class="modal-title">${titulo}</h#>
+                    </div>
+                    <div class="modal-body">
+                        <p>${mensaje}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `
+        $(document.body).append(html);
+        $("#myModal").modal("show");
+    }
+    
     // boton confirmar
     $(selectorTabla).on('mousedown.save', "i.bi."+claseBotonConfirmarRow, function(e) {
         updateRow($(this), true); // Pass save button to function.
@@ -376,6 +402,11 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             data: dataReq,
             dataType:"json",
             success:function(response){
+                if(response['error']){
+                    var mensaje = response['error'].split(']:').pop().split(' (')[0];
+                    mostrarAdvertencia(response['accion'].replace('_tbl', ' ') , mensaje);
+                    return;
+                }
                 // alert("Status: "+response);
                 console.log(rowdata);
                 existenCambiosPendientes = false;
@@ -383,8 +414,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 $(selectorTabla).DataTable().row($(this).closest("tr")).remove().draw();
             }, 
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                alert("Status: " + textStatus); 
-                alert("Error: " + errorThrown); 
+                mostrarAdvertencia('ajax Status', textStatus);
+                mostrarAdvertencia('Error', errorThrown);
             }
         });
         $(selectorTabla).DataTable().ajax.reload();
@@ -483,12 +514,16 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             contentType: false,
             processData: false,
             success:function(response){
-                // alert("Status: "+response);
-                console.log(rowdata);
+                if(response['error']){
+                    var mensaje = response['error'].split(']:').pop().split(' (')[0];
+                    mostrarAdvertencia(response['accion'].replace('_tbl', ' ') , mensaje);
+                    return;
+                }
+                // console.log(rowdata);
             }, 
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                alert("Status: " + textStatus); 
-                alert("Error: " + errorThrown); 
+                mostrarAdvertencia('ajax Status', textStatus);
+                mostrarAdvertencia('Error', errorThrown);
             }
 
         });
@@ -514,26 +549,35 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         var rowdata = null;
         var accionCRUD = '';
         var archivos = {};
+        var fila, cells;
+        var img, doc, ruta_doc, ruta_imagen;
 
         if(insertandoNuevoRegistro){
-            var row = $(selectorTabla).DataTable().row(0);
-            rowdata = row.data();
 
-            var fila = $(selectorTabla+' tbody tr:first');
-            var cells = fila.find("td").not(':first').not(':last');
+            fila = $(selectorTabla+' tbody tr:first');
+            cells = fila.find("td").not(':first').not(':last');
+            rowdata = $(selectorTabla).DataTable().row(0).data();
+
             cells.each(function(i, elemento) {
 
-                if(elemento.className.toUpperCase().indexOf('FILE')<0){
+                if(elemento.className.toUpperCase().indexOf('UP_IMG') < 0){
                     rowdata[elemento.id] = elemento.value;
+                } else {
+
+                    if(elemento.className.toUpperCase().indexOf('UP_IMG') > 0) {
+                        img = fila.find('td #myUploadedImg')[0];
+                        ruta_imagen = fila.find('td #myUploadedImg').attr('src');
+                        rowdata[elemento.id] = base_url+ruta_imagen;
+                    }
+
+                    if(elemento.className.toUpperCase().indexOf('UP_DOC') > 0) {
+                        // es una carga de documento
+                        doc = fila.find('td #uploadDoc')[0];
+                        ruta_doc = fila.find('td #uploadDoc').attr('src');
+                        rowdata[elemento.id] = base_url + ruta_doc;
+                    }
                 }
-                else
-                {
-                    var img = fila.find('td #myUploadedImg')[0];
-                    var ruta = fila.find('td #myUploadedImg').attr('src');
-                    // btn.click();
-                    var ruta_imagen = fila.find('td #myUploadedImg').attr('src');
-                    rowdata[elemento.id] = 'api/'+ruta_imagen;
-                }
+
             });
             // encontrando id de referencia a la tabla Padre 
             // TODO: verificar
@@ -544,21 +588,40 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             }
             accionCRUD = 'Insertar';
         }
-        else{   
-            // var idx = $(selectorTabla).DataTable().rows({selected: true}).indexes()[0];
+        else {   
+
+            fila = $(selectorTabla+' tbody tr:eq('+filaEnEdicion+')');
+            cells = fila.find("td").not(':first').not(':last');
             rowdata = $(selectorTabla).DataTable().row(filaEnEdicion).data();
 
-            var fila = $(selectorTabla+' tbody tr:eq('+filaEnEdicion+')');
-            var cells = fila.find("td").not(':first').not(':last');
             cells.each(function(i, elemento) {
-                if(elemento.className.toUpperCase().indexOf('FILE')<0){
+                
+                if(elemento.className.toUpperCase().indexOf('UP_IMG') < 0){
                     rowdata[elemento.id] = elemento.value;
+                } else {
+
+                    if(elemento.className.toUpperCase().indexOf('UP_IMG') > 0) {
+                        img = fila.find('td #myUploadedImg')[0];
+                        ruta_imagen = fila.find('td #myUploadedImg').attr('src');
+                        rowdata[elemento.id] = base_url+ruta_imagen;
+                    }
+                    
+                    if(elemento.className.toUpperCase().indexOf('UP_DOC') > 0) {
+                        // es una carga de documento
+                        doc = fila.find('td #uploadDoc')[0];
+                        ruta_doc = fila.find('td #uploadDoc').attr('src');
+                        rowdata[elemento.id] = base_url + ruta_doc;
+                    }
                 }
-                else
-                {
-                    var ruta_imagen = fila.find('td #myUploadedImg').attr('src');
-                    rowdata[elemento.id] = 'api/'+ruta_imagen;
-                }
+                
+                // if(elemento.className.toUpperCase().indexOf('FILE')<0){
+                //     rowdata[elemento.id] = elemento.value;
+                // }
+                // else
+                // {
+                //     var ruta_imagen = fila.find('td #myUploadedImg').attr('src');
+                //     rowdata[elemento.id] = base_url+ruta_imagen;
+                // }
             });
 
             accionCRUD = 'Modificar';
@@ -581,15 +644,19 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             data: dataReq,
             dataType:"json",
             success:function(response){
-                // alert("Status: "+response);
-                console.log(rowdata);
+                if(response['error']){
+                    var mensaje = response['error'].split(']:').pop().split(' (')[0];
+                    mostrarAdvertencia(response['accion'].replace('_tbl', ' ') , mensaje);
+                    return;
+                }
+                // console.log(rowdata);
                 $(selectorTabla).DataTable().ajax.reload();
                 existenCambiosPendientes = false;
                 insertandoNuevoRegistro = false;
             }, 
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                alert("Status: " + textStatus); 
-                alert("Error: " + errorThrown); 
+                mostrarAdvertencia('ajax Status', textStatus);
+                mostrarAdvertencia('Error', errorThrown);
             }
         });
 
@@ -684,11 +751,15 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             enableddlEdit($(this))
         });
 
-        $row.find('td.file').each(function(i, el) {
-            enableFileUploadEdit($(this))
+        $row.find('td.up_img').each(function(i, el) {
+            enableImgPicker($(this))
         });
 
-        $row.find("td").not('.ddl').not('.file')//.not('.datepicker')
+        $row.find('td.up_doc').each(function(i, el) {
+            enableDocUploadEdit($(this))
+        });
+
+        $row.find("td").not('.ddl').not('.up_img').not('.up_doc')//.not('.datepicker')
                        .not(':first').not(':last')
                        .each(function(i, el) {
             enableEditText($(this))
@@ -705,150 +776,6 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         $cancelButton.hide();
     }
 
-    function enableFileUploadEdit($cell) {
-        var row_index = $cell.closest('tr').index();
-        var rowdata = $(selectorTabla).DataTable().row(row_index).data();
-        var idDat = "cert_" + rowdata.id;
-        var ctrol = `
-                    <form id="form-demo" onsubmit="return false">
-                        <div class="input-group">
-                        <span class="input-group-btn">
-                            <input id=${idDat} class="btn btn-primary file-upload" type="file" name="file"/>
-                        </span> 
-                        </div>
-                    </form>
-                    `
-        // https://www.cloudways.com/blog/the-basics-of-file-upload-in-php/
-        //https://github.com/SiddharthaChowdhury/Async-File-Upload-using-PHP-Javascript-AJAX/blob/master/upload_form.html
-        var ctrol2 = `
-                    <input type="file" id="f_UploadFile" class="btn btn-primary file" />
-                    <img id="myUploadedImg" alt="Fotografía" style="width:180px;" />
-                    `
-                    // `
-                    // <form>
-                    //     <input type="file" name="fileInput" id="fileInput" class="btn btn-primary submitBtn" onchange="fileUpload()" />
-                    // </form>
-                    // `
-
-                    // `
-                    // <form id="form-demo" enctype="multipart/form-data" action=${urlControlador} method="post">
-                    //     <input name="pdf" type="file">
-                    //     <button type="button" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
-                    // </form>
-                    // `
-
-
-                    // `
-                    // <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}>
-                    //     <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
-                    //     <input type="submit" name="action" class="btn btn-primary submitBtn" value="cargarArchivo_tblEstudios"/>
-                    // </form>
-                    // `
-                    // `
-                    // <form id="form-demo" enctype="multipart/form-data">
-                    //     <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
-                    //     <input type="submit" name="action" class="btn btn-primary submitBtn" value="cargarArchivo_tblEstudios"/>
-                    // </form>
-                    // `
-
-                    // `
-                    // <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}>
-                    //     <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
-                    // </form>
-                    // `
-                    // <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}>
-                    //     <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
-                    //     <input type="submit" name="submit" class="btn btn-primary submitBtn" value="SUBMIT"/>
-                    // </form>
-                    // `
-        $cell.empty().append(ctrol2);
-    }
-
-    var _URL = window.URL || window.webkitURL;
-    $(".file").change(function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-    // function fileUpload(e){
-        var archivo, tipo_archivo, ruta_archivo;
-        nombreTabla = e.target.parentElement.parentElement.parentElement.parentElement.id;
-        var campo = e.target.parentElement.id;
-        filaEnEdicion = $(e.target.parentElement).closest('tr') .index();
-        var rowdata = $("#"+nombreTabla).DataTable().row(filaEnEdicion).data();
-        var input = $("#f_UploadFile")[0];
-
-        if (input.id == 'f_UploadFile') {
-
-            var img, file;
-            archivo = input.files[0];
-            tipo_archivo = input.files[0].type;
-            var encode_permitidos = ['application/pdf', 'application/msword', 'application/vnd.ms-office', 'image/jpeg', 'image/png', 'image/jpg'];
-            
-            if((tipo_archivo == encode_permitidos[0]) || (tipo_archivo == encode_permitidos[1]) || (tipo_archivo == encode_permitidos[2])){
-                file = new FileReader();
-                file.onload = function () {
-                    sendFile(urlControlador);
-                };
-                file.onerror = function () {
-                    alert("Este tipo de archivo no es válido o permitido en el sistema:" + tipo_archivo);
-                };
-                file.src = _URL.createObjectURL(archivo);
-            }
-
-            if((tipo_archivo == encode_permitidos[3]) || (tipo_archivo == encode_permitidos[4]) || (tipo_archivo == encode_permitidos[5])){
-                img = new Image();
-                img.onload = function () {
-                    sendFile(urlControlador);
-                };
-                img.onerror = function () {
-                    alert("Este tipo de archivo no es válido o permitido en el sistema:" + archivo.type);
-                };
-                img.src = _URL.createObjectURL(archivo);
-            }else{
-                alert('Solo se permite la carga de archivos, PDF, DOC, JPG, JPEG, & PNG en el sistema.');
-                return false;
-            }
-            
-        }
-    });
-
-    function sendFile(urlSend) {
-        // var filename = '';
-        var formData = new FormData();
-        formData.append('file', $('#f_UploadFile')[0].files[0]);
-        formData.append('action', "cargarArchivo_"+nombreTabla)
-        $.ajax({
-            type: 'post',
-            url: urlSend,
-            data: formData,
-            success: function (response) {
-                var res = JSON.parse(response);
-                var ctrol = $("#myUploadedImg")[0];
-                if (res.status === 1) {
-                    // var my_path = "pdfs/" + status;
-                    $("#myUploadedImg").attr("src", res.data);
-                    // filename = res.data;
-                }
-            },
-            processData: false,
-            contentType: false,
-            error: function () {
-                alert("Se presento un error inesperado. Vuelta a intentar.");
-            }
-        });
-    }
-
-    function enableImgPicker($cell) {
-        var html = 
-        `
-            <input type="file" name="pdf" id="f_UploadImage" class="btn btn-primary img" />
-            <img id="myUploadedImg" alt="Photo" style="width:180px;" />
-        `
-        // `
-        //     <input id="ImageMedias" name="ImageMedias" type="file" accept=".jfif,.jpg,.jpeg,.png,.gif" value=""></input>
-        //     <div id="divImageMediaPreview"></div>
-        // `
-        $cell.empty().append(html);
-    }
 
     function enableEditText($cell) {
         var txt = $cell.text();
@@ -889,6 +816,195 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             type : 'date',
             value : txt
         }).data('original-text', txt));
+    }
+    
+    function enableImgPicker($cell) {
+        var html = `
+                    <input type="file" id="uploadImage" class="up_img" />
+                    <img id="myUploadedImg" alt="Fotografía" style="width:180px;display: none;" />
+                    `
+        $cell.empty().append(html);
+    }
+
+    var _URL = window.URL || window.webkitURL;
+    $("td.up_img").change(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var archivo, tipo_archivo;
+        nombreTabla = e.target.parentElement.parentElement.parentElement.parentElement.id;
+        filaEnEdicion = $(e.target.parentElement).closest('tr') .index();
+        var input = $("#uploadImage")[0];
+
+        if (input.id == 'uploadImage') {
+
+            var img, file;
+            archivo = input.files[0];
+            tipo_archivo = input.files[0].type;
+            var encode_permitidos = ['application/pdf', 'application/msword', 'application/vnd.ms-office', 'image/jpeg', 'image/png', 'image/jpg'];
+            
+            if((tipo_archivo == encode_permitidos[0]) || (tipo_archivo == encode_permitidos[1]) || (tipo_archivo == encode_permitidos[2])){
+                file = new FileReader();
+                file.onload = function () {
+                    sendImg(urlControlador);
+                };
+                file.onerror = function () {
+                    mostrarAdvertencia('Archivo no permitido', "Este tipo de archivo no es válido o permitido en el sistema:" + tipo_archivo);
+                };
+                file.src = _URL.createObjectURL(archivo);
+            }
+
+            if((tipo_archivo == encode_permitidos[3]) || (tipo_archivo == encode_permitidos[4]) || (tipo_archivo == encode_permitidos[5])){
+                img = new Image();
+                img.onload = function () {
+                    sendImg(urlControlador);
+                };
+                img.onerror = function () {
+                    // alert("Este tipo de archivo no es válido o permitido en el sistema:" + archivo.type);
+                    mostrarAdvertencia('Archivo no permitido', "Este tipo de archivo no es válido o permitido en el sistema:" + tipo_archivo);
+                };
+                img.src = _URL.createObjectURL(archivo);
+            }else{
+                // alert('Solo se permite la carga de archivos, PDF, DOC, JPG, JPEG, & PNG en el sistema.');
+                mostrarAdvertencia('Archivo no permitido', 'Solo se permite la carga de archivos, PDF, DOC, JPG, JPEG, & PNG en el sistema.');
+                return false;
+            }
+            
+        }
+    });
+
+    function sendImg(urlSend) {
+        var formData = new FormData();
+        formData.append('file', $('#uploadImage')[0].files[0]);
+        formData.append('action', "cargarArchivo_"+nombreTabla)
+        $.ajax({
+            type: 'post',
+            url: urlSend,
+            data: formData,
+            success: function (response) {
+                var res = JSON.parse(response);
+                var ctrol = $("#myUploadedImg")[0];
+                if (res.status === 1) {
+                    // var my_path = "pdfs/" + status;
+                    $("#myUploadedImg").attr("src", res.data);
+                    // filename = res.data;
+                }
+            },
+            processData: false,
+            contentType: false,
+            error: function () {
+                mostrarAdvertencia('Error inesperado', 'Se presento un error inesperado. Intente la acción nuevamente.');
+            }
+        });
+    }
+
+    
+    function enableDocUploadEdit($cell) {
+        var row_index = $cell.closest('tr').index();
+        var rowdata = $(selectorTabla).DataTable().row(row_index).data();
+        var idDat = "cert_" + rowdata.id;
+        var ctrol = `
+                    <form id="form-demo" onsubmit="return false">
+                        <div class="input-group">
+                        <span class="input-group-btn">
+                            <input id=${idDat} class="btn btn-primary file-upload" type="file" name="file"/>
+                        </span> 
+                        </div>
+                    </form>
+                    `
+        // https://www.cloudways.com/blog/the-basics-of-file-upload-in-php/
+        //https://github.com/SiddharthaChowdhury/Async-File-Upload-using-PHP-Javascript-AJAX/blob/master/upload_form.html
+        var ctrol2 =  '<input id="uploadDoc" type="file" name="file" class="up_doc" />'
+                    
+
+                    // `
+                    // <form  enctype="multipart/form-data" action=${urlControlador} method="post">
+                    //     <input id="uploadDoc" name="pdf" type="file" class='up_doc'>
+                    //     <button type="button" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
+                    // </form>
+                    // `
+
+
+                    // `
+                    // <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}>
+                    //     <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
+                    //     <input type="submit" name="action" class="btn btn-primary submitBtn" value="cargarArchivo_tblEstudios"/>
+                    // </form>
+                    // `
+                    // `
+                    // <form id="form-demo" enctype="multipart/form-data">
+                    //     <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
+                    //     <input type="submit" name="action" class="btn btn-primary submitBtn" value="cargarArchivo_tblEstudios"/>
+                    // </form>
+                    // `
+
+                    // `
+                    // <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}>
+                    //     <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
+                    // </form>
+                    // `
+                    // <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}>
+                    //     <input type="file" id="pdf" name="pdf" class="btn btn-primary file-upload" accept="application/pdf"><br><br>
+                    //     <input type="submit" name="submit" class="btn btn-primary submitBtn" value="SUBMIT"/>
+                    // </form>
+                    // `
+        $cell.empty().append(ctrol2);
+    }
+
+    $('td.up_doc').change(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var archivo, tipo_archivo;
+        nombreTabla = e.target.parentElement.parentElement.parentElement.parentElement.id;
+        filaEnEdicion = $(e.target.parentElement).closest('tr') .index();
+        var input = $("#uploadDoc")[0];
+
+        if (input.id == 'uploadDoc') {
+
+            var img, file;
+            archivo = input.files[0];
+            tipo_archivo = input.files[0].type;
+            var encode_permitidos = ['application/pdf', 'application/msword', 'application/vnd.ms-office', 'image/jpeg', 'image/png', 'image/jpg'];
+            
+            if((tipo_archivo == encode_permitidos[0]) || (tipo_archivo == encode_permitidos[1]) || (tipo_archivo == encode_permitidos[2])){
+                file = new FileReader();
+                file.onload = function () {
+                    sendDoc(urlControlador);
+                };
+                file.onerror = function () {
+                    alert("Este tipo de archivo no es válido o permitido en el sistema:" + tipo_archivo);
+                };
+                file.src = _URL.createObjectURL(archivo);
+            }
+            else {
+                alert('Solo se permite la carga de archivos, PDF, DOC, DOCX en el sistema.');
+                return false;
+            }
+            
+        }
+    });
+
+    function sendDoc(urlSend) {
+        var formData = new FormData();
+        formData.append('file', $('#uploadDoc')[0].files[0]);
+        formData.append('action', "cargarArchivo_"+nombreTabla)
+        $.ajax({
+            type: 'post',
+            url: urlSend,
+            data: formData,
+            success: function (response) {
+                var res = JSON.parse(response);
+                if (res.status === 1) {
+                    // var my_path = "pdfs/" + status;
+                    $("#uploadDoc").attr("value", res.data);
+                    // filename = res.data;
+                }
+            },
+            processData: false,
+            contentType: false,
+            error: function () {
+                mostrarAdvertencia('Error inesperado', 'Se presento un error inesperado. Intente la acción nuevamente.');
+            }
+        });
     }
 
     function updateRows(commit) {
