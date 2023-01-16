@@ -82,7 +82,7 @@ else {
 
 <body>
     <div class="container-fluid bg-primary text-white text-center">
-        <h1>DevManager</h1>
+        <h1 class="display-2">DevManager</h1>
     </div>
 
     <!-- <div id="menu" class="mt-5"> -->

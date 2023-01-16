@@ -183,10 +183,17 @@ class ProyectoAdm
                       WHERE id = '$proyecto->id'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
-
     public static function eliminarObj($idProyecto)
     {
         $cadenaSQL = "DELETE FROM proyectos WHERE id = '$idProyecto'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+    public static function postularTrabajador($id_proyecto, $id_usuario)
+    {
+        $UUID = ConectorBD::get_UUIDv4();
+        $fechaActual = date('Y-m-d');
+        $cadenaSQL = "INSERT INTO rh_proyectos (id, fecha_solicitud, estado, id_proyecto, id_usuario) 
+                        VALUES ('$UUID','$fechaActual','E','$id_proyecto','$id_usuario')";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 

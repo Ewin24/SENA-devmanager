@@ -13,6 +13,7 @@ $btnHabilidadQuitar = "";
 $btnHabilidadAsign = "";
 $btnTrabajadorQuitar = "";
 $btnTrabajadorContr = "";
+$btnPostularse = "";
 
 $identificacion = $USUARIO->getIdentificacion();
 $idUsuario = $USUARIO->getId();
@@ -32,6 +33,7 @@ switch ($tipoUsuario) {
         break;
     default: //trabajador (modo: Solo lectura): perfiles existentes
         $modoTabla = 'R';
+        $btnPostularse = "<div class='col-lg-3'><input type='button' name='action' value='Postularse' class='btn btn-primary' onclick='postularse()'></div>";
         break;
 }
 // // print_r($datosProyectos);
@@ -67,6 +69,7 @@ switch ($tipoUsuario) {
                     </tr>
                 </tbody>
             </table>
+            <?= $btnPostularse ?>
         </div>
     </div>
 
@@ -176,6 +179,42 @@ switch ($tipoUsuario) {
 </fieldset>
 
 <script type="text/javascript">
+    //////////////////////////////////////////////////////////////////////////////
+    //FUNCIONALIDAD DE POSTULARSE A UN PROYECTO
+    function postularse() {
+        <?php echo 'const idUsuario = "' . $idUsuario . '";'; ?>
+
+        $('#tblProyectos tbody tr').each(function(fila, elemento) {
+            var checkb = $(elemento).find('input[type=checkbox]');
+            if (checkb.is(':checked')) {
+                var datosFila = $('#tblProyectos').DataTable().rows(fila).data()[0];
+
+                var dataReq = {
+                    datos: datosFila.id,
+                    id_usuario: idUsuario,
+                    action: 'Postularse'
+                }
+
+                $.ajax({
+                    url: 'http://localhost/SENA-devmanager/src/api/ProyectoControlador.php',
+                    method: "POST",
+                    data: dataReq,
+                    dataType: "json",
+                    success: function(response) {
+                        // alert("Status: "+response);
+                        console.log(response);
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Status: " + textStatus);
+                        alert("Error: " + errorThrown);
+                    }
+                });
+            }
+        });
+
+        $('#tbl_Proyectos').DataTable().ajax.reload();
+    }
+
     //////////////////////////////////////////////////////////////////////////////
     //FUNCIONALIDAD DE HABILIDADES
     function asignarHabilidades() {

@@ -119,15 +119,16 @@ function cargarHabilidades(nombreTabla, IdProySeleccionado, tipoUsuario, modoTab
         switch (tipoUsuario) {
             case "A":
                 modoTabla = 'CRUD';
+                cargarTablaGenerica(nombreTabla, colsHabilidades, modoTabla, dataUrl, payloadHabilidades ,null,null,null, id_proyecto);
                 break;
             case "D":
                 modoTabla = 'CRUD';
+                cargarTablaGenerica(nombreTabla, colsHabilidades, modoTabla, dataUrl, payloadHabilidades ,null,null,null, id_proyecto);
                 break;
             default:
                 modoTabla = 'R';
                 break;
             } 
-            cargarTablaGenerica(nombreTabla, colsHabilidades, modoTabla, dataUrl, payloadHabilidades ,null,null,null, id_proyecto);
     }
 }
 

@@ -62,6 +62,22 @@ if (!empty($_POST['action'])) {
             );
             break;
 
+        case 'Postularse':
+            header('Content-type: application/json; charset=utf-8');
+            $id_proyecto = $_POST['datos'];
+            $id_usuario = $_POST['id_usuario'];
+
+            if ($id_proyecto != null || $id_proyecto != '') {
+                ProyectoAdm::postularTrabajador($id_proyecto, $id_usuario);
+            }
+
+            $response = array(
+                "id_proyecto" => $id_proyecto,
+                "id_usuario" => $id_usuario,
+                "accion" => $accion
+            );
+            break;
+
         case 'cargar_tblProyectos':
             header('Content-type: application/json; charset=utf-8');
             $idUsuario = $_POST['datos'];

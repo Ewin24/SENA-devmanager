@@ -291,7 +291,7 @@ class Usuario
                         WHERE identificacion = $usuario"; //hash que se encuentra en la BD  -  *el parametro usuario es un id*
         $hashGuardado = ConectorBD::ejecutarQuery($consultaSQL);
         $bandera = Usuario::verify($clave, $hashGuardado[0]['clave_hash']);
-        
+
         $userObj = array();
         if ($bandera == 1) {
             $resultado = Usuario::getListaEnObjetos("identificacion = $usuario", null);
@@ -329,9 +329,10 @@ class Usuario
     public static function getProyectosUsuario($idUsuario)
     {
         $cadenaSQL = "  SELECT      p.id, p.nombre, p.descripcion, p.estado, p.fecha_inicio, p.fecha_fin, p.id_usuario, u.correo
-                        FROM 		(proyectos p
+                        FROM 		proyectos p
                         INNER JOIN 	usuarios u ON u.id = p.id_usuario
-                        INNER JOIN 	rh_proyectos rp ON rp.id_proyecto = p.id AND rp.id_usuario = '$idUsuario')";
+                        -- INNER JOIN 	rh_proyectos rp ON rp.id_proyecto = p.id AND rp.id_usuario = '$idUsuario')
+                        ";
         // echo $cadenaSQL;
         $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
         $datos = array();
