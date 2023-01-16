@@ -130,8 +130,9 @@ if (!empty($_POST['action'])) {
             case 'Eliminar_tblEmpleados':
                 header('Content-type: application/json; charset=utf-8');
                 $eliminarEmpleado = $_POST['datos'];
+
                 if ($eliminarEmpleado != null || $eliminarEmpleado != '') {
-                    EmpresaAdm::eliminarObj($eliminarEmpleado);
+                    EmpresaAdm::eliminarObjEmpleado($eliminarEmpleado);
                 }
 
                 $response = array(

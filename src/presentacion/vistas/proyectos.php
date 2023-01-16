@@ -18,7 +18,7 @@ $btnPostularse = "";
 $identificacion = $USUARIO->getIdentificacion();
 $idUsuario = $USUARIO->getId();
 $tipoUsuario = $USUARIO->getTipo_usuario();
-echo $idUsuario, $identificacion, $tipoUsuario;
+// echo $idUsuario, $identificacion, $tipoUsuario;
 switch ($tipoUsuario) {
     case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
         $modoTabla = 'CRUD';
@@ -26,10 +26,13 @@ switch ($tipoUsuario) {
         $btnHabilidadAsign = "<div class='col-lg-3'><input type='button' name='action' value='Asignar' class='btn btn-primary' onclick='asignarHabilidades()'></div>";
         $btnTrabajadorQuitar = "<div class='col-lg-3'><input type='button' name='action' value='Anular Contrato' class='btn btn-primary' onclick='quitarTrabajadores()'></div>'";
         $btnTrabajadorContr = "<div class='col-lg-3'><input type='button' name='action' value='Contratar' class='btn btn-primary' onclick='asignarTrabajadores()'></div>";
-        echo "Usuario A";
         break;
     case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
         $modoTabla = 'CRUD';
+        $btnHabilidadQuitar = "<div class='col-lg-3'><input type='button' name='action' value='Quitar' class= 'btn btn-primary' onclick='quitarHabilidades()'></div>";
+        $btnHabilidadAsign = "<div class='col-lg-3'><input type='button' name='action' value='Asignar' class='btn btn-primary' onclick='asignarHabilidades()'></div>";
+        $btnTrabajadorQuitar = "<div class='col-lg-3'><input type='button' name='action' value='Anular Contrato' class='btn btn-primary' onclick='quitarTrabajadores()'></div>'";
+        $btnTrabajadorContr = "<div class='col-lg-3'><input type='button' name='action' value='Contratar' class='btn btn-primary' onclick='asignarTrabajadores()'></div>";
         break;
     default: //trabajador (modo: Solo lectura): perfiles existentes
         $modoTabla = 'R';
@@ -39,12 +42,12 @@ switch ($tipoUsuario) {
 // // print_r($datosProyectos);
 ?>
 
-<h3 class="text-center">LISTA DE PROYECTOS</h3>
-
-<fieldset class="form-group border p-3">
+<fieldset class="form-group p-3">
     <div class="container col-auto justify-content-center">
         <div class="row">
-            <legend class="w-auto px-2">Proyectos Disponibles</legend>
+            <legend id="titulo" class="w-auto px-2">
+                <h3>Proyectos Disponibles</h3>
+            </legend>
 
             <table id="tblProyectos" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
             <!-- <div class="col align-self-center">
@@ -76,14 +79,16 @@ switch ($tipoUsuario) {
 </fieldset>
 
 <fieldset id='fsHabilidades' class="form-group border p-3">
-    <legend class="w-auto px-2">Habilidades del proyecto</legend>
+    <legend id="titulo" class="w-auto px-2">
+        <h3>Habilidades del proyecto</h3>
+    </legend>
     <div class="row">
         <div class="col-lg-6">
             <h5 class="col text-center">Requeridas</h1>
                 <table id="tblHab_Requeridas" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
                 <table id="new-Hab_Requerida" style="display:none" class="col-auto">
                     <tbody>
-                        
+
                         <tr>
                             <td></td>
                             <td>__id__</td>
@@ -126,8 +131,10 @@ switch ($tipoUsuario) {
     </div>
 </fieldset>
 
-<fieldset id='fsTrabajadores' class="form-group border p-3">
-    <legend class="w-auto px-2">Trabajadores del proyecto</legend>
+<fieldset id='fsTrabajadores' class="text-center form-group border p-3">
+    <legend id="titulo" class="w-auto">
+        <h3>Trabajadores del proyecto</h3>
+    </legend>
     <div class="row">
         <div class="row col-lg-6">
             <h5 class="col text-center">Contratados</h5>

@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <?php
 
-require_once 'upload.php';
-
 session_start();
 session_unset();
 session_destroy();
@@ -12,11 +10,7 @@ if (isset($_REQUEST['mensaje'])) {
     $sms = "<div id='alerta' class='alert alert-danger text-center m-2 ' role='alert'>$mensaje</div>";
 }
 
-// if (!$_REQUEST['mensaje'] == false) {
-//     $fileName = $_REQUEST['mensaje'];
-//     $pdf = upload::mostrarPdf($fileName);
-//     echo $pdf;
-// }
+
 ?>
 
 <html>
@@ -30,11 +24,6 @@ if (isset($_REQUEST['mensaje'])) {
 </head>
 
 <body>
-    <form action="upload.php" method="post" enctype="multipart/form-data">
-        <label for="pdf">Selecciona un archivo PDF:</label>
-        <input type="file" name="pdf" id="pdf" accept="application/pdf">
-        <input type="submit" value="Subir archivo">
-    </form>
     <?= @$sms ?>
     <div class="container position-relative ">
         <div class="row justify-content-center pt-5">

@@ -32,13 +32,13 @@ class TipoUsuario
         // $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/proyectos.php&accion=''&id='''>Proyectos</a></li>";
         // $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/perfiles.php&accion=''&id='''>Perfil</a></li>";
 
-        $menu = "<div class='col-sm'><div class='card'><div class='card-body'><h5 class='card-title'>Proyectos</h5><a href='principal.php?CONTENIDO=presentacion/vistas/proyectos.php&accion=''&id=''' class='btn btn-primary'>Acceder</a></div></div></div>";
-        $menu .= "<div class='col-sm'><div class='card'><div class='card-body'><h5 class='card-title'>Perfil</h5><a href='principal.php?CONTENIDO=presentacion/vistas/perfiles.php&accion=''&id=''' class='btn btn-primary'>Acceder</a></div></div></div>";
+        $menu = "<li class='nav-item m-2'><a class='nav-link active' href='principal.php?CONTENIDO=presentacion/vistas/proyectos.php&accion=''&id='''>Proyectos</a></li>";
+        $menu .= "<li class='nav-item m-2'><a class='nav-link active' href='principal.php?CONTENIDO=presentacion/vistas/perfiles.php&accion=''&id='''>Perfil</a></li>";
 
         switch ($codigo) {
             case 'A':
-                $menu .= "<div class='col-sm'><div class='card'><div class='card-body'><h5 class='card-title'>Administracion</h5><a href='principal.php?CONTENIDO=presentacion/vistas/empresas.php&accion=''&id=''' class='btn btn-primary'>Acceder</a></div></div></div>";
                 // $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/empresas.php&accion=''&id='''>Administración</a></li>";
+                $menu .= "<li class='nav-item m-2'><a class='nav-link active' href='principal.php?CONTENIDO=presentacion/vistas/empresas.php&accion=''&id='''>Administracion</a></li>";
                 break;
             case 'T':
                 break;
@@ -47,8 +47,9 @@ class TipoUsuario
             default:
                 break;
         }
-        $menu .= "<div class='col-sm'><div class='card'><div class='card-body'><h5 class='card-title'>----------></h5><a href='index.php' class='btn btn-primary'>Salir</a> </div></div></div>";
         // $menu .= "<li class='border nav-item '><a class='nav-link' href='index.php'>Salir</a></li>";
+        $menu .= "<li class='nav-item m-2'><a class='nav-link active' href='index.php'>Salir</a></li>";
+
         return $menu;
     }
 }

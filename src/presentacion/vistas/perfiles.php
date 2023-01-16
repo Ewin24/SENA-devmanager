@@ -18,7 +18,6 @@ switch ($tipoUsuario) {
     case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
         // $datosProyectos = Proyecto::getListaEnJson(null, null);
         $modoTabla = 'CRUD';
-        echo "Usuario A";
         break;
 
     case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
@@ -38,17 +37,19 @@ switch ($tipoUsuario) {
 }
 ?>
 
-<h3 class="text-center">PERFIL DE USUARIOS</h3>
+<!-- <h3 class="text-center">PERFIL DE USUARIOS</h3> -->
 
 <fieldset class="form-group border p-3">
     <div class="container col-auto justify-content-center">
         <div class="row">
-            <legend class="w-auto px-2">Perfiles</legend>
+            <legend class="w-auto px-2">
+                <h3>Perfil de usuario</h3>
+            </legend>
             <table id="tblEmpleados" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
             <table id="new-Empleado" style="display:none" class="col-auto">
                 <tbody>
                     <tr>
-                    <td></td>
+                        <td></td>
                         <td>_id_</td>
                         <td>_identificacion_</td>
                         <td>_tipo identificacion_</td>
@@ -76,26 +77,26 @@ switch ($tipoUsuario) {
     <div class="container col-auto justify-content-center">
         <div class="row">
             <legend class="w-auto px-2">Estudios</legend>
-                <table id="tblEstudios" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-                <table id="new-Estudio" style="display:none" class="col-auto">
-                    <tbody>
-                        <tr>
-                            <!-- <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}> -->
-                                <td></td>
-                                <td>__id__</td>
-                                <td>__Nombre estudio__</td>
-                                <td>__Nombre Certificado__</td>
-                                <td>archivo</td>
-                                <td>__01/01/2020__</td>
-                                <td>__ident del usuario__</td>
-                                <td>
-                                    <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
-                                    <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
-                                </td>
-                            <!-- </form> -->
-                        </tr>
-                    </tbody>
-                </table>
+            <table id="tblEstudios" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+            <table id="new-Estudio" style="display:none" class="col-auto">
+                <tbody>
+                    <tr>
+                        <!-- <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}> -->
+                        <td></td>
+                        <td>__id__</td>
+                        <td>__Nombre estudio__</td>
+                        <td>__Nombre Certificado__</td>
+                        <td>archivo</td>
+                        <td>__01/01/2020__</td>
+                        <td>__ident del usuario__</td>
+                        <td>
+                            <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
+                            <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                        </td>
+                        <!-- </form> -->
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </fieldset>

@@ -17,14 +17,12 @@ switch ($tipoUsuario) {
     case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
         // $datosProyectos = Proyecto::getListaEnJson(null, null);
         $modoTabla = 'CRUD';
-        echo "Usuario A";
         break;
 
     case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
         // $idUsuario = $USUARIO->getId();
         // $filtroUsuario = "id_usuario='$idUsuario'";
         // $datosProyectos = Proyecto::getListaEnJson($filtroUsuario, null);
-        // echo "Usuario D";
         // R solo lectura
         $modoTabla = 'CRUD';
         break;
@@ -32,17 +30,18 @@ switch ($tipoUsuario) {
     default: //trabajador (modo: Solo lectura): perfiles existentes
         // $datosProyectos = $USUARIO->getProyectosUsuario($USUARIO->getId());
         $modoTabla = 'R';
-        // echo "Usuario T";
         break;
 }
 ?>
 
-<h3 class="text-center">ADMINISTRACION</h3>
+<!-- <h3 class="text-center">ADMINISTRACION</h3> -->
 
 <fieldset class="form-group border p-3">
     <div class="container col-auto justify-content-center">
         <div class="row">
-            <legend class="w-auto px-2">EMPRESAS REGISTRADAS</legend>
+            <legend class="w-auto px-2">
+                <h3>Empresas registradas</h3>
+            </legend>
 
             <table id="tblEmpresas" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
             <!-- <div class="col align-self-center">
@@ -85,7 +84,9 @@ switch ($tipoUsuario) {
 <fieldset id='fsEmpleados' class="form-group border p-3">
     <div class="container col-auto justify-content-center">
         <div class="row">
-            <legend class="w-auto px-2">USUARIOS EMPRESA</legend>
+            <legend class="w-auto px-2">
+                <h3>Usuarios registrados</h3>
+            </legend>
 
             <table id="tblEmpleados" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
             <!-- <div class="col align-self-center">
@@ -149,10 +150,10 @@ switch ($tipoUsuario) {
             var data = $(selectorTabla).DataTable().row(rowindex).data();
 
             if (data.id != idEmpresaSeleccionada) {
-                idEmpresaSeleccionada = data.id;
+                var id_usuario = data.id;
                 console.clear();
-                cargarTrabajadores('tblEmpleados', idEmpresaSeleccionada, modoTabla);
-                console.log(idEmpresaSeleccionada);
+                cargarTrabajadores('tblEmpleados', id_usuario, modoTabla);
+                // console.log(idEmpresaSeleccionada);
                 // peticion - https://coderszine.com/live-datatables-crud-with-ajax-php-mysql/
                 // var dataReq = {
                 //     datos : IdProySeleccionado, 
