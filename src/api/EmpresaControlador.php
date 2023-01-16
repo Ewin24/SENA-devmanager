@@ -46,10 +46,10 @@ if (!empty($_POST['action'])) {
 
             case 'Eliminar_tblEmpresas':
                 header('Content-type: application/json; charset=utf-8');
-                $eliminarEmpresa = json_decode($_POST['datos']);
+                $eliminarEmpresa = $_POST['datos'];
 
                 if ($eliminarEmpresa != null || $eliminarEmpresa != '') {
-                    EmpresaAdm::eliminarObj($eliminarEmpresa->id);
+                    EmpresaAdm::eliminarObj($eliminarEmpresa);
                 }
 
                 $response = array(
@@ -129,9 +129,10 @@ if (!empty($_POST['action'])) {
                 //TODO: hace falta revisarlo en tabla generica
             case 'Eliminar_tblEmpleados':
                 header('Content-type: application/json; charset=utf-8');
-                $eliminarEmpleado = json_decode($_POST['datos']);
+                $eliminarEmpleado = $_POST['datos'];
+
                 if ($eliminarEmpleado != null || $eliminarEmpleado != '') {
-                    EmpresaAdm::eliminarObj($eliminarEmpleado->id);
+                    EmpresaAdm::eliminarObjEmpleado($eliminarEmpleado);
                 }
 
                 $response = array(

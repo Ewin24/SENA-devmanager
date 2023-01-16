@@ -89,15 +89,16 @@ class EmpresaAdm
     //SECCION EMPRESAS
     public static function guardarObj($empresa)
     {
+        $UUID = ConectorBD::get_UUIDv4();
         $cadenaSQL = "INSERT INTO empresas(id, nit, nombre, direccion, correo, telefono, nombre_representante, correo_representante) 
-                      VALUES (  '{$empresa->id}', 
+                      VALUES (  '{$UUID}', 
                                 '{$empresa->nit}', 
                                 '{$empresa->nombre}', 
                                 '{$empresa->direccion}', 
                                 '{$empresa->correo}', 
                                 '{$empresa->telefono}', 
-                                '{$empresa->nombreRepresentante}', 
-                                '{$empresa->correoRepresentante}');";
+                                '{$empresa->nombre_representante}', 
+                                '{$empresa->correo_representante}');";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
@@ -109,15 +110,15 @@ class EmpresaAdm
                       `direccion` = '{$empresa->direccion}', 
                       `correo` = '{$empresa->correo}', 
                       `telefono` = '{$empresa->telefono}', 
-                      `nombre_representante` = '{$empresa->nombreRepresentante}',
-                      `correo_representante` = '{$empresa->correoRepresentante}' 
-                       WHERE `empresas`.`nit` = '{$empresa->nit}'";
+                      `nombre_representante` = '{$empresa->nombre_representante}',
+                      `correo_representante` = '{$empresa->correo_representante}' 
+                       WHERE `empresas`.`id` = '{$empresa->id}'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
-    public static function eliminarObj($idEmpresa)
+    public static function eliminarObj($id_empresa)
     {
-        $cadenaSQL = "DELETE FROM empresas WHERE id = '$idEmpresa'";
+        $cadenaSQL = "DELETE FROM empresas WHERE id = '$id_empresa'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
     ///////////////////////////////////////////////////////////////////////

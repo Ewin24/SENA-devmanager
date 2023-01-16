@@ -35,7 +35,7 @@ function cargarEmpresas(nombreTabla, idUsuario, modoTabla = 'R') {
     });
 }
 
-function cargarTrabajadores(nombreTabla, idEmpresaSeleccionada, modoTabla ='R') {
+function cargarTrabajadores(nombreTabla, id_usuario, modoTabla ='R') {
 
     var ddl_t_identificacion = [
         { value : 'X', key : '' },
@@ -61,8 +61,7 @@ function cargarTrabajadores(nombreTabla, idEmpresaSeleccionada, modoTabla ='R') 
     ];
 
     var payloadTrabajadores = {
-        id_empresa : idEmpresaSeleccionada,
-        datos : idEmpresaSeleccionada ,
+        datos : id_usuario ,
         action : 'cargar_'+nombreTabla,
         html_tabla : nombreTabla
     }

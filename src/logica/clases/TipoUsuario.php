@@ -33,7 +33,7 @@ class TipoUsuario
         // $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/perfiles.php&accion=''&id='''>Perfil</a></li>";
 
         $menu = "<li class='nav-item m-2'><a class='nav-link active' href='principal.php?CONTENIDO=presentacion/vistas/proyectos.php&accion=''&id='''>Proyectos</a></li>";
-        $menu .= "<li class='nav-item m-2'><a class='nav-link active' href='principal.php?CONTENIDO=presentacion/vistas/perfiles.php&accion=''&id='''>Perfiles</a></li>";
+        $menu .= "<li class='nav-item m-2'><a class='nav-link active' href='principal.php?CONTENIDO=presentacion/vistas/perfiles.php&accion=''&id='''>Perfil</a></li>";
 
         switch ($codigo) {
             case 'A':
