@@ -64,7 +64,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             dataSrc: function ( json ) {
                 //Make your callback here.
                 if(json.accion == "Acción no definida") alert(json.accion);
-                console.log(json);
+                // console.log(json);
 
                 if( json.ddl_ops!=null && json.ddl_ops[0].length != 0){
                     var opciones = JSON.parse(json.ddl_ops[0])[nombreTabla];
@@ -72,7 +72,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     for(const op of opciones){
                         var key = Object.keys(op)[0];
                         obj[key] = op[key];
-                        console.log(key, op);
+                        // console.log(key, op);
                     }
                     ddl_ops = obj;
                 }
@@ -417,7 +417,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     return;
                 }
                 // alert("Status: "+response);
-                console.log(rowdata);
+                // console.log(rowdata);
                 existenCambiosPendientes = false;
                 insertandoNuevoRegistro = false;
                 $(selectorTabla).DataTable().row($(this).closest("tr")).remove().draw();
@@ -709,7 +709,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             rowCount = $(selectorTabla).DataTable().data().length-1,
             insertedRow = $(selectorTabla).DataTable().row(rowCount).data(),
             tempRow;
-        console.log(index-1, rowCount, insertedRow, );
+        // console.log(index-1, rowCount, insertedRow );
 
         // for (var i=rowCount; i>0; i--) {
         //     tempRow = $(selectorTabla).DataTable().row(i-1).data();
