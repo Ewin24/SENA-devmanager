@@ -15,12 +15,8 @@ if (isset($_REQUEST['mensaje'])) {
 $idUsuario = $USUARIO->getId();
 $tipoUsuario = $USUARIO->getTipo_usuario();
 switch ($tipoUsuario) {
-    case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
-        // $datosProyectos = Proyecto::getListaEnJson(null, null);
-        $modoTabla = 'CRUD';
-        break;
-
-    case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
+    case 'A': //Admin (Modo R): muestra todos los perfiles para poder consultar informacion más detallada del usuario
+    case 'D': //Director (modo R): muestra todos los perfiles para poder consultar informacion más detallada del usuario
         // $idUsuario = $USUARIO->getId();
         // $filtroUsuario = "id_usuario='$idUsuario'";
         // $datosProyectos = Proyecto::getListaEnJson($filtroUsuario, null);
@@ -29,9 +25,9 @@ switch ($tipoUsuario) {
         $modoTabla = 'R';
         break;
 
-    default: //trabajador (modo: Solo lectura): perfiles existentes
+    default: //trabajador (modo: Solo lectura): solo su información de perfil activo
         // $datosProyectos = $USUARIO->getProyectosUsuario($USUARIO->getId());
-        $modoTabla = 'CRUD';
+        $modoTabla = 'RU';
         // echo "Usuario T";
         break;
 }
@@ -142,6 +138,7 @@ switch ($tipoUsuario) {
     // }
 
     <?php echo 'const idUsuario = "' . $idUsuario . '";'; ?>
+    <?php echo 'const tipoUsuario = "' . $tipoUsuario . '";'; ?>
     <?php echo 'const modoTabla = "' . $modoTabla . '";'; ?>
 
     $(document).ready(function() {
@@ -157,8 +154,8 @@ switch ($tipoUsuario) {
             if (data.id != idPerfilSeleccionado) {
                 idPerfilSeleccionado = data.id;
                 console.clear();
-                cargarEstudios('tblEstudios', idPerfilSeleccionado, modoTabla);
-                cargarHabilidades('tblHabilidades', idPerfilSeleccionado, modoTabla);
+                cargarEstudios('tblEstudios', idPerfilSeleccionado, tipoUsuario);
+                cargarHabilidades('tblHabilidades', idPerfilSeleccionado, tipoUsuario);
                 // // peticion 
                 // fetch('http://localhost/SENA-devmanager/api/PerfilControlador.php?id=' + $idPerfilSeleccionado, {
                 //     method: 'GET',
