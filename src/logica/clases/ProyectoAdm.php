@@ -138,8 +138,9 @@ class ProyectoAdm
 
     public static function getTrabajadoresDisponibles($idProyectoSeleccionado)
     {
-        // tabla habilidades donde estado diferente A=Asignado para el proyecto pasado por parametro
-        return ProyectoAdm::getDatosCrudos(null, null, "TrabDisponible", $idProyectoSeleccionado);
+        //     // tabla habilidades donde estado diferente A=Asignado para el proyecto pasado por parametro
+            $resultado = ProyectoAdm::getDatosCrudos(null, null, "TrabDisponible", $idProyectoSeleccionado);
+            return $resultado;
     }
 
     public static function cargarTablasHijas($idProySeleccionado)
@@ -260,6 +261,8 @@ class ProyectoAdm
                     SET estado = 'R'
                     WHERE id_usuario = '$id_usuario'
                     AND id_proyecto = '$id_proyecto'";
-        return ConectorBD::ejecutarQuery($cadenaSQL);
+        $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
+        // print_r($resultado);
+        return $resultado;
     }
 }

@@ -40,7 +40,7 @@ function cargarPerfiles(nombreTabla, idUsuario, modoTabla='R') {
     });
 }
 
-function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='R'){
+function cargarEstudios(nombreTabla, IdPerfilSeleccionado, tipoUsuario, modoTabla='R'){
     var colsEstudios = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         { title: "Id", data: "id", name: 'id', visible: false },
@@ -58,6 +58,17 @@ function cargarEstudios(nombreTabla, IdPerfilSeleccionado, modoTabla='R'){
         html_tabla : nombreTabla
     }
     if($('#'+nombreTabla).lenght) $('#'+nombreTabla).DataTable().clear().draw();
+
+    switch (tipoUsuario) {
+        case "A":
+        case "D":
+            modoTabla = 'R';
+            break;
+        default:
+            modoTabla = 'CRUD';
+            break;
+    }                 
+
     cargarTablaGenerica(nombreTabla, colsEstudios, modoTabla, dataUrl, payloadEstudios);
 }
 
@@ -79,6 +90,16 @@ function cargarHabilidades(nombreTabla, IdPerfilSeleccionado, modoTabla='R'){
     }
 
     if($('#'+nombreTabla).lenght) $('#'+nombreTabla).DataTable().clear().draw();
+    
+    switch (tipoUsuario) {
+        case "A":
+        case "D":
+            modoTabla = 'R';
+            break;
+        default:
+            modoTabla = 'CRUD';
+            break;
+    } 
     cargarTablaGenerica(nombreTabla, colsHabilidades, modoTabla, dataUrl, payloadHabilidades);
 }
 

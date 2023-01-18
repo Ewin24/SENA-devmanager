@@ -15,12 +15,8 @@ if (isset($_REQUEST['mensaje'])) {
 $idUsuario = $USUARIO->getId();
 $tipoUsuario = $USUARIO->getTipo_usuario();
 switch ($tipoUsuario) {
-    case 'A': //Admin (Modo CRUD): muestra todos los perfiles y opciones porque es admin
-        // $datosProyectos = Proyecto::getListaEnJson(null, null);
-        $modoTabla = 'CRUD';
-        break;
-
-    case 'D': //Director (modo CRUD filtrado): solo su información de perfil activo
+    case 'A': //Admin (Modo R): muestra todos los perfiles para poder consultar informacion más detallada del usuario
+    case 'D': //Director (modo R): muestra todos los perfiles para poder consultar informacion más detallada del usuario
         // $idUsuario = $USUARIO->getId();
         // $filtroUsuario = "id_usuario='$idUsuario'";
         // $datosProyectos = Proyecto::getListaEnJson($filtroUsuario, null);
@@ -29,7 +25,7 @@ switch ($tipoUsuario) {
         $modoTabla = 'R';
         break;
 
-    default: //trabajador (modo: Solo lectura): perfiles existentes
+    default: //trabajador (modo: Solo lectura): solo su información de perfil activo
         // $datosProyectos = $USUARIO->getProyectosUsuario($USUARIO->getId());
         $modoTabla = 'RUD';
         // echo "Usuario T";
@@ -77,26 +73,28 @@ switch ($tipoUsuario) {
     <div class="container col-auto justify-content-center">
         <div class="row">
             <legend class="w-auto px-2">Estudios</legend>
-            <table id="tblEstudios" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-            <table id="new-Estudio" style="display:none" class="col-auto">
-                <tbody>
-                    <tr>
-                        <!-- <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}> -->
-                        <td></td>
-                        <td>__id__</td>
-                        <td>__Nombre estudio__</td>
-                        <td>__Nombre Certificado__</td>
-                        <td>archivo</td>
-                        <td>__01/01/2020__</td>
-                        <td>__ident del usuario__</td>
-                        <td>
-                            <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
-                            <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
-                        </td>
-                        <!-- </form> -->
-                    </tr>
-                </tbody>
-            </table>
+            <form enctype="multipart/form-data" action='./../../api/PerfilControlador.php'>
+                <table id="tblEstudios" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+                <table id="new-Estudio" style="display:none" class="col-auto">
+                    <tbody>
+                        <tr>
+                            <!-- <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}> -->
+                            <td></td>
+                            <td>__id__</td>
+                            <td>__Nombre estudio__</td>
+                            <td>__Nombre Certificado__</td>
+                            <td>archivo</td>
+                            <td>__01/01/2020__</td>
+                            <td>__ident del usuario__</td>
+                            <td>
+                                <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
+                                <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                            </td>
+                            <!-- </form> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
         </div>
     </div>
 </fieldset>
@@ -105,23 +103,23 @@ switch ($tipoUsuario) {
     <div class="container col-auto justify-content-center">
         <div class="row">
             <legend class="w-auto px-2">Habilidades</legend>
-            <table id="tblHabilidades" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-            <table id="new-Habilidade" style="display:none" class="col-auto">
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td>__nombre habilidad__</t d>
-                        <td>__Descripcion__</td>
-                        <td>__Experiencia__</td>
-                        <td>__correo representante__</td>
-                        <td>__correo representante__</td>
-                        <td>
-                            <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
-                            <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                <table id="tblHabilidades" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
+                <table id="new-Habilidade" style="display:none" class="col-auto">
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td>__nombre habilidad__</t d>
+                            <td>__Descripcion__</td>
+                            <td>__Experiencia__</td>
+                            <td>__correo representante__</td>
+                            <td>__correo representante__</td>
+                            <td>
+                                <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>
+                                <i class='bi ' +`${claseBotonEliminarRow}` aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
         </div>
     </div>
 </fieldset>
@@ -140,6 +138,7 @@ switch ($tipoUsuario) {
     // }
 
     <?php echo 'const idUsuario = "' . $idUsuario . '";'; ?>
+    <?php echo 'const tipoUsuario = "' . $tipoUsuario . '";'; ?>
     <?php echo 'const modoTabla = "' . $modoTabla . '";'; ?>
 
     $(document).ready(function() {
@@ -155,8 +154,8 @@ switch ($tipoUsuario) {
             if (data.id != idPerfilSeleccionado) {
                 idPerfilSeleccionado = data.id;
                 console.clear();
-                cargarEstudios('tblEstudios', idPerfilSeleccionado, modoTabla);
-                cargarHabilidades('tblHabilidades', idPerfilSeleccionado, modoTabla);
+                cargarEstudios('tblEstudios', idPerfilSeleccionado, tipoUsuario);
+                cargarHabilidades('tblHabilidades', idPerfilSeleccionado, tipoUsuario);
                 // // peticion 
                 // fetch('http://localhost/SENA-devmanager/api/PerfilControlador.php?id=' + $idPerfilSeleccionado, {
                 //     method: 'GET',
