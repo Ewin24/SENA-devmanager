@@ -49,6 +49,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             });
 
     dataTable = null;
+    var primerRegistro = $.fn.dataTable.absoluteOrder( '1' );
 
     //// definir id para cada fila: 
     //// https://datatables.net/reference/option/rowId
@@ -63,7 +64,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             dataSrc: function ( json ) {
                 //Make your callback here.
                 if(json.accion == "Acción no definida") alert(json.accion);
-                console.log(json);
+                // console.log(json);
 
                 if( json.ddl_ops!=null && json.ddl_ops[0].length != 0){
                     var opciones = JSON.parse(json.ddl_ops[0])[nombreTabla];
@@ -71,7 +72,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     for(const op of opciones){
                         var key = Object.keys(op)[0];
                         obj[key] = op[key];
-                        console.log(key, op);
+                        // console.log(key, op);
                     }
                     ddl_ops = obj;
                 }
@@ -79,15 +80,19 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 return json.data;
             }, 
             // success:function(response){
-            //     alert("Status: "+response);
+            //     // alert("Status: "+response);
             //     console.log(response);
             //     existenCambiosPendientes = false;
             //     insertandoNuevoRegistro = false;
+            //     return response.data;
             // }, 
-            // error: function(XMLHttpRequest, textStatus, errorThrown) { 
-            //     alert("Status: " + textStatus); 
-            //     alert("Error: " + errorThrown); 
-            // }
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                // alert("Status: " + textStatus); 
+                // alert("Error: " + errorThrown); 
+                var titulo = "<b>Error al cargar : </b>"+ nombreTabla.substring(3,nombreTabla.length-1);
+                var mensaje = "<b>Error en la invocación de : </b> "+payloadInicial['action'] + "<br><b>Detalle del Error : </b>"+ errorThrown['message'];
+                mostrarAdvertencia(titulo, mensaje);
+            }
         },
         // data: arreglo,
         columns: cols,
@@ -103,7 +108,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         // scrollX: true,
         destroy: true,
         processing: true,
-        select:{ style:'single', toggleable: true },
+        select:{ style:'single' }, //toggleable: true },
         // fnInitComplete: function(oSettings, json) {
         //         // Seleccionar primera fila automáticamente;
         //         $(selectorTabla+' tbody tr:eq(0)').click();
@@ -119,6 +124,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             $(row).attr('id', data.id);
         },
         "columnDefs": [ 
+            { targets: 1, type: primerRegistro },
             {
                 targets: '_all',
                 "createdCell": function (td, cellData, rowData, row, col) {
@@ -152,7 +158,9 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                         }
                         // TODO: revisar esto del hipervinculo para abrir
                         if(cols[col].className == 'up_doc'){
-                            var hiperlink = '<a href='+rowData[campo]+' target="_blank">'+cellData.split('/').pop()+'</a>'; 
+                            // var hiperlink = '<a href='+rowData[campo]+' target="_blank">'+cellData.split('/').pop()+'</a>'; 
+                            var valor = cellData != "" ? 'Archivo.pdf':'';
+                            var hiperlink = '<a href='+rowData[campo]+' target="_blank">'+ valor +'</a>'; 
                             $(td).empty().append(hiperlink);
                         }
                         if (cols[col].className == 'up_img') {
@@ -253,6 +261,16 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         }
     });
 
+    //     // // eventos de selección de fila
+    // $(selectorTabla+' tbody').on('click', 'tr', function () {
+    //     if ($(this).hasClass('selected')) {
+    //         $(this).removeClass('selected');
+    //     }
+    //     else {
+    //         $(this).addClass('selected');
+    //     }
+    // });
+
     // // // eventos de selección de fila
     // $(selectorTabla+' tbody').on('click', 'tr', function () {
         
@@ -294,7 +312,6 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     $(selectorTabla).on('mousedown.edit', 'i.bi.'+`${claseBotonEditarRow}`, function(e) {
         enableRowEdit($(this));
         existenCambiosPendientes = true;
-        $(selectorTabla).DataTable().row($(this)).select().draw();
 
         filaEnEdicion = $(this).closest('tr').index();
 
@@ -313,6 +330,9 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             $( selectorCtrlDescripcion ).val(data.descripcion);
         }
 
+        activar_upload(urlControlador);
+        $(this).closest('tr').click();
+        $(selectorTabla).DataTable().row($(this)).select().draw();
         // var nonSelected = $(selectorTabla).DataTable().rows( { selected: false } ).nodes().each(function(row){
         //     var but = $(selectorTabla).DataTable().row(row).node().attr('disabled', 'disabled'); //find("td:last-child i.bi."+claseBotonEliminarRow);
         //     but.hide();//.attr('disabled', 'disabled');
@@ -408,17 +428,17 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     return;
                 }
                 // alert("Status: "+response);
-                console.log(rowdata);
+                // console.log(rowdata);
                 existenCambiosPendientes = false;
                 insertandoNuevoRegistro = false;
                 $(selectorTabla).DataTable().row($(this).closest("tr")).remove().draw();
+                $(selectorTabla).DataTable().ajax.reload();
             }, 
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
                 mostrarAdvertencia('ajax Status', textStatus);
                 mostrarAdvertencia('Error', errorThrown);
             }
         });
-        $(selectorTabla).DataTable().ajax.reload();
     });
 
     $(selectorTabla).on('mousedown', 'input', function(e) {
@@ -546,38 +566,34 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     $('#btn-save-'+nombreTabla).on('click', async function() {
         updateRows(true); // Update all edited rows
         
-        var rowdata = null;
+        var fila = $(selectorTabla+' tbody tr:eq('+filaEnEdicion+')');
+        var cells = fila.find("td").not(':first').not(':last');
+        var rowdata = $(selectorTabla).DataTable().row(filaEnEdicion).data();
+
+        var clase;
         var accionCRUD = '';
-        var archivos = {};
-        var fila, cells;
         var img, doc, ruta_doc, ruta_imagen;
 
         if(insertandoNuevoRegistro){
 
-            fila = $(selectorTabla+' tbody tr:first');
-            cells = fila.find("td").not(':first').not(':last');
-            rowdata = $(selectorTabla).DataTable().row(0).data();
-
             cells.each(function(i, elemento) {
 
-                if(elemento.className.toUpperCase().indexOf('UP_IMG') < 0){
-                    rowdata[elemento.id] = elemento.value;
-                } else {
+                clase = elemento.className.toUpperCase().trim();
+                rowdata[elemento.id] = elemento.value;
 
-                    if(elemento.className.toUpperCase().indexOf('UP_IMG') > 0) {
+                if(clase.indexOf('UP_DOC') == 0) {
+                    // es una carga de documento
+                    doc = fila.find('td #uploadDoc')[0];
+                    ruta_doc = fila.find('td #uploadDoc').attr('value');
+                    rowdata[elemento.id] = base_url + ruta_doc;
+                }
+                else {
+                    if(clase.indexOf('UP_IMG') == 0) {
                         img = fila.find('td #myUploadedImg')[0];
                         ruta_imagen = fila.find('td #myUploadedImg').attr('src');
                         rowdata[elemento.id] = base_url+ruta_imagen;
-                    }
-
-                    if(elemento.className.toUpperCase().indexOf('UP_DOC') > 0) {
-                        // es una carga de documento
-                        doc = fila.find('td #uploadDoc')[0];
-                        ruta_doc = fila.find('td #uploadDoc').attr('src');
-                        rowdata[elemento.id] = base_url + ruta_doc;
-                    }
+                    } 
                 }
-
             });
             // encontrando id de referencia a la tabla Padre 
             // TODO: verificar
@@ -590,28 +606,23 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         }
         else {   
 
-            fila = $(selectorTabla+' tbody tr:eq('+filaEnEdicion+')');
-            cells = fila.find("td").not(':first').not(':last');
-            rowdata = $(selectorTabla).DataTable().row(filaEnEdicion).data();
-
             cells.each(function(i, elemento) {
-                
-                if(elemento.className.toUpperCase().indexOf('UP_IMG') < 0){
-                    rowdata[elemento.id] = elemento.value;
-                } else {
+                                
+                clase = elemento.className.toUpperCase().trim();
+                rowdata[elemento.id] = elemento.value;
 
-                    if(elemento.className.toUpperCase().indexOf('UP_IMG') > 0) {
+                if(clase.indexOf('UP_DOC') == 0) {
+                    // es una carga de documento
+                    doc = fila.find('td #uploadDoc')[0];
+                    ruta_doc = fila.find('td #uploadDoc').attr('value');
+                    rowdata[elemento.id] = base_url + ruta_doc;
+                }
+                else {
+                    if(clase.indexOf('UP_IMG') == 0) {
                         img = fila.find('td #myUploadedImg')[0];
                         ruta_imagen = fila.find('td #myUploadedImg').attr('src');
                         rowdata[elemento.id] = base_url+ruta_imagen;
-                    }
-                    
-                    if(elemento.className.toUpperCase().indexOf('UP_DOC') > 0) {
-                        // es una carga de documento
-                        doc = fila.find('td #uploadDoc')[0];
-                        ruta_doc = fila.find('td #uploadDoc').attr('src');
-                        rowdata[elemento.id] = base_url + ruta_doc;
-                    }
+                    } 
                 }
                 
                 // if(elemento.className.toUpperCase().indexOf('FILE')<0){
@@ -680,7 +691,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     // Botón nuevo proyecto
     $(selectorTabla).css('border-top', 'none')
         .before($('<div>').addClass('addRow')
-        .append($('<button>')
+        .append($('<button class="btn btn-primary" type="button">')
         .attr('id', 'addRow'+nombreTabla)
         .text('Nuevo '+nombreTabla.substring(3,nombreTabla.length-1))));
 
@@ -688,7 +699,6 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     $('#addRow'+nombreTabla).click(function() {
         existenCambiosPendientes = true;
         insertandoNuevoRegistro = true;
-        filaEnEdicion = 0;
 
         var PlantillaNuevoRegistro = nombreTabla.substring(3,nombreTabla.length-1);
 
@@ -702,17 +712,20 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             rowCount = $(selectorTabla).DataTable().data().length-1,
             insertedRow = $(selectorTabla).DataTable().row(rowCount).data(),
             tempRow;
-        console.log(index-1, rowCount, insertedRow);
+        // console.log(index-1, rowCount, insertedRow );
+        filaEnEdicion = rowCount;
 
-        for (var i=rowCount; i>0; i--) {
-            tempRow = $(selectorTabla).DataTable().row(i-1).data();
-            $(selectorTabla).DataTable().row(i).data(tempRow);
-            $(selectorTabla).DataTable().row(i-1).data(insertedRow);
-        }
+
+        // for (var i=rowCount; i>0; i--) {
+        //     tempRow = $(selectorTabla).DataTable().row(i-1).data();
+        //     $(selectorTabla).DataTable().row(i).data(tempRow);
+        //     $(selectorTabla).DataTable().row(i-1).data(insertedRow);
+        // }
         
         //refresh the page
-        $(selectorTabla).DataTable().row(0).select();
+        $(selectorTabla).DataTable().row(rowCount).select();
         $(selectorTabla).DataTable().page(currentPage).draw(false);
+        moveToPageWithSelectedItem();
         	
         // https://datatables.net/beta/1.8/examples/api/add_row.html
         // https://stackoverflow.com/questions/52792749/how-to-get-datatables-header-name
@@ -723,10 +736,30 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
 
         // Toggle edit mode upon creation.
         // enableRowEdit($(selectorTabla).find("tbody tr:first-child td i.bi."+claseBotonEditarRow));
-        enableRowEdit($(selectorTabla).find("tbody tr:first-child td i.bi"));
+        // enableRowEdit($(selectorTabla).find("tbody tr:first-child td i.bi"));
+        var selector = `tbody tr:eq(${filaEnEdicion}) td i.bi`;
+        console.log(selector);
+        enableRowEdit($(selectorTabla).find(selector));
         bloquearAccionesPantalla(nombreTabla, filaEnEdicion);
+        activar_upload(urlControlador);
         // TODO: Posterior a esta acción, en la tabla proyectos se causa una excepción
     });
+
+    function moveToPageWithSelectedItem() {
+       
+        var numberOfRows = $(selectorTabla).DataTable().data().length;
+        var rowsOnOnePage = $(selectorTabla).DataTable().page.len();
+        if(numberOfRows/rowsOnOnePage > 1){
+            filaEnEdicion = (numberOfRows % rowsOnOnePage) - 1;
+        }
+
+        if (rowsOnOnePage < numberOfRows) {
+            var selectedNode = $(selectorTabla).DataTable().row(".selected").node();
+            var nodePosition = $(selectorTabla).DataTable().rows({order: 'current'}).nodes().indexOf(selectedNode);
+            var pageNumber = Math.floor(nodePosition / rowsOnOnePage);
+            $(selectorTabla).DataTable().page(pageNumber).draw(false); //move to page with the element
+        }
+    }
 
     // habilitar edición
     function enableRowEdit($editButton) {
@@ -819,11 +852,15 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     }
     
     function enableImgPicker($cell) {
+        var campo = $cell.context.id;
+        var valor = $(selectorTabla).DataTable().row($cell.closest('tr').index()).data()[campo];
+
         var html = `
-                    <input type="file" id="uploadImage" class="up_img" />
+                    <input type="file" id="uploadImage" class="up_img"/>
                     <img id="myUploadedImg" alt="Fotografía" style="width:180px;display: none;" />
                     `
         $cell.empty().append(html);
+        $cell.find('#uploadImage').attr('value', valor);
     }
 
     var _URL = window.URL || window.webkitURL;
@@ -913,7 +950,8 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     `
         // https://www.cloudways.com/blog/the-basics-of-file-upload-in-php/
         //https://github.com/SiddharthaChowdhury/Async-File-Upload-using-PHP-Javascript-AJAX/blob/master/upload_form.html
-        var ctrol2 =  '<input id="uploadDoc" type="file" name="file" class="up_doc" />'
+        var ctrol2 = '<input id="uploadDoc" name="pdf" type="file">'
+                    // <button type="button" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
                     
 
                     // `
@@ -922,7 +960,6 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                     //     <button type="button" name="action" class="btn btn-primary submitBtn" style="display: none;">cargarArchivo_tblEstudios</button>
                     // </form>
                     // `
-
 
                     // `
                     // <form id="form-demo" enctype="multipart/form-data" method="post" action=${urlControlador}>
@@ -950,61 +987,133 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         $cell.empty().append(ctrol2);
     }
 
-    $('td.up_doc').change(function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var archivo, tipo_archivo;
-        nombreTabla = e.target.parentElement.parentElement.parentElement.parentElement.id;
-        filaEnEdicion = $(e.target.parentElement).closest('tr') .index();
-        var input = $("#uploadDoc")[0];
+    // $("input[type='file'].up_doc").change(function (e) {
+    // // $('tbody tr td' ).on('change','#uploadDoc.up_doc' , function (e) {
+    // // $(selectorTabla).on('click', '.submitBtn', function(e) {
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    //     var archivo, tipo_archivo;
+    //     nombreTabla = e.target.parentElement.parentElement.parentElement.parentElement.id;
+    //     filaEnEdicion = $(e.target.parentElement).closest('tr') .index();
+    //     var input = $("#uploadDoc")[0];
 
-        if (input.id == 'uploadDoc') {
+    //     if (input.id == 'uploadDoc') {
 
-            var img, file;
-            archivo = input.files[0];
-            tipo_archivo = input.files[0].type;
-            var encode_permitidos = ['application/pdf', 'application/msword', 'application/vnd.ms-office', 'image/jpeg', 'image/png', 'image/jpg'];
+    //         var img, file;
+    //         archivo = input.files[0];
+    //         tipo_archivo = input.files[0].type;
+    //         var encode_permitidos = ['application/pdf', 'application/msword', 'application/vnd.ms-office', 'image/jpeg', 'image/png', 'image/jpg'];
             
-            if((tipo_archivo == encode_permitidos[0]) || (tipo_archivo == encode_permitidos[1]) || (tipo_archivo == encode_permitidos[2])){
-                file = new FileReader();
-                file.onload = function () {
-                    sendDoc(urlControlador);
-                };
-                file.onerror = function () {
-                    alert("Este tipo de archivo no es válido o permitido en el sistema:" + tipo_archivo);
-                };
-                file.src = _URL.createObjectURL(archivo);
-            }
-            else {
-                alert('Solo se permite la carga de archivos, PDF, DOC, DOCX en el sistema.');
-                return false;
-            }
+    //         if((tipo_archivo == encode_permitidos[0]) || (tipo_archivo == encode_permitidos[1]) || (tipo_archivo == encode_permitidos[2])){
+    //             file = new FileReader();
+    //             file.onload = function () {
+    //                 sendDoc(urlControlador);
+    //             };
+    //             file.onerror = function () {
+    //                 alert("Este tipo de archivo no es válido o permitido en el sistema:" + tipo_archivo);
+    //             };
+    //             file.src = _URL.createObjectURL(archivo);
+    //         }
+    //         else {
+    //             alert('Solo se permite la carga de archivos, PDF, DOC, DOCX en el sistema.');
+    //             return false;
+    //         }
             
-        }
-    });
+    //     }
+    // });
+
+    
+        
+    function activar_upload(urlSend){
+        const inputFile = document.getElementById("uploadDoc");
+        const formData = new FormData();
+
+        const handleSubmit = (e) => {
+            e.preventDefault();
+
+            var archivo, tipo_archivo;
+            nombreTabla = e.target.parentElement.parentElement.parentElement.parentElement.id;
+            filaEnEdicion = $(e.target.parentElement).closest('tr') .index();
+            var input = $("#uploadDoc")[0];
+
+            if (input.id == 'uploadDoc') {
+
+                var img, file;
+                archivo = input.files[0];
+                tipo_archivo = input.files[0].type;
+                var encode_permitidos = ['application/pdf', 'application/msword', 'application/vnd.ms-office', 'image/jpeg', 'image/png', 'image/jpg'];
+                
+                if((tipo_archivo == encode_permitidos[0]) || (tipo_archivo == encode_permitidos[1]) || (tipo_archivo == encode_permitidos[2])){
+                    formData.append('file', $('#uploadDoc')[0].files[0]);
+                    formData.append('action', "cargarArchivo_"+nombreTabla)
+                    fetch(urlSend, {
+                        method: 'POST',
+                        body: formData,
+                    }).then((resp) => {
+                        if(resp['error']){
+                            mostrarAdvertencia('Error inesperado', 'Se presento un error inesperado. Intente la acción nuevamente.');
+                            return;
+                        }
+                        return resp.json();
+                    }).then((json) => {
+                        $("#uploadDoc").attr("value", json.data.data);
+                    });
+                    
+                    // file = new FileReader();
+                    // file.onload = function () {
+                    //     sendDoc(urlSend);
+                    // };
+                    // file.onerror = function () {
+                    //     alert("Este tipo de archivo no es válido o permitido en el sistema:" + tipo_archivo);
+                    // };
+                    // file.src = _URL.createObjectURL(archivo);
+                }
+                else {
+                    alert('Solo se permite la carga de archivos, PDF, DOC, DOCX en el sistema.');
+                    return false;
+                }
+                
+            }
+        };
+
+        if(inputFile){inputFile.addEventListener("change", handleSubmit);}
+    }
+
 
     function sendDoc(urlSend) {
         var formData = new FormData();
         formData.append('file', $('#uploadDoc')[0].files[0]);
         formData.append('action', "cargarArchivo_"+nombreTabla)
-        $.ajax({
-            type: 'post',
-            url: urlSend,
-            data: formData,
-            success: function (response) {
-                var res = JSON.parse(response);
-                if (res.status === 1) {
-                    // var my_path = "pdfs/" + status;
-                    $("#uploadDoc").attr("value", res.data);
-                    // filename = res.data;
-                }
-            },
-            processData: false,
-            contentType: false,
-            error: function () {
+        fetch(urlSend, {
+            method: 'POST',
+            body: formData,
+        }).then((resp) => {
+            if(resp['error']){
                 mostrarAdvertencia('Error inesperado', 'Se presento un error inesperado. Intente la acción nuevamente.');
+                return;
             }
+            return resp.json();
+        }).then((json) => {
+            $("#uploadDoc").attr("value", res.data);
         });
+        // $.ajax({
+        //     type: 'post',
+        //     url: urlSend,
+        //     data: formData,
+        //     success: function (response) {
+        //         var res = JSON.parse(response);
+        //         if (res.status === 1) {
+        //             // var my_path = "pdfs/" + status;
+        //             $("#uploadDoc").attr("value", res.data);
+        //             // filename = res.data;
+        //         }
+        //     },
+        //     processData: false,
+        //     contentType: false,
+        //     error: function () {
+        //         mostrarAdvertencia('Error inesperado', 'Se presento un error inesperado. Intente la acción nuevamente.');
+        //     }
+        // });
     }
 
     function updateRows(commit) {
@@ -1127,44 +1236,44 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
     //     }
     // });
 
-    $(selectorTabla).on('click', '.submitBtn', function(e) {
-        e.preventDefault();
-        var form = $(this).closest('tr'); //.find('#fupForm');  
-        var file_data = form.find('td #form-demo input[name=pdf]')[0].value;
-        var form_data = form.find('td #form-demo');                  
-        form_data.append('pdf', file_data);
-        form_data.append('action', 'cargarArchivo_'+nombreTabla);
-        // alert(form_data);        
+    // $(selectorTabla).on('click', '.submitBtn', function(e) {
+    //     e.preventDefault();
+    //     var form = $(this).closest('tr'); //.find('#fupForm');  
+    //     var file_data = form.find('td #form-demo input[name=pdf]')[0].value;
+    //     var form_data = form.find('td #form-demo');                  
+    //     form_data.append('pdf', file_data);
+    //     form_data.append('action', 'cargarArchivo_'+nombreTabla);
+    //     // alert(form_data);        
 
-        $.ajax({
-            method: 'POST',
-            type: 'POST', // For jQuery < 1.9
-            // url: 'http://localhost/SENA-devmanager/src/upload.php',
-            url: urlControlador,
-            data: form_data,
-            // dataType: 'json',
-            cache: false,
-            contentType: false,
-            processData: false,
-            beforeSend: function(){
-                $('.submitBtn').attr("disabled","disabled");
-                $('#fupForm').css("opacity",".5");
-            },
-            success: function(response){
-                $('.statusMsg').html('');
-                if(response.status == 1){
-                    $('#fupForm')[0].reset();
-                    $('.statusMsg').html('<p class="alert alert-success">'+response.message+'</p>');
-                }else{
-                    $('.statusMsg').html('<p class="alert alert-danger">'+response.message+'</p>');
-                }
-                $('#fupForm').css("opacity","");
-                $(".submitBtn").removeAttr("disabled");
-            }
-        });
-        e.preventDefault();
-        return false;
-    });
+    //     $.ajax({
+    //         method: 'POST',
+    //         type: 'POST', // For jQuery < 1.9
+    //         // url: 'http://localhost/SENA-devmanager/src/upload.php',
+    //         url: urlControlador,
+    //         data: form_data,
+    //         // dataType: 'json',
+    //         cache: false,
+    //         contentType: false,
+    //         processData: false,
+    //         beforeSend: function(){
+    //             $('.submitBtn').attr("disabled","disabled");
+    //             $('#fupForm').css("opacity",".5");
+    //         },
+    //         success: function(response){
+    //             $('.statusMsg').html('');
+    //             if(response.status == 1){
+    //                 $('#fupForm')[0].reset();
+    //                 $('.statusMsg').html('<p class="alert alert-success">'+response.message+'</p>');
+    //             }else{
+    //                 $('.statusMsg').html('<p class="alert alert-danger">'+response.message+'</p>');
+    //             }
+    //             $('#fupForm').css("opacity","");
+    //             $(".submitBtn").removeAttr("disabled");
+    //         }
+    //     });
+    //     e.preventDefault();
+    //     return false;
+    // });
     
     activarModoCRUD(modoTabla, nombreTabla);
 }
