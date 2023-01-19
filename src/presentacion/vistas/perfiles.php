@@ -110,8 +110,8 @@ switch ($tipoUsuario) {
                             <td></td>
                             <td>__nombre habilidad__</t d>
                             <td>__Descripcion__</td>
+                            <td>__Descripcion__</td>
                             <td>__Experiencia__</td>
-                            <td>__correo representante__</td>
                             <td>__correo representante__</td>
                             <td>
                                 <i class='bi ' +`${claseBotonEditarRow}` aria-hidden="true"></i>

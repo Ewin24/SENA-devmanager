@@ -72,7 +72,7 @@ function cargarEstudios(nombreTabla, IdPerfilSeleccionado, tipoUsuario, modoTabl
     cargarTablaGenerica(nombreTabla, colsEstudios, modoTabla, dataUrl, payloadEstudios);
 }
 
-function cargarHabilidades(nombreTabla, IdPerfilSeleccionado, modoTabla='R'){
+function cargarHabilidades(nombreTabla, IdPerfilSeleccionado, tipo_usuario,  modoTabla='R'){
     var colsHabilidades = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         { title: 'Nombre Habilidad', data: 'id_habilidad', name: 'id_habilidad', className : 'ddl' ,visible: true},
@@ -91,7 +91,7 @@ function cargarHabilidades(nombreTabla, IdPerfilSeleccionado, modoTabla='R'){
 
     if($('#'+nombreTabla).lenght) $('#'+nombreTabla).DataTable().clear().draw();
     
-    switch (tipoUsuario) {
+    switch (tipo_usuario) {
         case "A":
         case "D":
             modoTabla = 'R';
