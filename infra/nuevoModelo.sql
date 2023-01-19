@@ -132,7 +132,7 @@ CREATE TABLE ddl_parametrizado (
 	campo varchar(50) NOT NULL,
 	valor varchar(50) null,
 	texto varchar(50) null,
-  	CONSTRAINT pK_ddl_parametrizado PRIMARY KEY (id)
+  CONSTRAINT pK_ddl_parametrizado PRIMARY KEY (id)
 )
 COMMENT='Tabla que permite obtener opciones para controles ddl';
 
@@ -141,9 +141,150 @@ CREATE TABLE parametros (
 	parametro varchar(100) NOT NULL,
 	valor varchar(40) NOT NULL,
 	descripcion varchar(100) NOT NULL,
-    CONSTRAINT pK_parametros PRIMARY KEY (id)
+  CONSTRAINT pK_parametros PRIMARY KEY (id)
 )
 COMMENT='Tabla que permite establecer parametros para tipos documentos, estados, etc';
+
+--trigg para ddl_parametrizado
+DELIMITER $$
+CREATE TRIGGER tr_delete_user_ddl
+AFTER INSERT ON usuarios
+FOR EACH ROW
+BEGIN
+	IF NEW.tipo_usuario = 'D'  THEN 
+		INSERT INTO ddl_parametrizado (tabla, campo, valor, texto) 
+		VALUES ('tblProyectos', 'id_director', NEW.id, NEW.correo);
+	END IF;
+END;$$
+
+DELIMITER $$
+CREATE TRIGGER tr_update_user_ddl
+AFTER UPDATE ON usuarios
+FOR EACH ROW
+BEGIN
+    IF NEW.tipo_usuario = 'D' AND OLD.tipo_usuario <> 'D' THEN
+        INSERT INTO ddl_parametrizado (tabla, campo, valor, texto) 
+		VALUES ('tblProyectos', 'id_director', NEW.id, NEW.correo);
+    END IF;
+
+    IF NEW.tipo_usuario <> 'D' AND OLD.tipo_usuario = 'D' THEN
+        DELETE FROM ddl_parametrizado
+        WHERE valor = OLD.id;
+    END IF;
+   
+   	IF NEW.correo <> OLD.correo THEN
+        UPDATE ddl_parametrizado SET texto = NEW.correo WHERE valor = NEW.id AND tabla = 'tblProyectos';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER tr_delete_user_ddl
+AFTER DELETE ON usuarios
+FOR EACH ROW
+BEGIN
+    DELETE FROM ddl_parametrizado
+    WHERE valor = OLD.id;
+END $$
+DELIMITER ;
+
+--empresa
+DELIMITER $$
+CREATE TRIGGER tr_insert_empresa_ddl
+AFTER INSERT ON empresas
+FOR EACH ROW
+BEGIN
+	INSERT INTO ddl_parametrizado (tabla, campo, valor, texto) 
+	VALUES ('tblEmpleados', 'id_empresa', NEW.id, NEW.nombre);
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER tr_update_empresa_ddl
+AFTER UPDATE ON empresas
+FOR EACH ROW
+BEGIN
+    UPDATE ddl_parametrizado 
+    SET texto = NEW.nombre
+    WHERE valor = NEW.id;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER tr_delete_empresa_ddl
+AFTER DELETE ON empresas
+FOR EACH ROW
+BEGIN
+    DELETE FROM ddl_parametrizado
+    WHERE valor = OLD.id;
+END $$
+DELIMITER ;
+
+--habilidades
+DELIMITER $$
+CREATE TRIGGER tr_insert_habilidad_ddl
+AFTER INSERT ON habilidades
+FOR EACH ROW
+BEGIN
+    INSERT INTO ddl_parametrizado (tabla, campo, valor, texto) 
+	VALUES ('tblHabilidades', 'id_habilidad', NEW.id, NEW.nombre);   
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER tr_update_habilidad_ddl
+AFTER UPDATE ON habilidades
+FOR EACH ROW
+BEGIN
+    UPDATE ddl_parametrizado
+    SET texto = NEW.nombre
+    WHERE valor = NEW.id;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER tr_delete_habilidad_ddl
+AFTER DELETE ON habilidades
+FOR EACH ROW
+BEGIN
+    DELETE FROM ddl_parametrizado
+    WHERE valor = OLD.id;
+END $$
+DELIMITER ;
+
+--estudios
+DELIMITER $$
+CREATE TRIGGER tr_insert_estudio_ddl
+AFTER INSERT ON estudios
+FOR EACH ROW
+BEGIN
+    INSERT INTO ddl_parametrizado (tabla, campo, valor, texto) 
+	VALUES ('tblEstudios', 'id_estudio', NEW.id, NEW.nombre);  
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER tr_update_estudio_ddl
+AFTER UPDATE ON estudios
+FOR EACH ROW
+BEGIN
+    UPDATE ddl
+    SET nombre = NEW.nombre
+    WHERE valor = NEW.id;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER tr_delete_estudio_ddl
+AFTER DELETE ON estudios
+FOR EACH ROW
+BEGIN
+    DELETE FROM ddl_parametrizado
+    WHERE valor = OLD.id;
+END $$
+DELIMITER ;
+
+
 
 -- Poblar base
 
