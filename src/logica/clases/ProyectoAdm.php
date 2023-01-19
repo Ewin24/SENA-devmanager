@@ -139,8 +139,8 @@ class ProyectoAdm
     public static function getTrabajadoresDisponibles($idProyectoSeleccionado)
     {
         //     // tabla habilidades donde estado diferente A=Asignado para el proyecto pasado por parametro
-            $resultado = ProyectoAdm::getDatosCrudos(null, null, "TrabDisponible", $idProyectoSeleccionado);
-            return $resultado;
+        $resultado = ProyectoAdm::getDatosCrudos(null, null, "TrabDisponible", $idProyectoSeleccionado);
+        return $resultado;
     }
 
     public static function cargarTablasHijas($idProySeleccionado)
@@ -191,6 +191,7 @@ class ProyectoAdm
     }
     public static function postularTrabajador($id_proyecto, $id_usuario)
     {
+
         $UUID = ConectorBD::get_UUIDv4();
         $fechaActual = date('Y-m-d');
         $cadenaSQL = "INSERT INTO rh_proyectos (id, fecha_solicitud, estado, id_proyecto, id_usuario) 
@@ -250,8 +251,8 @@ class ProyectoAdm
     public static function insertarTrabajadorProyecto($id_usuario, $id_proyecto)
     {
         $cadenaSQL = "UPDATE rh_proyectos 
-                    SET estado = 'A', id_proyecto = '$id_proyecto'
-                    WHERE id_usuario = '$id_usuario'";
+            SET estado = 'A', id_proyecto = '$id_proyecto'
+            WHERE id_usuario = '$id_usuario'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
