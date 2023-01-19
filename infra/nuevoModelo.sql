@@ -1,3 +1,6 @@
+CREATE DATABASE devmanager2;
+use devmanager2;
+
 CREATE TABLE empresas (
   id VARCHAR(36) NOT NULL, /* UUID v4 */
   nit VARCHAR(10) NOT NULL,
