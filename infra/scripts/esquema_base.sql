@@ -141,7 +141,15 @@ CREATE TABLE ddl_parametrizado (
 	texto varchar(50) null,
   	CONSTRAINT pK_ddl_parametrizado PRIMARY KEY (id)
 )
-ENGINE=InnoDB
-DEFAULT CHARSET=utf8mb4
-COLLATE=utf8mb4_general_ci
+
 COMMENT='Tabla que permite obtener opciones para controles ddl';
+
+
+CREATE TABLE parametros (
+	id int auto_increment,
+	parametro varchar(100) NOT NULL,
+	valor varchar(40) NOT NULL,
+	descripcion varchar(100) NOT NULL,
+    CONSTRAINT pK_parametros PRIMARY KEY (id)
+)
+COMMENT='Tabla que permite establecer parametros para tipos documentos, estados, etc';

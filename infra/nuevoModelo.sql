@@ -134,21 +134,15 @@ CREATE TABLE ddl_parametrizado (
 	texto varchar(50) null,
   	CONSTRAINT pK_ddl_parametrizado PRIMARY KEY (id)
 )
-ENGINE=InnoDB
-DEFAULT CHARSET=utf8mb4
-COLLATE=utf8mb4_general_ci
 COMMENT='Tabla que permite obtener opciones para controles ddl';
 
 CREATE TABLE parametros (
-	id varchar(36) NOT NULL,
+	id int auto_increment,
 	parametro varchar(100) NOT NULL,
 	valor varchar(40) NOT NULL,
-	descripcion varchar(100) NOT NULL
+	descripcion varchar(100) NOT NULL,
+    CONSTRAINT pK_parametros PRIMARY KEY (id)
 )
-
-ENGINE=InnoDB
-DEFAULT CHARSET=utf8mb4
-COLLATE=utf8mb4_general_ci
 COMMENT='Tabla que permite establecer parametros para tipos documentos, estados, etc';
 
 
@@ -163,14 +157,14 @@ INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(6, 'tipo_usuar
 INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(7, 'tipo_usuario', 'D', 'Director');
 INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(8, 'tipo_usuario', 'T', 'Trabajador');
 INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(9, 'tipo_usuario', '-', ' ');
-INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(10, 'estado', 'T', 'Terminado');
-INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(11, 'estado', 'P', 'Espera');
-INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(12, 'estado', 'E', 'Ejecución');
-INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(13, 'estado', '-', '');
-INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(14, 'estado', 'A', 'Admitido');
-INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(15, 'estado', 'R', 'Rechazado');
-INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(16, 'estado', 'E', 'Espera');
-INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(17, 'estado', '-', '');
+INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(10, 'estado_proyecto', 'T', 'Terminado');
+INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(11, 'estado_proyecto', 'P', 'Espera');
+INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(12, 'estado_proyecto', 'E', 'Ejecución');
+INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(13, 'estado_proyecto', '-', '');
+INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(14, 'estado_postulacion', 'A', 'Admitido');
+INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(15, 'estado_postulacion', 'R', 'Rechazado');
+INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(16, 'estado_postulacion', 'E', 'Espera');
+INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(17, 'estado_postulacion', '-', '');
 
 -- Tablas paramétrizadas
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(1, 'tblEmpleados', 'tipo_identificacion', 'T', 'Tarjeta Identidad');

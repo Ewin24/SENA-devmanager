@@ -37,7 +37,17 @@ CALL llenar_ddl_desde_parametros('tblCandidatos','estado','estado_postulacion');
 
 
 -- ############################### PARAMETRIZACION MENU PERFIL
+-- tblEmpleados
+CALL parametrizar_desde_tabla('tblEmpleados','tipo_identificacion','parametros','parametro', 'tipo_identificacion','valor','descripcion'); 
+CALL parametrizar_desde_tabla('tblEmpleados','tipo_usuario','parametros','parametro', 'tipo_usuario','valor','descripcion'); 
+CALL parametrizar_desde_tabla('tblEmpleados','id_empresa','empresas','1', '1','id','nombre'); 
 
+
+-- tblEstudios
+CALL llenar_ddl_desde_parametros('tblEstudios','tipo_identificacion','tipo_identificacion');
+
+-- tblHabilidades
+CALL llenar_ddl_desde_parametros('tblEstudios','tipo_identificacion','tipo_identificacion');
 
 -- ############################### PARAMETRIZACION MENU ADMON
 
@@ -176,3 +186,57 @@ BEGIN
 END //
 
 DELIMITER ;
+
+
+
+DELIMITER //
+-- campos id_director
+CREATE PROCEDURE `parametrizar_desde_tabla` ( 
+	IN nombre_tabla_html varchar(100),
+	IN campo_tabla_html varchar(100),
+	IN tabla_origen_bd varchar(100),
+	IN nombre_columna_origen varchar(100),
+	IN valor_columna_origen varchar(100),
+	IN campo_llave varchar(100),
+	IN campo_valor varchar(100)
+)
+BEGIN
+
+		
+
+SET @query = concat("INSERT INTO ddl_parametrizado (tabla, campo, valor, texto) ( SELECT '", 
+							@nombre_tabla_html, "','", @campo_tabla_html, "',", @campo_llave, ",", @campo_valor, 
+							' FROM  ', @tabla_origen_bd, ' WHERE NOT EXISTS ( SELECT DISTINCT valor, texto FROM ddl_parametrizado WHERE	tabla = ', 
+							"'", @nombre_tabla_html,"' AND campo = '", @campo_tabla_html, "'" , " AND valor = ", @campo_llave, " AND texto = ", @campo_valor,
+							") AND ", @nombre_columna_origen ," = '", @valor_columna_origen, "') ON DUPLICATE KEY UPDATE valor = VALUES(valor), texto = VALUES(texto);" 
+				);
+
+PREPARE stmt1 FROM @query;
+EXECUTE stmt1;
+DEALLOCATE PREPARE stmt1;
+	
+END //
+
+DELIMITER ;
+
+
+
+SELECT @nombre_tabla_html := 'tblContratados';
+SELECT @campo_tabla_html :='estado';
+SELECT @tabla_origen_bd := 'parametros';
+SELECT @nombre_columna_origen := 'parametro';
+SELECT @valor_columna_origen := 'estado_proyecto';
+SELECT @campo_llave := 'valor';
+SELECT @campo_valor := 'descripcion';
+
+
+-- SELECT @nombre_tabla_html := 'tblContratados';
+-- SELECT @campo_tabla_html :='id_director';
+-- SELECT @tabla_origen_bd := 'usuarios';
+-- SELECT @nombre_columna_origen := '1';
+-- SELECT @valor_columna_origen := '1';
+-- SELECT @campo_llave := 'id';
+-- SELECT @campo_valor := 'correo';
+-- CALL parametrizar_desde_tabla('tblContratados','id_director','usuarios','1', '1','id','correo')
+
+
