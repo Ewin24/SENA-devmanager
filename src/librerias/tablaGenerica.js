@@ -33,10 +33,10 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                         case 'UD':
                             ultimaColumna += botonEditar+botonEliminar; //+"</td>";
                             break;
-                        case 'U':
+                        case 'RU':
                             ultimaColumna += botonEditar; //+"</td>";
                             break;
-                        case 'D':
+                        case 'RD':
                             ultimaColumna+= botonEliminar; //+"</td>";
                             break;
                         default:
