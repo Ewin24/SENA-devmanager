@@ -101,6 +101,48 @@ if (!empty($_POST['action'])) {
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
                 //SECCION HABILIDADES
+            case 'Insertar_tblHabilidades':
+                header('Content-type: application/json; charset=utf-8');
+                $newHabilidad = json_decode($_POST['datos']);
+
+
+                if ($newHabilidad != null) {
+                    HabilidadesAdm::guardarObj($newHabilidad);
+                }
+                $response = array(
+                    "data" => $newHabilidad,
+                    "accion" => $accion
+                );
+                break;
+
+            case 'Modificar_tblHabilidades':
+                header('Content-type: application/json; charset=utf-8');
+                $editarHabilidad = json_decode($_POST['datos']);
+
+                if ($editarHabilidad != null || $editarHabilidad != '') {
+                    HabilidadesAdm::modificarObj($editarHabilidad);
+                }
+
+                $response = array(
+                    "data" => $editarHabilidad->id,
+                    "accion" => $accion
+                );
+                break;
+
+            case 'Eliminar_tblHabilidades':
+                header('Content-type: application/json; charset=utf-8');
+                $id_habilidad = $_POST['datos'];
+
+                if ($id_habilidad != null || $id_habilidad != '') {
+                    HabilidadesAdm::eliminarObj($id_habilidad);
+                }
+
+                $response = array(
+                    "data" => $id_habilidad,
+                    "accion" => $accion
+                );
+                break;
+
             case 'cargar_tblHabilidades':
                 header('Content-type: application/json; charset=utf-8');
                 $idPerfilSeleccionado = $_POST['datos'];
@@ -117,7 +159,6 @@ if (!empty($_POST['action'])) {
                     "ddl_ops" => $json_ddl,
                     "accion" => $accion
                 );
-
                 break;
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,7 +193,6 @@ if (!empty($_POST['action'])) {
                 );
                 break;
 
-                // TODO: Falta Implementar Modificar_tblEstudios
             case 'Modificar_tblEstudios':
                 header('Content-type: application/json; charset=utf-8');
                 $editarEstudio = json_decode($_POST['datos']);
@@ -167,7 +207,6 @@ if (!empty($_POST['action'])) {
                 );
                 break;
 
-                // TODO: Falta Implementar Eliminar_tblEstudios
             case 'Eliminar_tblEstudios':
                 header('Content-type: application/json; charset=utf-8');
                 $eliminarIdEstudio = $_POST['datos'];
@@ -181,7 +220,6 @@ if (!empty($_POST['action'])) {
                     "accion" => $accion
                 );
                 break;
-
 
             case 'cargarArchivo_tblEmpleados':
 
@@ -205,7 +243,7 @@ if (!empty($_POST['action'])) {
 
                 //TODO: hacer verificacion de seguridad, con la ruta verificar que el archivo si es PDF
                 $resultado = upload::subirArchivo();
-                
+
                 $response = array(
                     "data" => $resultado,
                     "accion" => $accion

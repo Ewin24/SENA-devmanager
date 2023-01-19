@@ -227,4 +227,31 @@ class HabilidadesAdm
             $this->experiencia = $campo['experiencia'];
         }
     }
+    public static function guardarObj($habilidad)
+    {
+        $UUID = ConectorBD::get_UUIDv4(); //genera el UUID
+        $cadenaSQL = "INSERT INTO usuarios_habilidades
+                    (id, experiencia, id_usuario, id_habilidad)
+                    VALUES ('$UUID',
+                        '$habilidad->experiencia', 
+                        '$habilidad->id_usuario', 
+                        '$habilidad->id_habilidad')";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+    //modificar usuario
+    public static function modificarObj($habilidad)
+    {
+        $cadenaSQL = "UPDATE  usuarios_habilidades
+                        SET  experiencia = '$habilidad->experiencia',
+                             id_usuario = '$habilidad->id_usuario',
+                             id_habilidad = '$habilidad->id_habilidad'
+                        WHERE id='$habilidad->id'";
+        return ConectorBD::ejecutarQuery($cadenaSQL);
+    }
+
+    public static function eliminarObj($id)
+    {
+        $cadenaSQL = "DELETE FROM usuarios_habilidades WHERE id = '$id'";
+        ConectorBD::ejecutarQuery($cadenaSQL);
+    }
 }

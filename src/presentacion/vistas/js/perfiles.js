@@ -76,7 +76,6 @@ function cargarHabilidades(nombreTabla, IdPerfilSeleccionado, tipo_usuario,  mod
     var colsHabilidades = [
         { data:null, render:function(){return "<input type='checkbox'/>";}, visible: true },
         { title: 'Nombre Habilidad', data: 'id_habilidad', name: 'id_habilidad', className : 'ddl' ,visible: true},
-        { title: 'Nombre Habilidad', data: 'nombre', name: 'nombre' , visible: false },
         { title: 'Descripcion', data: 'descripcion', name: 'descripcion', visible: true },
         { title: 'Experiencia', data: 'experiencia', name: 'experiencia', visible: true },
         { title: 'Id usuario', data: 'id_usuario', name: 'id_usuario',visible: false},
