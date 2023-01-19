@@ -93,6 +93,9 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 // alert("Error: " + errorThrown); 
                 var titulo = "<b>Error al cargar : </b>"+ nombreTabla.substring(3,nombreTabla.length-1);
                 var mensaje = "<b>Error en la invocación de : </b> "+payloadInicial['action'] + "<br><b>Detalle del Error : </b>"+ errorThrown['message'];
+                if(errorThrown['message'] === undefined){
+                    return;
+                }
                 mostrarAdvertencia(titulo, mensaje);
             }
         },
@@ -660,9 +663,19 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 if(response['error']){
                     var mensaje = response['error'].split(']:').pop().split(' (')[0];
                     mostrarAdvertencia(response['accion'].replace('_tbl', ' ') , mensaje);
+                    // esta logica activa campo descripción dentro de la tabla
+                    if ( $( selectorCtrlDescripcion ).length ) {
+                        $( selectorCtrlDescripcion ).removeAttr("disabled");
+                        $( selectorCtrlDescripcion ).val('agregue una descripción');
+                        $( selectorCtrlDescripcion ).show();
+                    }
+                    if ( $( selectorBotonesGuardar).length ) {
+                        $( selectorBotonesGuardar ).show();
+                    }
                     return;
                 }
                 // console.log(rowdata);
+                filaEnEdicion = ''
                 $(selectorTabla).DataTable().ajax.reload();
                 existenCambiosPendientes = false;
                 insertandoNuevoRegistro = false;
@@ -672,9 +685,6 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
                 mostrarAdvertencia('Error', errorThrown);
             }
         });
-
-        filaEnEdicion = ''
-        $(selectorTabla).DataTable().ajax.reload();
     });
 
     // Cancelar Cambios
@@ -740,7 +750,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         // enableRowEdit($(selectorTabla).find("tbody tr:first-child td i.bi."+claseBotonEditarRow));
         // enableRowEdit($(selectorTabla).find("tbody tr:first-child td i.bi"));
         var selector = `tbody tr:eq(${filaEnEdicion}) td i.bi`;
-        console.log(selector);
+        // console.log(selector);
         enableRowEdit($(selectorTabla).find(selector));
         bloquearAccionesPantalla(nombreTabla, filaEnEdicion);
         activar_upload(urlControlador);

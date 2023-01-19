@@ -230,7 +230,8 @@ AFTER INSERT ON habilidades
 FOR EACH ROW
 BEGIN
     INSERT INTO ddl_parametrizado (tabla, campo, valor, texto) 
-	VALUES ('tblHabilidades', 'id_habilidad', NEW.id, NEW.nombre);   
+	  VALUES ('tblHabilidades', 'id_habilidad', NEW.id, NEW.nombre),
+           ('tblHab_Requeridas', 'id_habilidad', NEW.id, NEW.nombre);
 END $$
 DELIMITER ;
 
@@ -363,7 +364,6 @@ INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(50, 'tblHa
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(51, 'tblHabilidades', 'id_habilidad', '0463add9-313e-49bf-a07e-800612c36263', 'JavaScript');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(52, 'tblEstudios', 'id_estudio', '50c46fc7-9066-11ed-aeb0-1701c1c49394', 'Basica Primaria');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(53, 'tblEstudios', 'id_estudio', '788486b4-9066-11ed-aeb0-1701c1c49394', 'Maestria');
-
 
 -- empresa
 -- UUID V4 - https://www.delftstack.com/howto/php/php-uuid/
