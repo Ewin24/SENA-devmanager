@@ -386,6 +386,16 @@ INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(50, 'tblHa
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(51, 'tblHabilidades', 'id_habilidad', '0463add9-313e-49bf-a07e-800612c36263', 'JavaScript');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(52, 'tblEstudios', 'id_estudio', '50c46fc7-9066-11ed-aeb0-1701c1c49394', 'Basica Primaria');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(53, 'tblEstudios', 'id_estudio', '788486b4-9066-11ed-aeb0-1701c1c49394', 'Maestria');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(54, 'tblEstudios', 'id_estudio', '2d6c6741-c4d1-49bb-b18c-6705678567be', 'Pre-universitario');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(55, 'tblEstudios', 'id_estudio', '717e915e-463d-45de-bb08-aa2eeb4ebd7a', 'Doctorado');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(56, 'tblEstudios', 'id_estudio', '777a66b2-65dc-4ac1-89c4-d53edb717f9d', 'Postgrado');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(57, 'tblEstudios', 'id_estudio', '788486b4-9066-11ed-aeb0-1701c1c49394', 'Maestria');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(58, 'tblEstudios', 'id_estudio', 'a0f22a6d-254b-449f-920b-6f34ebb085af', 'Especialización');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(59, 'tblEstudios', 'id_estudio', 'af3e09e9-8ce3-4010-9e95-d7ba6f6cf9da', 'Técnico');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(60, 'tblEstudios', 'id_estudio', 'becf1482-7b03-42df-9831-ec2ddb6c2ba0', 'Tecnólogo');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(61, 'tblEstudios', 'id_estudio', 'cfb2184d-8577-4a59-bb8c-399710ceae43', 'Auto-Adquirida');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(62, 'tblEstudios', 'id_estudio', 'fc119392-fb77-477a-83bc-66ca5b7d7996', 'Pregrado Universitario');
+INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(63, 'tblEstudios', 'id_estudio', '788486b4-9066-11ed-aeb0-1701c1c49396', 'Secundaria');
 
 -- empresa
 -- UUID V4 - https://www.delftstack.com/howto/php/php-uuid/
@@ -434,6 +444,16 @@ VALUES
 
 INSERT INTO estudios (`id`, `nombre`) VALUES ('50c46fc7-9066-11ed-aeb0-1701c1c49394', 'Basica Primaria');
 INSERT INTO estudios (`id`, `nombre`) VALUES ('788486b4-9066-11ed-aeb0-1701c1c49394', 'Maestria');
+INSERT INTO estudios (id, nombre) VALUES('2d6c6741-c4d1-49bb-b18c-6705678567be', 'Pre-universitario');
+INSERT INTO estudios (id, nombre) VALUES('717e915e-463d-45de-bb08-aa2eeb4ebd7a', 'Doctorado');
+INSERT INTO estudios (id, nombre) VALUES('777a66b2-65dc-4ac1-89c4-d53edb717f9d', 'Postgrado');
+INSERT INTO estudios (id, nombre) VALUES('788486b4-9066-11ed-aeb0-1701c1c49394', 'Maestria');
+INSERT INTO estudios (id, nombre) VALUES('a0f22a6d-254b-449f-920b-6f34ebb085af', 'Especialización');
+INSERT INTO estudios (id, nombre) VALUES('af3e09e9-8ce3-4010-9e95-d7ba6f6cf9da', 'Técnico');
+INSERT INTO estudios (id, nombre) VALUES('becf1482-7b03-42df-9831-ec2ddb6c2ba0', 'Tecnólogo');
+INSERT INTO estudios (id, nombre) VALUES('cfb2184d-8577-4a59-bb8c-399710ceae43', 'Auto-Adquirida');
+INSERT INTO estudios (id, nombre) VALUES('fc119392-fb77-477a-83bc-66ca5b7d7996', 'Pregrado Universitario');
+INSERT INTO estudios (id, nombre) VALUES('788486b4-9066-11ed-aeb0-1701c1c49396', 'Secundaria');
 
 INSERT INTO usuarios_estudios (id, nombre_certificado, nombre_archivo, fecha_certificado, id_usuario, id_estudio) VALUES('a3501f9f-1c5d-4589-92a3-21f2ad42c210', 'Prueba Edw', ' ', '2022-03-24', 'eb036f8a-75bd-4811-a477-1444e2521f3b', '788486b4-9066-11ed-aeb0-1701c1c49394');
 INSERT INTO usuarios_estudios (id, nombre_certificado, nombre_archivo, fecha_certificado, id_usuario, id_estudio) VALUES('2bcf4528-8b81-4e2a-be59-7fa18964d6b9', 'Prueba Willa', ' ', '2022-03-18', '499a9d4a-fbf1-4ea7-850b-01bf301a98af', '50c46fc7-9066-11ed-aeb0-1701c1c49394');

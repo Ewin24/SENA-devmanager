@@ -187,6 +187,29 @@ switch ($tipoUsuario) {
 </fieldset>
 
 <script type="text/javascript">
+    
+    function mostrarAdvertencia(titulo, mensaje) {
+        var html = `
+        <div id="myModal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header modal-">
+                        <h3 class="modal-title">${titulo}</h#>
+                    </div>
+                    <div class="modal-body">
+                        <p>${mensaje}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `
+        $(document.body).append(html);
+        $("#myModal").modal("show");
+    }
+
     //////////////////////////////////////////////////////////////////////////////
     //FUNCIONALIDAD DE POSTULARSE A UN PROYECTO
     function postularse() {
@@ -209,6 +232,7 @@ switch ($tipoUsuario) {
                     data: dataReq,
                     dataType: "json",
                     success: function(response) {
+                        if(response['error']) mostrarAdvertencia('Ocurrido una excepción en la Base: ', response.error);
                         // alert("Status: "+response);
                         console.log(response);
                         $('#tbl_Proyectos').DataTable().ajax.reload();
