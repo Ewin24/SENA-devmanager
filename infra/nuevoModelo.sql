@@ -284,6 +284,28 @@ BEGIN
 END $$
 DELIMITER ;
 
+--trigger para que no deje postular si esta postulado aceptado 
+DELIMITER $$
+CREATE TRIGGER tr_postularse_proyecto
+BEFORE INSERT ON rh_proyectos
+FOR EACH ROW
+BEGIN
+	DECLARE postulado INT DEFAULT 0;
+	DECLARE aceptado INT DEFAULT 0;
+
+	SELECT COUNT(*) INTO postulado FROM rh_proyectos WHERE id_usuario = NEW.id_usuario AND id_proyecto = NEW.id_proyecto;
+    SELECT COUNT(*) INTO aceptado FROM rh_proyectos WHERE id_usuario = NEW.id_usuario AND id_proyecto = NEW.id_proyecto AND estado = 'A';
+
+    IF postulado > 0 THEN
+    	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya se encuentra postulado en el proyecto seleccionado';
+    END IF;
+   
+	IF postulado > 0 THEN
+       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya se encuentra aceptado en el proyecto seleccionado';
+    END IF;
+END $$
+DELIMITER ;
+
 
 
 -- Poblar base
