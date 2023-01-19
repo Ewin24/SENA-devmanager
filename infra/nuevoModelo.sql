@@ -148,7 +148,7 @@ CREATE TABLE parametros (
 )
 COMMENT='Tabla que permite establecer parametros para tipos documentos, estados, etc';
 
---trigg para ddl_parametrizado
+-- trigg para ddl_parametrizado
 DELIMITER $$
 CREATE TRIGGER tr_insert_user_ddl
 AFTER INSERT ON usuarios
@@ -191,7 +191,7 @@ BEGIN
 END $$
 DELIMITER ;
 
---empresa
+-- empresa
 DELIMITER $$
 CREATE TRIGGER tr_insert_empresa_ddl
 AFTER INSERT ON empresas
@@ -223,7 +223,7 @@ BEGIN
 END $$
 DELIMITER ;
 
---habilidades
+-- habilidades
 DELIMITER $$
 CREATE TRIGGER tr_insert_habilidad_ddl
 AFTER INSERT ON habilidades
@@ -256,7 +256,7 @@ BEGIN
 END $$
 DELIMITER ;
 
---estudios
+-- estudios
 DELIMITER $$
 CREATE TRIGGER tr_insert_estudio_ddl
 AFTER INSERT ON estudios
@@ -288,7 +288,7 @@ BEGIN
 END $$
 DELIMITER ;
 
---trigger para que no deje postular si esta postulado aceptado 
+-- trigger para que no deje postular si esta postulado aceptado 
 DELIMITER $$
 CREATE TRIGGER tr_postularse_proyecto
 BEFORE INSERT ON rh_proyectos
