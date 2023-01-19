@@ -1429,7 +1429,6 @@ function bloquearAccionesPantalla(nombreTabla='', filaEnEdicion=0){
 export {    cargarTablaGenerica,
             bloquearAccionesPantalla,
             desbloquearAccionesPantalla,
-            // fileUpload,
             claseBotonEditarRow,
             claseBotonEliminarRow,
             claseBotonConfirmarRow,
