@@ -66,6 +66,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
             dataSrc: function ( json ) {
                 //Make your callback here.
                 if(json.accion == "Acción no definida") alert(json.accion);
+                if(json.error) mostrarAdvertencia('Ocurrido una excepción en la Base: ', json.error);
                 // console.log(json);
 
                 if( json.ddl_ops!=null && json.ddl_ops[0].length != 0){
