@@ -9,6 +9,10 @@ body {
   font-family: 'Inconsolata', monospace;
 }
 
+img{
+  height: 160px;
+}
+
 #nav {
   background-color: #aebdca;
 }

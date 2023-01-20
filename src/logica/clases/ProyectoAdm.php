@@ -251,19 +251,19 @@ class ProyectoAdm
     public static function insertarTrabajadorProyecto($id_usuario, $id_proyecto)
     {
         $cadenaSQL = "UPDATE rh_proyectos 
-            SET estado = 'A', id_proyecto = '$id_proyecto'
-            WHERE id_usuario = '$id_usuario'";
+            SET estado = 'A'
+            WHERE id_usuario = '$id_usuario' AND id_proyecto = '$id_proyecto'";
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
 
     public static function eliminarTrabajadorProyecto($id_usuario, $id_proyecto)
     {
-        $cadenaSQL = "UPDATE rh_proyectos
-                    SET estado = 'R'
-                    WHERE id_usuario = '$id_usuario'
-                    AND id_proyecto = '$id_proyecto'";
+        $cadenaSQL = "DELETE FROM rh_proyectos WHERE id_proyecto= '$id_proyecto' AND id_usuario = '$id_usuario'";
+        // $cadenaSQL = "UPDATE rh_proyectos
+        //             SET estado = 'R'
+        //             WHERE id_usuario = '$id_usuario'
+        //             AND id_proyecto = '$id_proyecto'";
         $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
-        // print_r($resultado);
         return $resultado;
     }
 }

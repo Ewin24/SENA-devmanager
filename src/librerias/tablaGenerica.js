@@ -870,7 +870,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
 
         var html = `
                     <input type="file" id="uploadImage" class="up_img"/>
-                    <img id="myUploadedImg" alt="Fotografía" style="width:180px;display: none;" />
+                    <img id="myUploadedImg" alt="Fotografía" style="width:500px; height:300px; display: none;" />
                     `
         $cell.empty().append(html);
         $cell.find('#uploadImage').attr('value', valor);

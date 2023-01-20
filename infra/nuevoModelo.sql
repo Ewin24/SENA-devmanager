@@ -262,7 +262,7 @@ CREATE TRIGGER tr_insert_estudio_ddl
 AFTER INSERT ON estudios
 FOR EACH ROW
 BEGIN
-    INSERT INTO ddl_parametrizado (tabla, campo, valor, texto) 
+  INSERT INTO ddl_parametrizado (tabla, campo, valor, texto) 
 	VALUES ('tblEstudios', 'id_estudio', NEW.id, NEW.nombre);  
 END $$
 DELIMITER ;
@@ -272,8 +272,8 @@ CREATE TRIGGER tr_update_estudio_ddl
 AFTER UPDATE ON estudios
 FOR EACH ROW
 BEGIN
-    UPDATE ddl
-    SET nombre = NEW.nombre
+    UPDATE ddl_parametrizado
+    SET texto = NEW.nombre
     WHERE valor = NEW.id;
 END $$
 DELIMITER ;
@@ -304,16 +304,60 @@ BEGIN
     	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya se encuentra postulado en el proyecto seleccionado';
     END IF;
    
-	IF postulado > 0 THEN
+	IF aceptado > 0 THEN
        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya se encuentra aceptado en el proyecto seleccionado';
     END IF;
 END $$
 DELIMITER ;
 
+-- triggers para los registros de ddl_parametrizados relacionados con los candidatos y los postulados
+DELIMITER $$
+CREATE TRIGGER insert_rh_proyectos_candidatos
+AFTER INSERT ON rh_proyectos
+FOR EACH ROW
+BEGIN
+ 	DECLARE correo_usuario VARCHAR(255);
+    SELECT correo INTO correo_usuario FROM usuarios WHERE id = NEW.id_usuario;
+    IF NEW.estado = 'E' THEN
+       	INSERT INTO ddl_parametrizado (tabla, campo, valor, texto) 
+		VALUES ('tblCandidatos', 'id_usuario', NEW.id_usuario, correo_usuario);
+    END IF;
+END $$
+DELIMITER ;
 
+DELIMITER $$
+CREATE TRIGGER insert_rh_proyectos_contratados
+AFTER UPDATE ON rh_proyectos
+FOR EACH ROW
+BEGIN
+	DECLARE correo_usuario VARCHAR(255);
+    SELECT correo INTO correo_usuario FROM usuarios WHERE id = NEW.id_usuario;
+    IF OLD.estado = 'E' AND NEW.estado = 'A' THEN
+       	INSERT INTO ddl_parametrizado (tabla, campo, valor, texto) 
+		VALUES ('tblContratados', 'id_usuario', NEW.id_usuario, correo_usuario);
+    END IF;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER update_usuarios_rh_proyectos
+AFTER UPDATE ON usuarios
+FOR EACH ROW
+BEGIN
+    UPDATE ddl_parametrizado SET texto = NEW.correo WHERE valor = NEW.id;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER delete_rh_proyectos
+AFTER DELETE ON rh_proyectos
+FOR EACH ROW
+BEGIN
+    DELETE FROM ddl_parametrizado WHERE valor = OLD.id_usuario;
+END $$
+DELIMITER ;
 
 -- Poblar base
-
 INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(1, 'tipo_identificacion', 'T', 'Tarjeta Identidad');
 INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(2, 'tipo_identificacion', 'C', 'Cédula');
 INSERT INTO parametros (id, parametro, valor, descripcion) VALUES(3, 'tipo_identificacion', 'R', 'Registro Civil');
@@ -384,18 +428,6 @@ INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(48, 'tblEm
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(49, 'tblEmpleados', 'id_empresa', 'b7f6046a-b834-48f0-856e-8a360b495406', 'actses');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(50, 'tblHabilidades', 'id_habilidad', '65374dc5-692f-483d-9809-3371a7222a79', 'PHP');
 INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(51, 'tblHabilidades', 'id_habilidad', '0463add9-313e-49bf-a07e-800612c36263', 'JavaScript');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(52, 'tblEstudios', 'id_estudio', '50c46fc7-9066-11ed-aeb0-1701c1c49394', 'Basica Primaria');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(53, 'tblEstudios', 'id_estudio', '788486b4-9066-11ed-aeb0-1701c1c49394', 'Maestria');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(54, 'tblEstudios', 'id_estudio', '2d6c6741-c4d1-49bb-b18c-6705678567be', 'Pre-universitario');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(55, 'tblEstudios', 'id_estudio', '717e915e-463d-45de-bb08-aa2eeb4ebd7a', 'Doctorado');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(56, 'tblEstudios', 'id_estudio', '777a66b2-65dc-4ac1-89c4-d53edb717f9d', 'Postgrado');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(57, 'tblEstudios', 'id_estudio', '788486b4-9066-11ed-aeb0-1701c1c49394', 'Maestria');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(58, 'tblEstudios', 'id_estudio', 'a0f22a6d-254b-449f-920b-6f34ebb085af', 'Especialización');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(59, 'tblEstudios', 'id_estudio', 'af3e09e9-8ce3-4010-9e95-d7ba6f6cf9da', 'Técnico');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(60, 'tblEstudios', 'id_estudio', 'becf1482-7b03-42df-9831-ec2ddb6c2ba0', 'Tecnólogo');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(61, 'tblEstudios', 'id_estudio', 'cfb2184d-8577-4a59-bb8c-399710ceae43', 'Auto-Adquirida');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(62, 'tblEstudios', 'id_estudio', 'fc119392-fb77-477a-83bc-66ca5b7d7996', 'Pregrado Universitario');
-INSERT INTO ddl_parametrizado (id, tabla, campo, valor, texto) VALUES(63, 'tblEstudios', 'id_estudio', '788486b4-9066-11ed-aeb0-1701c1c49396', 'Secundaria');
 
 -- empresa
 -- UUID V4 - https://www.delftstack.com/howto/php/php-uuid/
@@ -442,8 +474,7 @@ VALUES
 ('12c1ec3e-6d4b-4379-9322-195269bc5bd4','f660bbbf-dd1a-4eab-9866-dba8092c94c5','0463add9-313e-49bf-a07e-800612c36263'),
 ('6f384e65-a7b6-4814-b5bd-dfeda652d748','43a9245a-275a-4b23-8ac0-a63fefa13013','65374dc5-692f-483d-9809-3371a7222a79');
 
-INSERT INTO estudios (`id`, `nombre`) VALUES ('50c46fc7-9066-11ed-aeb0-1701c1c49394', 'Basica Primaria');
-INSERT INTO estudios (`id`, `nombre`) VALUES ('788486b4-9066-11ed-aeb0-1701c1c49394', 'Maestria');
+INSERT INTO estudios (id, nombre) VALUES ('50c46fc7-9066-11ed-aeb0-1701c1c49394', 'Basica Primaria');
 INSERT INTO estudios (id, nombre) VALUES('2d6c6741-c4d1-49bb-b18c-6705678567be', 'Pre-universitario');
 INSERT INTO estudios (id, nombre) VALUES('717e915e-463d-45de-bb08-aa2eeb4ebd7a', 'Doctorado');
 INSERT INTO estudios (id, nombre) VALUES('777a66b2-65dc-4ac1-89c4-d53edb717f9d', 'Postgrado');
