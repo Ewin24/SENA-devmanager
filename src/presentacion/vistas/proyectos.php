@@ -50,9 +50,6 @@ switch ($tipoUsuario) {
             </legend>
 
             <table id="tblProyectos" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
-            <!-- <div class="col align-self-center">
-                <textarea id="campoDescripcion" type="text" class="form-control" style="min-width: 100%" rows="5" disabled="disabled"></textarea>
-            </div> -->
 
             <table id="new-Proyecto" style="display:none" class="col-auto">
                 <tbody>
@@ -102,9 +99,6 @@ switch ($tipoUsuario) {
                     </tbody>
                 </table>
                 <?= $btnHabilidadQuitar ?>
-                <!-- <div class="col-lg-3">
-                    <input type="button" name="action" value="Quitar" class="btn btn-primary" onclick="quitarHabilidades()">
-                </div> -->
         </div>
         <div class="col-lg-6">
             <h5 class="text-center">Disponibles</h1>
@@ -124,9 +118,6 @@ switch ($tipoUsuario) {
                     </tbody>
                 </table>
                 <?= $btnHabilidadAsign ?>
-                <!-- <div class="col-lg-3">
-                    <input type="button" name="action" value="Asignar" class="btn btn-primary" onclick="asignarHabilidades()">
-                </div> -->
         </div>
     </div>
 </fieldset>
@@ -154,9 +145,6 @@ switch ($tipoUsuario) {
                     </tr>
                 </tbody>
                 <?= $btnTrabajadorQuitar ?>
-                <!-- <div class="col-lg-3">
-                    <input type="button" name="action" value="Anular Contrato" class="btn btn-primary" onclick="quitarTrabajadores()">
-                </div> -->
             </table>
         </div>
         <div class="col-lg-6">
@@ -177,9 +165,6 @@ switch ($tipoUsuario) {
                     </tr>
                 </tbody>
                 <?= $btnTrabajadorContr ?>
-                <!-- <div class='col-lg-3'>
-                    <input type='button' name='action' value='Contratar' class='btn btn-primary' onclick='asignarTrabajadores()'>
-                </div> -->
             </table>
         </div>
     </div>
@@ -187,7 +172,6 @@ switch ($tipoUsuario) {
 </fieldset>
 
 <script type="text/javascript">
-    
     function mostrarAdvertencia(titulo, mensaje) {
         var html = `
         <div id="myModal" class="modal fade" tabindex="-1">
@@ -212,6 +196,7 @@ switch ($tipoUsuario) {
 
     //////////////////////////////////////////////////////////////////////////////
     //FUNCIONALIDAD DE POSTULARSE A UN PROYECTO
+
     function postularse() {
         <?php echo 'const idUsuario = "' . $idUsuario . '";'; ?>
 
@@ -232,7 +217,7 @@ switch ($tipoUsuario) {
                     data: dataReq,
                     dataType: "json",
                     success: function(response) {
-                        if(response['error']) mostrarAdvertencia('Ocurrido una excepción en la Base: ', response.error);
+                        if (response['error']) mostrarAdvertencia('Ocurrido una excepción en la Base: ', response.error);
                         // alert("Status: "+response);
                         console.log(response);
                         $('#tbl_Proyectos').DataTable().ajax.reload();
@@ -401,16 +386,8 @@ switch ($tipoUsuario) {
     <?php echo 'const modoTabla = "' . $modoTabla . '";'; ?>
     <?php //echo 'const dProy = ' . $datosProyectos . ';'; 
     ?>
-
-    // if (lisProyectos.length == 0 || lisProyectos == null) {
-    //     lisProyectos = [...dProy];
-    // }
-    // console.log(lisProyectos);
-
-    // //genera_tabla(arreglo);    
-
-
     $(document).ready(function() {
+
         $('input[value="Quitar"]').hide();
         $('input[value="Asignar"]').hide();
         $('input[value="Anular Contrato"]').hide();
@@ -429,94 +406,43 @@ switch ($tipoUsuario) {
             if (data.id != IdProySeleccionado) {
 
                 IdProySeleccionado = data.id;
-                // console.log(IdProySeleccionado);
-
-                // console.clear();
                 cargarHabilidades('tblHab_Requeridas', IdProySeleccionado, tipoUsuario);
                 cargarHabilidades('tblHab_Disponibles', IdProySeleccionado, tipoUsuario);
                 cargarTrabajadores('tblContratados', IdProySeleccionado, tipoUsuario);
                 cargarTrabajadores('tblCandidatos', IdProySeleccionado, tipoUsuario);
 
-                if($("#tblHab_Requeridas").length) $('input[value="Quitar"]').show();
-                if($("#tblHab_Disponibles").length) $('input[value="Asignar"]').show();
-                if($("#tblContratados").length) $('input[value="Anular Contrato"]').show();
-                if($("#tblCandidatos").length) $('input[value="Contratar"]').show();
-
-                // //// peticion - https://coderszine.com/live-datatables-crud-with-ajax-php-mysql/
-                // var dataReq = {
-                //     datos : IdProySeleccionado, 
-                //     action : 'cargarTablasHijas'
-                // };
-                // $.ajax({
-                //     url:"http://localhost/SENA-devmanager/api/ProyectoControlador.php",
-                //     method:"POST",
-                //     data: dataReq,
-                //     dataType:"json",
-                //     success:function(datos){
-                //         var { dHabReq, dHabDisp, dTrabReq, dTrabDisp } = datos.data;
-                //         console.log(datos);
-                //         cargarHabilidades('tblHab_Requeridas', dHabReq, modoTabla);
-                //         cargarHabilidades('tblHab_Disponibles', dHabDisp, modoTabla);
-                //         cargarTrabajadores('tblContratados', dTrabReq, modoTabla);
-                //         cargarTrabajadores('tblCandidatos', dTrabDisp, modoTabla);
-                //     }
-                // });
-
-                // fetch('http://localhost/SENA-devmanager/api/ProyectoControlador.php?id=' + IdProySeleccionado, {
-                //     method: 'GET',
-                // }).then((resp) => {
-                //     return resp.json();
-                // }).then((json) => {
-                //     const {
-                //         dHabReq,
-                //         dHabDisp,
-                //         dTrabReq,
-                //         dTrabDisp
-                //     } = json;
-                //         cargarHabilidades('tblHab_Requeridas', dHabReq, modoTabla);
-                //         cargarHabilidades('tblHab_Disponibles', dHabDisp, modoTabla);
-                //         cargarTrabajadores('tblContratados', dTrabReq, modoTabla);
-                //         cargarTrabajadores('tblCandidatos', dTrabDisp, modoTabla);
-                // });
+                if ($("#tblHab_Requeridas").length) $('input[value="Quitar"]').show();
+                if ($("#tblHab_Disponibles").length) $('input[value="Asignar"]').show();
+                if ($("#tblContratados").length) $('input[value="Anular Contrato"]').show();
+                if ($("#tblCandidatos").length) $('input[value="Contratar"]').show();
             }
 
-            if ( $("#guardarCambiostblProyectos").css("display") === 'none'){
-                if($('#desctblProyectos').css("display") === 'block') {
+            if ($("#guardarCambiostblProyectos").css("display") === 'none') {
+                if ($('#desctblProyectos').css("display") === 'block') {
                     // console.log("hijas");
                     $('#fsHabilidades').css("display", "block");
                     $('#fsTrabajadores').css("display", "block");
-                }
-                else{
+                } else {
                     // console.log("ocultar");
                     $('#fsHabilidades').css("display", "none");
                     $('#fsTrabajadores').css("display", "none");
                 }
-            }      
-            else{
+            } else {
                 // console.log("todo oculto");
                 $('#fsHabilidades').css("display", "none");
                 $('#fsTrabajadores').css("display", "none");
-            }      
-            
-
+            }
         });
-
-        // $('#addRowtblProyectos').click(function() {
-        //     $('#tblHab_Requeridas').DataTable().clear().draw();
-        //     $('#tblHab_Disponibles').DataTable().clear().draw();
-        //     $('#tblContratados').DataTable().clear().draw();
-        //     $('#tblCandidatos').DataTable().clear().draw();
-        // });
 
         $('#addRowtblHab_Disponibles').click(function() {
             // if($('#tblHab_Requeridas').length) $('#tblHab_Requeridas').DataTable().clear().draw();
             // if($('#tblHab_Disponibles').length) $('#tblHab_Disponibles').DataTable().clear().draw();
             // if($('#tblContratados').length) $('#tblContratados').DataTable().clear().draw();
             // if($('#tblCandidatos').length) $('#tblCandidatos').DataTable().clear().draw();
-            if($("#tblHab_Requeridas").length) $('input[value="Quitar"]').hide();
-            if($("#tblHab_Disponibles").length) $('input[value="Asignar"]').hide();
-            if($("#tblContratados").length) $('input[value="Anular Contrato"]').hide();
-            if($("#tblCandidatos").length) $('input[value="Contratar"]').hide();
+            if ($("#tblHab_Requeridas").length) $('input[value="Quitar"]').hide();
+            if ($("#tblHab_Disponibles").length) $('input[value="Asignar"]').hide();
+            if ($("#tblContratados").length) $('input[value="Anular Contrato"]').hide();
+            if ($("#tblCandidatos").length) $('input[value="Contratar"]').hide();
         });
 
     });

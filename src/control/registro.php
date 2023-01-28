@@ -19,7 +19,6 @@ if (isset($_POST['registro']) && $_POST['clave1'] == $_POST['clave2']) {
     $apellido = $_POST['apellidos'];
     $tipo_usuario = 'T'; //por defecto es trabajador
     $clave = $_POST['clave2'];
-    //$nombreUsuario = $_POST['identificacion']; ya no se necesit
     $correo = $_POST['correo'];
     $telefono = $_POST['telefono'];
     $tipoIdentificacion = $_POST['tipo_identificacion'];
@@ -37,16 +36,11 @@ if (isset($_POST['registro']) && $_POST['clave1'] == $_POST['clave2']) {
     $usuario->setTelefono($telefono);
     $usuario->setTipo_identificacion($tipoIdentificacion);
     $usuario->setDireccion($direccion);
+    if ($nitEmpresa == null || $nitEmpresa == '') {
+        header('location: ../index.php?mensaje=debe seleccionarse una empresa');
+    }
     $usuario->setId_empresa($nitEmpresa);
     $usuario->guardar();
 
     header('location: ../index.php?mensaje=Registro de usuario exitoso'); //hace el registro y manda el mensaje de exito
 }
-
-
-//campos opcionales a futuro
- //    $fecha_registro = date("Y-m-d"); //fecha de registro del usuario opcional
- //    $imagen = $_FILES['imagen']['name'];
- //    $ruta = $_FILES['imagen']['tmp_name'];
- //    $destino = "../img/usuarios/" . $imagen;
- //    move_uploaded_file($ruta, $destino);

@@ -179,6 +179,13 @@ class Usuario
         return password_verify($password, $hash);
     }
 
+    public static function cambioClave($nuevaClave, $id_usuario)
+    {
+        $clave = Usuario::hash($nuevaClave);
+
+        $cadenaSQL = "UPDATE usuarios SET clave_hash = '$clave' WHERE id = '$id_usuario'";
+        ConectorBD::ejecutarQuery($cadenaSQL);
+    }
     //obtener uuid
     public static function guidv4($data = null)
     {

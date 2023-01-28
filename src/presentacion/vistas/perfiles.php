@@ -14,26 +14,20 @@ if (isset($_REQUEST['mensaje'])) {
 
 $idUsuario = $USUARIO->getId();
 $tipoUsuario = $USUARIO->getTipo_usuario();
+$btnCambioClave = "<a href='principal.php?CONTENIDO=presentacion/configuracion/cambioClaveFormulario.php'><input type='button' name='action' value='Cambio de clave' class='btn btn-primary'></a>";
 switch ($tipoUsuario) {
+
     case 'A': //Admin (Modo R): muestra todos los perfiles para poder consultar informacion más detallada del usuario
-    case 'D': //Director (modo R): muestra todos los perfiles para poder consultar informacion más detallada del usuario
-        // $idUsuario = $USUARIO->getId();
-        // $filtroUsuario = "id_usuario='$idUsuario'";
-        // $datosProyectos = Proyecto::getListaEnJson($filtroUsuario, null);
-        // echo "Usuario D";
-        // R solo lectura
+    case 'D': //Director (modo R): muestra todos los perfiles para poder consultar informacion más detallada del usuario   
         $modoTabla = 'R';
         break;
 
     default: //trabajador (modo: Solo lectura): solo su información de perfil activo
         // $datosProyectos = $USUARIO->getProyectosUsuario($USUARIO->getId());
         $modoTabla = 'RU';
-        // echo "Usuario T";
         break;
 }
 ?>
-
-<!-- <h3 class="text-center">PERFIL DE USUARIOS</h3> -->
 
 <fieldset class="form-group border p-3">
     <div class="container col-auto justify-content-center">
@@ -41,6 +35,7 @@ switch ($tipoUsuario) {
             <legend class="w-auto px-2">
                 <h3>Perfil de usuario</h3>
             </legend>
+            <?= $btnCambioClave ?>
             <table id="tblEmpleados" class="table table-responsive table-striped table-borded dataTable-content" cellpacing="0" width="100%"></table>
             <table id="new-Empleado" style="display:none" class="col-auto">
                 <tbody>

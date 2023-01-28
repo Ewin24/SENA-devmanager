@@ -61,7 +61,7 @@ else {
     <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
     <script src="//cdn.datatables.net/plug-ins/1.13.1/sorting/absolute.js"></script>
-    
+
     <script type="module" src="./librerias/tablaGenerica.js"></script>
 
 
@@ -76,11 +76,9 @@ else {
         <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
         <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" />
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
-
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css"/> 
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css"/>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.2/css/select.dataTables.min.css"/> 
-
         <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script> 
         <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
         <script src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>

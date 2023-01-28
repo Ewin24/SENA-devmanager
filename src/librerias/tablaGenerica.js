@@ -186,24 +186,24 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
         "language":	{
             "sProcessing":     "Procesando...",
             "sLengthMenu":     "Mostrar _MENU_ registros",
-            "sZeroRecords":    "No se encontraron resultados",
+            "sZeroRecords":    "No se encontraron resultados",
             "sEmptyTable":     "Ningún dato disponible en esta tabla",
             "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
             "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-            "sInfoPostFix":    "",
+            "sInfoPostFix":    "",
             "sSearch":         "Buscar:",
-            "sUrl":            "",
-            "sInfoThousands":  ",",
+            "sUrl":            "",
+            "sInfoThousands":  ",",
             "sLoadingRecords": "Cargando...",
             "oPaginate": {
-                "sFirst":    "Primero",
+                "sFirst":    "Primero",
                 "sLast":     "Último",
                 "sNext":     "Siguiente",
                 "sPrevious": "Anterior"
             },
             "oAria": {
-                "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
                 "sSortDescending": ": Activar para ordenar la columna de manera descendente"
             }
         },
@@ -870,7 +870,7 @@ function cargarTablaGenerica(nombreTabla, cols, modoTabla='CRUD', urlControlador
 
         var html = `
                     <input type="file" id="uploadImage" class="up_img"/>
-                    <img id="myUploadedImg" alt="Fotografía" style="width:500px; height:300px; display: none;" />
+                    <img id="myUploadedImg" alt="Fotografía" style="width:180px;display: none;" />
                     `
         $cell.empty().append(html);
         $cell.find('#uploadImage').attr('value', valor);
