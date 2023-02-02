@@ -9,23 +9,6 @@ Luego revisar la extensión docker de VSCODE para verificar que se ejecutan los 
 
 docker run -dti --name some-mysql -e MYSQL_ROOT_PASSWORD=rootPassword -p 3306:3306 mysql
 
-# Actualizar con respecto a repo Edwin primera vez
-
-1. Seleccionar rama master
-`git checkout master`
-
-2. Agregar el repositorio de Edwin en aguas arriba de mi repo
-`git remote add upstream https://github.com/Ewin24/SENA-devmanager.git`
-
-3. Obtener la última versión desde el repositorio upstream (Edwin)
-`git fetch upstream`
-
-4. Asegurar que mi master, tenga la última versión de upstream (Edwin)
-`git rebase upstream/master`
-
-5. Empujar mi última versión de mi repo, hacia Github luego de actualizar con Upstream
-`git push -f origin master`
-
 ### Ajustes realizados
 1. \logica\clases\Usuario.php 
    - ajustar las sentencias sql según la nueva estructura de la base
@@ -82,7 +65,6 @@ cargarTablaGenerica(nombreTabla, arreglo, cols, ddl_estado_ops = [], campo_desc 
 
 ## Trabajando con código
 
-- clonar repo
 - Instalar Xampp
 - Correr xampp control y ejecutar mysql y apache
 - Crear la base de datos devmanager2 (usando administrador de BD)

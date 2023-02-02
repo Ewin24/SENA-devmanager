@@ -62,7 +62,7 @@ if (!empty($_POST['action'])) {
             case 'cargar_tblEmpleados':
                 header('Content-type: application/json; charset=utf-8');
                 $idUsuario = $_POST['datos'];
-                $USUARIO = Usuario::getListaEnObjetos("id='$idUsuario'", null)[0];
+                $USUARIO = Usuario::getListaEnObjetos("u.id='$idUsuario'", null)[0];
                 $tipoUsuario = $USUARIO->getTipo_usuario();
 
                 switch ($tipoUsuario) {

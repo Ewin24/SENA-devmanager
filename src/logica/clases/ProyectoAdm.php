@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 require_once 'Habilidad.php';
 
@@ -265,5 +265,11 @@ class ProyectoAdm
         //             AND id_proyecto = '$id_proyecto'";
         $resultado = ConectorBD::ejecutarQuery($cadenaSQL);
         return $resultado;
+    }
+
+    public static function getListaEnJson($filtro, $orden)
+    {
+        $datos = ProyectoAdm::getDatosCrudos($filtro, $orden, 'TrabAsignados', null);
+        return json_encode($datos);
     }
 }

@@ -39,6 +39,7 @@ class TipoUsuario
             case 'A':
                 // $menu .= "<li class='border nav-item me-4'><a class='nav-link' href='principal.php?CONTENIDO=presentacion/vistas/empresas.php&accion=''&id='''>Administración</a></li>";
                 $menu .= "<li class='nav-item m-2'><a class='nav-link active' href='principal.php?CONTENIDO=presentacion/vistas/empresas.php&accion=''&id='''>Administracion</a></li>";
+                $menu .= "<li class='nav-item m-2'><a class='nav-link active' href='principal.php?CONTENIDO=presentacion/configuracion/reportesFormulario.php&accion=''&id='''>Modulo de reportes</a></li>";
                 break;
             case 'T':
                 break;

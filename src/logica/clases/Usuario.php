@@ -256,10 +256,10 @@ class Usuario
         else
             $orden = "ORDER BY $orden";
 
-        $cadenaSQL = "  SELECT  id, identificacion, tipo_identificacion, nombres, apellidos, correo, clave_hash, direccion, nombre_foto, telefono, tipo_usuario, id_empresa
-                        FROM    usuarios
-                        $filtro 
-                        $orden";
+        $cadenaSQL = "  SELECT  u.id, identificacion, tipo_identificacion, nombres, apellidos, u.correo, clave_hash, u.direccion, nombre_foto, u.telefono, tipo_usuario, id_empresa, e.nombre
+                        FROM    usuarios u
+                        INNER JOIN empresas e ON e.id = u.id_empresa
+                        $filtro $orden";
         // echo $cadenaSQL;
         return ConectorBD::ejecutarQuery($cadenaSQL);
     }
@@ -281,15 +281,7 @@ class Usuario
     public static function getListaEnJson($filtro, $orden)
     {
         $datos = Usuario::getListaEnObjetos($filtro, $orden);
-
-        $json_data = array(
-            //"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
-            "recordsTotal" => intval(count($datos)), // total number of records
-            // "recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
-            "data" => $datos   // total data array
-        );
-
-        return json_encode($json_data);  // send data as json format
+        return json_encode($datos);  // send data as json format
     }
 
     public static function validar($usuario, $clave)
